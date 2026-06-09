@@ -1,0 +1,10 @@
+{
+  "provider": "openai",
+  "openai": {
+    "model": "gpt-5.4",
+    "temperature": 0.1,
+    "top_p": 1.0,
+    "max_output_tokens": 1200,
+    "reasoning_effort": "medium"
+  }
+}

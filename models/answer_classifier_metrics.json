@@ -1,0 +1,11 @@
+{
+  "accuracy": 1.0,
+  "true_positive": 600,
+  "false_positive": 0,
+  "true_negative": 400,
+  "false_negative": 0,
+  "eval_mode": "leave-one-question-out",
+  "example_count": 1000,
+  "min_examples": 50,
+  "min_accuracy": 0.9
+}

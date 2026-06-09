@@ -1,373 +1,310 @@
-AWS Certification Coach v2.0 - Initial Architecture
+# AWS Certification Coach Architecture
 
-Project Goal
+## Goal
 
-Develop a lightweight AI-powered AWS certification study platform that presents pre-generated certification questions, evaluates user responses using a Large Language Model (LLM), and provides personalized feedback.
+AWS Certification Coach is a lightweight AI-powered study app for AWS certification practice. It presents pre-generated questions, evaluates learner answers with an LLM, and returns structured coaching feedback.
 
-Unlike Version 1.0, this architecture eliminates Retrieval-Augmented Generation (RAG), vector databases, and FAISS indexes in favor of a simpler question-and-evaluation workflow.
+Version 2 intentionally removes the runtime RAG stack from the earlier prototype. There is no document ingestion, FAISS index, vector database, or embedding model in the deployed app. Certification content is generated and reviewed offline, then served from a simple question repository.
 
----
+## System Overview
 
-High-Level Architecture
+```text
+Student
+  |
+  v
+Streamlit UI
+  |
+  v
+Quiz Controller
+  |
+  +--> Question Repository
+  |
+  v
+Evaluation Prompt Builder
+  |
+  v
+LLM Evaluation Service
+  |
+  v
+Feedback Engine
+  |
+  v
+Results Display
+```
 
-┌─────────────────┐
-│     Student     │
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ Streamlit Front │
-│      End        │
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ Application API │
-│  (Python Layer) │
-└───────┬─────────┘
-│
-├─────────────► Question Repository
-│                  (JSON/Database)
-│
-▼
-┌─────────────────┐
-│ Evaluation      │
-│ Prompt Builder  │
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ LLM Evaluation  │
-│    Service      │
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ Feedback Engine │
-└────────┬────────┘
-│
-▼
-┌─────────────────┐
-│ Results Display │
-└─────────────────┘
+## Runtime Components
 
----
+### Streamlit UI
 
-Major Components
+The UI is responsible for the learner-facing workflow:
 
-1. User Interface Layer
+- Select certification, domain, and difficulty filters.
+- Present one question at a time.
+- Accept free-text learner responses.
+- Display scores, missing concepts, recommended review topics, and a detailed correct answer.
+- Show session progress and recent score history.
 
-Technology:
+The UI should stay thin. It should delegate quiz state, question selection, prompt generation, model calls, and response formatting to application modules.
 
-- Streamlit
+### Question Repository
 
-Responsibilities:
+The question repository stores reviewed certification practice content. The MVP can use JSON files because the app only needs read-heavy access to a curated question bank.
 
-- Present study questions
-- Accept user responses
-- Display scores
-- Display feedback
-- Track session progress
+Example question shape:
 
-Inputs:
-
-- Question data
-- Evaluation results
-
-Outputs:
-
-- User answer submissions
-
----
-
-2. Question Repository
-
-Purpose:
-Store all study content generated offline.
-
-Initial Storage Option:
-
-- JSON files
-
-Future Storage Options:
-
-- SQLite
-- PostgreSQL
-- DynamoDB
-
-Question Structure:
-
+```json
 {
-"question_id": "AWS-001",
-"certification": "Cloud Practitioner",
-"domain": "Security",
-"difficulty": "Easy",
-"question": "...",
-"reference_answer": "...",
-"key_concepts": [
-"IAM",
-"Least Privilege",
-"Roles"
-]
+  "question_id": "AWS-001",
+  "certification": "Cloud Practitioner",
+  "domain": "Security",
+  "difficulty": "Easy",
+  "question": "What is the purpose of IAM roles?",
+  "reference_answer": "IAM roles grant temporary permissions that AWS services, applications, or users can assume without long-lived credentials.",
+  "key_concepts": [
+    "IAM",
+    "temporary credentials",
+    "least privilege",
+    "trusted entities"
+  ]
 }
+```
 
-Responsibilities:
+Repository responsibilities:
 
-- Retrieve questions
-- Filter by domain
-- Filter by difficulty
-- Support randomized quizzes
+- Load question files.
+- Validate required fields.
+- Filter by certification, domain, and difficulty.
+- Support randomized quiz order.
+- Preserve original multiple-choice source questions for post-answer review.
+- Keep storage swappable for SQLite, PostgreSQL, or DynamoDB later.
 
----
+### Quiz Controller
 
-3. Quiz Controller
+The quiz controller owns session behavior:
 
-Purpose:
-Manage user study sessions.
+- Select the next question.
+- Track completed question IDs.
+- Track score history.
+- Avoid repeating questions during a session.
+- Maintain current filters and quiz mode.
 
-Responsibilities:
+Future versions can add adaptive difficulty, weak-area targeting, timed exam simulation, and persisted learner profiles.
 
-- Select next question
-- Track completed questions
-- Track score history
-- Manage quiz state
+### Evaluation Prompt Builder
 
-Future Enhancements:
+The prompt builder converts a question, reference answer, key concepts, and learner answer into a consistent scoring request.
 
-- Adaptive difficulty
-- Weak-area targeting
-- Exam simulation mode
+Prompt contract:
 
----
-
-4. Evaluation Prompt Builder
-
-Purpose:
-Convert user responses into structured evaluation prompts.
-
-Inputs:
-
-- Question
-- Reference answer
-- Key concepts
-- User response
-
-Generated Prompt Example:
-
-Evaluate the user's answer.
+```text
+Evaluate the learner's answer against the reference answer.
 
 Question:
 {question}
 
-Reference Answer:
+Reference answer:
 {reference_answer}
 
-Key Concepts:
+Key concepts:
 {key_concepts}
 
-User Answer:
+Learner answer:
 {user_answer}
 
-Provide:
+Return JSON only with:
+- score: integer from 0 to 100
+- missing_concepts: array of strings
+- suggested_improvements: array of strings
+- feedback: concise learner-facing explanation
+- detailed_answer: detailed correct answer that covers the reference answer and every missing concept
+```
 
-1. Accuracy Score (0-100)
-2. Missing Concepts
-3. Strengths
-4. Suggested Improvements
-5. Final Feedback
+The prompt builder should keep scoring instructions centralized so that every model provider receives the same evaluation contract.
 
-Return JSON only.
+### LLM Evaluation Service
 
-Responsibilities:
-
-- Standardize prompts
-- Ensure consistent scoring
-- Reduce LLM hallucination
-
----
-
-5. LLM Evaluation Service
-
-Purpose:
-Evaluate learner responses.
-
-Candidate Models:
-
-AWS:
-
-- Amazon Bedrock
-
-Alternative:
-
-- OpenAI API
-
-Input:
-
-- Evaluation prompt
-
-Output:
-
-{
-"score": 85,
-"strengths": [...],
-"missing_concepts": [...],
-"feedback": "..."
-}
+The evaluation service is the only runtime component that talks to the model provider. The initial provider can be local `llama-cpp-python`, Amazon Bedrock, or OpenAI, but the app should expose a narrow interface such as `evaluate_answer(prompt) -> EvaluationResult`.
 
 Responsibilities:
 
-- Semantic answer comparison
-- Concept identification
-- Feedback generation
+- Load provider configuration.
+- Reuse model clients across requests when possible.
+- Apply deterministic generation settings for grading.
+- Capture latency and provider errors.
+- Return parseable JSON or a controlled error state.
 
----
+### Feedback Engine
 
-6. Feedback Engine
-
-Purpose:
-Transform model output into user-friendly results.
+The feedback engine turns raw model output into the final learner display.
 
 Responsibilities:
 
-- Format feedback
-- Highlight missed concepts
-- Present scores
-- Generate improvement recommendations
+- Parse and validate model JSON.
+- Normalize score values.
+- Provide fallback feedback if the model returns malformed output.
+- Format missed concepts, recommendations, and detailed answer guidance for the UI.
 
-Outputs:
+Example display content:
 
+```text
 Score: 85%
 
-Strengths:
+Areas to improve:
+- Mention temporary credentials.
+- Connect roles to least privilege.
 
-- Correctly identified IAM Roles
+Detailed answer:
+Review IAM roles, trust policies, and temporary security credentials.
+```
 
-Areas to Improve:
+## Offline Content Generation
 
-- Mention temporary credentials
+Practice questions are produced before deployment.
 
-Recommendation:
-Review IAM security best practices.
+```text
+AWS documentation and exam guide
+  |
+  v
+Content generation script
+  |
+  v
+LLM-assisted question generation
+  |
+  v
+Human quality review
+  |
+  v
+JSON question bank
+```
 
----
+Offline generation outputs:
 
-Offline Content Generation Pipeline
+- Question files.
+- Reference answers.
+- Key concepts.
+- Domain and difficulty metadata.
+- Original multiple-choice provenance for transformed freeform questions.
 
-Purpose:
-Generate question bank before deployment.
+Keeping generation offline reduces runtime memory usage, startup time, and deployment complexity.
 
-Workflow:
+## Multiple-Choice to Freeform Transformation
 
-AWS Documentation
-│
-▼
-Content Generation Script
-│
-▼
-LLM Question Generation
-│
-▼
-Quality Review
-│
-▼
-JSON Question Bank
+V1 uses freeform learner prompts, but the source material should remain aligned with exam-style multiple-choice questions. The offline transformation pipeline converts licensed or self-authored multiple-choice questions into paragraph-answer prompts.
 
-Outputs:
+```text
+Source multiple-choice artifact
+  |
+  v
+Transformation prompt builder
+  |
+  v
+High-quality LLM transformer
+  |
+  v
+Freeform question artifact
+  |
+  +--> Original multiple-choice source preserved
+```
 
-- Question files
-- Answer keys
-- Key concepts
+The transformed artifact keeps the original multiple-choice question, answer choices, correct answer IDs, explanation, source name, source URL, and license notes. The app uses the transformed freeform prompt for recall practice, then displays the original multiple-choice item next to generated feedback after the learner submits an answer.
 
-Benefits:
+## Deployment
 
-- No vector database
-- No embeddings
-- No runtime retrieval
+### Phase 1
 
----
-
-Deployment Architecture
-
-Phase 1
-
+```text
 User
-│
-▼
+  |
+  v
 Streamlit App
-│
-▼
-LLM API
+  |
+  v
+LLM Provider
+```
 
-Deployment Target:
+Recommended targets:
 
-- Render
-  OR
-- AWS EC2
+- Render for a simple MVP.
+- EC2 if local model hosting is required.
+- A managed LLM API if startup time and small images are higher priority than fully local inference.
 
-Expected Benefits:
+Expected benefits:
 
-- Small Docker image
-- Faster startup
-- Lower memory usage
+- Smaller Docker image than the RAG prototype.
+- Faster startup.
+- Lower memory use.
+- Fewer runtime artifacts to package.
 
----
+### Phase 2
 
-Future AWS Architecture
-
-Phase 2
-
+```text
 User
-│
-▼
+  |
+  v
 CloudFront
-│
-▼
+  |
+  v
 Application Load Balancer
-│
-▼
-Containerized App
-(ECS/Fargate)
-│
-├──► DynamoDB
-│
-└──► Amazon Bedrock
+  |
+  v
+ECS/Fargate App
+  |
+  +--> DynamoDB
+  |
+  +--> Amazon Bedrock
+```
 
-Optional Services:
+Optional AWS services:
 
-- CloudWatch
-- S3
-- Cognito
+- CloudWatch for logs and metrics.
+- S3 for question bank storage.
+- Cognito for authentication.
+- DynamoDB for learner progress.
 
----
+## MVP Scope
 
-MVP Deliverables
+Included:
 
-Version 2.0 MVP
+- Question display.
+- Free-text answer submission.
+- LLM-based evaluation.
+- Score generation.
+- Feedback generation.
+- Domain and difficulty filtering.
+- Session progress tracking.
 
-Features:
+Excluded:
 
-- Question display
-- User answer submission
-- LLM evaluation
-- Score generation
-- Feedback generation
-- Domain filtering
-- Progress tracking
+- Runtime RAG.
+- FAISS.
+- Embeddings.
+- Document ingestion.
+- User authentication.
+- Multi-user persistence.
 
-Out of Scope:
+## Success Criteria
 
-- Vector search
-- FAISS
-- Embeddings
-- RAG
-- Document ingestion
-- User authentication
-- Multi-user support
+- Docker image under 1 GB when using a managed LLM provider.
+- Startup under 30 seconds.
+- Answer evaluation under 10 seconds for normal requests.
+- Successful cloud deployment.
+- At least 100 reviewed AWS certification questions.
+- Evaluation responses are valid JSON at least 95% of the time in smoke tests.
 
-Success Criteria:
+## Reusable Code Candidates
 
-- Docker image under 1 GB
-- Startup time under 30 seconds
-- Response evaluation under 10 seconds
-- Successful cloud deployment
-- Minimum 100 AWS certification questions
+The previous RAG prototype contains pieces worth carrying forward, even though the RAG-specific code should be left behind:
+
+- Model configuration loading and overrides.
+- Cached model/client lifecycle management.
+- Timing helpers for cold start and request latency.
+- Chat-completion wrapper for deterministic responses.
+- Response trimming for local models that emit reasoning markers.
+
+Do not carry forward:
+
+- FAISS loading and querying.
+- Sentence-transformer embedding setup.
+- Pickled chunk loading.
+- RAG-only prompts.
+- Document chunking and ingestion.

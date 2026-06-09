@@ -1,0 +1,4202 @@
+[
+  {
+    "question_id": "AWS-GEN-001",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "reference_answer": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "key_concepts": [
+      "IAM",
+      "temporary credentials",
+      "least privilege",
+      "trusted entities"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will grant temporary credentials to trusted AWS resources without storing long-term access keys. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use IAM roles."
+        },
+        {
+          "option_id": "B",
+          "text": "Use IAM user access keys."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Shield Advanced."
+        },
+        {
+          "option_id": "D",
+          "text": "Use hard-coded credentials."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "certification": "Cloud Practitioner",
+    "domain": "Billing",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "reference_answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "key_concepts": [
+      "AWS Budgets",
+      "cost thresholds",
+      "usage thresholds",
+      "alerts"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must track cost or usage thresholds and send alerts for actual or forecasted spending. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Elastic Load Balancing."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "certification": "Solutions Architect Associate",
+    "domain": "Resilient Architectures",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "reference_answer": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "key_concepts": [
+      "Availability Zones",
+      "high availability",
+      "fault tolerance",
+      "load balancing"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to improve high availability and fault tolerance during an Availability Zone impairment. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use multiple Availability Zones."
+        },
+        {
+          "option_id": "B",
+          "text": "Use single Availability Zone deployment."
+        },
+        {
+          "option_id": "C",
+          "text": "Use larger instance."
+        },
+        {
+          "option_id": "D",
+          "text": "Use root volume backups."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "certification": "Solutions Architect Associate",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "reference_answer": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "key_concepts": [
+      "Amazon S3",
+      "versioning",
+      "object recovery",
+      "overwrite protection"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will preserve, retrieve, and restore previous versions of objects after overwrite or delete events. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon S3 versioning."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 Transfer Acceleration."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use S3 static website hosting."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "certification": "Cloud Practitioner",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.",
+    "reference_answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+    "key_concepts": [
+      "S3 Lifecycle",
+      "storage classes",
+      "object expiration",
+      "cost optimization"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must automatically transition or expire objects based on age and access patterns. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use S3 lifecycle policies."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 bucket policies."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Organizations."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon GuardDuty."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.",
+    "reference_answer": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+    "key_concepts": [
+      "Amazon RDS",
+      "Multi-AZ",
+      "automatic failover",
+      "standby replica"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to provide synchronous standby replication and automatic failover for relational databases. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon RDS Multi-AZ."
+        },
+        {
+          "option_id": "B",
+          "text": "Use read replica only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use DynamoDB global table."
+        },
+        {
+          "option_id": "D",
+          "text": "Use manual snapshot."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "reference_answer": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "key_concepts": [
+      "Amazon RDS",
+      "read replicas",
+      "read scaling",
+      "replication"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will scale read-heavy database workloads by serving read traffic from replicated database instances. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon RDS read replicas."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Multi-AZ failover."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Backup."
+        },
+        {
+          "option_id": "D",
+          "text": "Use vertical scaling only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "certification": "Cloud Practitioner",
+    "domain": "Database",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "reference_answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "key_concepts": [
+      "DynamoDB",
+      "NoSQL",
+      "fully managed",
+      "low latency"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must provide a fully managed NoSQL key-value and document database with low-latency access. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon DynamoDB."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon Redshift."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Glue."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "key_concepts": [
+      "DynamoDB global tables",
+      "multi-Region",
+      "replication",
+      "low latency"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to replicate tables across Regions for low-latency multi-Region access and resilience. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use DynamoDB global tables."
+        },
+        {
+          "option_id": "B",
+          "text": "Use DynamoDB local secondary index."
+        },
+        {
+          "option_id": "C",
+          "text": "Use RDS read replica."
+        },
+        {
+          "option_id": "D",
+          "text": "Use S3 replication only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "certification": "Cloud Practitioner",
+    "domain": "Compute",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.",
+    "reference_answer": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+    "key_concepts": [
+      "AWS Lambda",
+      "serverless",
+      "event-driven",
+      "automatic scaling"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will run event-driven code without managing servers and scale per request. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Lambda."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon EC2 dedicated hosts."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Batch only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon EBS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "certification": "Solutions Architect Associate",
+    "domain": "Compute",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.",
+    "reference_answer": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+    "key_concepts": [
+      "Auto Scaling",
+      "EC2",
+      "capacity",
+      "health checks"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must adjust EC2 capacity automatically based on demand and health checks. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Auto Scaling groups."
+        },
+        {
+          "option_id": "B",
+          "text": "Use manual instance launch."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Elastic IP."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AMI copy."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.",
+    "reference_answer": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+    "key_concepts": [
+      "Elastic Load Balancing",
+      "traffic distribution",
+      "healthy targets",
+      "scalability"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to distribute traffic across healthy targets to improve availability and scalability. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Elastic Load Balancing."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Direct Connect."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon Route 53 only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon EBS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.",
+    "reference_answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+    "key_concepts": [
+      "CloudFront",
+      "edge locations",
+      "caching",
+      "latency reduction"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will cache and deliver content from edge locations to reduce latency for users. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon CloudFront."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Transit Gateway."
+        },
+        {
+          "option_id": "C",
+          "text": "Use NAT gateway."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon FSx."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.",
+    "reference_answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+    "key_concepts": [
+      "Route 53",
+      "DNS",
+      "routing",
+      "health checks"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must provide scalable DNS routing and health-check-based routing for applications. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Route 53."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon CloudWatch Logs."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Inspector."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "certification": "Solutions Architect Associate",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "reference_answer": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "key_concepts": [
+      "security groups",
+      "stateful",
+      "inbound rules",
+      "outbound rules"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to act as stateful virtual firewalls controlling inbound and outbound traffic for resources. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use VPC security groups."
+        },
+        {
+          "option_id": "B",
+          "text": "Use network ACL only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS WAF for subnets."
+        },
+        {
+          "option_id": "D",
+          "text": "Use IAM policy."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "certification": "Solutions Architect Associate",
+    "domain": "Networking",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "reference_answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "key_concepts": [
+      "network ACLs",
+      "stateless",
+      "subnet",
+      "allow and deny rules"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will provide stateless subnet-level traffic filtering with explicit inbound and outbound rules. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use network ACLs."
+        },
+        {
+          "option_id": "B",
+          "text": "Use security group only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Shield."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Route 53."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "key_concepts": [
+      "CloudTrail",
+      "API activity",
+      "auditing",
+      "governance"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must record AWS API activity for auditing, governance, and operational troubleshooting. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudWatch metrics."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Macie."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "certification": "Cloud Practitioner",
+    "domain": "Operations",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "reference_answer": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "key_concepts": [
+      "CloudWatch",
+      "metrics",
+      "logs",
+      "alarms"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to collect metrics, logs, alarms, and dashboards for monitoring AWS resources. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon CloudWatch."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Organizations."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Marketplace."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "certification": "Solutions Architect Associate",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.",
+    "reference_answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "key_concepts": [
+      "AWS Config",
+      "configuration history",
+      "compliance rules",
+      "resource inventory"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will track resource configuration history and evaluate compliance against rules. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudTrail only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Trusted Advisor only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Shield."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "key_concepts": [
+      "AWS KMS",
+      "encryption keys",
+      "data protection",
+      "key management"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must create and manage encryption keys used to protect data in AWS services. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS KMS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Secrets Manager rotation only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use IAM roles."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS WAF."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "certification": "Solutions Architect Associate",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
+    "reference_answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+    "key_concepts": [
+      "Secrets Manager",
+      "secret rotation",
+      "credentials",
+      "secure retrieval"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to store, retrieve, and rotate application secrets such as database credentials. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Secrets Manager."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Parameter Store only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Certificate Manager."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Cognito."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "certification": "Cloud Practitioner",
+    "domain": "Integration",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to decouple application components with a managed message queue.",
+    "reference_answer": "Use Amazon SQS to decouple application components with a managed message queue.",
+    "key_concepts": [
+      "SQS",
+      "message queue",
+      "decoupling",
+      "asynchronous processing"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will decouple application components with a managed message queue. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon SQS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon SNS only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EBS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS CloudFormation."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon SQS to decouple application components with a managed message queue.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "certification": "Cloud Practitioner",
+    "domain": "Integration",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to fan out messages to multiple subscribers using a managed pub/sub service.",
+    "reference_answer": "Use Amazon SNS to fan out messages to multiple subscribers using a managed pub/sub service.",
+    "key_concepts": [
+      "SNS",
+      "pub/sub",
+      "fanout",
+      "subscribers"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must fan out messages to multiple subscribers using a managed pub/sub service. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon SNS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use SQS queue polling only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Batch."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon RDS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon SNS to fan out messages to multiple subscribers using a managed pub/sub service.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "certification": "Solutions Architect Associate",
+    "domain": "Integration",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.",
+    "reference_answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+    "key_concepts": [
+      "EventBridge",
+      "event bus",
+      "rules",
+      "event routing"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to route events from AWS services and applications to targets using event buses and rules. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon EventBridge."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudFront."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Artifact."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "certification": "Solutions Architect Associate",
+    "domain": "Application Integration",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to orchestrate multi-step workflows and coordinate distributed application components.",
+    "reference_answer": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+    "key_concepts": [
+      "Step Functions",
+      "workflow orchestration",
+      "state machine",
+      "coordination"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will orchestrate multi-step workflows and coordinate distributed application components. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Step Functions."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Lambda alone."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon S3 Glacier."
+        },
+        {
+          "option_id": "D",
+          "text": "Use NAT gateway."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "certification": "Solutions Architect Associate",
+    "domain": "Networking",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to create, publish, secure, monitor, and throttle APIs for backend services.",
+    "reference_answer": "Use Amazon API Gateway to create, publish, secure, monitor, and throttle APIs for backend services.",
+    "key_concepts": [
+      "API Gateway",
+      "APIs",
+      "throttling",
+      "backend integration"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must create, publish, secure, monitor, and throttle APIs for backend services. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon API Gateway."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudFront only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon EBS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon API Gateway to create, publish, secure, monitor, and throttle APIs for backend services.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "certification": "Solutions Architect Associate",
+    "domain": "Storage",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to provide shared elastic file storage that can be mounted by multiple compute resources.",
+    "reference_answer": "Use Amazon EFS to provide shared elastic file storage that can be mounted by multiple compute resources.",
+    "key_concepts": [
+      "EFS",
+      "shared file storage",
+      "elastic",
+      "multiple compute resources"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to provide shared elastic file storage that can be mounted by multiple compute resources. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon EBS single volume."
+        },
+        {
+          "option_id": "C",
+          "text": "Use S3 object storage only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use DynamoDB."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon EFS to provide shared elastic file storage that can be mounted by multiple compute resources.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "certification": "Cloud Practitioner",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to create point-in-time backups of block storage volumes for recovery or copying.",
+    "reference_answer": "Use Amazon EBS snapshots to create point-in-time backups of block storage volumes for recovery or copying.",
+    "key_concepts": [
+      "EBS snapshots",
+      "point-in-time backup",
+      "block storage",
+      "recovery"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will create point-in-time backups of block storage volumes for recovery or copying. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon EBS snapshots."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 lifecycle."
+        },
+        {
+          "option_id": "C",
+          "text": "Use CloudTrail event."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Route 53 health check."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon EBS snapshots to create point-in-time backups of block storage volumes for recovery or copying.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "certification": "Cloud Practitioner",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "reference_answer": "Use S3 Glacier storage classes to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "key_concepts": [
+      "S3 Glacier",
+      "archive",
+      "low cost",
+      "retrieval time"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must store rarely accessed archival data at lower cost with retrieval-time tradeoffs. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use S3 Glacier storage classes."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 Standard only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon ElastiCache."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use S3 Glacier storage classes to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "certification": "Cloud Practitioner",
+    "domain": "Analytics",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to run analytical queries against a managed petabyte-scale data warehouse.",
+    "reference_answer": "Use Amazon Redshift to run analytical queries against a managed petabyte-scale data warehouse.",
+    "key_concepts": [
+      "Redshift",
+      "data warehouse",
+      "analytics",
+      "SQL queries"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to run analytical queries against a managed petabyte-scale data warehouse. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Redshift."
+        },
+        {
+          "option_id": "B",
+          "text": "Use DynamoDB."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon SQS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Lambda."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Redshift to run analytical queries against a managed petabyte-scale data warehouse.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "certification": "Cloud Practitioner",
+    "domain": "Analytics",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to perform serverless data integration, cataloging, and ETL jobs.",
+    "reference_answer": "Use AWS Glue to perform serverless data integration, cataloging, and ETL jobs.",
+    "key_concepts": [
+      "AWS Glue",
+      "ETL",
+      "data catalog",
+      "serverless"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will perform serverless data integration, cataloging, and ETL jobs. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Glue."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon Route 53."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Shield."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Glue to perform serverless data integration, cataloging, and ETL jobs.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "certification": "Cloud Practitioner",
+    "domain": "Analytics",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to query data in Amazon S3 using SQL without managing servers.",
+    "reference_answer": "Use Amazon Athena to query data in Amazon S3 using SQL without managing servers.",
+    "key_concepts": [
+      "Athena",
+      "SQL",
+      "Amazon S3",
+      "serverless queries"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must query data in Amazon S3 using SQL without managing servers. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Athena."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon RDS."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EBS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS WAF."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Athena to query data in Amazon S3 using SQL without managing servers.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "certification": "Solutions Architect Associate",
+    "domain": "Analytics",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.",
+    "reference_answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "key_concepts": [
+      "Kinesis Data Streams",
+      "real-time",
+      "streaming data",
+      "shards"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to ingest and process real-time streaming data at scale. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Kinesis Data Streams."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Glue crawler."
+        },
+        {
+          "option_id": "C",
+          "text": "Use S3 Glacier."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudTrail Lake only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "certification": "Cloud Practitioner",
+    "domain": "Governance",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to centrally manage multiple AWS accounts and apply service control policies.",
+    "reference_answer": "Use AWS Organizations to centrally manage multiple AWS accounts and apply service control policies.",
+    "key_concepts": [
+      "AWS Organizations",
+      "multiple accounts",
+      "SCPs",
+      "central management"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will centrally manage multiple AWS accounts and apply service control policies. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Organizations."
+        },
+        {
+          "option_id": "B",
+          "text": "Use IAM groups only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Budgets only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Cognito."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Organizations to centrally manage multiple AWS accounts and apply service control policies.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "certification": "Solutions Architect Associate",
+    "domain": "Governance",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.",
+    "reference_answer": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
+    "key_concepts": [
+      "SCPs",
+      "permission guardrails",
+      "AWS Organizations",
+      "accounts"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must set maximum available permissions across accounts in an AWS Organization. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Service Control Policies."
+        },
+        {
+          "option_id": "B",
+          "text": "Use resource policies only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use security groups."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudWatch alarms."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "certification": "Cloud Practitioner",
+    "domain": "Governance",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+    "reference_answer": "Use AWS Trusted Advisor to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+    "key_concepts": [
+      "Trusted Advisor",
+      "recommendations",
+      "cost optimization",
+      "service limits"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Trusted Advisor."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudTrail."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Glue."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon SQS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Trusted Advisor to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "certification": "Cloud Practitioner",
+    "domain": "Governance",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to review workloads against AWS best practices and identify improvement opportunities.",
+    "reference_answer": "Use AWS Well-Architected Tool to review workloads against AWS best practices and identify improvement opportunities.",
+    "key_concepts": [
+      "Well-Architected Tool",
+      "best practices",
+      "workload review",
+      "improvements"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will review workloads against AWS best practices and identify improvement opportunities. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Well-Architected Tool."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Backup only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Route 53."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Well-Architected Tool to review workloads against AWS best practices and identify improvement opportunities.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "certification": "Solutions Architect Associate",
+    "domain": "Storage",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to centralize and automate backup policies across supported AWS services.",
+    "reference_answer": "Use AWS Backup to centralize and automate backup policies across supported AWS services.",
+    "key_concepts": [
+      "AWS Backup",
+      "centralized backups",
+      "backup policies",
+      "automation"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must centralize and automate backup policies across supported AWS services. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Backup."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudFront."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon SNS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Config only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Backup to centralize and automate backup policies across supported AWS services.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "certification": "Solutions Architect Associate",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.",
+    "reference_answer": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+    "key_concepts": [
+      "Cognito",
+      "user authentication",
+      "identity management",
+      "sign-in"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to add user sign-up, sign-in, and identity management to applications. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Cognito."
+        },
+        {
+          "option_id": "B",
+          "text": "Use IAM role for EC2."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS KMS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudTrail."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to protect web applications from common web exploits using rules.",
+    "reference_answer": "Use AWS WAF to protect web applications from common web exploits using rules.",
+    "key_concepts": [
+      "AWS WAF",
+      "web application",
+      "rules",
+      "common exploits"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will protect web applications from common web exploits using rules. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS WAF."
+        },
+        {
+          "option_id": "B",
+          "text": "Use security groups only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon Inspector."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Budgets."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS WAF to protect web applications from common web exploits using rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "reference_answer": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "key_concepts": [
+      "IAM",
+      "temporary credentials",
+      "least privilege",
+      "trusted entities"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must grant temporary credentials to trusted AWS resources without storing long-term access keys. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use IAM roles."
+        },
+        {
+          "option_id": "B",
+          "text": "Use IAM user access keys."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Shield Advanced."
+        },
+        {
+          "option_id": "D",
+          "text": "Use hard-coded credentials."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "certification": "Cloud Practitioner",
+    "domain": "Billing",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "reference_answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "key_concepts": [
+      "AWS Budgets",
+      "cost thresholds",
+      "usage thresholds",
+      "alerts"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to track cost or usage thresholds and send alerts for actual or forecasted spending. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Elastic Load Balancing."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "certification": "Solutions Architect Associate",
+    "domain": "Resilient Architectures",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "reference_answer": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "key_concepts": [
+      "Availability Zones",
+      "high availability",
+      "fault tolerance",
+      "load balancing"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will improve high availability and fault tolerance during an Availability Zone impairment. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use multiple Availability Zones."
+        },
+        {
+          "option_id": "B",
+          "text": "Use single Availability Zone deployment."
+        },
+        {
+          "option_id": "C",
+          "text": "Use larger instance."
+        },
+        {
+          "option_id": "D",
+          "text": "Use root volume backups."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "certification": "Solutions Architect Associate",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "reference_answer": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "key_concepts": [
+      "Amazon S3",
+      "versioning",
+      "object recovery",
+      "overwrite protection"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must preserve, retrieve, and restore previous versions of objects after overwrite or delete events. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon S3 versioning."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 Transfer Acceleration."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use S3 static website hosting."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "certification": "Cloud Practitioner",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.",
+    "reference_answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+    "key_concepts": [
+      "S3 Lifecycle",
+      "storage classes",
+      "object expiration",
+      "cost optimization"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to automatically transition or expire objects based on age and access patterns. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use S3 lifecycle policies."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 bucket policies."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Organizations."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon GuardDuty."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.",
+    "reference_answer": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+    "key_concepts": [
+      "Amazon RDS",
+      "Multi-AZ",
+      "automatic failover",
+      "standby replica"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will provide synchronous standby replication and automatic failover for relational databases. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon RDS Multi-AZ."
+        },
+        {
+          "option_id": "B",
+          "text": "Use read replica only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use DynamoDB global table."
+        },
+        {
+          "option_id": "D",
+          "text": "Use manual snapshot."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "reference_answer": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "key_concepts": [
+      "Amazon RDS",
+      "read replicas",
+      "read scaling",
+      "replication"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must scale read-heavy database workloads by serving read traffic from replicated database instances. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon RDS read replicas."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Multi-AZ failover."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Backup."
+        },
+        {
+          "option_id": "D",
+          "text": "Use vertical scaling only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "certification": "Cloud Practitioner",
+    "domain": "Database",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "reference_answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "key_concepts": [
+      "DynamoDB",
+      "NoSQL",
+      "fully managed",
+      "low latency"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to provide a fully managed NoSQL key-value and document database with low-latency access. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon DynamoDB."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon Redshift."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Glue."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "key_concepts": [
+      "DynamoDB global tables",
+      "multi-Region",
+      "replication",
+      "low latency"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will replicate tables across Regions for low-latency multi-Region access and resilience. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use DynamoDB global tables."
+        },
+        {
+          "option_id": "B",
+          "text": "Use DynamoDB local secondary index."
+        },
+        {
+          "option_id": "C",
+          "text": "Use RDS read replica."
+        },
+        {
+          "option_id": "D",
+          "text": "Use S3 replication only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "certification": "Cloud Practitioner",
+    "domain": "Compute",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.",
+    "reference_answer": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+    "key_concepts": [
+      "AWS Lambda",
+      "serverless",
+      "event-driven",
+      "automatic scaling"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must run event-driven code without managing servers and scale per request. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Lambda."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon EC2 dedicated hosts."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Batch only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon EBS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "certification": "Solutions Architect Associate",
+    "domain": "Compute",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.",
+    "reference_answer": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+    "key_concepts": [
+      "Auto Scaling",
+      "EC2",
+      "capacity",
+      "health checks"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to adjust EC2 capacity automatically based on demand and health checks. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Auto Scaling groups."
+        },
+        {
+          "option_id": "B",
+          "text": "Use manual instance launch."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Elastic IP."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AMI copy."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.",
+    "reference_answer": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+    "key_concepts": [
+      "Elastic Load Balancing",
+      "traffic distribution",
+      "healthy targets",
+      "scalability"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will distribute traffic across healthy targets to improve availability and scalability. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Elastic Load Balancing."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Direct Connect."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon Route 53 only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon EBS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.",
+    "reference_answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+    "key_concepts": [
+      "CloudFront",
+      "edge locations",
+      "caching",
+      "latency reduction"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must cache and deliver content from edge locations to reduce latency for users. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon CloudFront."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Transit Gateway."
+        },
+        {
+          "option_id": "C",
+          "text": "Use NAT gateway."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon FSx."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.",
+    "reference_answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+    "key_concepts": [
+      "Route 53",
+      "DNS",
+      "routing",
+      "health checks"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to provide scalable DNS routing and health-check-based routing for applications. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Route 53."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon CloudWatch Logs."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Inspector."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "certification": "Solutions Architect Associate",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "reference_answer": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "key_concepts": [
+      "security groups",
+      "stateful",
+      "inbound rules",
+      "outbound rules"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will act as stateful virtual firewalls controlling inbound and outbound traffic for resources. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use VPC security groups."
+        },
+        {
+          "option_id": "B",
+          "text": "Use network ACL only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS WAF for subnets."
+        },
+        {
+          "option_id": "D",
+          "text": "Use IAM policy."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "certification": "Solutions Architect Associate",
+    "domain": "Networking",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "reference_answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "key_concepts": [
+      "network ACLs",
+      "stateless",
+      "subnet",
+      "allow and deny rules"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must provide stateless subnet-level traffic filtering with explicit inbound and outbound rules. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use network ACLs."
+        },
+        {
+          "option_id": "B",
+          "text": "Use security group only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Shield."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Route 53."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "key_concepts": [
+      "CloudTrail",
+      "API activity",
+      "auditing",
+      "governance"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to record AWS API activity for auditing, governance, and operational troubleshooting. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudWatch metrics."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Macie."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "certification": "Cloud Practitioner",
+    "domain": "Operations",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "reference_answer": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "key_concepts": [
+      "CloudWatch",
+      "metrics",
+      "logs",
+      "alarms"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will collect metrics, logs, alarms, and dashboards for monitoring AWS resources. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon CloudWatch."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Organizations."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Marketplace."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "certification": "Solutions Architect Associate",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.",
+    "reference_answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "key_concepts": [
+      "AWS Config",
+      "configuration history",
+      "compliance rules",
+      "resource inventory"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must track resource configuration history and evaluate compliance against rules. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudTrail only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Trusted Advisor only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Shield."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "key_concepts": [
+      "AWS KMS",
+      "encryption keys",
+      "data protection",
+      "key management"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to create and manage encryption keys used to protect data in AWS services. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS KMS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Secrets Manager rotation only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use IAM roles."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS WAF."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "certification": "Solutions Architect Associate",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
+    "reference_answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+    "key_concepts": [
+      "Secrets Manager",
+      "secret rotation",
+      "credentials",
+      "secure retrieval"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will store, retrieve, and rotate application secrets such as database credentials. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Secrets Manager."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Parameter Store only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Certificate Manager."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Cognito."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "certification": "Cloud Practitioner",
+    "domain": "Integration",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to decouple application components with a managed message queue.",
+    "reference_answer": "Use Amazon SQS to decouple application components with a managed message queue.",
+    "key_concepts": [
+      "SQS",
+      "message queue",
+      "decoupling",
+      "asynchronous processing"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must decouple application components with a managed message queue. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon SQS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon SNS only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EBS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS CloudFormation."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon SQS to decouple application components with a managed message queue.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "certification": "Cloud Practitioner",
+    "domain": "Integration",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to fan out messages to multiple subscribers using a managed pub/sub service.",
+    "reference_answer": "Use Amazon SNS to fan out messages to multiple subscribers using a managed pub/sub service.",
+    "key_concepts": [
+      "SNS",
+      "pub/sub",
+      "fanout",
+      "subscribers"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to fan out messages to multiple subscribers using a managed pub/sub service. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon SNS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use SQS queue polling only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Batch."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon RDS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon SNS to fan out messages to multiple subscribers using a managed pub/sub service.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "certification": "Solutions Architect Associate",
+    "domain": "Integration",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.",
+    "reference_answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+    "key_concepts": [
+      "EventBridge",
+      "event bus",
+      "rules",
+      "event routing"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will route events from AWS services and applications to targets using event buses and rules. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon EventBridge."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudFront."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Artifact."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "certification": "Solutions Architect Associate",
+    "domain": "Application Integration",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to orchestrate multi-step workflows and coordinate distributed application components.",
+    "reference_answer": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+    "key_concepts": [
+      "Step Functions",
+      "workflow orchestration",
+      "state machine",
+      "coordination"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must orchestrate multi-step workflows and coordinate distributed application components. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Step Functions."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Lambda alone."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon S3 Glacier."
+        },
+        {
+          "option_id": "D",
+          "text": "Use NAT gateway."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "certification": "Solutions Architect Associate",
+    "domain": "Networking",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to create, publish, secure, monitor, and throttle APIs for backend services.",
+    "reference_answer": "Use Amazon API Gateway to create, publish, secure, monitor, and throttle APIs for backend services.",
+    "key_concepts": [
+      "API Gateway",
+      "APIs",
+      "throttling",
+      "backend integration"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to create, publish, secure, monitor, and throttle APIs for backend services. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon API Gateway."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudFront only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon EBS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon API Gateway to create, publish, secure, monitor, and throttle APIs for backend services.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "certification": "Solutions Architect Associate",
+    "domain": "Storage",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to provide shared elastic file storage that can be mounted by multiple compute resources.",
+    "reference_answer": "Use Amazon EFS to provide shared elastic file storage that can be mounted by multiple compute resources.",
+    "key_concepts": [
+      "EFS",
+      "shared file storage",
+      "elastic",
+      "multiple compute resources"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will provide shared elastic file storage that can be mounted by multiple compute resources. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon EBS single volume."
+        },
+        {
+          "option_id": "C",
+          "text": "Use S3 object storage only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use DynamoDB."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon EFS to provide shared elastic file storage that can be mounted by multiple compute resources.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "certification": "Cloud Practitioner",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to create point-in-time backups of block storage volumes for recovery or copying.",
+    "reference_answer": "Use Amazon EBS snapshots to create point-in-time backups of block storage volumes for recovery or copying.",
+    "key_concepts": [
+      "EBS snapshots",
+      "point-in-time backup",
+      "block storage",
+      "recovery"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must create point-in-time backups of block storage volumes for recovery or copying. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon EBS snapshots."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 lifecycle."
+        },
+        {
+          "option_id": "C",
+          "text": "Use CloudTrail event."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Route 53 health check."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon EBS snapshots to create point-in-time backups of block storage volumes for recovery or copying.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "certification": "Cloud Practitioner",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "reference_answer": "Use S3 Glacier storage classes to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "key_concepts": [
+      "S3 Glacier",
+      "archive",
+      "low cost",
+      "retrieval time"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to store rarely accessed archival data at lower cost with retrieval-time tradeoffs. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use S3 Glacier storage classes."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 Standard only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon ElastiCache."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use S3 Glacier storage classes to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "certification": "Cloud Practitioner",
+    "domain": "Analytics",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to run analytical queries against a managed petabyte-scale data warehouse.",
+    "reference_answer": "Use Amazon Redshift to run analytical queries against a managed petabyte-scale data warehouse.",
+    "key_concepts": [
+      "Redshift",
+      "data warehouse",
+      "analytics",
+      "SQL queries"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will run analytical queries against a managed petabyte-scale data warehouse. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Redshift."
+        },
+        {
+          "option_id": "B",
+          "text": "Use DynamoDB."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon SQS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Lambda."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Redshift to run analytical queries against a managed petabyte-scale data warehouse.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "certification": "Cloud Practitioner",
+    "domain": "Analytics",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to perform serverless data integration, cataloging, and ETL jobs.",
+    "reference_answer": "Use AWS Glue to perform serverless data integration, cataloging, and ETL jobs.",
+    "key_concepts": [
+      "AWS Glue",
+      "ETL",
+      "data catalog",
+      "serverless"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must perform serverless data integration, cataloging, and ETL jobs. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Glue."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon Route 53."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Shield."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Glue to perform serverless data integration, cataloging, and ETL jobs.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "certification": "Cloud Practitioner",
+    "domain": "Analytics",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to query data in Amazon S3 using SQL without managing servers.",
+    "reference_answer": "Use Amazon Athena to query data in Amazon S3 using SQL without managing servers.",
+    "key_concepts": [
+      "Athena",
+      "SQL",
+      "Amazon S3",
+      "serverless queries"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to query data in Amazon S3 using SQL without managing servers. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Athena."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon RDS."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EBS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS WAF."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Athena to query data in Amazon S3 using SQL without managing servers.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "certification": "Solutions Architect Associate",
+    "domain": "Analytics",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.",
+    "reference_answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "key_concepts": [
+      "Kinesis Data Streams",
+      "real-time",
+      "streaming data",
+      "shards"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will ingest and process real-time streaming data at scale. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Kinesis Data Streams."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Glue crawler."
+        },
+        {
+          "option_id": "C",
+          "text": "Use S3 Glacier."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudTrail Lake only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "certification": "Cloud Practitioner",
+    "domain": "Governance",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to centrally manage multiple AWS accounts and apply service control policies.",
+    "reference_answer": "Use AWS Organizations to centrally manage multiple AWS accounts and apply service control policies.",
+    "key_concepts": [
+      "AWS Organizations",
+      "multiple accounts",
+      "SCPs",
+      "central management"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must centrally manage multiple AWS accounts and apply service control policies. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Organizations."
+        },
+        {
+          "option_id": "B",
+          "text": "Use IAM groups only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Budgets only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Cognito."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Organizations to centrally manage multiple AWS accounts and apply service control policies.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "certification": "Solutions Architect Associate",
+    "domain": "Governance",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.",
+    "reference_answer": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
+    "key_concepts": [
+      "SCPs",
+      "permission guardrails",
+      "AWS Organizations",
+      "accounts"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to set maximum available permissions across accounts in an AWS Organization. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Service Control Policies."
+        },
+        {
+          "option_id": "B",
+          "text": "Use resource policies only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use security groups."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudWatch alarms."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "certification": "Cloud Practitioner",
+    "domain": "Governance",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+    "reference_answer": "Use AWS Trusted Advisor to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+    "key_concepts": [
+      "Trusted Advisor",
+      "recommendations",
+      "cost optimization",
+      "service limits"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will provide recommendations for cost optimization, security, fault tolerance, performance, and service limits. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Trusted Advisor."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudTrail."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Glue."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon SQS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Trusted Advisor to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "certification": "Cloud Practitioner",
+    "domain": "Governance",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to review workloads against AWS best practices and identify improvement opportunities.",
+    "reference_answer": "Use AWS Well-Architected Tool to review workloads against AWS best practices and identify improvement opportunities.",
+    "key_concepts": [
+      "Well-Architected Tool",
+      "best practices",
+      "workload review",
+      "improvements"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must review workloads against AWS best practices and identify improvement opportunities. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Well-Architected Tool."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Backup only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Route 53."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Well-Architected Tool to review workloads against AWS best practices and identify improvement opportunities.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "certification": "Solutions Architect Associate",
+    "domain": "Storage",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to centralize and automate backup policies across supported AWS services.",
+    "reference_answer": "Use AWS Backup to centralize and automate backup policies across supported AWS services.",
+    "key_concepts": [
+      "AWS Backup",
+      "centralized backups",
+      "backup policies",
+      "automation"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to centralize and automate backup policies across supported AWS services. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Backup."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudFront."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon SNS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Config only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Backup to centralize and automate backup policies across supported AWS services.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "certification": "Solutions Architect Associate",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.",
+    "reference_answer": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+    "key_concepts": [
+      "Cognito",
+      "user authentication",
+      "identity management",
+      "sign-in"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will add user sign-up, sign-in, and identity management to applications. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Cognito."
+        },
+        {
+          "option_id": "B",
+          "text": "Use IAM role for EC2."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS KMS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudTrail."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to protect web applications from common web exploits using rules.",
+    "reference_answer": "Use AWS WAF to protect web applications from common web exploits using rules.",
+    "key_concepts": [
+      "AWS WAF",
+      "web application",
+      "rules",
+      "common exploits"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must protect web applications from common web exploits using rules. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS WAF."
+        },
+        {
+          "option_id": "B",
+          "text": "Use security groups only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon Inspector."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Budgets."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS WAF to protect web applications from common web exploits using rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "reference_answer": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "key_concepts": [
+      "IAM",
+      "temporary credentials",
+      "least privilege",
+      "trusted entities"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to grant temporary credentials to trusted AWS resources without storing long-term access keys. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use IAM roles."
+        },
+        {
+          "option_id": "B",
+          "text": "Use IAM user access keys."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Shield Advanced."
+        },
+        {
+          "option_id": "D",
+          "text": "Use hard-coded credentials."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "certification": "Cloud Practitioner",
+    "domain": "Billing",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "reference_answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "key_concepts": [
+      "AWS Budgets",
+      "cost thresholds",
+      "usage thresholds",
+      "alerts"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will track cost or usage thresholds and send alerts for actual or forecasted spending. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Elastic Load Balancing."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "certification": "Solutions Architect Associate",
+    "domain": "Resilient Architectures",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "reference_answer": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "key_concepts": [
+      "Availability Zones",
+      "high availability",
+      "fault tolerance",
+      "load balancing"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must improve high availability and fault tolerance during an Availability Zone impairment. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use multiple Availability Zones."
+        },
+        {
+          "option_id": "B",
+          "text": "Use single Availability Zone deployment."
+        },
+        {
+          "option_id": "C",
+          "text": "Use larger instance."
+        },
+        {
+          "option_id": "D",
+          "text": "Use root volume backups."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "certification": "Solutions Architect Associate",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "reference_answer": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "key_concepts": [
+      "Amazon S3",
+      "versioning",
+      "object recovery",
+      "overwrite protection"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to preserve, retrieve, and restore previous versions of objects after overwrite or delete events. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon S3 versioning."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 Transfer Acceleration."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use S3 static website hosting."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "certification": "Cloud Practitioner",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.",
+    "reference_answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+    "key_concepts": [
+      "S3 Lifecycle",
+      "storage classes",
+      "object expiration",
+      "cost optimization"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will automatically transition or expire objects based on age and access patterns. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use S3 lifecycle policies."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 bucket policies."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Organizations."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon GuardDuty."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.",
+    "reference_answer": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+    "key_concepts": [
+      "Amazon RDS",
+      "Multi-AZ",
+      "automatic failover",
+      "standby replica"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must provide synchronous standby replication and automatic failover for relational databases. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon RDS Multi-AZ."
+        },
+        {
+          "option_id": "B",
+          "text": "Use read replica only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use DynamoDB global table."
+        },
+        {
+          "option_id": "D",
+          "text": "Use manual snapshot."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "reference_answer": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "key_concepts": [
+      "Amazon RDS",
+      "read replicas",
+      "read scaling",
+      "replication"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to scale read-heavy database workloads by serving read traffic from replicated database instances. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon RDS read replicas."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Multi-AZ failover."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Backup."
+        },
+        {
+          "option_id": "D",
+          "text": "Use vertical scaling only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "certification": "Cloud Practitioner",
+    "domain": "Database",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "reference_answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "key_concepts": [
+      "DynamoDB",
+      "NoSQL",
+      "fully managed",
+      "low latency"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will provide a fully managed NoSQL key-value and document database with low-latency access. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon DynamoDB."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon Redshift."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Glue."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "certification": "Solutions Architect Associate",
+    "domain": "Database",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "key_concepts": [
+      "DynamoDB global tables",
+      "multi-Region",
+      "replication",
+      "low latency"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must replicate tables across Regions for low-latency multi-Region access and resilience. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use DynamoDB global tables."
+        },
+        {
+          "option_id": "B",
+          "text": "Use DynamoDB local secondary index."
+        },
+        {
+          "option_id": "C",
+          "text": "Use RDS read replica."
+        },
+        {
+          "option_id": "D",
+          "text": "Use S3 replication only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "certification": "Cloud Practitioner",
+    "domain": "Compute",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.",
+    "reference_answer": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+    "key_concepts": [
+      "AWS Lambda",
+      "serverless",
+      "event-driven",
+      "automatic scaling"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to run event-driven code without managing servers and scale per request. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Lambda."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon EC2 dedicated hosts."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Batch only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon EBS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "certification": "Solutions Architect Associate",
+    "domain": "Compute",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.",
+    "reference_answer": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+    "key_concepts": [
+      "Auto Scaling",
+      "EC2",
+      "capacity",
+      "health checks"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will adjust EC2 capacity automatically based on demand and health checks. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Auto Scaling groups."
+        },
+        {
+          "option_id": "B",
+          "text": "Use manual instance launch."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Elastic IP."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AMI copy."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.",
+    "reference_answer": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+    "key_concepts": [
+      "Elastic Load Balancing",
+      "traffic distribution",
+      "healthy targets",
+      "scalability"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must distribute traffic across healthy targets to improve availability and scalability. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Elastic Load Balancing."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Direct Connect."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon Route 53 only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon EBS."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.",
+    "reference_answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+    "key_concepts": [
+      "CloudFront",
+      "edge locations",
+      "caching",
+      "latency reduction"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to cache and deliver content from edge locations to reduce latency for users. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon CloudFront."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Transit Gateway."
+        },
+        {
+          "option_id": "C",
+          "text": "Use NAT gateway."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon FSx."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "certification": "Cloud Practitioner",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.",
+    "reference_answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+    "key_concepts": [
+      "Route 53",
+      "DNS",
+      "routing",
+      "health checks"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will provide scalable DNS routing and health-check-based routing for applications. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Route 53."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon CloudWatch Logs."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Inspector."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "certification": "Solutions Architect Associate",
+    "domain": "Networking",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "reference_answer": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "key_concepts": [
+      "security groups",
+      "stateful",
+      "inbound rules",
+      "outbound rules"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must act as stateful virtual firewalls controlling inbound and outbound traffic for resources. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use VPC security groups."
+        },
+        {
+          "option_id": "B",
+          "text": "Use network ACL only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS WAF for subnets."
+        },
+        {
+          "option_id": "D",
+          "text": "Use IAM policy."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "certification": "Solutions Architect Associate",
+    "domain": "Networking",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "reference_answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "key_concepts": [
+      "network ACLs",
+      "stateless",
+      "subnet",
+      "allow and deny rules"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use network ACLs."
+        },
+        {
+          "option_id": "B",
+          "text": "Use security group only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Shield."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Route 53."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "key_concepts": [
+      "CloudTrail",
+      "API activity",
+      "auditing",
+      "governance"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will record AWS API activity for auditing, governance, and operational troubleshooting. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudWatch metrics."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Macie."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "certification": "Cloud Practitioner",
+    "domain": "Operations",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "reference_answer": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "key_concepts": [
+      "CloudWatch",
+      "metrics",
+      "logs",
+      "alarms"
+    ],
+    "original_multiple_choice": {
+      "question": "A workload requirement says the solution must collect metrics, logs, alarms, and dashboards for monitoring AWS resources. Which AWS service or feature best fits?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon CloudWatch."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Organizations."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Marketplace."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "certification": "Solutions Architect Associate",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.",
+    "reference_answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "key_concepts": [
+      "AWS Config",
+      "configuration history",
+      "compliance rules",
+      "resource inventory"
+    ],
+    "original_multiple_choice": {
+      "question": "An architect is designing a solution to track resource configuration history and evaluate compliance against rules. Which choice is most appropriate?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudTrail only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Trusted Advisor only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Shield."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "key_concepts": [
+      "AWS KMS",
+      "encryption keys",
+      "data protection",
+      "key management"
+    ],
+    "original_multiple_choice": {
+      "question": "A team needs to choose the AWS capability that will create and manage encryption keys used to protect data in AWS services. Which option should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS KMS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Secrets Manager rotation only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use IAM roles."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS WAF."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+      "source_name": "Generated self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Generated for this project; not copied from an official exam or practice test."
+    }
+  }
+]

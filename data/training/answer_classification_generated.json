@@ -1,0 +1,6002 @@
+[
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "Use IAM roles.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "Use IAM roles grant temporary credentials trusted AWS resources storing long-term access",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "Use IAM",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "IAM roles is appropriate because it helps grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "The best choice is IAM roles; key ideas include IAM, temporary credentials.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "Use IAM user access keys.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "Use AWS Shield Advanced.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "Use hard-coded credentials.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-001",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "Use AWS Budgets.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "Use AWS Budgets track cost or thresholds and send for actual or spending.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "AWS Budgets is appropriate because it helps track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "The best choice is AWS Budgets; key ideas include AWS Budgets, cost thresholds.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "Use AWS CloudTrail.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "Use Elastic Load Balancing.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-002",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "Use multiple Availability Zones.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "Use multiple Availability to improve high and fault tolerance an Availability Zone",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "Use multiple Zones.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "multiple Availability Zones is appropriate because it helps improve high availability and fault tolerance during an Availability Zone impairment.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "The best choice is multiple Availability Zones; key ideas include Availability Zones, high availability.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "Use single Availability Zone deployment.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "Use larger instance.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "Use root volume backups.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-003",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Use Amazon S3 versioning.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Use Amazon S3 to preserve, retrieve, restore previous versions objects after overwrite delete events.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Use Amazon versioning.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Amazon S3 versioning is appropriate because it helps preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "The best choice is Amazon S3 versioning; key ideas include Amazon S3, versioning.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Use S3 Transfer Acceleration.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Use S3 static website hosting.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-004",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "Use S3 lifecycle policies.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "Use S3 lifecycle to automatically transition expire objects based age and access",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "Use S3 policies.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "S3 lifecycle policies is appropriate because it helps automatically transition or expire objects based on age and access patterns.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "The best choice is S3 lifecycle policies; key ideas include S3 Lifecycle, storage classes.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "Use S3 bucket policies.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "Use AWS Organizations.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "Use Amazon GuardDuty.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-005",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Use Amazon RDS Multi-AZ.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Use Amazon RDS to provide synchronous replication and automatic for relational databases.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Use Amazon Multi-AZ.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Amazon RDS Multi-AZ is appropriate because it helps provide synchronous standby replication and automatic failover for relational databases.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "The best choice is Amazon RDS Multi-AZ; key ideas include Amazon RDS, Multi-AZ.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Use read replica only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Use DynamoDB global table.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Use manual snapshot.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-006",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Use Amazon RDS read replicas.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Use Amazon RDS replicas to scale database workloads by read traffic from database instances.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Use Amazon read replicas.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Amazon RDS read replicas is appropriate because it helps scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "The best choice is Amazon RDS read replicas; key ideas include Amazon RDS, read replicas.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Use Multi-AZ failover.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Use AWS Backup.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Use vertical scaling only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-007",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Use Amazon DynamoDB.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Use Amazon DynamoDB provide a fully NoSQL key-value and database with low-latency",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Amazon DynamoDB is appropriate because it helps provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "The best choice is Amazon DynamoDB; key ideas include DynamoDB, NoSQL.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Use Amazon Redshift.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Use AWS Glue.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-008",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "Use DynamoDB global tables.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "Use DynamoDB global to replicate tables Regions for low-latency access and resilience.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "Use DynamoDB tables.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "DynamoDB global tables is appropriate because it helps replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "The best choice is DynamoDB global tables; key ideas include DynamoDB global tables, multi-Region.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "Use DynamoDB local secondary index.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "Use RDS read replica.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "Use S3 replication only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-009",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "Use AWS Lambda.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "Use AWS Lambda run event-driven code managing servers and per request.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "AWS Lambda is appropriate because it helps run event-driven code without managing servers and scale per request.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "The best choice is AWS Lambda; key ideas include AWS Lambda, serverless.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "Use Amazon EC2 dedicated hosts.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "Use AWS Batch only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-010",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Use Auto Scaling groups.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Use Auto Scaling to adjust EC2 automatically based on and health checks.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Use Auto groups.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Auto Scaling groups is appropriate because it helps adjust EC2 capacity automatically based on demand and health checks.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "The best choice is Auto Scaling groups; key ideas include Auto Scaling, EC2.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Use manual instance launch.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Use Elastic IP.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Use AMI copy.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-011",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Use Elastic Load Balancing.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Use Elastic Load to distribute traffic healthy targets to availability and scalability.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Use Elastic Balancing.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Elastic Load Balancing is appropriate because it helps distribute traffic across healthy targets to improve availability and scalability.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "The best choice is Elastic Load Balancing; key ideas include Elastic Load Balancing, traffic distribution.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Use AWS Direct Connect.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Use Amazon Route 53 only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-012",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Use Amazon CloudFront.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Use Amazon CloudFront cache and deliver from edge locations reduce latency for",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Amazon CloudFront is appropriate because it helps cache and deliver content from edge locations to reduce latency for users.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "The best choice is Amazon CloudFront; key ideas include CloudFront, edge locations.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Use AWS Transit Gateway.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Use NAT gateway.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Use Amazon FSx.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-013",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Use Amazon Route 53.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Use Amazon Route to provide scalable routing and health-check-based for applications.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Use Amazon 53.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Amazon Route 53 is appropriate because it helps provide scalable DNS routing and health-check-based routing for applications.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "The best choice is Amazon Route 53; key ideas include Route 53, DNS.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Use Amazon CloudWatch Logs.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Use AWS Config.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Use Amazon Inspector.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-014",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "Use VPC security groups.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "Use VPC security to act as virtual firewalls controlling and outbound traffic resources.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "Use VPC groups.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "VPC security groups is appropriate because it helps act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "The best choice is VPC security groups; key ideas include security groups, stateful.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "Use network ACL only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "Use AWS WAF for subnets.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "Use IAM policy.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-015",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "Use network ACLs.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "Use network ACLs provide stateless subnet-level filtering with explicit and outbound rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "Use network",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "network ACLs is appropriate because it helps provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "The best choice is network ACLs; key ideas include network ACLs, stateless.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "Use security group only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "Use AWS Shield.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "Use Route 53.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-016",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "Use AWS CloudTrail.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "Use AWS CloudTrail record AWS API for auditing, governance, operational troubleshooting.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "AWS CloudTrail is appropriate because it helps record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "The best choice is AWS CloudTrail; key ideas include CloudTrail, API activity.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "Use CloudWatch metrics.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "Use AWS Budgets.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "Use Amazon Macie.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-017",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Use Amazon CloudWatch.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Use Amazon CloudWatch collect metrics, logs, and dashboards for AWS resources.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Amazon CloudWatch is appropriate because it helps collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "The best choice is Amazon CloudWatch; key ideas include CloudWatch, metrics.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Use AWS Organizations.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Use AWS Marketplace.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-018",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "Use AWS Config.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "Use AWS Config track resource configuration and evaluate compliance rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "AWS Config is appropriate because it helps track resource configuration history and evaluate compliance against rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "The best choice is AWS Config; key ideas include AWS Config, configuration history.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "Use CloudTrail only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "Use Trusted Advisor only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "Use AWS Shield.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-019",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "Use AWS KMS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "Use AWS KMS create and manage keys used to data in AWS",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "AWS KMS is appropriate because it helps create and manage encryption keys used to protect data in AWS services.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "The best choice is AWS KMS; key ideas include AWS KMS, encryption keys.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "Use AWS Secrets Manager rotation only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "Use IAM roles.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "Use AWS WAF.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-020",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "Use AWS Secrets Manager.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "Use AWS Secrets to store, retrieve, rotate application secrets as database credentials.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "Use AWS Manager.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "AWS Secrets Manager is appropriate because it helps store, retrieve, and rotate application secrets such as database credentials.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "The best choice is AWS Secrets Manager; key ideas include Secrets Manager, secret rotation.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "Use Parameter Store only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "Use AWS Certificate Manager.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "Use Amazon Cognito.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-021",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Use Amazon SQS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Use Amazon SQS to decouple application components with a managed message queue.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Use Amazon SQS decouple application components a managed message",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Amazon SQS is appropriate because it helps decouple application components with a managed message queue.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "The best choice is Amazon SQS; key ideas include SQS, message queue.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Use Amazon SNS only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Use AWS CloudFormation.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-022",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Use Amazon SNS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Use Amazon SNS to fan out messages to multiple subscribers using a managed pub/sub service.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Use Amazon SNS fan out messages multiple subscribers using managed pub/sub service.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Amazon SNS is appropriate because it helps fan out messages to multiple subscribers using a managed pub/sub service.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "The best choice is Amazon SNS; key ideas include SNS, pub/sub.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Use SQS queue polling only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Use AWS Batch.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Use Amazon RDS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-023",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Use Amazon EventBridge.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Use Amazon EventBridge route events from services and applications targets using event and rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Amazon EventBridge is appropriate because it helps route events from AWS services and applications to targets using event buses and rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "The best choice is Amazon EventBridge; key ideas include EventBridge, event bus.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Use CloudFront.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-024",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "Use AWS Step Functions.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "Use AWS Step to orchestrate multi-step and coordinate distributed components.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "Use AWS Functions.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "AWS Step Functions is appropriate because it helps orchestrate multi-step workflows and coordinate distributed application components.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "The best choice is AWS Step Functions; key ideas include Step Functions, workflow orchestration.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "Use Lambda alone.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "Use Amazon S3 Glacier.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "Use NAT gateway.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-025",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Use Amazon API Gateway.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Use Amazon API Gateway to create, publish, secure, monitor, and throttle APIs for backend services.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Use Amazon API to create, publish, monitor, and throttle for backend services.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Use Amazon Gateway.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Amazon API Gateway is appropriate because it helps create, publish, secure, monitor, and throttle APIs for backend services.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "The best choice is Amazon API Gateway; key ideas include API Gateway, APIs.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Use CloudFront only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Use AWS Config.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-026",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Use Amazon EFS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Use Amazon EFS to provide shared elastic file storage that can be mounted by multiple compute resources.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Use Amazon EFS provide shared elastic storage that can mounted by multiple resources.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Amazon EFS is appropriate because it helps provide shared elastic file storage that can be mounted by multiple compute resources.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "The best choice is Amazon EFS; key ideas include EFS, shared file storage.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Use Amazon EBS single volume.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Use S3 object storage only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Use DynamoDB.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-027",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Use Amazon EBS snapshots.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Use Amazon EBS snapshots to create point-in-time backups of block storage volumes for recovery or copying.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Use Amazon EBS to create point-in-time of block storage for recovery or",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Use Amazon snapshots.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Amazon EBS snapshots is appropriate because it helps create point-in-time backups of block storage volumes for recovery or copying.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "The best choice is Amazon EBS snapshots; key ideas include EBS snapshots, point-in-time backup.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Use S3 lifecycle.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Use CloudTrail event.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Use Route 53 health check.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-028",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "Use S3 Glacier storage classes.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "Use S3 Glacier storage classes to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "Use S3 Glacier classes to store accessed archival data lower cost with tradeoffs.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "Use S3 storage classes.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "S3 Glacier storage classes is appropriate because it helps store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "The best choice is S3 Glacier storage classes; key ideas include S3 Glacier, archive.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "Use S3 Standard only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "Use Amazon ElastiCache.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-029",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Use Amazon Redshift.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Use Amazon Redshift to run analytical queries against a managed petabyte-scale data warehouse.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Use Amazon Redshift run analytical queries a managed petabyte-scale warehouse.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Amazon Redshift is appropriate because it helps run analytical queries against a managed petabyte-scale data warehouse.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "The best choice is Amazon Redshift; key ideas include Redshift, data warehouse.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Use DynamoDB.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Use Amazon SQS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Use AWS Lambda.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-030",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "Use AWS Glue.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "Use AWS Glue to perform serverless data integration, cataloging, and ETL jobs.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "Use AWS Glue perform serverless data cataloging, and ETL",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "AWS Glue is appropriate because it helps perform serverless data integration, cataloging, and ETL jobs.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "The best choice is AWS Glue; key ideas include AWS Glue, ETL.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "Use AWS Config.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "Use Amazon Route 53.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "Use AWS Shield.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-031",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Use Amazon Athena.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Use Amazon Athena to query data in Amazon S3 using SQL without managing servers.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Use Amazon Athena query data in S3 using SQL managing servers.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Amazon Athena is appropriate because it helps query data in Amazon S3 using SQL without managing servers.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "The best choice is Amazon Athena; key ideas include Athena, SQL.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Use Amazon RDS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Use AWS WAF.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-032",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Use Amazon Kinesis Data Streams.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Use Amazon Kinesis Streams to ingest process real-time streaming at scale.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Use Amazon Data Streams.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Amazon Kinesis Data Streams is appropriate because it helps ingest and process real-time streaming data at scale.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "The best choice is Amazon Kinesis Data Streams; key ideas include Kinesis Data Streams, real-time.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Use AWS Glue crawler.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Use S3 Glacier.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Use CloudTrail Lake only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-033",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "Use AWS Organizations.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "Use AWS Organizations to centrally manage multiple AWS accounts and apply service control policies.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "Use AWS Organizations centrally manage multiple accounts and apply control policies.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "AWS Organizations is appropriate because it helps centrally manage multiple AWS accounts and apply service control policies.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "The best choice is AWS Organizations; key ideas include AWS Organizations, multiple accounts.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "Use IAM groups only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "Use AWS Budgets only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "Use Amazon Cognito.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-034",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Use Service Control Policies.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Use Service Control to set maximum permissions across accounts an AWS Organization.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Use Service Policies.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Service Control Policies is appropriate because it helps set maximum available permissions across accounts in an AWS Organization.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "The best choice is Service Control Policies; key ideas include SCPs, permission guardrails.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Use resource policies only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Use security groups.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Use CloudWatch alarms.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-035",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "Use AWS Trusted Advisor.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "Use AWS Trusted Advisor to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "Use AWS Trusted to provide recommendations cost optimization, security, tolerance, performance, and limits.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "Use AWS Advisor.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "AWS Trusted Advisor is appropriate because it helps provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "The best choice is AWS Trusted Advisor; key ideas include Trusted Advisor, recommendations.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "Use CloudTrail.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "Use AWS Glue.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "Use Amazon SQS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-036",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "Use AWS Well-Architected Tool.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "Use AWS Well-Architected Tool to review workloads against AWS best practices and identify improvement opportunities.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "Use AWS Well-Architected to review workloads AWS best practices identify improvement opportunities.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "Use AWS Tool.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "AWS Well-Architected Tool is appropriate because it helps review workloads against AWS best practices and identify improvement opportunities.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "The best choice is AWS Well-Architected Tool; key ideas include Well-Architected Tool, best practices.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "Use AWS Backup only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "Use Route 53.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-037",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "Use AWS Backup.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "Use AWS Backup to centralize and automate backup policies across supported AWS services.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "Use AWS Backup centralize and automate policies across supported services.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "AWS Backup is appropriate because it helps centralize and automate backup policies across supported AWS services.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "The best choice is AWS Backup; key ideas include AWS Backup, centralized backups.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "Use CloudFront.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "Use Amazon SNS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "Use AWS Config only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-038",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Use Amazon Cognito.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Use Amazon Cognito add user sign-up, and identity management applications.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Amazon Cognito is appropriate because it helps add user sign-up, sign-in, and identity management to applications.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "The best choice is Amazon Cognito; key ideas include Cognito, user authentication.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Use IAM role for EC2.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Use AWS KMS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Use CloudTrail.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-039",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "Use AWS WAF.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "Use AWS WAF to protect web applications from common web exploits using rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "Use AWS WAF protect web applications common web exploits rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "AWS WAF is appropriate because it helps protect web applications from common web exploits using rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "The best choice is AWS WAF; key ideas include AWS WAF, web application.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "Use security groups only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "Use Amazon Inspector.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "Use AWS Budgets.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-040",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "Use IAM roles.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "Use IAM roles grant temporary credentials trusted AWS resources storing long-term access",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "Use IAM",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "IAM roles is appropriate because it helps grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "The best choice is IAM roles; key ideas include IAM, temporary credentials.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "Use IAM user access keys.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "Use AWS Shield Advanced.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "Use hard-coded credentials.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-041",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "Use AWS Budgets.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "Use AWS Budgets track cost or thresholds and send for actual or spending.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "AWS Budgets is appropriate because it helps track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "The best choice is AWS Budgets; key ideas include AWS Budgets, cost thresholds.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "Use AWS CloudTrail.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "Use Elastic Load Balancing.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-042",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "Use multiple Availability Zones.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "Use multiple Availability to improve high and fault tolerance an Availability Zone",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "Use multiple Zones.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "multiple Availability Zones is appropriate because it helps improve high availability and fault tolerance during an Availability Zone impairment.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "The best choice is multiple Availability Zones; key ideas include Availability Zones, high availability.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "Use single Availability Zone deployment.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "Use larger instance.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "Use root volume backups.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-043",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Use Amazon S3 versioning.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Use Amazon S3 to preserve, retrieve, restore previous versions objects after overwrite delete events.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Use Amazon versioning.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Amazon S3 versioning is appropriate because it helps preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "The best choice is Amazon S3 versioning; key ideas include Amazon S3, versioning.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Use S3 Transfer Acceleration.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Use S3 static website hosting.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-044",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "Use S3 lifecycle policies.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "Use S3 lifecycle to automatically transition expire objects based age and access",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "Use S3 policies.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "S3 lifecycle policies is appropriate because it helps automatically transition or expire objects based on age and access patterns.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "The best choice is S3 lifecycle policies; key ideas include S3 Lifecycle, storage classes.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "Use S3 bucket policies.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "Use AWS Organizations.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "Use Amazon GuardDuty.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-045",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Use Amazon RDS Multi-AZ.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Use Amazon RDS to provide synchronous replication and automatic for relational databases.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Use Amazon Multi-AZ.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Amazon RDS Multi-AZ is appropriate because it helps provide synchronous standby replication and automatic failover for relational databases.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "The best choice is Amazon RDS Multi-AZ; key ideas include Amazon RDS, Multi-AZ.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Use read replica only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Use DynamoDB global table.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Use manual snapshot.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-046",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Use Amazon RDS read replicas.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Use Amazon RDS replicas to scale database workloads by read traffic from database instances.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Use Amazon read replicas.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Amazon RDS read replicas is appropriate because it helps scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "The best choice is Amazon RDS read replicas; key ideas include Amazon RDS, read replicas.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Use Multi-AZ failover.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Use AWS Backup.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Use vertical scaling only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-047",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Use Amazon DynamoDB.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Use Amazon DynamoDB provide a fully NoSQL key-value and database with low-latency",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Amazon DynamoDB is appropriate because it helps provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "The best choice is Amazon DynamoDB; key ideas include DynamoDB, NoSQL.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Use Amazon Redshift.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Use AWS Glue.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-048",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "Use DynamoDB global tables.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "Use DynamoDB global to replicate tables Regions for low-latency access and resilience.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "Use DynamoDB tables.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "DynamoDB global tables is appropriate because it helps replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "The best choice is DynamoDB global tables; key ideas include DynamoDB global tables, multi-Region.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "Use DynamoDB local secondary index.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "Use RDS read replica.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "Use S3 replication only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-049",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "Use AWS Lambda.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "Use AWS Lambda run event-driven code managing servers and per request.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "AWS Lambda is appropriate because it helps run event-driven code without managing servers and scale per request.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "The best choice is AWS Lambda; key ideas include AWS Lambda, serverless.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "Use Amazon EC2 dedicated hosts.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "Use AWS Batch only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-050",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Use Auto Scaling groups.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Use Auto Scaling to adjust EC2 automatically based on and health checks.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Use Auto groups.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Auto Scaling groups is appropriate because it helps adjust EC2 capacity automatically based on demand and health checks.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "The best choice is Auto Scaling groups; key ideas include Auto Scaling, EC2.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Use manual instance launch.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Use Elastic IP.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Use AMI copy.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-051",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Use Elastic Load Balancing.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Use Elastic Load to distribute traffic healthy targets to availability and scalability.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Use Elastic Balancing.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Elastic Load Balancing is appropriate because it helps distribute traffic across healthy targets to improve availability and scalability.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "The best choice is Elastic Load Balancing; key ideas include Elastic Load Balancing, traffic distribution.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Use AWS Direct Connect.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Use Amazon Route 53 only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-052",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Use Amazon CloudFront.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Use Amazon CloudFront cache and deliver from edge locations reduce latency for",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Amazon CloudFront is appropriate because it helps cache and deliver content from edge locations to reduce latency for users.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "The best choice is Amazon CloudFront; key ideas include CloudFront, edge locations.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Use AWS Transit Gateway.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Use NAT gateway.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Use Amazon FSx.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-053",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Use Amazon Route 53.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Use Amazon Route to provide scalable routing and health-check-based for applications.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Use Amazon 53.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Amazon Route 53 is appropriate because it helps provide scalable DNS routing and health-check-based routing for applications.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "The best choice is Amazon Route 53; key ideas include Route 53, DNS.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Use Amazon CloudWatch Logs.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Use AWS Config.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Use Amazon Inspector.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-054",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "Use VPC security groups.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "Use VPC security to act as virtual firewalls controlling and outbound traffic resources.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "Use VPC groups.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "VPC security groups is appropriate because it helps act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "The best choice is VPC security groups; key ideas include security groups, stateful.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "Use network ACL only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "Use AWS WAF for subnets.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "Use IAM policy.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-055",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "Use network ACLs.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "Use network ACLs provide stateless subnet-level filtering with explicit and outbound rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "Use network",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "network ACLs is appropriate because it helps provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "The best choice is network ACLs; key ideas include network ACLs, stateless.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "Use security group only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "Use AWS Shield.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "Use Route 53.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-056",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "Use AWS CloudTrail.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "Use AWS CloudTrail record AWS API for auditing, governance, operational troubleshooting.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "AWS CloudTrail is appropriate because it helps record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "The best choice is AWS CloudTrail; key ideas include CloudTrail, API activity.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "Use CloudWatch metrics.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "Use AWS Budgets.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "Use Amazon Macie.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-057",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Use Amazon CloudWatch.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Use Amazon CloudWatch collect metrics, logs, and dashboards for AWS resources.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Amazon CloudWatch is appropriate because it helps collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "The best choice is Amazon CloudWatch; key ideas include CloudWatch, metrics.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Use AWS Organizations.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Use AWS Marketplace.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-058",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "Use AWS Config.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "Use AWS Config track resource configuration and evaluate compliance rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "AWS Config is appropriate because it helps track resource configuration history and evaluate compliance against rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "The best choice is AWS Config; key ideas include AWS Config, configuration history.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "Use CloudTrail only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "Use Trusted Advisor only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "Use AWS Shield.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-059",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "Use AWS KMS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "Use AWS KMS create and manage keys used to data in AWS",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "AWS KMS is appropriate because it helps create and manage encryption keys used to protect data in AWS services.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "The best choice is AWS KMS; key ideas include AWS KMS, encryption keys.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "Use AWS Secrets Manager rotation only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "Use IAM roles.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "Use AWS WAF.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-060",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "Use AWS Secrets Manager.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "Use AWS Secrets to store, retrieve, rotate application secrets as database credentials.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "Use AWS Manager.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "AWS Secrets Manager is appropriate because it helps store, retrieve, and rotate application secrets such as database credentials.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "The best choice is AWS Secrets Manager; key ideas include Secrets Manager, secret rotation.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "Use Parameter Store only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "Use AWS Certificate Manager.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "Use Amazon Cognito.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-061",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Use Amazon SQS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Use Amazon SQS to decouple application components with a managed message queue.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Use Amazon SQS decouple application components a managed message",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Amazon SQS is appropriate because it helps decouple application components with a managed message queue.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "The best choice is Amazon SQS; key ideas include SQS, message queue.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Use Amazon SNS only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Use AWS CloudFormation.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-062",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Use Amazon SNS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Use Amazon SNS to fan out messages to multiple subscribers using a managed pub/sub service.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Use Amazon SNS fan out messages multiple subscribers using managed pub/sub service.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Amazon SNS is appropriate because it helps fan out messages to multiple subscribers using a managed pub/sub service.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "The best choice is Amazon SNS; key ideas include SNS, pub/sub.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Use SQS queue polling only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Use AWS Batch.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Use Amazon RDS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-063",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Use Amazon EventBridge.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Use Amazon EventBridge route events from services and applications targets using event and rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Amazon EventBridge is appropriate because it helps route events from AWS services and applications to targets using event buses and rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "The best choice is Amazon EventBridge; key ideas include EventBridge, event bus.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Use CloudFront.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-064",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "Use AWS Step Functions.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "Use AWS Step to orchestrate multi-step and coordinate distributed components.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "Use AWS Functions.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "AWS Step Functions is appropriate because it helps orchestrate multi-step workflows and coordinate distributed application components.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "The best choice is AWS Step Functions; key ideas include Step Functions, workflow orchestration.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "Use Lambda alone.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "Use Amazon S3 Glacier.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "Use NAT gateway.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-065",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Use Amazon API Gateway.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Use Amazon API Gateway to create, publish, secure, monitor, and throttle APIs for backend services.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Use Amazon API to create, publish, monitor, and throttle for backend services.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Use Amazon Gateway.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Amazon API Gateway is appropriate because it helps create, publish, secure, monitor, and throttle APIs for backend services.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "The best choice is Amazon API Gateway; key ideas include API Gateway, APIs.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Use CloudFront only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Use AWS Config.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-066",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Use Amazon EFS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Use Amazon EFS to provide shared elastic file storage that can be mounted by multiple compute resources.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Use Amazon EFS provide shared elastic storage that can mounted by multiple resources.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Amazon EFS is appropriate because it helps provide shared elastic file storage that can be mounted by multiple compute resources.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "The best choice is Amazon EFS; key ideas include EFS, shared file storage.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Use Amazon EBS single volume.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Use S3 object storage only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Use DynamoDB.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-067",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Use Amazon EBS snapshots.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Use Amazon EBS snapshots to create point-in-time backups of block storage volumes for recovery or copying.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Use Amazon EBS to create point-in-time of block storage for recovery or",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Use Amazon snapshots.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Amazon EBS snapshots is appropriate because it helps create point-in-time backups of block storage volumes for recovery or copying.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "The best choice is Amazon EBS snapshots; key ideas include EBS snapshots, point-in-time backup.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Use S3 lifecycle.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Use CloudTrail event.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Use Route 53 health check.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-068",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "Use S3 Glacier storage classes.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "Use S3 Glacier storage classes to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "Use S3 Glacier classes to store accessed archival data lower cost with tradeoffs.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "Use S3 storage classes.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "S3 Glacier storage classes is appropriate because it helps store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "The best choice is S3 Glacier storage classes; key ideas include S3 Glacier, archive.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "Use S3 Standard only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "Use Amazon ElastiCache.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-069",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Use Amazon Redshift.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Use Amazon Redshift to run analytical queries against a managed petabyte-scale data warehouse.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Use Amazon Redshift run analytical queries a managed petabyte-scale warehouse.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Amazon Redshift is appropriate because it helps run analytical queries against a managed petabyte-scale data warehouse.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "The best choice is Amazon Redshift; key ideas include Redshift, data warehouse.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Use DynamoDB.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Use Amazon SQS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Use AWS Lambda.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-070",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "Use AWS Glue.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "Use AWS Glue to perform serverless data integration, cataloging, and ETL jobs.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "Use AWS Glue perform serverless data cataloging, and ETL",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "AWS Glue is appropriate because it helps perform serverless data integration, cataloging, and ETL jobs.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "The best choice is AWS Glue; key ideas include AWS Glue, ETL.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "Use AWS Config.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "Use Amazon Route 53.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "Use AWS Shield.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-071",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Use Amazon Athena.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Use Amazon Athena to query data in Amazon S3 using SQL without managing servers.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Use Amazon Athena query data in S3 using SQL managing servers.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Amazon Athena is appropriate because it helps query data in Amazon S3 using SQL without managing servers.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "The best choice is Amazon Athena; key ideas include Athena, SQL.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Use Amazon RDS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Use AWS WAF.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-072",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Use Amazon Kinesis Data Streams.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Use Amazon Kinesis Streams to ingest process real-time streaming at scale.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Use Amazon Data Streams.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Amazon Kinesis Data Streams is appropriate because it helps ingest and process real-time streaming data at scale.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "The best choice is Amazon Kinesis Data Streams; key ideas include Kinesis Data Streams, real-time.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Use AWS Glue crawler.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Use S3 Glacier.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Use CloudTrail Lake only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-073",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "Use AWS Organizations.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "Use AWS Organizations to centrally manage multiple AWS accounts and apply service control policies.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "Use AWS Organizations centrally manage multiple accounts and apply control policies.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "AWS Organizations is appropriate because it helps centrally manage multiple AWS accounts and apply service control policies.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "The best choice is AWS Organizations; key ideas include AWS Organizations, multiple accounts.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "Use IAM groups only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "Use AWS Budgets only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "Use Amazon Cognito.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-074",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Use Service Control Policies.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Use Service Control to set maximum permissions across accounts an AWS Organization.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Use Service Policies.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Service Control Policies is appropriate because it helps set maximum available permissions across accounts in an AWS Organization.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "The best choice is Service Control Policies; key ideas include SCPs, permission guardrails.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Use resource policies only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Use security groups.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Use CloudWatch alarms.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-075",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "Use AWS Trusted Advisor.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "Use AWS Trusted Advisor to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "Use AWS Trusted to provide recommendations cost optimization, security, tolerance, performance, and limits.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "Use AWS Advisor.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "AWS Trusted Advisor is appropriate because it helps provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "The best choice is AWS Trusted Advisor; key ideas include Trusted Advisor, recommendations.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "Use CloudTrail.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "Use AWS Glue.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "Use Amazon SQS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-076",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "Use AWS Well-Architected Tool.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "Use AWS Well-Architected Tool to review workloads against AWS best practices and identify improvement opportunities.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "Use AWS Well-Architected to review workloads AWS best practices identify improvement opportunities.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "Use AWS Tool.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "AWS Well-Architected Tool is appropriate because it helps review workloads against AWS best practices and identify improvement opportunities.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "The best choice is AWS Well-Architected Tool; key ideas include Well-Architected Tool, best practices.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "Use AWS Backup only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "Use Route 53.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-077",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "Use AWS Backup.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "Use AWS Backup to centralize and automate backup policies across supported AWS services.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "Use AWS Backup centralize and automate policies across supported services.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "AWS Backup is appropriate because it helps centralize and automate backup policies across supported AWS services.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "The best choice is AWS Backup; key ideas include AWS Backup, centralized backups.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "Use CloudFront.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "Use Amazon SNS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "Use AWS Config only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-078",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Use Amazon Cognito.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Use Amazon Cognito add user sign-up, and identity management applications.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Amazon Cognito is appropriate because it helps add user sign-up, sign-in, and identity management to applications.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "The best choice is Amazon Cognito; key ideas include Cognito, user authentication.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Use IAM role for EC2.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Use AWS KMS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Use CloudTrail.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-079",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "Use AWS WAF.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "Use AWS WAF to protect web applications from common web exploits using rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "Use AWS WAF protect web applications common web exploits rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "AWS WAF is appropriate because it helps protect web applications from common web exploits using rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "The best choice is AWS WAF; key ideas include AWS WAF, web application.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "Use security groups only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "Use Amazon Inspector.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "Use AWS Budgets.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-080",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "Use IAM roles.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "Use IAM roles grant temporary credentials trusted AWS resources storing long-term access",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "Use IAM",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "IAM roles is appropriate because it helps grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "The best choice is IAM roles; key ideas include IAM, temporary credentials.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "Use IAM user access keys.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "Use AWS Shield Advanced.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "Use hard-coded credentials.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-081",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "Use AWS Budgets.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "Use AWS Budgets track cost or thresholds and send for actual or spending.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "AWS Budgets is appropriate because it helps track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "The best choice is AWS Budgets; key ideas include AWS Budgets, cost thresholds.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "Use AWS CloudTrail.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "Use Elastic Load Balancing.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-082",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "Use multiple Availability Zones.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "Use multiple Availability to improve high and fault tolerance an Availability Zone",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "Use multiple Zones.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "multiple Availability Zones is appropriate because it helps improve high availability and fault tolerance during an Availability Zone impairment.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "The best choice is multiple Availability Zones; key ideas include Availability Zones, high availability.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "Use single Availability Zone deployment.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "Use larger instance.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "Use root volume backups.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-083",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Use Amazon S3 versioning.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Use Amazon S3 to preserve, retrieve, restore previous versions objects after overwrite delete events.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Use Amazon versioning.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Amazon S3 versioning is appropriate because it helps preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "The best choice is Amazon S3 versioning; key ideas include Amazon S3, versioning.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Use S3 Transfer Acceleration.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Use S3 static website hosting.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-084",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "Use S3 lifecycle policies.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "Use S3 lifecycle to automatically transition expire objects based age and access",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "Use S3 policies.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "S3 lifecycle policies is appropriate because it helps automatically transition or expire objects based on age and access patterns.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "The best choice is S3 lifecycle policies; key ideas include S3 Lifecycle, storage classes.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "Use S3 bucket policies.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "Use AWS Organizations.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "Use Amazon GuardDuty.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-085",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Use Amazon RDS Multi-AZ.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Use Amazon RDS to provide synchronous replication and automatic for relational databases.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Use Amazon Multi-AZ.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Amazon RDS Multi-AZ is appropriate because it helps provide synchronous standby replication and automatic failover for relational databases.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "The best choice is Amazon RDS Multi-AZ; key ideas include Amazon RDS, Multi-AZ.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Use read replica only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Use DynamoDB global table.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Use manual snapshot.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-086",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Use Amazon RDS read replicas.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Use Amazon RDS replicas to scale database workloads by read traffic from database instances.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Use Amazon read replicas.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Amazon RDS read replicas is appropriate because it helps scale read-heavy database workloads by serving read traffic from replicated database instances.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "The best choice is Amazon RDS read replicas; key ideas include Amazon RDS, read replicas.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Use Multi-AZ failover.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Use AWS Backup.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Use vertical scaling only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-087",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Use Amazon DynamoDB.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Use Amazon DynamoDB provide a fully NoSQL key-value and database with low-latency",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Amazon DynamoDB is appropriate because it helps provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "The best choice is Amazon DynamoDB; key ideas include DynamoDB, NoSQL.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Use Amazon Redshift.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Use Amazon EFS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Use AWS Glue.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-088",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "Use DynamoDB global tables.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "Use DynamoDB global to replicate tables Regions for low-latency access and resilience.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "Use DynamoDB tables.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "DynamoDB global tables is appropriate because it helps replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "The best choice is DynamoDB global tables; key ideas include DynamoDB global tables, multi-Region.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "Use DynamoDB local secondary index.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "Use RDS read replica.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "Use S3 replication only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-089",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "Use AWS Lambda.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "Use AWS Lambda run event-driven code managing servers and per request.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "AWS Lambda is appropriate because it helps run event-driven code without managing servers and scale per request.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "The best choice is AWS Lambda; key ideas include AWS Lambda, serverless.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "Use Amazon EC2 dedicated hosts.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "Use AWS Batch only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-090",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Use Auto Scaling groups.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Use Auto Scaling to adjust EC2 automatically based on and health checks.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Use Auto groups.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Auto Scaling groups is appropriate because it helps adjust EC2 capacity automatically based on demand and health checks.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "The best choice is Auto Scaling groups; key ideas include Auto Scaling, EC2.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Use manual instance launch.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Use Elastic IP.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Use AMI copy.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-091",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Use Elastic Load Balancing.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Use Elastic Load Balancing to distribute traffic across healthy targets to improve availability and scalability.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Use Elastic Load to distribute traffic healthy targets to availability and scalability.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Use Elastic Balancing.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Elastic Load Balancing is appropriate because it helps distribute traffic across healthy targets to improve availability and scalability.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "The best choice is Elastic Load Balancing; key ideas include Elastic Load Balancing, traffic distribution.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Use AWS Direct Connect.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Use Amazon Route 53 only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Use Amazon EBS.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-092",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Use Amazon CloudFront.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Use Amazon CloudFront cache and deliver from edge locations reduce latency for",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Amazon CloudFront is appropriate because it helps cache and deliver content from edge locations to reduce latency for users.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "The best choice is Amazon CloudFront; key ideas include CloudFront, edge locations.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Use AWS Transit Gateway.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Use NAT gateway.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Use Amazon FSx.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-093",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Use Amazon Route 53.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Use Amazon Route to provide scalable routing and health-check-based for applications.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Use Amazon 53.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Amazon Route 53 is appropriate because it helps provide scalable DNS routing and health-check-based routing for applications.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "The best choice is Amazon Route 53; key ideas include Route 53, DNS.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Use Amazon CloudWatch Logs.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Use AWS Config.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Use Amazon Inspector.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-094",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "Use VPC security groups.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "Use VPC security to act as virtual firewalls controlling and outbound traffic resources.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "Use VPC groups.",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "VPC security groups is appropriate because it helps act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "The best choice is VPC security groups; key ideas include security groups, stateful.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "Use network ACL only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "Use AWS WAF for subnets.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "Use IAM policy.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-095",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "Use network ACLs.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "Use network ACLs provide stateless subnet-level filtering with explicit and outbound rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "Use network",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "network ACLs is appropriate because it helps provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "The best choice is network ACLs; key ideas include network ACLs, stateless.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "Use security group only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "Use AWS Shield.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "Use Route 53.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-096",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "Use AWS CloudTrail.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "Use AWS CloudTrail record AWS API for auditing, governance, operational troubleshooting.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "AWS CloudTrail is appropriate because it helps record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "The best choice is AWS CloudTrail; key ideas include CloudTrail, API activity.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "Use CloudWatch metrics.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "Use AWS Budgets.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "Use Amazon Macie.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-097",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Use Amazon CloudWatch.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Use Amazon CloudWatch collect metrics, logs, and dashboards for AWS resources.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Use Amazon",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Amazon CloudWatch is appropriate because it helps collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "The best choice is Amazon CloudWatch; key ideas include CloudWatch, metrics.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Use AWS Artifact.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Use AWS Organizations.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Use AWS Marketplace.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-098",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "Use AWS Config.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "Use AWS Config track resource configuration and evaluate compliance rules.",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "AWS Config is appropriate because it helps track resource configuration history and evaluate compliance against rules.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "The best choice is AWS Config; key ideas include AWS Config, configuration history.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "Use CloudTrail only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "Use Trusted Advisor only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "Use AWS Shield.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-099",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "Use AWS KMS.",
+    "label": 1,
+    "source": "generated_correct_option"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "label": 1,
+    "source": "generated_explanation"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "Use AWS KMS create and manage keys used to data in AWS",
+    "label": 1,
+    "source": "generated_positive_word_drop"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "Use AWS",
+    "label": 1,
+    "source": "generated_positive_shortened_option"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "AWS KMS is appropriate because it helps create and manage encryption keys used to protect data in AWS services.",
+    "label": 1,
+    "source": "generated_positive_paraphrase"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "The best choice is AWS KMS; key ideas include AWS KMS, encryption keys.",
+    "label": 1,
+    "source": "generated_positive_concepts"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "Use AWS Secrets Manager rotation only.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "Use IAM roles.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "Use AWS WAF.",
+    "label": 0,
+    "source": "generated_distractor"
+  },
+  {
+    "question_id": "AWS-GEN-100",
+    "answer": "Choose the cheapest service without considering the requirement.",
+    "label": 0,
+    "source": "generated_generic_negative"
+  }
+]

@@ -1,0 +1,128 @@
+[
+  {
+    "question_id": "AWS-001",
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Explain how an application running on Amazon EC2 should access objects in an Amazon S3 bucket without storing long-term access keys on the instance.",
+    "reference_answer": "The application should use an IAM role attached to the EC2 instance. IAM roles provide temporary credentials and can be scoped to least-privilege permissions for trusted AWS resources.",
+    "key_concepts": [
+      "IAM",
+      "temporary credentials",
+      "least privilege",
+      "trusted entities"
+    ],
+    "original_multiple_choice": {
+      "question": "A company wants an application running on Amazon EC2 to access objects in an Amazon S3 bucket without storing long-term access keys on the instance. Which option should the company use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Create an IAM user and store its access key on the EC2 instance."
+        },
+        {
+          "option_id": "B",
+          "text": "Attach an IAM role with the required S3 permissions to the EC2 instance."
+        },
+        {
+          "option_id": "C",
+          "text": "Enable AWS Shield Advanced for the S3 bucket."
+        },
+        {
+          "option_id": "D",
+          "text": "Store the access key in an Amazon Machine Image."
+        }
+      ],
+      "correct_option_ids": [
+        "B"
+      ],
+      "explanation": "The application should use an IAM role attached to the EC2 instance. IAM roles provide temporary credentials and can be scoped to least-privilege permissions for trusted AWS resources.",
+      "source_name": "Self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Created for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-002",
+    "certification": "Cloud Practitioner",
+    "domain": "Billing",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature a team should use to receive notifications when monthly AWS spending is forecasted to exceed a configured amount.",
+    "reference_answer": "AWS Budgets can track cost and usage against configured thresholds and send alerts when actual or forecasted spend exceeds those thresholds.",
+    "key_concepts": [
+      "AWS Budgets",
+      "cost thresholds",
+      "usage thresholds",
+      "alerts"
+    ],
+    "original_multiple_choice": {
+      "question": "A team wants to receive a notification when monthly AWS spending is forecasted to exceed a configured amount. Which AWS service or feature should they use?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "AWS Budgets"
+        },
+        {
+          "option_id": "B",
+          "text": "AWS CloudTrail"
+        },
+        {
+          "option_id": "C",
+          "text": "AWS Artifact"
+        },
+        {
+          "option_id": "D",
+          "text": "Elastic Load Balancing"
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "AWS Budgets can track cost and usage against configured thresholds and send alerts when actual or forecasted spend exceeds those thresholds.",
+      "source_name": "Self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Created for this project; not copied from an official exam or practice test."
+    }
+  },
+  {
+    "question_id": "AWS-003",
+    "certification": "Solutions Architect Associate",
+    "domain": "Resilient Architectures",
+    "difficulty": "Medium",
+    "question": "Explain how to design a web application so it remains available if a single Availability Zone becomes unavailable.",
+    "reference_answer": "Deploying across multiple Availability Zones behind a load balancer improves high availability and fault tolerance because traffic can continue to route to healthy targets if one Availability Zone is impaired.",
+    "key_concepts": [
+      "Availability Zones",
+      "high availability",
+      "fault tolerance",
+      "regional resilience"
+    ],
+    "original_multiple_choice": {
+      "question": "A web application must remain available if a single Availability Zone becomes unavailable. Which architecture best meets this requirement?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Deploy all instances in one Availability Zone and create frequent AMI backups."
+        },
+        {
+          "option_id": "B",
+          "text": "Deploy instances across multiple Availability Zones behind a load balancer."
+        },
+        {
+          "option_id": "C",
+          "text": "Deploy one larger instance in a public subnet."
+        },
+        {
+          "option_id": "D",
+          "text": "Store static files in the instance root volume."
+        }
+      ],
+      "correct_option_ids": [
+        "B"
+      ],
+      "explanation": "Deploying across multiple Availability Zones behind a load balancer improves high availability and fault tolerance because traffic can continue to route to healthy targets if one Availability Zone is impaired.",
+      "source_name": "Self-authored exam-style sample",
+      "source_url": "",
+      "source_license_notes": "Created for this project; not copied from an official exam or practice test."
+    }
+  }
+]
