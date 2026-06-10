@@ -3,28 +3,26 @@
 
 ## System Overview
 
-```text
-Student
-  |
-  v
-Streamlit UI
-  |
-  v
-Quiz Controller
-  |
-  +--> Question Repository
-  |
-  v
-Evaluation Prompt Builder
-  |
-  v
-LLM Evaluation Service
-  |
-  v
-Feedback Engine
-  |
-  v
-Results Display
+```mermaid
+flowchart TD
+    User[Student]
+    UI[Streamlit UI]
+    Controller[Quiz Controller]
+    Repo[Question Repository]
+    Prompt[Prompt Builder]
+    LLM[LLM Evaluation Service]
+    Feedback[Feedback Engine]
+
+    User --> UI
+    UI --> Controller
+
+    Controller --> Repo
+    Controller --> Prompt
+
+    Prompt --> LLM
+    LLM --> Feedback
+
+    Feedback --> UI
 ```
 
 ## Runtime Components
@@ -156,20 +154,20 @@ Review IAM roles, trust policies, and temporary security credentials.
 
 Practice questions are produced before deployment.
 
-```text
-AWS documentation and exam guide
-  |
-  v
-Content generation script
-  |
-  v
-LLM-assisted question generation
-  |
-  v
-Human quality review
-  |
-  v
-JSON question bank
+```mermaid
+flowchart TD
+    Docs[AWS Documentation & Exam Guide]
+    Script[Content Generation Script]
+    LLM[LLM-Assisted Question Generation]
+    Review[Human Quality Review]
+    Bank[JSON Question Bank]
+    App[AWS Certification Coach]
+
+    Docs --> Script
+    Script --> LLM
+    LLM --> Review
+    Review --> Bank
+    Bank --> App
 ```
 
 Offline generation outputs:
