@@ -119,7 +119,7 @@ def _render_score(score: int) -> None:
     grade, color = _score_grade(score)
     st.markdown(
         f"""
-        <div aria-label="Score: {score} percent, grade {grade}" style="
+        <div aria-label="Score: {grade}" style="
             border-left: 0.35rem solid {color};
             border-radius: 0.45rem;
             background: color-mix(in srgb, {color} 12%, transparent);
@@ -128,7 +128,6 @@ def _render_score(score: int) -> None:
         ">
             <div style="font-size: 0.85rem; font-weight: 600;">Score</div>
             <div style="display: flex; align-items: baseline; gap: 0.65rem;">
-                <span style="font-size: 2rem; font-weight: 700; line-height: 1.2;">{score}%</span>
                 <span style="color: {color}; font-size: 1.1rem; font-weight: 700;">Grade {grade}</span>
             </div>
         </div>
@@ -173,7 +172,7 @@ def _render_feedback_form(question: Question, user_answer: str, score: int) -> N
             question=question,
             answer_given=user_answer,
             rating_given=rating_given,
-            correct_rating=correct_rating,
+           correct_rating=correct_rating,
         )
         submitted.add(question.question_id)
         st.success("Thanks. Your grade correction was saved for future training.")
