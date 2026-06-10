@@ -22,8 +22,21 @@ class TrainedClassifierEvaluatorProvider:
         features = self.feature_extractor.extract(question, user_answer)
         probability = self.model.predict_proba(features)
         prediction = self.model.predict(features)
-        missing = [] if prediction == 1 else _missing_concepts(question, user_answer)
         model_score = probability * 100
+        if _is_incorrect_service_selection(question, user_answer):
+            missing = _missing_concepts(question, user_answer)
+            payload = {
+                "score": min(int(model_score), 50),
+                "missing_concepts": missing,
+                "suggested_improvements": [f"Explain {concept}." for concept in missing],
+                "feedback": (
+                    f"Raw model score: {model_score:.2f}%. This exact service answer is not in the "
+                    "question's correct answer list."
+                ),
+                "detailed_answer": question.reference_answer,
+            }
+            return json.dumps(payload)
+        missing = [] if prediction == 1 else _missing_concepts(question, user_answer)
         score = int(model_score)
         payload = {
             "score": score,
@@ -44,7 +57,29 @@ def _missing_concepts(question: Question, user_answer: str) -> list[str]:
     ]
 
 
+def _is_incorrect_service_selection(question: Question, user_answer: str) -> bool:
+    original = question.original_multiple_choice
+    if original is None:
+        return False
+    normalized_answer = _normalized(user_answer)
+    if not normalized_answer.startswith("use "):
+        return False
+    if len(normalized_answer.split()) > 6:
+        return False
+    correct_ids = set(original.correct_option_ids)
+    correct_answers = {
+        _normalized(option.text)
+        for option in original.options
+        if option.option_id in correct_ids
+    }
+    return normalized_answer not in correct_answers
+
+
 def _feedback(model_score: float, prediction: int) -> str:
     if prediction == 1:
         return f"Model score: {model_score:.2f}%. This answer is above the correctness threshold."
     return f"Model score: {model_score:.2f}%. This answer is below the correctness threshold and needs more AWS-specific detail."
+
+
+def _normalized(value: str) -> str:
+    return " ".join(value.casefold().replace(".", "").split())

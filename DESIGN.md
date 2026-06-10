@@ -121,12 +121,12 @@ AWS-Certification-Coach/
 
 ## Initial Implementation Notes
 
-- The repository starts with `data/questions/sample_questions.json`, a random 10-question sample from the generated training question bank.
+- The repository starts with `data/questions/sample_questions.json`, an app-facing question bank generated independently from training labels.
 - Combined training and holdout artifacts store the freeform question, original multiple-choice source data, binary answer examples, wrong answers, and partial-credit examples in the same JSON row.
 - `scripts/transform_questions.py` converts source MCQ JSON into transformed freeform JSON.
-- `scripts/generate_sample_training_artifacts.py` creates the self-authored 100-question test bank and labeled answer examples used by the training gate.
-- `scripts/generate_partial_answer_artifacts.py` refreshes partial-credit sections inside the combined training and holdout artifacts.
-- `scripts/select_sample_questions.py` refreshes the app sample file with 10 random questions from the generated training question bank. The script supports an optional `--seed` only for debugging a specific sample.
+- `scripts/generate_sample_training_artifacts.py` creates the self-authored 100-question training set, 100-question generated verification split, binary answer examples, wrong answers, and partial-credit examples used by the training gates.
+- `scripts/generate_app_question_artifacts.py` refreshes the app sample file from app-facing source specs with AWS documentation URLs and no training-only answer labels.
+- `scripts/select_sample_questions.py` can still project app-facing rows from a combined artifact for debugging, but it should not be the default app-data generation path.
 - The final verification set lives at `data/verification/questions_with_answers_holdout.json` and must not be used by training scripts.
 - `scripts/train_answer_classifier.py` must exceed the configured 90% held-out accuracy gate and stay below the suspicious-perfect threshold before any trained evaluator should be used in the app.
 - V1 defaults to the trained classifier once `models/answer_classifier.json` exists.

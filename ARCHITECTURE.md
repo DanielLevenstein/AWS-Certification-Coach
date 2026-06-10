@@ -3,28 +3,30 @@
 
 ## System Overview
 
-```text
-Student
-  |
-  v
-Streamlit UI
-  |
-  v
-Quiz Controller
-  |
-  +--> Question Repository
-  |
-  v
-Evaluation Prompt Builder
-  |
-  v
-Evaluation Service
-  |
-  v
-Feedback Engine
-  |
-  v
-Results Display
+```mermaid
+flowchart TD
+    User[Student]
+    UI[Streamlit UI]
+    Controller[Quiz Controller]
+    Repo[Question Repository]
+    Prompt[Prompt Builder]
+    Eval[Evaluation Service]
+    Classifier[Trained Classifier]
+    Feedback[Feedback Engine]
+    Results[Results Display]
+
+    User --> UI
+    UI --> Controller
+
+    Controller --> Repo
+    Controller --> Prompt
+
+    Prompt --> Eval
+    Eval --> Classifier
+    Eval --> Feedback
+
+    Feedback --> Results
+    Results --> UI
 ```
 
 ## Runtime Components
@@ -156,20 +158,20 @@ Review IAM roles, trust policies, and temporary security credentials.
 
 Practice questions are produced before deployment.
 
-```text
-AWS documentation and exam guide
-  |
-  v
-Content generation script
-  |
-  v
-Scripted self-authored generation
-  |
-  v
-Human quality review
-  |
-  v
-JSON question bank
+```mermaid
+flowchart TD
+    Docs[AWS Documentation & Exam Guide]
+    Script[Content Generation Script]
+    Generated[Scripted Self-Authored Generation]
+    Review[Human Quality Review]
+    Bank[JSON Question Bank]
+    App[AWS Certification Coach]
+
+    Docs --> Script
+    Script --> Generated
+    Generated --> Review
+    Review --> Bank
+    Bank --> App
 ```
 
 Offline generation outputs:
@@ -187,19 +189,19 @@ Keeping generation offline reduces runtime memory usage, startup time, and deplo
 
 V1 uses freeform learner prompts, but the source material should remain aligned with exam-style multiple-choice questions. The offline transformation pipeline converts licensed or self-authored multiple-choice questions into paragraph-answer prompts.
 
-```text
-Source multiple-choice artifact
-  |
-  v
-Transformation prompt builder
-  |
-  v
-High-quality LLM transformer
-  |
-  v
-Freeform question artifact
-  |
-  +--> Original multiple-choice source preserved
+```mermaid
+flowchart TD
+    Source[Source Multiple-Choice Artifact]
+    Prompt[Transformation Prompt Builder]
+    LLM[High-Quality LLM Transformer]
+    Freeform[Freeform Question Artifact]
+    Original[Original Multiple-Choice Source Preserved]
+
+    Source --> Prompt
+    Prompt --> LLM
+    LLM --> Freeform
+
+    Source --> Original
 ```
 
 The transformed artifact keeps the original multiple-choice question, answer choices, correct answer IDs, explanation, source name, source URL, and license notes. Generated training artifacts also keep answer examples in the same question row so human test cases can be added without synchronizing separate question and answer files. The app uses the transformed freeform prompt for recall practice, then displays the original multiple-choice item next to generated feedback after the learner submits an answer.
@@ -208,14 +210,16 @@ The transformed artifact keeps the original multiple-choice question, answer cho
 
 ### Phase 1
 
-```text
-User
-  |
-  v
-Streamlit App
-  |
-  v
-Trained Classifier
+```mermaid
+flowchart TD
+    User[Student]
+    App[AWS Certification Coach<br/>Streamlit Application]
+    Classifier[Trained Classifier<br/>Bundled Model Artifact]
+    OpenAI[Optional OpenAI Provider]
+
+    User --> App
+    App --> Classifier
+    App -. configurable .-> OpenAI
 ```
 
 Recommended targets:
@@ -235,21 +239,21 @@ Expected benefits:
 
 ### Phase 2
 
-```text
-User
-  |
-  v
-CloudFront
-  |
-  v
-Application Load Balancer
-  |
-  v
-ECS/Fargate App
-  |
-  +--> DynamoDB
-  |
-  +--> Amazon Bedrock
+```mermaid
+flowchart TD
+    User[Student]
+    CF[CloudFront CDN]
+    ALB[Application Load Balancer]
+    ECS[AWS Certification Coach<br/>ECS/Fargate Service]
+    DDB[Question Bank<br/>DynamoDB]
+    Bedrock[Answer Evaluation<br/>Amazon Bedrock]
+
+    User --> CF
+    CF --> ALB
+    ALB --> ECS
+
+    ECS --> DDB
+    ECS --> Bedrock
 ```
 
 Optional AWS services:
@@ -265,7 +269,7 @@ Included:
 
 - Question display.
 - Free-text answer submission.
-- LLM-based evaluation.
+- Answer evaluation through the trained classifier or a configured provider.
 - Score generation.
 - Feedback generation.
 - Domain and difficulty filtering.

@@ -41,7 +41,7 @@ Training and verification data are generated separately:
 
 - `data/training/questions_with_answers_generated.json`: training artifact used by the classifier and partial-credit regressor.
 - `data/verification/questions_with_answers_holdout.json`: holdout artifact reserved for final verification and not used by training scripts.
-- `data/questions/sample_questions.json`: 10 random training questions used by the local app sample.
+- `data/questions/sample_questions.json`: app-facing question bank generated independently from training labels and grounded with AWS documentation source URLs.
 
 The binary classifier treats `.25` partial-credit examples as explicit negatives, so very weak answers are rejected even when they mention a broad service family. The partial-credit regressor is trained separately against the continuous `rating` values using mean squared error. This keeps full-answer correctness and partial-credit estimation measurable as different tasks.
 
@@ -50,8 +50,7 @@ To regenerate the artifacts cleanly:
 ```bash
 rm -rf data models
 python scripts/generate_sample_training_artifacts.py
-python scripts/generate_partial_answer_artifacts.py
-python scripts/select_sample_questions.py --count 10
+python scripts/generate_app_question_artifacts.py --count 80
 python scripts/train_answer_classifier.py --min-accuracy 0.90
 python scripts/train_partial_answer_regressor.py
 ```
@@ -131,8 +130,7 @@ Regenerate local training, holdout, and app sample artifacts:
 
 ```bash
 python scripts/generate_sample_training_artifacts.py
-python scripts/generate_partial_answer_artifacts.py
-python scripts/select_sample_questions.py --count 10
+python scripts/generate_app_question_artifacts.py --count 80
 ```
 
 Train the deployed answer classifier and enforce the 90% minimum gate:
