@@ -185,19 +185,19 @@ Keeping generation offline reduces runtime memory usage, startup time, and deplo
 
 V1 uses freeform learner prompts, but the source material should remain aligned with exam-style multiple-choice questions. The offline transformation pipeline converts licensed or self-authored multiple-choice questions into paragraph-answer prompts.
 
-```text
-Source multiple-choice artifact
-  |
-  v
-Transformation prompt builder
-  |
-  v
-High-quality LLM transformer
-  |
-  v
-Freeform question artifact
-  |
-  +--> Original multiple-choice source preserved
+```mermaid
+flowchart TD
+    Source[Source Multiple-Choice Artifact]
+    Prompt[Transformation Prompt Builder]
+    LLM[High-Quality LLM Transformer]
+    Freeform[Freeform Question Artifact]
+    Original[Original Multiple-Choice Source Preserved]
+
+    Source --> Prompt
+    Prompt --> LLM
+    LLM --> Freeform
+
+    Source --> Original
 ```
 
 The transformed artifact keeps the original multiple-choice question, answer choices, correct answer IDs, explanation, source name, source URL, and license notes. Generated training artifacts also keep answer examples in the same question row so human test cases can be added without synchronizing separate question and answer files. The app uses the transformed freeform prompt for recall practice, then displays the original multiple-choice item next to generated feedback after the learner submits an answer.
@@ -206,14 +206,14 @@ The transformed artifact keeps the original multiple-choice question, answer cho
 
 ### Phase 1
 
-```text
-User
-  |
-  v
-Streamlit App
-  |
-  v
-LLM Provider
+```mermaid
+flowchart TD
+    User[Student]
+    App[AWS Certification Coach<br/>Streamlit Application]
+    LLM[LLM Evaluation Provider]
+
+    User --> App
+    App --> LLM
 ```
 
 Recommended targets:
@@ -231,21 +231,21 @@ Expected benefits:
 
 ### Phase 2
 
-```text
-User
-  |
-  v
-CloudFront
-  |
-  v
-Application Load Balancer
-  |
-  v
-ECS/Fargate App
-  |
-  +--> DynamoDB
-  |
-  +--> Amazon Bedrock
+```mermaid
+flowchart TD
+    User[Student]
+    CF[CloudFront CDN]
+    ALB[Application Load Balancer]
+    ECS[AWS Certification Coach<br/>ECS/Fargate Service]
+    DDB[Question Bank<br/>DynamoDB]
+    Bedrock[Answer Evaluation<br/>Amazon Bedrock]
+
+    User --> CF
+    CF --> ALB
+    ALB --> ECS
+
+    ECS --> DDB
+    ECS --> Bedrock
 ```
 
 Optional AWS services:
