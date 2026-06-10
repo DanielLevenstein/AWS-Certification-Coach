@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -110,7 +111,8 @@ def main() -> None:
             st.write("Detailed answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)
-            _render_feedback_link(question, user_answer, result.score)
+            if os.environ.get("SHOW_FEEDBACK"):
+                _render_feedback_link(question, user_answer, result.score)
         with source_column:
             _render_original_multiple_choice(question.original_multiple_choice)
 
