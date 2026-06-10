@@ -43,6 +43,10 @@
 
 ## Artifact Shape
 
-Source multiple-choice artifacts live in `data/questions/source_multiple_choice_*.json`.
+Source multiple-choice artifacts may live in `data/questions/source_multiple_choice_*.json`.
 
-Transformed freeform artifacts live in `data/questions/transformed_freeform_*.json` and preserve the original item under `original_multiple_choice`.
+Generated training artifacts live in `data/training/questions_with_answers_generated.json` and preserve the original item under `original_multiple_choice`.
+
+Final holdout artifacts live in `data/verification/questions_with_answers_holdout.json` and must stay separate from training data.
+
+Each combined question row can include `binary_answers`, `wrong_answers`, and `partial_answers` so human review cases can be added next to the source question they validate.

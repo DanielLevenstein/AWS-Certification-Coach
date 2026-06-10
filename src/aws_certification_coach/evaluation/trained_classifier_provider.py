@@ -23,12 +23,13 @@ class TrainedClassifierEvaluatorProvider:
         probability = self.model.predict_proba(features)
         prediction = self.model.predict(features)
         missing = [] if prediction == 1 else _missing_concepts(question, user_answer)
-        score = 100 if prediction == 1 else 0
+        model_score = probability * 100
+        score = int(model_score)
         payload = {
             "score": score,
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
-            "feedback": _feedback(prediction, probability),
+            "feedback": _feedback(model_score, prediction),
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -43,8 +44,7 @@ def _missing_concepts(question: Question, user_answer: str) -> list[str]:
     ]
 
 
-def _feedback(prediction: int, probability: float) -> str:
-    del probability
+def _feedback(model_score: float, prediction: int) -> str:
     if prediction == 1:
-        return "This answer is correct."
-    return "This answer needs more AWS-specific detail."
+        return f"Model score: {model_score:.2f}%. This answer is above the correctness threshold."
+    return f"Model score: {model_score:.2f}%. This answer is below the correctness threshold and needs more AWS-specific detail."

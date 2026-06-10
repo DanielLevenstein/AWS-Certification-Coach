@@ -22,24 +22,9 @@ class OpenAIModelConfig:
 
 
 @dataclass(frozen=True)
-class LocalLlamaModelConfig:
-    model_path: str = "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF"
-    model_filename: str = "tinyllama-1.1b-chat-v1.0.Q2_K.gguf"
-    top_p: float = 0.95
-    max_tokens: int = 900
-    temperature: float = 0.0
-    repeat_penalty: float = 1.2
-    n_gpu_layers: int = 0
-    n_batch: int = 256
-    n_ctx: int = 2048
-    n_threads: int | None = None
-
-
-@dataclass(frozen=True)
 class EvaluatorConfig:
     provider: str = "heuristic"
     openai: OpenAIModelConfig = field(default_factory=OpenAIModelConfig)
-    local_llama: LocalLlamaModelConfig = field(default_factory=LocalLlamaModelConfig)
     trained_classifier_model_path: str = "models/answer_classifier.json"
 
 
@@ -50,7 +35,6 @@ def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:
     return EvaluatorConfig(
         provider=provider,
         openai=_openai_config(raw.get("openai", {})),
-        local_llama=_local_llama_config(raw.get("local_llama", {})),
         trained_classifier_model_path=str(
             os.getenv(
                 "AWS_COACH_CLASSIFIER_MODEL_PATH",
@@ -82,23 +66,6 @@ def _openai_config(raw: object) -> OpenAIModelConfig:
         max_output_tokens=_int_env("AWS_COACH_OPENAI_MAX_OUTPUT_TOKENS", values.get("max_output_tokens", 900)),
         reasoning_effort=_optional_str_env("AWS_COACH_OPENAI_REASONING_EFFORT", values.get("reasoning_effort", "low")),
     )
-
-
-def _local_llama_config(raw: object) -> LocalLlamaModelConfig:
-    values = raw if isinstance(raw, dict) else {}
-    return LocalLlamaModelConfig(
-        model_path=str(values.get("model_path", LocalLlamaModelConfig.model_path)),
-        model_filename=str(values.get("model_filename", LocalLlamaModelConfig.model_filename)),
-        top_p=float(values.get("top_p", 0.95)),
-        max_tokens=int(values.get("max_tokens", 900)),
-        temperature=float(values.get("temperature", 0.0)),
-        repeat_penalty=float(values.get("repeat_penalty", 1.2)),
-        n_gpu_layers=int(values.get("n_gpu_layers", 0)),
-        n_batch=int(values.get("n_batch", 256)),
-        n_ctx=int(values.get("n_ctx", 2048)),
-        n_threads=values.get("n_threads"),
-    )
-
 
 def _float_env(name: str, default: object) -> float:
     return float(os.getenv(name, default))

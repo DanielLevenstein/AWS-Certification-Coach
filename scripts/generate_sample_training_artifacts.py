@@ -61,25 +61,21 @@ def main() -> None:
     training_artifacts = _build_artifacts(start_index=0, count=100, question_prefix="AWS-GEN")
     holdout_artifacts = _build_artifacts(start_index=100, count=100, question_prefix="AWS-HOLDOUT")
 
-    _write_json("data/questions/source_multiple_choice_generated.json", training_artifacts["source_items"])
-    _write_json("data/questions/transformed_freeform_generated.json", training_artifacts["transformed_items"])
-    _write_json("data/training/answer_classification_generated.json", training_artifacts["examples"])
-    _write_json("data/verification/questions/source_multiple_choice_holdout.json", holdout_artifacts["source_items"])
-    _write_json("data/verification/questions/transformed_freeform_holdout.json", holdout_artifacts["transformed_items"])
-    _write_json("data/verification/answers/answer_classification_holdout.json", holdout_artifacts["examples"])
+    _write_json("data/training/questions_with_answers_generated.json", training_artifacts["questions"])
+    _write_json("data/verification/questions_with_answers_holdout.json", holdout_artifacts["questions"])
     print(
         "Generated "
-        f"{len(training_artifacts['transformed_items'])} training questions, "
-        f"{len(training_artifacts['examples'])} training examples, "
-        f"{len(holdout_artifacts['transformed_items'])} holdout questions, and "
-        f"{len(holdout_artifacts['examples'])} holdout examples."
+        f"{len(training_artifacts['questions'])} training questions, "
+        f"{sum(len(question['binary_answers']) for question in training_artifacts['questions'])} training binary examples, "
+        f"{sum(len(question['partial_answers']) for question in training_artifacts['questions'])} training partial examples, "
+        f"{len(holdout_artifacts['questions'])} holdout questions, "
+        f"{sum(len(question['binary_answers']) for question in holdout_artifacts['questions'])} holdout binary examples, and "
+        f"{sum(len(question['partial_answers']) for question in holdout_artifacts['questions'])} holdout partial examples."
     )
 
 
 def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict[str, list[dict]]:
-    source_items = []
-    transformed_items = []
-    examples = []
+    questions = []
     for offset in range(count):
         index = start_index + offset
         service, domain, certification, difficulty, purpose, concepts, distractors = SERVICE_SPECS[index % len(SERVICE_SPECS)]
@@ -90,28 +86,21 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
         mcq_question = variant.format(purpose=purpose)
         explanation = f"Use {service} to {purpose}."
         correct_option = f"Use {service}."
-        source_item = {
-            "question_id": question_id,
-            "certification": certification,
-            "domain": domain,
-            "difficulty": difficulty,
-            "key_concepts": concepts,
-            "original_multiple_choice": {
-                "question": mcq_question,
-                "options": [
-                    {"option_id": "A", "text": correct_option},
-                    {"option_id": "B", "text": f"Use {distractors[0]}."},
-                    {"option_id": "C", "text": f"Use {distractors[1]}."},
-                    {"option_id": "D", "text": f"Use {distractors[2]}."},
-                ],
-                "correct_option_ids": ["A"],
-                "explanation": explanation,
-                "source_name": "Generated self-authored exam-style sample",
-                "source_url": "",
-                "source_license_notes": "Generated for this project; not copied from an official exam or practice test.",
-            },
+        original_multiple_choice = {
+            "question": mcq_question,
+            "options": [
+                {"option_id": "A", "text": correct_option},
+                {"option_id": "B", "text": f"Use {distractors[0]}."},
+                {"option_id": "C", "text": f"Use {distractors[1]}."},
+                {"option_id": "D", "text": f"Use {distractors[2]}."},
+            ],
+            "correct_option_ids": ["A"],
+            "explanation": explanation,
+            "source_name": "Generated self-authored exam-style sample",
+            "source_url": "",
+            "source_license_notes": "Generated for this project; not copied from an official exam or practice test.",
         }
-        transformed_item = {
+        question = {
             "question_id": question_id,
             "certification": certification,
             "domain": domain,
@@ -119,19 +108,16 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
             "question": f"Explain which AWS service or feature should be used to {purpose}.",
             "reference_answer": explanation,
             "key_concepts": concepts,
-            "original_multiple_choice": source_item["original_multiple_choice"],
+            "original_multiple_choice": original_multiple_choice,
+            "binary_answers": _binary_examples(question_id, service, purpose, concepts, distractors, explanation, correct_option),
+            "wrong_answers": _wrong_examples(question_id, distractors),
+            "partial_answers": _partial_examples(question_id, service, concepts, mcq_question),
         }
-        source_items.append(source_item)
-        transformed_items.append(transformed_item)
-        examples.extend(_examples(question_id, service, purpose, concepts, distractors, explanation, correct_option))
-    return {
-        "source_items": source_items,
-        "transformed_items": transformed_items,
-        "examples": examples,
-    }
+        questions.append(question)
+    return {"questions": questions}
 
 
-def _examples(question_id, service, purpose, concepts, distractors, explanation, correct_option):
+def _binary_examples(question_id, service, purpose, concepts, distractors, explanation, correct_option):
     examples = [
         {"question_id": question_id, "answer": correct_option, "label": 1, "source": "generated_correct_option"},
         {"question_id": question_id, "answer": explanation, "label": 1, "source": "generated_explanation"},
@@ -159,13 +145,101 @@ def _examples(question_id, service, purpose, concepts, distractors, explanation,
             "source": "generated_generic_negative",
         },
     ]
+    if _question_number(question_id) % 2 == 0:
+        examples.append(
+            {
+                "question_id": question_id,
+                "answer": f"Use {service}, but skip {concepts[-1]} and assume the requirement is automatically satisfied.",
+                "label": 0,
+                "source": "generated_same_service_wrong_reason",
+            }
+        )
     return examples
+
+
+def _wrong_examples(question_id, distractors):
+    return [
+        {"question_id": question_id, "answer": f"Use {distractor}.", "label": 0, "source": "generated_wrong_answer"}
+        for distractor in distractors
+    ]
+
+
+def _partial_examples(question_id, service_name, concepts, question_text):
+    answers = [
+        (_rating_75_answer(service_name, concepts, 0), 0.75, "generated_partial_075"),
+        (_rating_75_answer(service_name, concepts, 1), 0.75, "generated_partial_075_paraphrase"),
+        (_rating_50_answer(service_name, concepts, 0), 0.50, "generated_partial_050"),
+        (_rating_50_answer(service_name, concepts, 1), 0.50, "generated_partial_050_paraphrase"),
+        (_rating_25_answer(question_text), 0.25, "generated_partial_025"),
+    ]
+    return [
+        {
+            "question_id": question_id,
+            "answer": answer,
+            "rating": _continuous_rating(answer, bucket, service_name, concepts),
+            "rating_bucket": bucket,
+            "source": source,
+        }
+        for answer, bucket, source in answers
+    ]
+
+
+def _continuous_rating(answer: str, rating_bucket: float, service_name: str, concepts: list[str]) -> float:
+    normalized_answer = answer.casefold()
+    normalized_service = service_name.casefold()
+    concept_hits = sum(1 for concept in concepts if concept.casefold() in normalized_answer)
+    concept_ratio = concept_hits / max(1, len(concepts))
+    service_bonus = 0.08 if normalized_service and normalized_service in normalized_answer else 0.0
+    specificity_bonus = min(0.07, len(answer.split()) / 120)
+    if rating_bucket >= 0.75:
+        value = 0.68 + service_bonus + (0.16 * concept_ratio) + specificity_bonus
+    elif rating_bucket >= 0.50:
+        value = 0.38 + service_bonus + (0.14 * concept_ratio) + specificity_bonus
+    else:
+        value = 0.14 + (0.10 * concept_ratio) + specificity_bonus
+    return round(max(0.0, min(1.0, value)), 2)
+
+
+def _rating_75_answer(service_name: str, concepts: list[str], index: int) -> str:
+    if "IAM" in service_name or any("temporary credentials" == concept for concept in concepts):
+        return [
+            "Assume a role with S3 bucket permission.",
+            "Use a role for S3 access instead of putting keys on the instance.",
+        ][index % 2]
+    supporting_concepts = [concept for concept in concepts if concept.casefold() not in service_name.casefold()]
+    if index % 2 == 1 and supporting_concepts:
+        return f"{service_name} handles this; mention {supporting_concepts[0]}."
+    if supporting_concepts:
+        return f"Use {service_name} and mention {supporting_concepts[0]}."
+    return f"Use {service_name} for the requirement."
+
+
+def _rating_50_answer(service_name: str, concepts: list[str], index: int) -> str:
+    if index % 2 == 1 and concepts:
+        return f"This is about {concepts[0]}."
+    return f"Use {service_name}."
+
+
+def _rating_25_answer(question_text: str) -> str:
+    lowered = question_text.casefold()
+    if "cost" in lowered or "spend" in lowered or "budget" in lowered:
+        return "Set up a cost alert."
+    if "available" in lowered or "fail" in lowered or "zone" in lowered:
+        return "Make the application more redundant."
+    if "access" in lowered or "permission" in lowered or "security" in lowered:
+        return "Use permissions for the resource."
+    return "Use an AWS managed service for this requirement."
 
 
 def _drop_every_nth_word(value: str, n: int) -> str:
     words = value.split()
     kept = [word for index, word in enumerate(words, start=1) if index % n != 0]
     return " ".join(kept) if kept else value
+
+
+def _question_number(question_id: str) -> int:
+    digits = "".join(character for character in question_id if character.isdigit())
+    return int(digits or "0")
 
 
 def _write_json(path, payload) -> None:

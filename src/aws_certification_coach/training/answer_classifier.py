@@ -9,7 +9,7 @@ from pathlib import Path
 import random
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.training.dataset import AnswerClassificationExample
+from aws_certification_coach.training.dataset import AnswerClassificationExample, AnswerRegressionExample
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
@@ -54,7 +54,7 @@ class ReinforcementAnswerClassifier:
         feature_extractor: AnswerFeatureExtractor | None = None,
         learning_rate: float = 0.08,
         epochs: int = 500,
-        seed: int = 7,
+        seed: int | None = None,
     ) -> None:
         self.feature_extractor = feature_extractor or AnswerFeatureExtractor()
         self.learning_rate = learning_rate
@@ -66,7 +66,7 @@ class ReinforcementAnswerClassifier:
         questions_by_id: dict[str, Question],
         examples: list[AnswerClassificationExample],
     ) -> AnswerClassificationModel:
-        rng = random.Random(self.seed)
+        rng = random.Random(self.seed) if self.seed is not None else random
         weights = [0.0 for _ in self.feature_extractor.feature_names]
         training_rows = [
             (self.feature_extractor.extract(questions_by_id[example.question_id], example.answer), example.label)
@@ -90,6 +90,76 @@ class ReinforcementAnswerClassifier:
         )
 
 
+@dataclass(frozen=True)
+class AnswerRegressionModel:
+    feature_names: list[str]
+    weights: list[float]
+
+    def predict(self, features: list[float]) -> float:
+        score = sum(weight * value for weight, value in zip(self.weights, features))
+        return max(0.0, min(1.0, score))
+
+    def save(self, path: str | Path) -> None:
+        payload = {
+            "feature_names": self.feature_names,
+            "weights": self.weights,
+        }
+        output_path = Path(path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    @classmethod
+    def load(cls, path: str | Path) -> "AnswerRegressionModel":
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        return cls(
+            feature_names=[str(name) for name in payload["feature_names"]],
+            weights=[float(weight) for weight in payload["weights"]],
+        )
+
+
+class PartialCreditRegressor:
+    """Trains continuous partial-credit ratings by minimizing squared error."""
+
+    def __init__(
+        self,
+        feature_extractor: AnswerFeatureExtractor | None = None,
+        learning_rate: float = 0.02,
+        epochs: int = 500,
+        l2_penalty: float = 0.001,
+        seed: int | None = None,
+    ) -> None:
+        self.feature_extractor = feature_extractor or AnswerFeatureExtractor()
+        self.learning_rate = learning_rate
+        self.epochs = epochs
+        self.l2_penalty = l2_penalty
+        self.seed = seed
+
+    def train(
+        self,
+        questions_by_id: dict[str, Question],
+        examples: list[AnswerRegressionExample],
+    ) -> AnswerRegressionModel:
+        rng = random.Random(self.seed) if self.seed is not None else random
+        weights = [0.0 for _ in self.feature_extractor.feature_names]
+        training_rows = [
+            (self.feature_extractor.extract(questions_by_id[example.question_id], example.answer), example.rating)
+            for example in examples
+        ]
+        for _ in range(self.epochs):
+            rng.shuffle(training_rows)
+            for features, rating in training_rows:
+                prediction = max(0.0, min(1.0, sum(weight * value for weight, value in zip(weights, features))))
+                error = prediction - rating
+                weights = [
+                    weight - self.learning_rate * ((2 * error * value) + (self.l2_penalty * weight))
+                    for weight, value in zip(weights, features)
+                ]
+        return AnswerRegressionModel(
+            feature_names=list(self.feature_extractor.feature_names),
+            weights=weights,
+        )
+
+
 def evaluate_model(
     model: AnswerClassificationModel,
     questions_by_id: dict[str, Question],
@@ -108,8 +178,12 @@ def evaluate_model(
         true_negative += int(prediction == 0 and example.label == 0)
         false_negative += int(prediction == 0 and example.label == 1)
     total = max(1, len(examples))
+    precision = true_positive / max(1, true_positive + false_positive)
+    recall = true_positive / max(1, true_positive + false_negative)
     return {
         "accuracy": correct / total,
+        "precision": precision,
+        "recall": recall,
         "true_positive": true_positive,
         "false_positive": false_positive,
         "true_negative": true_negative,
@@ -151,10 +225,66 @@ def evaluate_leave_one_question_out(
 
     return {
         "accuracy": correct / total_examples,
+        "precision": aggregate["true_positive"] / max(1, aggregate["true_positive"] + aggregate["false_positive"]),
+        "recall": aggregate["true_positive"] / max(1, aggregate["true_positive"] + aggregate["false_negative"]),
         "true_positive": aggregate["true_positive"],
         "false_positive": aggregate["false_positive"],
         "true_negative": aggregate["true_negative"],
         "false_negative": aggregate["false_negative"],
+    }
+
+
+def evaluate_regression_model(
+    model: AnswerRegressionModel,
+    questions_by_id: dict[str, Question],
+    examples: list[AnswerRegressionExample],
+    feature_extractor: AnswerFeatureExtractor | None = None,
+) -> dict[str, float]:
+    extractor = feature_extractor or AnswerFeatureExtractor()
+    squared_error = 0.0
+    absolute_error = 0.0
+    for example in examples:
+        question = questions_by_id[example.question_id]
+        prediction = model.predict(extractor.extract(question, example.answer))
+        error = prediction - example.rating
+        squared_error += error * error
+        absolute_error += abs(error)
+    total = max(1, len(examples))
+    return {
+        "mse": squared_error / total,
+        "mae": absolute_error / total,
+        "example_count": len(examples),
+    }
+
+
+def evaluate_regression_leave_one_question_out(
+    trainer: PartialCreditRegressor,
+    questions_by_id: dict[str, Question],
+    examples: list[AnswerRegressionExample],
+) -> dict[str, float]:
+    question_ids = sorted({example.question_id for example in examples})
+    squared_error = 0.0
+    absolute_error = 0.0
+    total_examples = 0
+    for question_id in question_ids:
+        train_examples = [example for example in examples if example.question_id != question_id]
+        held_out_examples = [example for example in examples if example.question_id == question_id]
+        if not train_examples or not held_out_examples:
+            continue
+        model = trainer.train(questions_by_id, train_examples)
+        metrics = evaluate_regression_model(model, questions_by_id, held_out_examples, trainer.feature_extractor)
+        held_out_count = len(held_out_examples)
+        squared_error += metrics["mse"] * held_out_count
+        absolute_error += metrics["mae"] * held_out_count
+        total_examples += held_out_count
+
+    if total_examples == 0:
+        raise ValueError("Leave-one-question-out evaluation requires examples for at least two questions.")
+
+    return {
+        "mse": squared_error / total_examples,
+        "mae": absolute_error / total_examples,
+        "example_count": total_examples,
     }
 
 

@@ -74,10 +74,22 @@ def main() -> None:
     st.subheader(question.question)
 
     user_answer = st.text_area("Your answer", key=f"answer_text_{session.current_index}", height=160)
-    if st.button("Evaluate Answer", disabled=not user_answer.strip()):
+    evaluate_column, next_column = st.columns([1, 1])
+    with evaluate_column:
+        evaluate_clicked = st.button("Evaluate Answer", disabled=not user_answer.strip())
+    with next_column:
+        next_clicked = st.button("Next Question", disabled=not st.session_state.get("last_result"))
+
+    if evaluate_clicked:
         result = get_evaluation_service().evaluate(question, user_answer)
         session.record_answer(question, user_answer, result)
         st.session_state.last_result = result
+        st.rerun()
+
+    if next_clicked:
+        session.advance()
+        st.session_state.last_result = None
+        st.rerun()
 
     result = st.session_state.get("last_result")
     if result:
@@ -93,10 +105,6 @@ def main() -> None:
             st.write(result.detailed_answer)
         with source_column:
             _render_original_multiple_choice(question.original_multiple_choice)
-        if st.button("Next Question"):
-            session.advance()
-            st.session_state.last_result = None
-            st.rerun()
 
 
 def _render_original_multiple_choice(original: MultipleChoiceQuestion | None) -> None:

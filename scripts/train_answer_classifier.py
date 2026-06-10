@@ -18,11 +18,12 @@ from aws_certification_coach.training.dataset import load_answer_classification_
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--questions", default="data/questions/transformed_freeform_generated.json")
-    parser.add_argument("--training-data", default="data/training/answer_classification_generated.json")
+    parser.add_argument("--questions", default="data/training/questions_with_answers_generated.json")
+    parser.add_argument("--training-data", default="data/training/questions_with_answers_generated.json")
     parser.add_argument("--output", default="models/answer_classifier.json")
     parser.add_argument("--metrics-output", default="models/answer_classifier_metrics.json")
     parser.add_argument("--min-accuracy", type=float, default=0.90)
+    parser.add_argument("--max-accuracy", type=float, default=0.999)
     parser.add_argument("--min-examples", type=int, default=50)
     parser.add_argument("--eval-mode", choices=["leave-one-question-out", "training"], default="leave-one-question-out")
     parser.add_argument("--epochs", type=int, default=100)
@@ -53,12 +54,21 @@ def main() -> None:
     metrics["example_count"] = len(examples)
     metrics["min_examples"] = args.min_examples
     metrics["min_accuracy"] = args.min_accuracy
+    metrics["max_accuracy"] = args.max_accuracy
 
     if metrics["accuracy"] < args.min_accuracy:
         _write_metrics(args.metrics_output, metrics)
         raise SystemExit(
             f"Held-out model accuracy {metrics['accuracy']:.3f} is below required {args.min_accuracy:.3f}."
         )
+    if metrics["accuracy"] >= args.max_accuracy:
+        metrics["suspicious_accuracy"] = True
+        _write_metrics(args.metrics_output, metrics)
+        raise SystemExit(
+            f"Held-out model accuracy {metrics['accuracy']:.3f} is suspiciously high. "
+            "Regenerate harder examples before treating this as deployable."
+        )
+    metrics["suspicious_accuracy"] = False
 
     model = trainer.train(questions_by_id, examples)
     model.save(args.output)

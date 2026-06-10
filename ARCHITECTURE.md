@@ -1,10 +1,5 @@
 # AWS Certification Coach Architecture
 
-## Goal
-
-AWS Certification Coach is a lightweight AI-powered study app for AWS certification practice. It presents pre-generated questions, evaluates learner answers with an LLM, and returns structured coaching feedback.
-
-Version 2 intentionally removes the runtime RAG stack from the earlier prototype. There is no document ingestion, FAISS index, vector database, or embedding model in the deployed app. Certification content is generated and reviewed offline, then served from a simple question repository.
 
 ## System Overview
 
@@ -123,7 +118,7 @@ The prompt builder should keep scoring instructions centralized so that every mo
 
 ### LLM Evaluation Service
 
-The evaluation service is the only runtime component that talks to the model provider. The initial provider can be local `llama-cpp-python`, Amazon Bedrock, or OpenAI, but the app should expose a narrow interface such as `evaluate_answer(prompt) -> EvaluationResult`.
+The evaluation service is the only runtime component that talks to the model provider. Runtime grading defaults to the trained classifier and can be switched to OpenAI through configuration, but the app should expose a narrow interface such as `evaluate_answer(prompt) -> EvaluationResult`.
 
 Responsibilities:
 
@@ -179,11 +174,12 @@ JSON question bank
 
 Offline generation outputs:
 
-- Question files.
+- Combined question and answer files.
 - Reference answers.
 - Key concepts.
 - Domain and difficulty metadata.
 - Original multiple-choice provenance for transformed freeform questions.
+- Binary, wrong-answer, and continuous partial-credit answer examples.
 
 Keeping generation offline reduces runtime memory usage, startup time, and deployment complexity.
 
@@ -206,7 +202,7 @@ Freeform question artifact
   +--> Original multiple-choice source preserved
 ```
 
-The transformed artifact keeps the original multiple-choice question, answer choices, correct answer IDs, explanation, source name, source URL, and license notes. The app uses the transformed freeform prompt for recall practice, then displays the original multiple-choice item next to generated feedback after the learner submits an answer.
+The transformed artifact keeps the original multiple-choice question, answer choices, correct answer IDs, explanation, source name, source URL, and license notes. Generated training artifacts also keep answer examples in the same question row so human test cases can be added without synchronizing separate question and answer files. The app uses the transformed freeform prompt for recall practice, then displays the original multiple-choice item next to generated feedback after the learner submits an answer.
 
 ## Deployment
 

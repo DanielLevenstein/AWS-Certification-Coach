@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import json
+
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 
 
@@ -17,3 +19,14 @@ def test_question_artifact_preserves_original_multiple_choice_provenance():
         assert original.question
         assert original.options
         assert original.correct_option_ids
+
+
+def test_combined_training_artifact_keeps_answer_sections_with_questions():
+    artifact = PROJECT_ROOT / "data" / "training" / "questions_with_answers_generated.json"
+    rows = JsonQuestionRepository(artifact).all()
+    raw_rows = json.loads(artifact.read_text(encoding="utf-8"))
+
+    assert len(rows) >= 100
+    assert all(row.get("binary_answers") for row in raw_rows)
+    assert all(row.get("wrong_answers") for row in raw_rows)
+    assert all(row.get("partial_answers") for row in raw_rows)

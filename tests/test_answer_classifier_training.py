@@ -6,8 +6,8 @@ from aws_certification_coach.training.dataset import load_answer_classification_
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "questions" / "transformed_freeform_generated.json"
-TRAINING_ARTIFACT = PROJECT_ROOT / "data" / "training" / "answer_classification_generated.json"
+QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "training" / "questions_with_answers_generated.json"
+TRAINING_ARTIFACT = PROJECT_ROOT / "data" / "training" / "questions_with_answers_generated.json"
 
 
 def test_reinforcement_classifier_exceeds_held_out_accuracy_gate():
@@ -21,6 +21,16 @@ def test_reinforcement_classifier_exceeds_held_out_accuracy_gate():
         examples,
     )
 
+    print(
+        "classifier_metrics "
+        f"accuracy={metrics['accuracy']:.3f} "
+        f"precision={metrics['precision']:.3f} "
+        f"recall={metrics['recall']:.3f}"
+    )
+
     assert len(questions) >= 100
     assert len(examples) >= 100
     assert metrics["accuracy"] >= 0.90
+    assert metrics["accuracy"] < 1.0
+    assert metrics["precision"] >= 0.90
+    assert metrics["recall"] >= 0.90

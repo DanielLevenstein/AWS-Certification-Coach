@@ -5,8 +5,8 @@ from aws_certification_coach.training.dataset import load_answer_classification_
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-HOLDOUT_QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "verification" / "questions" / "transformed_freeform_holdout.json"
-HOLDOUT_ANSWER_ARTIFACT = PROJECT_ROOT / "data" / "verification" / "answers" / "answer_classification_holdout.json"
+HOLDOUT_QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "verification" / "questions_with_answers_holdout.json"
+HOLDOUT_ANSWER_ARTIFACT = PROJECT_ROOT / "data" / "verification" / "questions_with_answers_holdout.json"
 
 
 def test_holdout_verification_artifacts_are_separate_and_large_enough():

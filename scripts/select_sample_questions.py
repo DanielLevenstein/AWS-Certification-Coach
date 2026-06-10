@@ -10,7 +10,7 @@ import random
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="data/questions/transformed_freeform_generated.json")
+    parser.add_argument("--input", default="data/training/questions_with_answers_generated.json")
     parser.add_argument("--output", default="data/questions/sample_questions.json")
     parser.add_argument("--count", type=int, default=10)
     parser.add_argument("--seed", type=int, default=None)
