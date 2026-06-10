@@ -12,5 +12,6 @@ fi
 
 echo "After script is run update RELEASE_NOTES and push image to docker with the following commands"
 echo "docker buildx build --platform linux/amd64 -t daniellevenstein/aws-certification-coach:tag. --push"
-echo "Remember push to latest after validating build"
+echo "Test tagged build before pushing to latest:"
+echo "docker run -p 8501:8501 daniellevenstein/aws-certification-coach:tag"
 echo "Docker image URL: https://docker.io/daniellevenstein/aws-certification-coach:latest"
