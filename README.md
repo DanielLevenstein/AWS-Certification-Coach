@@ -2,6 +2,10 @@
 
 AI study partner for AWS certification exams
 
+![AWS Certification Coach answering an AWS exam-style question](docs/images/aws-certification-coach.png)
+
+*Figure: The coach scores a freeform Amazon Kinesis answer and displays detailed feedback alongside the source multiple-choice question.*
+
 ## Goal
 
 AWS Certification Coach is a lightweight AI-powered study app for AWS certification practice. It presents pre-generated questions, evaluates learner answers with the trained local classifier or a configured LLM provider, and returns structured coaching feedback.
@@ -41,7 +45,7 @@ Training and verification data are generated separately:
 
 - `data/training/questions_with_answers_generated.json`: training artifact used by the classifier and partial-credit regressor.
 - `data/verification/questions_with_answers_holdout.json`: holdout artifact reserved for final verification and not used by training scripts.
-- `data/questions/sample_questions.json`: app-facing question bank generated independently from training labels and grounded with AWS documentation source URLs.
+- `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
 
 The binary classifier treats `.25` partial-credit examples as explicit negatives, so very weak answers are rejected even when they mention a broad service family. The partial-credit regressor is trained separately against the continuous `rating` values using mean squared error. This keeps full-answer correctness and partial-credit estimation measurable as different tasks.
 
@@ -57,30 +61,12 @@ python scripts/train_partial_answer_regressor.py
 
 ## Releases
 
-### v1.0.0 Initial Release
+| Release | Description                                                                                                                                                                 |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| v1.1.0  | Separates the app-facing question bank from training labels,<br /> expands the app bank to 80 AWS-docs-grounded questions and adds stricter wrong-service answer rejection. |
+| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions, <br />trained answer classifier, and partial-credit regression metrics.               |
 
-#### Model Performance
-
-| Full Answer Evaluation | Value |
-| --- | ---: |
-| Accuracy | 97.39% |
-| Precision | 97.19% |
-| Recall | 97.83% |
-| Examples | 1150 |
-| Evaluation mode | leave-one-question-out |
-
-| Partial Credit Regressor | Value |
-| --- | ---: |
-| MSE | 0.0193 |
-| MAE | 0.1006 |
-| Examples | 500 |
-| Evaluation mode | leave-one-question-out |
-
-| Classifier TP | Classifier FP | Classifier TN | Classifier FN |
-| ---: | ---: | ---: | ---: |
-| 587 | 17 | 533 | 13 |
-
-#### Scope
+#### ```Scope
 
 Certifications:
 
@@ -103,6 +89,7 @@ Domains:
 - Storage
 
 Difficulty:
+
 - Easy
 - Medium
 
@@ -147,7 +134,7 @@ Train the partial-credit regression model and report mean squared error:
 python scripts/train_partial_answer_regressor.py
 ```
 
-Print a single release-note friendly model performance summary:
+Print a single release-note-friendly model performance summary:
 
 ```bash
 python scripts/release_metrics.py
@@ -158,8 +145,6 @@ Final verification data is stored separately in `data/verification/questions_wit
 Use the trained classifier in the app:
 
 ```bash
-export AWS_COACH_EVALUATOR_PROVIDER=trained_classifier
-export AWS_COACH_CLASSIFIER_MODEL_PATH=models/answer_classifier.json
 streamlit run app.py
 ```
 
