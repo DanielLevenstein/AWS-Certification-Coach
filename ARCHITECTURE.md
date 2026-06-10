@@ -18,7 +18,7 @@ Quiz Controller
 Evaluation Prompt Builder
   |
   v
-LLM Evaluation Service
+Evaluation Service
   |
   v
 Feedback Engine
@@ -116,7 +116,7 @@ Return JSON only with:
 
 The prompt builder should keep scoring instructions centralized so that every model provider receives the same evaluation contract.
 
-### LLM Evaluation Service
+### Evaluation Service
 
 The evaluation service is the only runtime component that talks to the model provider. Runtime grading defaults to the trained classifier and can be switched to OpenAI through configuration, but the app should expose a narrow interface such as `evaluate_answer(prompt) -> EvaluationResult`.
 
@@ -163,7 +163,7 @@ AWS documentation and exam guide
 Content generation script
   |
   v
-LLM-assisted question generation
+Scripted self-authored generation
   |
   v
 Human quality review
@@ -215,7 +215,7 @@ User
 Streamlit App
   |
   v
-LLM Provider
+Trained Classifier
 ```
 
 Recommended targets:
@@ -223,6 +223,8 @@ Recommended targets:
 - Render for a simple MVP.
 - EC2 if local model hosting is required.
 - A managed LLM API if startup time and small images are higher priority than fully local inference.
+
+OpenAI remains available as an optional provider for model-based evaluation, but the default V1 deployment uses the trained local classifier and bundled model artifact.
 
 Expected benefits:
 

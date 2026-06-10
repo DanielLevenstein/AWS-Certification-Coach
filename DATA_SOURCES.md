@@ -20,7 +20,7 @@
 
 5. Self-authored Exam-Style Questions
 
-   This is the safest default for local artifacts. Use official AWS exam guides, AWS documentation, and Skill Builder style observations to write original questions, then transform them into freeform recall prompts.
+   This is the safest default for local artifacts. Use official AWS exam guides and AWS documentation to write original questions, then transform them into freeform recall prompts. Treat Skill Builder material as style guidance only when reuse terms allow it.
 
 6. User-Owned Notes and Review Material
 

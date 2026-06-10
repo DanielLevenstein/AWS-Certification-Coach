@@ -56,39 +56,58 @@ python scripts/train_answer_classifier.py --min-accuracy 0.90
 python scripts/train_partial_answer_regressor.py
 ```
 
-# Releases
+## Releases
 
-v1.0.0 Initial release
+### v1.0.0 Initial Release
 
-## Model Performance
+#### Model Performance
 
+| Full Answer Evaluation | Value |
+| --- | ---: |
+| Accuracy | 97.39% |
+| Precision | 97.19% |
+| Recall | 97.83% |
+| Examples | 1150 |
+| Evaluation mode | leave-one-question-out |
 
-| Full Answer Evaluation |                  Value |
-| ---------------------- | ---------------------: |
-| Accuracy               |                 97.39% |
-| Precision              |                 97.19% |
-| Recall                 |                 97.83% |
-| Examples               |                   1150 |
-| Evaluation mode        | leave-one-question-out |
-
-
-| Partial Credit Regressor |                  Value |
-| ------------------------ | ---------------------: |
-| MSE                      |                 0.0193 |
-| MAE                      |                 0.1006 |
-| Examples                 |                    500 |
-| Evaluation mode          | leave-one-question-out |
-
+| Partial Credit Regressor | Value |
+| --- | ---: |
+| MSE | 0.0193 |
+| MAE | 0.1006 |
+| Examples | 500 |
+| Evaluation mode | leave-one-question-out |
 
 | Classifier TP | Classifier FP | Classifier TN | Classifier FN |
-| ------------: | ------------: | ------------: | ------------: |
-|           587 |            17 |           533 |            13 |
+| ---: | ---: | ---: | ---: |
+| 587 | 17 | 533 | 13 |
 
-## Scope
+#### Scope
 
-Certifications [Cloud Practitioner, Solutions Architect Associate]
+Certifications:
 
-Domains [Analytics, Application Integration, Billing, Compute, Database, Governance, Integration, Networking, Operations, Resilient Architectures, Security, Storage]
+- Cloud Practitioner
+- Solutions Architect Associate
+
+Domains:
+
+- Analytics
+- Application Integration
+- Billing
+- Compute
+- Database
+- Governance
+- Integration
+- Networking
+- Operations
+- Resilient Architectures
+- Security
+- Storage
+
+Difficulty:
+- Easy
+- Medium
+
+## Setup
 
 Install the project in editable mode so the `src/` package imports work from Streamlit, tests, and command-line scripts:
 
@@ -161,6 +180,14 @@ docker run --rm -p 8501:8501 aws-certification-coach:latest
 ```
 
 The image includes the generated sample questions and trained model artifacts, so the default app path runs without an API key.
+
+## Render Deployment
+
+- Runtime: Docker
+- Port: `8501`
+- Health check path: `/_stcore/health`
+- Default evaluator: `trained_classifier`
+- API key requirement: none for the default classifier path; set `OPENAI_API_KEY` only when using the OpenAI provider.
 
 ## Evaluator Configuration
 
