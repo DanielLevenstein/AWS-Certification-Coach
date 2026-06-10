@@ -2,6 +2,7 @@ from pathlib import Path
 import tracemalloc
 
 from aws_certification_coach.evaluation.factory import build_evaluation_service
+from aws_certification_coach.evaluation.trained_classifier_provider import SUCCESS_THRESHOLD
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 
 
@@ -23,5 +24,5 @@ def test_question_loading_and_evaluation_memory_overhead_stays_small():
 
     print(f"memory_overhead_peak_bytes={peak}")
 
-    assert result.score > 50
+    assert result.score >= SUCCESS_THRESHOLD
     assert peak <= MAX_EVALUATION_OVERHEAD_BYTES

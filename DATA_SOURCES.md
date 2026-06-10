@@ -19,10 +19,10 @@
 
 Source multiple-choice artifacts may live in `data/questions/source_multiple_choice_*.json`.
 
-Generated training artifacts live in `data/training/questions_with_answers_generated.json` and preserve the original item under `original_multiple_choice`.
+Generated training artifacts live in `data/generated/questions_with_answers_generated.json` and preserve the original item under `original_multiple_choice`. Generated and submitted answers retain A-F letter grades in JSON; training loaders convert those grades to numeric values in memory.
 
 Final holdout artifacts live in `data/verification/questions_with_answers_holdout.json` and must stay separate from training data.
 
-App-facing questions live in `data/questions/sample_questions.json`. They should not include `binary_answers`, `wrong_answers`, or `partial_answers`; those fields are training-only labels. The app question bank should be generated independently from training data and should include source URLs for topic grounding.
+App-facing questions live in `data/questions/sample_questions.json`. They should not include `generated_answers`; that field is reserved for offline training labels. The app question bank should be generated independently from training data and should include source URLs for topic grounding.
 
-Each combined question row can include `binary_answers`, `wrong_answers`, and `partial_answers` so human review cases can be added next to the source question they validate.
+Each generated question row includes `generated_answers` spanning A through F so human review cases stay next to the source question they validate. Curated and learner-submitted corrections use the separate feedback record format.
