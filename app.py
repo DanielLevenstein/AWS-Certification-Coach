@@ -19,7 +19,7 @@ from aws_certification_coach.ratings import LETTER_RATINGS, score_to_letter
 
 
 QUESTIONS_PATH = ROOT_DIR / "data" / "questions" / "sample_questions.json"
-USER_FEEDBACK_PATH = ROOT_DIR / "data" / "generated" / "user_feedback.json"
+USER_FEEDBACK_PATH = ROOT_DIR / "data" / "generated" / "user_feedback.v1.json"
 
 
 @st.cache_resource
