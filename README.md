@@ -41,7 +41,7 @@ Training and verification data are generated separately:
 
 - `data/training/questions_with_answers_generated.json`: training artifact used by the classifier and partial-credit regressor.
 - `data/verification/questions_with_answers_holdout.json`: holdout artifact reserved for final verification and not used by training scripts.
-- `data/questions/sample_questions.json`: 10 random training questions used by the local app sample.
+- `data/questions/sample_questions.json`: app-facing question bank generated independently from training labels and grounded with AWS documentation source URLs.
 
 The binary classifier treats `.25` partial-credit examples as explicit negatives, so very weak answers are rejected even when they mention a broad service family. The partial-credit regressor is trained separately against the continuous `rating` values using mean squared error. This keeps full-answer correctness and partial-credit estimation measurable as different tasks.
 
@@ -50,45 +50,63 @@ To regenerate the artifacts cleanly:
 ```bash
 rm -rf data models
 python scripts/generate_sample_training_artifacts.py
-python scripts/generate_partial_answer_artifacts.py
-python scripts/select_sample_questions.py --count 10
+python scripts/generate_app_question_artifacts.py --count 80
 python scripts/train_answer_classifier.py --min-accuracy 0.90
 python scripts/train_partial_answer_regressor.py
 ```
 
-# Releases
+## Releases
 
-v1.0.0 Initial release
+### v1.0.0 Initial Release
 
-## Model Performance
+#### Model Performance
 
+| Full Answer Evaluation | Value |
+| --- | ---: |
+| Accuracy | 97.39% |
+| Precision | 97.19% |
+| Recall | 97.83% |
+| Examples | 1150 |
+| Evaluation mode | leave-one-question-out |
 
-| Full Answer Evaluation |                  Value |
-| ---------------------- | ---------------------: |
-| Accuracy               |                 97.39% |
-| Precision              |                 97.19% |
-| Recall                 |                 97.83% |
-| Examples               |                   1150 |
-| Evaluation mode        | leave-one-question-out |
-
-
-| Partial Credit Regressor |                  Value |
-| ------------------------ | ---------------------: |
-| MSE                      |                 0.0193 |
-| MAE                      |                 0.1006 |
-| Examples                 |                    500 |
-| Evaluation mode          | leave-one-question-out |
-
+| Partial Credit Regressor | Value |
+| --- | ---: |
+| MSE | 0.0193 |
+| MAE | 0.1006 |
+| Examples | 500 |
+| Evaluation mode | leave-one-question-out |
 
 | Classifier TP | Classifier FP | Classifier TN | Classifier FN |
-| ------------: | ------------: | ------------: | ------------: |
-|           587 |            17 |           533 |            13 |
+| ---: | ---: | ---: | ---: |
+| 587 | 17 | 533 | 13 |
 
-## Scope
+#### Scope
 
-Certifications [Cloud Practitioner, Solutions Architect Associate]
+Certifications:
 
-Domains [Analytics, Application Integration, Billing, Compute, Database, Governance, Integration, Networking, Operations, Resilient Architectures, Security, Storage]
+- Cloud Practitioner
+- Solutions Architect Associate
+
+Domains:
+
+- Analytics
+- Application Integration
+- Billing
+- Compute
+- Database
+- Governance
+- Integration
+- Networking
+- Operations
+- Resilient Architectures
+- Security
+- Storage
+
+Difficulty:
+- Easy
+- Medium
+
+## Setup
 
 Install the project in editable mode so the `src/` package imports work from Streamlit, tests, and command-line scripts:
 
@@ -112,8 +130,7 @@ Regenerate local training, holdout, and app sample artifacts:
 
 ```bash
 python scripts/generate_sample_training_artifacts.py
-python scripts/generate_partial_answer_artifacts.py
-python scripts/select_sample_questions.py --count 10
+python scripts/generate_app_question_artifacts.py --count 80
 ```
 
 Train the deployed answer classifier and enforce the 90% minimum gate:
@@ -161,6 +178,14 @@ docker run --rm -p 8501:8501 aws-certification-coach:latest
 ```
 
 The image includes the generated sample questions and trained model artifacts, so the default app path runs without an API key.
+
+## Render Deployment
+
+- Runtime: Docker
+- Port: `8501`
+- Health check path: `/_stcore/health`
+- Default evaluator: `trained_classifier`
+- API key requirement: none for the default classifier path; set `OPENAI_API_KEY` only when using the OpenAI provider.
 
 ## Evaluator Configuration
 

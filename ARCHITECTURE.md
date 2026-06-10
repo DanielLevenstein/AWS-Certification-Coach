@@ -10,8 +10,10 @@ flowchart TD
     Controller[Quiz Controller]
     Repo[Question Repository]
     Prompt[Prompt Builder]
-    LLM[LLM Evaluation Service]
+    Eval[Evaluation Service]
+    Classifier[Trained Classifier]
     Feedback[Feedback Engine]
+    Results[Results Display]
 
     User --> UI
     UI --> Controller
@@ -19,10 +21,12 @@ flowchart TD
     Controller --> Repo
     Controller --> Prompt
 
-    Prompt --> LLM
-    LLM --> Feedback
+    Prompt --> Eval
+    Eval --> Classifier
+    Eval --> Feedback
 
-    Feedback --> UI
+    Feedback --> Results
+    Results --> UI
 ```
 
 ## Runtime Components
@@ -114,7 +118,7 @@ Return JSON only with:
 
 The prompt builder should keep scoring instructions centralized so that every model provider receives the same evaluation contract.
 
-### LLM Evaluation Service
+### Evaluation Service
 
 The evaluation service is the only runtime component that talks to the model provider. Runtime grading defaults to the trained classifier and can be switched to OpenAI through configuration, but the app should expose a narrow interface such as `evaluate_answer(prompt) -> EvaluationResult`.
 
@@ -158,14 +162,14 @@ Practice questions are produced before deployment.
 flowchart TD
     Docs[AWS Documentation & Exam Guide]
     Script[Content Generation Script]
-    LLM[LLM-Assisted Question Generation]
+    Generated[Scripted Self-Authored Generation]
     Review[Human Quality Review]
     Bank[JSON Question Bank]
     App[AWS Certification Coach]
 
     Docs --> Script
-    Script --> LLM
-    LLM --> Review
+    Script --> Generated
+    Generated --> Review
     Review --> Bank
     Bank --> App
 ```
@@ -210,10 +214,12 @@ The transformed artifact keeps the original multiple-choice question, answer cho
 flowchart TD
     User[Student]
     App[AWS Certification Coach<br/>Streamlit Application]
-    LLM[LLM Evaluation Provider]
+    Classifier[Trained Classifier<br/>Bundled Model Artifact]
+    OpenAI[Optional OpenAI Provider]
 
     User --> App
-    App --> LLM
+    App --> Classifier
+    App -. configurable .-> OpenAI
 ```
 
 Recommended targets:
@@ -221,6 +227,8 @@ Recommended targets:
 - Render for a simple MVP.
 - EC2 if local model hosting is required.
 - A managed LLM API if startup time and small images are higher priority than fully local inference.
+
+OpenAI remains available as an optional provider for model-based evaluation, but the default V1 deployment uses the trained local classifier and bundled model artifact.
 
 Expected benefits:
 
@@ -261,7 +269,7 @@ Included:
 
 - Question display.
 - Free-text answer submission.
-- LLM-based evaluation.
+- Answer evaluation through the trained classifier or a configured provider.
 - Score generation.
 - Feedback generation.
 - Domain and difficulty filtering.

@@ -1,0 +1,8 @@
+{
+  "mse": 0.019346141855997652,
+  "mae": 0.1005754753757138,
+  "example_count": 500,
+  "eval_mode": "leave-one-question-out",
+  "min_examples": 100,
+  "max_mse": 0.06
+}

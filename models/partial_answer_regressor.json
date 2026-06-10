@@ -1,0 +1,30 @@
+{
+  "feature_names": [
+    "bias",
+    "reference_jaccard",
+    "reference_answer_containment",
+    "answer_reference_containment",
+    "correct_option_exact",
+    "correct_option_jaccard",
+    "correct_option_answer_containment",
+    "incorrect_option_jaccard",
+    "incorrect_option_answer_containment",
+    "explanation_exact",
+    "explanation_jaccard",
+    "answer_length_ratio"
+  ],
+  "weights": [
+    0.12602956656577013,
+    0.023981693028109586,
+    0.3218588033995687,
+    0.3555171260147593,
+    -0.2812967704061338,
+    -0.3397478949610794,
+    0.6936004435710685,
+    0.3480019838981454,
+    -0.49532243168726237,
+    0.0,
+    0.023981693028109586,
+    0.13704063621926796
+  ]
+}
