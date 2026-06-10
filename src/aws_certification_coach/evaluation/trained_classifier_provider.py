@@ -3,11 +3,19 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.training.answer_classifier import AnswerClassificationModel
 from aws_certification_coach.training.features import AnswerFeatureExtractor
+
+
+SUCCESS_THRESHOLD = 70
+INCORRECT_ANSWER_SCORE_CAP = 49
+MISSPELLED_SERVICE_SCORE = 65
+TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+GENERIC_SERVICE_TOKENS = {"amazon", "aws", "service", "the", "use"}
 
 
 class TrainedClassifierEvaluatorProvider:
@@ -21,18 +29,26 @@ class TrainedClassifierEvaluatorProvider:
         del prompt
         features = self.feature_extractor.extract(question, user_answer)
         probability = self.model.predict_proba(features)
-        prediction = self.model.predict(features)
         model_score = probability * 100
-        if _is_incorrect_service_selection(question, user_answer):
+        prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
+        if _has_bad_service_spelling(question, user_answer):
             missing = _missing_concepts(question, user_answer)
             payload = {
-                "score": min(int(model_score), 50),
+                "score": MISSPELLED_SERVICE_SCORE,
                 "missing_concepts": missing,
                 "suggested_improvements": [f"Explain {concept}." for concept in missing],
-                "feedback": (
-                    f"Raw model score: {model_score:.2f}%. This exact service answer is not in the "
-                    "question's correct answer list."
-                ),
+                "feedback": "The AWS service name appears to be misspelled.",
+                "detailed_answer": question.reference_answer,
+            }
+            return json.dumps(payload)
+        grading_issue = _incorrect_service_answer_issue(question, user_answer)
+        if grading_issue:
+            missing = _missing_concepts(question, user_answer)
+            payload = {
+                "score": min(int(model_score), INCORRECT_ANSWER_SCORE_CAP),
+                "missing_concepts": missing,
+                "suggested_improvements": [f"Explain {concept}." for concept in missing],
+                "feedback": grading_issue,
                 "detailed_answer": question.reference_answer,
             }
             return json.dumps(payload)
@@ -57,6 +73,41 @@ def _missing_concepts(question: Question, user_answer: str) -> list[str]:
     ]
 
 
+def _incorrect_service_answer_issue(question: Question, user_answer: str) -> str | None:
+    if _is_too_generic_service_answer(question, user_answer):
+        return "The answer names AWS generally but does not identify the required service."
+    if _is_incorrect_service_selection(question, user_answer):
+        return "This exact service answer is not in the question's correct answer list."
+    return None
+
+
+def _is_too_generic_service_answer(question: Question, user_answer: str) -> bool:
+    expected_tokens = _expected_service_tokens(question)
+    answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold()))
+    meaningful_tokens = answer_tokens - GENERIC_SERVICE_TOKENS
+    return bool(expected_tokens) and not meaningful_tokens and len(answer_tokens) <= 3
+
+
+def _has_bad_service_spelling(question: Question, user_answer: str) -> bool:
+    expected_tokens = _expected_service_tokens(question) - GENERIC_SERVICE_TOKENS
+    answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold()))
+    for expected in expected_tokens - answer_tokens:
+        if any(
+            not _is_singular_plural_variant(expected, candidate)
+            and _edit_distance(expected, candidate) == 1
+            for candidate in answer_tokens
+            if len(candidate) >= 3
+        ):
+            return True
+    return False
+
+
+def _expected_service_tokens(question: Question) -> set[str]:
+    if not question.key_concepts:
+        return set()
+    return set(TOKEN_PATTERN.findall(question.key_concepts[0].casefold()))
+
+
 def _is_incorrect_service_selection(question: Question, user_answer: str) -> bool:
     original = question.original_multiple_choice
     if original is None:
@@ -76,10 +127,31 @@ def _is_incorrect_service_selection(question: Question, user_answer: str) -> boo
 
 
 def _feedback(model_score: float, prediction: int) -> str:
+    del model_score
     if prediction == 1:
-        return f"Model score: {model_score:.2f}%. This answer is above the correctness threshold."
-    return f"Model score: {model_score:.2f}%. This answer is below the correctness threshold and needs more AWS-specific detail."
+        return "This answer covers the expected AWS concepts."
+    return "This answer needs more AWS-specific detail."
 
 
 def _normalized(value: str) -> str:
     return " ".join(value.casefold().replace(".", "").split())
+
+
+def _edit_distance(left: str, right: str) -> int:
+    previous = list(range(len(right) + 1))
+    for left_index, left_character in enumerate(left, start=1):
+        current = [left_index]
+        for right_index, right_character in enumerate(right, start=1):
+            current.append(
+                min(
+                    current[-1] + 1,
+                    previous[right_index] + 1,
+                    previous[right_index - 1] + (left_character != right_character),
+                )
+            )
+        previous = current
+    return previous[-1]
+
+
+def _is_singular_plural_variant(left: str, right: str) -> bool:
+    return left == f"{right}s" or right == f"{left}s"

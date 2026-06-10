@@ -3,11 +3,12 @@ from pathlib import Path
 import json
 
 from aws_certification_coach.evaluation.factory import build_evaluation_service
+from aws_certification_coach.evaluation.trained_classifier_provider import SUCCESS_THRESHOLD
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "training" / "questions_with_answers_generated.json"
+QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_generated.json"
 APP_QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "questions" / "sample_questions.json"
 
 
@@ -19,13 +20,14 @@ def test_trained_classifier_accepts_shortened_correct_answers():
         shortened_answer = _drop_every_nth_word(question.reference_answer, 4)
         result = service.evaluate(question, shortened_answer)
 
-        assert result.score > 50, (
+        assert result.score >= SUCCESS_THRESHOLD, (
             f"{question.question_id} should accept shortened correct answer: "
             f"{shortened_answer!r}. Feedback: {result.feedback}"
         )
         assert result.score < 100
         assert "classifier" not in result.feedback.lower()
         assert "confidence" not in result.feedback.lower()
+        assert "model score" not in result.feedback.lower()
 
 
 def test_trained_classifier_rejects_incorrect_service_answers():
@@ -46,7 +48,7 @@ def test_trained_classifier_rejects_incorrect_service_answers():
             if _normalized(answer) in correct_answers:
                 continue
             result = service.evaluate(question, answer)
-            if result.score > 50:
+            if result.score >= SUCCESS_THRESHOLD:
                 failures.append((question.question_id, result.score, answer, result.feedback))
 
     assert not failures
@@ -60,14 +62,37 @@ def test_trained_classifier_rejects_low_partial_credit_answers():
     failures = []
     for row in raw_questions:
         question = questions[row["question_id"]]
-        for answer in row.get("partial_answers", []):
-            if answer.get("rating_bucket") != 0.25:
+        for answer in row.get("generated_answers", []):
+            if answer.get("rating") != "F":
                 continue
             result = service.evaluate(question, answer["answer"])
-            if result.score > 50:
+            if result.score >= SUCCESS_THRESHOLD:
                 failures.append((question.question_id, result.score, answer["answer"], result.feedback))
 
     assert not failures
+
+
+def test_trained_classifier_rejects_generic_answers_and_gives_misspellings_a_d():
+    service = build_evaluation_service()
+    question = next(
+        question
+        for question in JsonQuestionRepository(APP_QUESTION_ARTIFACT).all()
+        if question.question_id == "AWS-APP-020"
+    )
+
+    generic_result = service.evaluate(question, "AWS")
+    assert generic_result.score < 50
+    assert "model score" not in generic_result.feedback.lower()
+
+    for answer in ("AWS KMZ", "Use AWS KMZ"):
+        result = service.evaluate(question, answer)
+        assert 60 <= result.score < SUCCESS_THRESHOLD, (
+            f"{answer!r} should receive a D, but scored {result.score}: {result.feedback}"
+        )
+        assert "model score" not in result.feedback.lower()
+
+    correct_result = service.evaluate(question, "AWS KMS")
+    assert correct_result.score >= SUCCESS_THRESHOLD
 
 
 def _drop_every_nth_word(value: str, n: int) -> str:

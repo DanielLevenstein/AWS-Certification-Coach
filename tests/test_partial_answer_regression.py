@@ -6,7 +6,7 @@ from aws_certification_coach.training.dataset import load_answer_regression_exam
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-TRAINING_ARTIFACT = PROJECT_ROOT / "data" / "training" / "questions_with_answers_generated.json"
+TRAINING_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_generated.json"
 
 
 def test_partial_credit_regressor_reports_mse_metrics():

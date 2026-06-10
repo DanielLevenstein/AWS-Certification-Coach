@@ -13,13 +13,21 @@ from aws_certification_coach.training.answer_classifier import (
     evaluate_leave_one_question_out,
     evaluate_model,
 )
-from aws_certification_coach.training.dataset import load_answer_classification_examples
+from aws_certification_coach.training.dataset import (
+    load_answer_classification_examples,
+    load_feedback_classification_examples,
+)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--questions", default="data/training/questions_with_answers_generated.json")
-    parser.add_argument("--training-data", default="data/training/questions_with_answers_generated.json")
+    parser.add_argument("--questions", default="data/generated/questions_with_answers_generated.json")
+    parser.add_argument("--training-data", default="data/generated/questions_with_answers_generated.json")
+    parser.add_argument(
+        "--feedback-data",
+        action="append",
+        default=["data/curated/curated_training_data.json", "data/generated/user_feedback.json"],
+    )
     parser.add_argument("--output", default="models/answer_classifier.json")
     parser.add_argument("--metrics-output", default="models/answer_classifier_metrics.json")
     parser.add_argument("--min-accuracy", type=float, default=0.90)
@@ -33,6 +41,9 @@ def main() -> None:
     questions = JsonQuestionRepository(args.questions).all()
     questions_by_id = {question.question_id: question for question in questions}
     examples = load_answer_classification_examples(args.training_data)
+    for feedback_path in args.feedback_data:
+        if Path(feedback_path).exists():
+            examples.extend(load_feedback_classification_examples(feedback_path, questions_by_id))
     _validate_examples(questions_by_id, examples)
     if len(examples) < args.min_examples:
         raise SystemExit(
