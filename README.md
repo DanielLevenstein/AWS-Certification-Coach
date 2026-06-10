@@ -37,17 +37,17 @@ The generation flow starts with service-level scenario specs in `scripts/generat
 
 Each generated question keeps its source-style multiple-choice item in the same JSON row under `original_multiple_choice`. The same row also stores answer examples used for model training:
 
-- `binary_answers`: correct answers, paraphrases, shortened correct answers, distractor answers, generic wrong answers, and near-miss wrong answers.
-- `wrong_answers`: explicit wrong-answer examples based on the multiple-choice distractors.
-- `partial_answers`: continuous partial-credit examples with ratings between `0` and `1`, plus a coarse `rating_bucket` for provenance.
+- `generated_answers`: complete, partial, weak, and incorrect answers labeled with human-readable grades `A`, `B`, `C`, `D`, and `F`.
 
 Training and verification data are generated separately:
 
-- `data/training/questions_with_answers_generated.json`: training artifact used by the classifier and partial-credit regressor.
+- `data/generated/questions_with_answers_generated.json`: generated training artifact used by the classifier and partial-credit regressor.
+- `data/generated/user_feedback.json`: learner-submitted grade corrections created by the app.
+- `data/curated/curated_training_data.json`: reviewed feedback examples maintained by hand.
 - `data/verification/questions_with_answers_holdout.json`: holdout artifact reserved for final verification and not used by training scripts.
 - `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
 
-The binary classifier treats `.25` partial-credit examples as explicit negatives, so very weak answers are rejected even when they mention a broad service family. The partial-credit regressor is trained separately against the continuous `rating` values using mean squared error. This keeps full-answer correctness and partial-credit estimation measurable as different tasks.
+Artifacts keep letter grades for readability. Dataset loaders convert them in memory to numeric regression targets and binary labels, with `C` and above treated as passing. Both training scripts also incorporate curated feedback and any locally submitted user feedback when those files exist.
 
 To regenerate the artifacts cleanly:
 
@@ -126,7 +126,7 @@ Train the deployed answer classifier and enforce the 90% minimum gate:
 python scripts/train_answer_classifier.py --min-accuracy 0.90
 ```
 
-The default training command uses `data/training/questions_with_answers_generated.json`, which contains 100 self-authored freeform questions, original multiple-choice provenance, binary answer examples, wrong answers, and continuous partial-answer ratings.
+The default training command uses `data/generated/questions_with_answers_generated.json`, which contains 100 self-authored freeform questions, original multiple-choice provenance, and generated answers spanning grades A through F.
 
 Train the partial-credit regression model and report mean squared error:
 

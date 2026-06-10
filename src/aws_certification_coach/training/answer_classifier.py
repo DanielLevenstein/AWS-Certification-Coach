@@ -86,7 +86,7 @@ class ReinforcementAnswerClassifier:
         return AnswerClassificationModel(
             feature_names=list(self.feature_extractor.feature_names),
             weights=weights,
-            threshold=0.5,
+            threshold=0.7,
         )
 
 

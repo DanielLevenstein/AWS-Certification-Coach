@@ -61,16 +61,14 @@ def main() -> None:
     training_artifacts = _build_artifacts(start_index=0, count=100, question_prefix="AWS-GEN")
     holdout_artifacts = _build_artifacts(start_index=100, count=100, question_prefix="AWS-HOLDOUT")
 
-    _write_json("data/training/questions_with_answers_generated.json", training_artifacts["questions"])
+    _write_json("data/generated/questions_with_answers_generated.json", training_artifacts["questions"])
     _write_json("data/verification/questions_with_answers_holdout.json", holdout_artifacts["questions"])
     print(
         "Generated "
         f"{len(training_artifacts['questions'])} training questions, "
-        f"{sum(len(question['binary_answers']) for question in training_artifacts['questions'])} training binary examples, "
-        f"{sum(len(question['partial_answers']) for question in training_artifacts['questions'])} training partial examples, "
+        f"{sum(len(question['generated_answers']) for question in training_artifacts['questions'])} graded training answers, "
         f"{len(holdout_artifacts['questions'])} holdout questions, "
-        f"{sum(len(question['binary_answers']) for question in holdout_artifacts['questions'])} holdout binary examples, and "
-        f"{sum(len(question['partial_answers']) for question in holdout_artifacts['questions'])} holdout partial examples."
+        f"{sum(len(question['generated_answers']) for question in holdout_artifacts['questions'])} graded holdout answers."
     )
 
 
@@ -109,95 +107,46 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
             "reference_answer": explanation,
             "key_concepts": concepts,
             "original_multiple_choice": original_multiple_choice,
-            "binary_answers": _binary_examples(question_id, service, purpose, concepts, distractors, explanation, correct_option),
-            "wrong_answers": _wrong_examples(question_id, distractors),
-            "partial_answers": _partial_examples(question_id, service, concepts, mcq_question),
+            "generated_answers": _generated_answers(
+                question_id,
+                service,
+                purpose,
+                concepts,
+                distractors,
+                explanation,
+                correct_option,
+                mcq_question,
+            ),
         }
         questions.append(question)
     return {"questions": questions}
 
 
-def _binary_examples(question_id, service, purpose, concepts, distractors, explanation, correct_option):
-    examples = [
-        {"question_id": question_id, "answer": correct_option, "label": 1, "source": "generated_correct_option"},
-        {"question_id": question_id, "answer": explanation, "label": 1, "source": "generated_explanation"},
-        {"question_id": question_id, "answer": _drop_every_nth_word(explanation, 4), "label": 1, "source": "generated_positive_word_drop"},
-        {"question_id": question_id, "answer": _drop_every_nth_word(correct_option, 3), "label": 1, "source": "generated_positive_shortened_option"},
-        {
-            "question_id": question_id,
-            "answer": f"{service} is appropriate because it helps {purpose}.",
-            "label": 1,
-            "source": "generated_positive_paraphrase",
-        },
-        {
-            "question_id": question_id,
-            "answer": f"The best choice is {service}; key ideas include {', '.join(concepts[:2])}.",
-            "label": 1,
-            "source": "generated_positive_concepts",
-        },
-        {"question_id": question_id, "answer": f"Use {distractors[0]}.", "label": 0, "source": "generated_distractor"},
-        {"question_id": question_id, "answer": f"Use {distractors[1]}.", "label": 0, "source": "generated_distractor"},
-        {"question_id": question_id, "answer": f"Use {distractors[2]}.", "label": 0, "source": "generated_distractor"},
-        {
-            "question_id": question_id,
-            "answer": "Choose the cheapest service without considering the requirement.",
-            "label": 0,
-            "source": "generated_generic_negative",
-        },
-    ]
-    if _question_number(question_id) % 2 == 0:
-        examples.append(
-            {
-                "question_id": question_id,
-                "answer": f"Use {service}, but skip {concepts[-1]} and assume the requirement is automatically satisfied.",
-                "label": 0,
-                "source": "generated_same_service_wrong_reason",
-            }
-        )
-    return examples
-
-
-def _wrong_examples(question_id, distractors):
-    return [
-        {"question_id": question_id, "answer": f"Use {distractor}.", "label": 0, "source": "generated_wrong_answer"}
-        for distractor in distractors
-    ]
-
-
-def _partial_examples(question_id, service_name, concepts, question_text):
+def _generated_answers(question_id, service, purpose, concepts, distractors, explanation, correct_option, question_text):
     answers = [
-        (_rating_75_answer(service_name, concepts, 0), 0.75, "generated_partial_075"),
-        (_rating_75_answer(service_name, concepts, 1), 0.75, "generated_partial_075_paraphrase"),
-        (_rating_50_answer(service_name, concepts, 0), 0.50, "generated_partial_050"),
-        (_rating_50_answer(service_name, concepts, 1), 0.50, "generated_partial_050_paraphrase"),
-        (_rating_25_answer(question_text), 0.25, "generated_partial_025"),
+        (correct_option, "A", "generated_exact_answer"),
+        (explanation, "A", "generated_complete_answer"),
+        (f"{service} is appropriate because it helps {purpose}.", "A", "generated_complete_paraphrase"),
+        (_drop_every_nth_word(explanation, 4), "B", "generated_shortened_answer"),
+        (f"The best choice is {service}; key ideas include {', '.join(concepts[:2])}.", "B", "generated_key_concepts"),
+        (_rating_75_answer(service, concepts, 0), "C", "generated_partial_correct"),
+        (_rating_75_answer(service, concepts, 1), "C", "generated_partial_correct_paraphrase"),
+        (_rating_50_answer(service, concepts, 0), "D", "generated_weak_answer"),
+        (_rating_50_answer(service, concepts, 1), "D", "generated_weak_paraphrase"),
+        (_rating_25_answer(question_text), "F", "generated_generic_wrong"),
+        (f"Use {distractors[0]}.", "F", "generated_distractor"),
+        (f"Use {distractors[1]}.", "F", "generated_distractor"),
+        (f"Use {distractors[2]}.", "F", "generated_distractor"),
     ]
     return [
         {
             "question_id": question_id,
             "answer": answer,
-            "rating": _continuous_rating(answer, bucket, service_name, concepts),
-            "rating_bucket": bucket,
+            "rating": rating,
             "source": source,
         }
-        for answer, bucket, source in answers
+        for answer, rating, source in answers
     ]
-
-
-def _continuous_rating(answer: str, rating_bucket: float, service_name: str, concepts: list[str]) -> float:
-    normalized_answer = answer.casefold()
-    normalized_service = service_name.casefold()
-    concept_hits = sum(1 for concept in concepts if concept.casefold() in normalized_answer)
-    concept_ratio = concept_hits / max(1, len(concepts))
-    service_bonus = 0.08 if normalized_service and normalized_service in normalized_answer else 0.0
-    specificity_bonus = min(0.07, len(answer.split()) / 120)
-    if rating_bucket >= 0.75:
-        value = 0.68 + service_bonus + (0.16 * concept_ratio) + specificity_bonus
-    elif rating_bucket >= 0.50:
-        value = 0.38 + service_bonus + (0.14 * concept_ratio) + specificity_bonus
-    else:
-        value = 0.14 + (0.10 * concept_ratio) + specificity_bonus
-    return round(max(0.0, min(1.0, value)), 2)
 
 
 def _rating_75_answer(service_name: str, concepts: list[str], index: int) -> str:
@@ -215,9 +164,11 @@ def _rating_75_answer(service_name: str, concepts: list[str], index: int) -> str
 
 
 def _rating_50_answer(service_name: str, concepts: list[str], index: int) -> str:
-    if index % 2 == 1 and concepts:
-        return f"This is about {concepts[0]}."
-    return f"Use {service_name}."
+    supporting_concepts = [concept for concept in concepts if concept.casefold() not in service_name.casefold()]
+    concept = supporting_concepts[index % len(supporting_concepts)] if supporting_concepts else "an AWS feature"
+    if index % 2 == 1:
+        return f"Use a service related to {concept}."
+    return f"This is generally about {concept}, but the specific AWS service is unclear."
 
 
 def _rating_25_answer(question_text: str) -> str:
