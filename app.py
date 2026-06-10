@@ -83,12 +83,11 @@ def main() -> None:
     st.subheader(question.question)
 
     user_answer = st.text_area("Your answer", key=f"answer_text_{session.current_index}", height=160)
-    result = st.session_state.get("last_result")
     evaluate_column, next_column = st.columns([1, 1])
     with evaluate_column:
         evaluate_clicked = st.button("Evaluate Answer", disabled=not user_answer.strip())
     with next_column:
-        next_clicked = st.button("Next Question", disabled=not result)
+        next_clicked = st.button("Next Question", disabled=not st.session_state.get("last_result"))
 
     if evaluate_clicked:
         result = get_evaluation_service().evaluate(question, user_answer)
@@ -101,22 +100,21 @@ def main() -> None:
         st.session_state.last_result = None
         st.rerun()
 
+    result = st.session_state.get("last_result")
     if result:
         feedback_column, source_column = st.columns([3, 2])
         with feedback_column:
             _render_score(result.score)
-            if result.feedback:
-                st.write(result.feedback)
             improvements = result.suggested_improvements or result.missing_concepts
             if improvements:
                 st.write("What to improve")
                 st.write(improvements)
-            _render_original_multiple_choice(question.original_multiple_choice)
-        with source_column:
             st.write("Detailed answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)
             _render_feedback_link(question, user_answer, result.score)
+        with source_column:
+            _render_original_multiple_choice(question.original_multiple_choice)
 
 
 def _render_score(score: int) -> None:
@@ -161,15 +159,11 @@ def _render_feedback_link(question: Question, user_answer: str, score: int) -> N
 def _render_feedback_form(question: Question, user_answer: str, score: int) -> None:
     submitted = st.session_state.setdefault("feedback_submitted", set())
     if question.question_id in submitted:
-        st.success("Thanks. Your grade correction was saved for review and possible future training.")
+        st.success("Thanks. Your grade correction was saved for future training.")
         return
 
     rating_given = score_to_letter(score)
     st.caption("Tell us if this answer should have received a different grade.")
-    st.caption(
-        "Feedback is saved for review and possible future training. "
-        "The model may or may not read or learn from it."
-    )
     correct_rating = st.selectbox(
         "What grade should this answer receive?",
         LETTER_RATINGS,
@@ -184,7 +178,7 @@ def _render_feedback_form(question: Question, user_answer: str, score: int) -> N
             correct_rating=correct_rating,
         )
         submitted.add(question.question_id)
-        st.success("Thanks. Your grade correction was saved for review and possible future training.")
+        st.success("Thanks. Your grade correction was saved for future training.")
 
 
 def _render_source_documentation(original: MultipleChoiceQuestion | None) -> None:
