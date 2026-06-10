@@ -2,7 +2,7 @@
 
 AI study partner for AWS certification exams
 
-![AWS Certification Coach answering an AWS exam-style question](docs/images/aws-certification-coach.png)
+![AWS Certification Coach answering an AWS exam-style question](docs/images/aws-certification-coach2.png)
 
 *Figure: The coach scores a freeform Amazon Kinesis answer and displays detailed feedback alongside the source multiple-choice question.*
 
