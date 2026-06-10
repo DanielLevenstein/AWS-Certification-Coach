@@ -26,7 +26,11 @@ def main() -> None:
     parser.add_argument(
         "--feedback-data",
         action="append",
-        default=["data/curated/curated_training_data.json", "data/generated/user_feedback.json"],
+        default=[
+            "data/curated/curated_training_data.json",
+            "data/curated/user_feedback.v1.json",
+            "data/generated/user_feedback.v1.json",
+        ],
     )
     parser.add_argument("--output", default="models/answer_classifier.json")
     parser.add_argument("--metrics-output", default="models/answer_classifier_metrics.json")

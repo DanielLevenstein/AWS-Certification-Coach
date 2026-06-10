@@ -95,6 +95,44 @@ def test_trained_classifier_rejects_generic_answers_and_gives_misspellings_a_d()
     assert correct_result.score >= SUCCESS_THRESHOLD
 
 
+def test_trained_classifier_rejects_question_restatements():
+    service = build_evaluation_service()
+    questions = JsonQuestionRepository(APP_QUESTION_ARTIFACT).all()
+
+    failures = []
+    for question in questions:
+        prompt_texts = [question.question, question.original_multiple_choice.question]
+        copied_answers = []
+        for prompt in prompt_texts:
+            words = prompt.split()
+            copied_answers.extend(
+                [
+                    prompt,
+                    " ".join(words[: max(1, len(words) // 2)]),
+                    " ".join(words[len(words) // 2 :]),
+                ]
+            )
+        for answer in copied_answers:
+            result = service.evaluate(question, answer)
+            if result.score >= SUCCESS_THRESHOLD:
+                failures.append((question.question_id, result.score, answer, result.feedback))
+
+    assert not failures
+
+
+def test_question_restatement_guard_does_not_reject_exact_correct_option():
+    service = build_evaluation_service()
+    question = next(
+        question
+        for question in JsonQuestionRepository(APP_QUESTION_ARTIFACT).all()
+        if question.question_id == "AWS-APP-020"
+    )
+
+    result = service.evaluate(question, "Use AWS KMS.")
+
+    assert result.score >= SUCCESS_THRESHOLD
+
+
 def _drop_every_nth_word(value: str, n: int) -> str:
     words = value.split()
     kept = [word for index, word in enumerate(words, start=1) if index % n != 0]

@@ -105,10 +105,8 @@ def main() -> None:
         feedback_column, source_column = st.columns([3, 2])
         with feedback_column:
             _render_score(result.score)
-            improvements = result.suggested_improvements or result.missing_concepts
-            if improvements:
-                st.write("What to improve")
-                st.write(improvements)
+            missing_concepts = result.missing_concepts
+            # Consider adding back missing concepts for answers with ratings below A.
             st.write("Detailed answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)

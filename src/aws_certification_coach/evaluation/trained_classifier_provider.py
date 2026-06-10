@@ -13,6 +13,7 @@ from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 SUCCESS_THRESHOLD = 70
 INCORRECT_ANSWER_SCORE_CAP = 49
+QUESTION_RESTATEMENT_SCORE_CAP = 25
 MISSPELLED_SERVICE_SCORE = 65
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 GENERIC_SERVICE_TOKENS = {"amazon", "aws", "service", "the", "use"}
@@ -31,6 +32,16 @@ class TrainedClassifierEvaluatorProvider:
         probability = self.model.predict_proba(features)
         model_score = probability * 100
         prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
+        if _is_question_restatement(question, user_answer):
+            missing = _missing_concepts(question, user_answer)
+            payload = {
+                "score": min(int(model_score), QUESTION_RESTATEMENT_SCORE_CAP),
+                "missing_concepts": missing,
+                "suggested_improvements": [f"Explain {concept}." for concept in missing],
+                "feedback": "This answer restates the question without identifying and explaining the solution.",
+                "detailed_answer": question.reference_answer,
+            }
+            return json.dumps(payload)
         if _has_bad_service_spelling(question, user_answer):
             missing = _missing_concepts(question, user_answer)
             payload = {
@@ -79,6 +90,44 @@ def _incorrect_service_answer_issue(question: Question, user_answer: str) -> str
     if _is_incorrect_service_selection(question, user_answer):
         return "This exact service answer is not in the question's correct answer list."
     return None
+
+
+def _is_question_restatement(question: Question, user_answer: str) -> bool:
+    answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold()))
+    if len(answer_tokens) < 4 or _is_exact_correct_option(question, user_answer):
+        return False
+
+    prompt_texts = [question.question]
+    if question.original_multiple_choice:
+        prompt_texts.append(question.original_multiple_choice.question)
+    for prompt in prompt_texts:
+        prompt_tokens = set(TOKEN_PATTERN.findall(prompt.casefold()))
+        if _token_containment(answer_tokens, prompt_tokens) < 0.9:
+            continue
+        identifying_tokens = _expected_service_tokens(question) - prompt_tokens - GENERIC_SERVICE_TOKENS
+        if identifying_tokens & answer_tokens:
+            continue
+        return True
+    return False
+
+
+def _is_exact_correct_option(question: Question, user_answer: str) -> bool:
+    original = question.original_multiple_choice
+    if original is None:
+        return False
+    correct_ids = set(original.correct_option_ids)
+    normalized_answer = _normalized(user_answer)
+    return normalized_answer in {
+        _normalized(option.text)
+        for option in original.options
+        if option.option_id in correct_ids
+    }
+
+
+def _token_containment(required: set[str], candidate: set[str]) -> float:
+    if not required:
+        return 0.0
+    return len(required & candidate) / len(required)
 
 
 def _is_too_generic_service_answer(question: Question, user_answer: str) -> bool:

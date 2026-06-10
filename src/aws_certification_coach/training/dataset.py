@@ -197,9 +197,18 @@ def _feedback_question_id(row: dict, questions_by_id: dict[str, Question]) -> st
 
     question_text = _normalized_text(row.get("question", ""))
     reference_text = _normalized_text(row.get("reference_answer", ""))
+    original_question_text = _normalized_text(_feedback_original_question(row))
     ranked = sorted(
         (
-            (_feedback_match_score(question_text, reference_text, question), candidate_id)
+            (
+                _feedback_match_score(
+                    question_text,
+                    reference_text,
+                    original_question_text,
+                    question,
+                ),
+                candidate_id,
+            )
             for candidate_id, question in questions_by_id.items()
         ),
         reverse=True,
@@ -209,11 +218,27 @@ def _feedback_question_id(row: dict, questions_by_id: dict[str, Question]) -> st
     return ranked[0][1]
 
 
-def _feedback_match_score(question_text: set[str], reference_text: set[str], question: Question) -> float:
+def _feedback_match_score(
+    question_text: set[str],
+    reference_text: set[str],
+    original_question_text: set[str],
+    question: Question,
+) -> float:
+    original = question.original_multiple_choice
     return _jaccard(question_text, _normalized_text(question.question)) + _jaccard(
         reference_text,
         _normalized_text(question.reference_answer),
+    ) + _jaccard(
+        original_question_text,
+        _normalized_text(original.question if original else ""),
     )
+
+
+def _feedback_original_question(row: dict) -> object:
+    original = row.get("original_multiple_choice")
+    if not isinstance(original, dict):
+        return ""
+    return original.get("question", "")
 
 
 def _normalized_text(value: object) -> set[str]:

@@ -42,8 +42,9 @@ Each generated question keeps its source-style multiple-choice item in the same 
 Training and verification data are generated separately:
 
 - `data/generated/questions_with_answers_generated.json`: generated training artifact used by the classifier and partial-credit regressor.
-- `data/generated/user_feedback.json`: learner-submitted grade corrections created by the app.
+- `data/generated/user_feedback.v1.json`: learner-submitted grade corrections created by the app using the self-contained v1 schema.
 - `data/curated/curated_training_data.json`: reviewed feedback examples maintained by hand.
+- `data/curated/user_feedback.v1.json`: reviewed learner submissions included in model training.
 - `data/verification/questions_with_answers_holdout.json`: holdout artifact reserved for final verification and not used by training scripts.
 - `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
 

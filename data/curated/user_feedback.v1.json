@@ -1,0 +1,335 @@
+[
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-033",
+    "question": "Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.",
+    "reference_answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "original_multiple_choice": {
+      "question": "A team is reviewing an AWS design and needs a solution that can ingest and process real-time streaming data at scale. Which AWS service or feature should they choose?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Kinesis Data Streams."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Glue crawler."
+        },
+        {
+          "option_id": "C",
+          "text": "Use S3 Glacier."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudTrail Lake only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+      "source_name": "AWS Documentation: Amazon Kinesis Data Streams",
+      "source_url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "AWS Kinesis\n",
+    "correct_rating": "D",
+    "rating_given": "F"
+  },
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-064",
+    "question": "Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.",
+    "reference_answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+    "original_multiple_choice": {
+      "question": "During exam preparation, explain which AWS service or feature is best suited to route events from AWS services and applications to targets using event buses and rules.",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon EventBridge."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudFront."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Artifact."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+      "source_name": "AWS Documentation: Amazon EventBridge",
+      "source_url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "route 55",
+    "correct_rating": "C",
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-008",
+    "question": "Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "reference_answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "original_multiple_choice": {
+      "question": "A team is reviewing an AWS design and needs a solution that can provide a fully managed NoSQL key-value and document database with low-latency access. Which AWS service or feature should they choose?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon DynamoDB."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon Redshift."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon EFS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Glue."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+      "source_name": "AWS Documentation: Amazon DynamoDB",
+      "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "NoSQL",
+    "correct_rating": "D",
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-065",
+    "question": "Explain which AWS service or feature should be used to orchestrate multi-step workflows and coordinate distributed application components.",
+    "reference_answer": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+    "original_multiple_choice": {
+      "question": "During exam preparation, explain which AWS service or feature is best suited to orchestrate multi-step workflows and coordinate distributed application components.",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Step Functions."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Lambda alone."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Amazon S3 Glacier."
+        },
+        {
+          "option_id": "D",
+          "text": "Use NAT gateway."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+      "source_name": "AWS Documentation: AWS Step Functions",
+      "source_url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "AWS service orchestration",
+    "correct_rating": "D",
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-073",
+    "question": "Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.",
+    "reference_answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "original_multiple_choice": {
+      "question": "During exam preparation, explain which AWS service or feature is best suited to ingest and process real-time streaming data at scale.",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Kinesis Data Streams."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Glue crawler."
+        },
+        {
+          "option_id": "C",
+          "text": "Use S3 Glacier."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudTrail Lake only."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+      "source_name": "AWS Documentation: Amazon Kinesis Data Streams",
+      "source_url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "AWS Kinesis",
+    "correct_rating": "B",
+    "rating_given": "F"
+  },
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-019",
+    "question": "Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.",
+    "reference_answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "original_multiple_choice": {
+      "question": "A team is reviewing an AWS design and needs a solution that can track resource configuration history and evaluate compliance against rules. Which AWS service or feature should they choose?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudTrail only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Trusted Advisor only."
+        },
+        {
+          "option_id": "D",
+          "text": "Use AWS Shield."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+      "source_name": "AWS Documentation: AWS Config",
+      "source_url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "AWS Compliance Manager",
+    "correct_rating": "F",
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-042",
+    "question": "Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "reference_answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "original_multiple_choice": {
+      "question": "During exam preparation, explain which AWS service or feature is best suited to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Artifact."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Elastic Load Balancing."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+      "source_name": "AWS Documentation: AWS Budgets",
+      "source_url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "AWS Cost Center",
+    "correct_rating": "B",
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-054",
+    "question": "Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.",
+    "reference_answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+    "original_multiple_choice": {
+      "question": "During exam preparation, explain which AWS service or feature is best suited to provide scalable DNS routing and health-check-based routing for applications.",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Route 53."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon CloudWatch Logs."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Inspector."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+      "source_name": "AWS Documentation: Amazon Route 53",
+      "source_url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "route 55",
+    "correct_rating": "C",
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 1,
+    "question_id": "AWS-APP-016",
+    "question": "Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "reference_answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "original_multiple_choice": {
+      "question": "A team is reviewing an AWS design and needs a solution that can provide stateless subnet-level traffic filtering with explicit inbound and outbound rules. Which AWS service or feature should they choose?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use network ACLs."
+        },
+        {
+          "option_id": "B",
+          "text": "Use security group only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Shield."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Route 53."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+      "source_name": "AWS Documentation: network ACLs",
+      "source_url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "Allow and deny rules",
+    "correct_rating": "C",
+    "rating_given": "A"
+  }
+]
