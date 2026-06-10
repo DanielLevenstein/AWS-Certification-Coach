@@ -55,27 +55,12 @@ def format_markdown(metrics: dict[str, object]) -> str:
     partial = metrics["partial_credit_regressor"]
     return "\n".join(
         [
-            "## Model Performance",
-            "",
-            "| Full Answer Evaluation | Value |",
-            "| --- | ---: |",
-            f"| Accuracy | {_percent(classifier['accuracy'])} |",
-            f"| Precision | {_percent(classifier['precision'])} |",
-            f"| Recall | {_percent(classifier['recall'])} |",
-            f"| Examples | {classifier['example_count']} |",
-            f"| Evaluation mode | {classifier['eval_mode']} |",
-            "",
-            "| Partial Credit Regressor | Value |",
-            "| --- | ---: |",
-            f"| MSE | {partial['mse']:.4f} |",
-            f"| MAE | {partial['mae']:.4f} |",
-            f"| Examples | {partial['example_count']} |",
-            f"| Evaluation mode | {partial['eval_mode']} |",
-            "",
-            "| Classifier TP | Classifier FP | Classifier TN | Classifier FN |",
-            "| ---: | ---: | ---: | ---: |",
-            f"| {classifier['true_positive']} | {classifier['false_positive']} | "
-            f"{classifier['true_negative']} | {classifier['false_negative']} |",
+
+            "| Release  Version | Accuracy | Precision | Recall | Full Examples | MSE    | MAE    | Partial Examples | TP  | FP | TN  | FN |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+            f"| Release 1 | {_percent(classifier['accuracy'])} | {_percent(classifier['precision'])} | {_percent(classifier['recall'])} | "
+            f"{classifier['example_count']} | {partial['mse']:.4f} | {partial['mae']:.4f} | {partial['example_count']} | "
+            f"{classifier['true_positive']} | {classifier['false_positive']} | {classifier['true_negative']} | {classifier['false_negative']} |",
         ]
     )
 
