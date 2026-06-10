@@ -55,8 +55,7 @@ def format_markdown(metrics: dict[str, object]) -> str:
     partial = metrics["partial_credit_regressor"]
     return "\n".join(
         [
-
-            "| Release  Version | Accuracy | Precision | Recall | Full Examples | MSE    | MAE    | Partial Examples | TP  | FP | TN  | FN |",
+            "| Release | Accuracy | Precision | Recall | Full Examples | MSE | MAE | Partial Examples | TP | FP | TN | FN |",
             "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
             f"| Release 1 | {_percent(classifier['accuracy'])} | {_percent(classifier['precision'])} | {_percent(classifier['recall'])} | "
             f"{classifier['example_count']} | {partial['mse']:.4f} | {partial['mae']:.4f} | {partial['example_count']} | "

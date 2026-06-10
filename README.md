@@ -182,7 +182,7 @@ The image includes the generated sample questions and trained model artifacts, s
 ## Render Deployment
 
 - Runtime: Docker
-- Port: `8501`
+- Port: use Render's `PORT` environment variable; the container defaults to `8501` for local runs.
 - Health check path: `/_stcore/health`
 - Default evaluator: `trained_classifier`
 - API key requirement: none for the default classifier path; set `OPENAI_API_KEY` only when using the OpenAI provider.
