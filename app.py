@@ -8,15 +8,18 @@ ROOT_DIR = Path(__file__).resolve().parent
 
 import streamlit as st
 
-from aws_certification_coach.domain import MultipleChoiceQuestion, QuestionFilter
+from aws_certification_coach.domain import MultipleChoiceQuestion, Question, QuestionFilter
 from aws_certification_coach.config import load_evaluator_config
 from aws_certification_coach.evaluation.factory import build_evaluation_service
 from aws_certification_coach.evaluation.service import EvaluationService
+from aws_certification_coach.feedback import UserFeedbackRepository
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.quiz.session import QuizSession
+from aws_certification_coach.ratings import LETTER_RATINGS, score_to_letter
 
 
 QUESTIONS_PATH = ROOT_DIR / "data" / "questions" / "sample_questions.json"
+USER_FEEDBACK_PATH = ROOT_DIR / "data" / "generated" / "user_feedback.json"
 
 
 @st.cache_resource
@@ -27,6 +30,11 @@ def get_question_repository() -> JsonQuestionRepository:
 @st.cache_resource
 def get_evaluation_service() -> EvaluationService:
     return build_evaluation_service(load_evaluator_config())
+
+
+@st.cache_resource
+def get_feedback_repository() -> UserFeedbackRepository:
+    return UserFeedbackRepository(USER_FEEDBACK_PATH)
 
 
 def _selected_filter(repository: JsonQuestionRepository) -> QuestionFilter:
@@ -41,8 +49,12 @@ def _selected_filter(repository: JsonQuestionRepository) -> QuestionFilter:
 
 
 def _reset_session(questions) -> None:
+    for key in list(st.session_state):
+        if key.startswith(("show_hints_", "hint_index_")):
+            del st.session_state[key]
     st.session_state.quiz_session = QuizSession(questions)
     st.session_state.last_result = None
+    st.session_state.feedback_submitted = set()
 
 
 def main() -> None:
@@ -74,11 +86,17 @@ def main() -> None:
     st.subheader(question.question)
 
     user_answer = st.text_area("Your answer", key=f"answer_text_{session.current_index}", height=160)
-    evaluate_column, next_column = st.columns([1, 1])
+    result = st.session_state.get("last_result")
+    evaluate_column, hints_column, next_column = st.columns([1, 1, 1])
     with evaluate_column:
         evaluate_clicked = st.button("Evaluate Answer", disabled=not user_answer.strip())
+    with hints_column:
+        show_hints = st.toggle("Show Hints", key=f"show_hints_{question.question_id}")
     with next_column:
-        next_clicked = st.button("Next Question", disabled=not st.session_state.get("last_result"))
+        next_clicked = st.button("Next Question", disabled=not result)
+
+    if show_hints and not result:
+        _render_progressive_hint(question)
 
     if evaluate_clicked:
         result = get_evaluation_service().evaluate(question, user_answer)
@@ -91,20 +109,136 @@ def main() -> None:
         st.session_state.last_result = None
         st.rerun()
 
-    result = st.session_state.get("last_result")
     if result:
         feedback_column, source_column = st.columns([3, 2])
         with feedback_column:
-            st.metric("Score", f"{result.score}%")
-            st.write(result.feedback)
+            _render_score(result.score)
+            if result.feedback:
+                st.write(result.feedback)
             improvements = result.suggested_improvements or result.missing_concepts
             if improvements:
                 st.write("What to improve")
                 st.write(improvements)
+            _render_original_multiple_choice(question.original_multiple_choice)
+        with source_column:
+            _render_all_hints(question)
             st.write("Detailed answer")
             st.write(result.detailed_answer)
-        with source_column:
-            _render_original_multiple_choice(question.original_multiple_choice)
+            _render_source_documentation(question.original_multiple_choice)
+            _render_feedback_link(question, user_answer, result.score)
+
+
+def _render_score(score: int) -> None:
+    grade, color = _score_grade(score)
+    st.markdown(
+        f"""
+        <div aria-label="Score: {score} percent, grade {grade}" style="
+            border-left: 0.35rem solid {color};
+            border-radius: 0.45rem;
+            background: color-mix(in srgb, {color} 12%, transparent);
+            padding: 0.7rem 0.9rem;
+            margin-bottom: 1rem;
+        ">
+            <div style="font-size: 0.85rem; font-weight: 600;">Score</div>
+            <div style="display: flex; align-items: baseline; gap: 0.65rem;">
+                <span style="font-size: 2rem; font-weight: 700; line-height: 1.2;">{score}%</span>
+                <span style="color: {color}; font-size: 1.1rem; font-weight: 700;">Grade {grade}</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _score_grade(score: int) -> tuple[str, str]:
+    grade = score_to_letter(score)
+    colors = {
+        "A": "#3ddc84",
+        "B": "#62a8ff",
+        "C": "#f2cc60",
+        "D": "#ff9f43",
+        "F": "#ff6b6b",
+    }
+    return grade, colors[grade]
+
+
+def _render_feedback_link(question: Question, user_answer: str, score: int) -> None:
+    with st.expander("Submit feedback", expanded=False):
+        _render_feedback_form(question, user_answer, score)
+
+
+def _render_feedback_form(question: Question, user_answer: str, score: int) -> None:
+    submitted = st.session_state.setdefault("feedback_submitted", set())
+    if question.question_id in submitted:
+        st.success("Thanks. Your grade correction was saved for review and possible future training.")
+        return
+
+    rating_given = score_to_letter(score)
+    st.caption("Tell us if this answer should have received a different grade.")
+    st.caption(
+        "Feedback is saved for review and possible future training. "
+        "The model may or may not read or learn from it."
+    )
+    correct_rating = st.selectbox(
+        "What grade should this answer receive?",
+        LETTER_RATINGS,
+        index=LETTER_RATINGS.index(rating_given),
+        key=f"feedback_rating_{question.question_id}",
+    )
+    if st.button("Submit Feedback", key=f"submit_feedback_{question.question_id}"):
+        get_feedback_repository().submit(
+            question=question,
+            answer_given=user_answer,
+            rating_given=rating_given,
+            correct_rating=correct_rating,
+        )
+        submitted.add(question.question_id)
+        st.success("Thanks. Your grade correction was saved for review and possible future training.")
+
+
+def _hint_sentences(question: Question) -> list[str]:
+    concepts = [concept.strip() for concept in question.key_concepts if concept.strip()]
+    if not concepts:
+        return []
+
+    hints = [f"Identify the AWS service or feature most closely associated with {concepts[0]}."]
+    hints.extend(
+        f"Include {concept} in your explanation and describe why it matters."
+        for concept in concepts[1:]
+    )
+    return hints
+
+
+def _render_progressive_hint(question: Question) -> None:
+    hints = _hint_sentences(question)
+    if not hints:
+        st.info("No hints are available for this question.")
+        return
+
+    hint_index_key = f"hint_index_{question.question_id}"
+    hint_index = min(st.session_state.get(hint_index_key, 0), len(hints) - 1)
+    st.caption(f"Hint {hint_index + 1} of {len(hints)}")
+    st.info(hints[hint_index])
+    if hint_index < len(hints) - 1 and st.button("More", key=f"more_hints_{question.question_id}"):
+        st.session_state[hint_index_key] = hint_index + 1
+        st.rerun()
+
+
+def _render_all_hints(question: Question) -> None:
+    hints = _hint_sentences(question)
+    if not hints:
+        return
+
+    st.write("Hints")
+    for hint in hints:
+        st.markdown(f"- {hint}")
+
+
+def _render_source_documentation(original: MultipleChoiceQuestion | None) -> None:
+    if original is None or not original.source_url:
+        return
+    st.write("Source documentation")
+    st.markdown(f"[{original.source_name or 'AWS Documentation'}]({original.source_url})")
 
 
 def _render_original_multiple_choice(original: MultipleChoiceQuestion | None) -> None:
