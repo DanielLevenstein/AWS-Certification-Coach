@@ -6,6 +6,9 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 
+from aws_certification_coach.domain import Question
+from aws_certification_coach.ratings import letter_to_binary_label, letter_to_numeric
+
 
 @dataclass(frozen=True)
 class AnswerClassificationExample:
@@ -37,6 +40,38 @@ def load_answer_regression_examples(path: str | Path) -> list[AnswerRegressionEx
     for row in rows:
         examples.extend(_regression_examples_from_json(row))
     return examples
+
+
+def load_feedback_classification_examples(
+    path: str | Path,
+    questions_by_id: dict[str, Question],
+) -> list[AnswerClassificationExample]:
+    return [
+        AnswerClassificationExample(
+            question_id=_feedback_question_id(row, questions_by_id),
+            answer=str(row["answer_given"]),
+            label=letter_to_binary_label(row["correct_rating"]),
+            source="user_feedback",
+        )
+        for row in _load_rows(path)
+        if isinstance(row, dict)
+    ]
+
+
+def load_feedback_regression_examples(
+    path: str | Path,
+    questions_by_id: dict[str, Question],
+) -> list[AnswerRegressionExample]:
+    return [
+        AnswerRegressionExample(
+            question_id=_feedback_question_id(row, questions_by_id),
+            answer=str(row["answer_given"]),
+            rating=letter_to_numeric(row["correct_rating"]),
+            source="user_feedback",
+        )
+        for row in _load_rows(path)
+        if isinstance(row, dict)
+    ]
 
 
 def _load_rows(path: str | Path) -> list[object]:
@@ -78,6 +113,21 @@ def _classification_examples_from_json(row: object) -> list[AnswerClassification
                 if isinstance(answer, dict) and _is_rejected_partial_answer(answer)
             )
         return examples
+    if "generated_answers" in row:
+        question_id = str(row["question_id"])
+        answers = row["generated_answers"]
+        if not isinstance(answers, list):
+            raise ValueError("Combined question generated_answers must be a list.")
+        return [
+            AnswerClassificationExample(
+                question_id=str(answer.get("question_id", question_id)),
+                answer=str(answer["answer"]),
+                label=letter_to_binary_label(answer["rating"]),
+                source=str(answer.get("source", "generated_answer")),
+            )
+            for answer in answers
+            if isinstance(answer, dict)
+        ]
     return [
         AnswerClassificationExample(
             question_id=str(row["question_id"]),
@@ -113,6 +163,21 @@ def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]
             for answer in answers
             if isinstance(answer, dict)
         ]
+    if "generated_answers" in row:
+        question_id = str(row["question_id"])
+        answers = row["generated_answers"]
+        if not isinstance(answers, list):
+            raise ValueError("Combined question generated_answers must be a list.")
+        return [
+            AnswerRegressionExample(
+                question_id=str(answer.get("question_id", question_id)),
+                answer=str(answer["answer"]),
+                rating=letter_to_numeric(answer["rating"]),
+                source=str(answer.get("source", "generated_answer")),
+            )
+            for answer in answers
+            if isinstance(answer, dict)
+        ]
     if "rating" not in row:
         return []
     return [
@@ -123,3 +188,39 @@ def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]
             source=str(row.get("source", "")),
         )
     ]
+
+
+def _feedback_question_id(row: dict, questions_by_id: dict[str, Question]) -> str:
+    question_id = str(row.get("question_id", "")).strip()
+    if question_id in questions_by_id:
+        return question_id
+
+    question_text = _normalized_text(row.get("question", ""))
+    reference_text = _normalized_text(row.get("reference_answer", ""))
+    ranked = sorted(
+        (
+            (_feedback_match_score(question_text, reference_text, question), candidate_id)
+            for candidate_id, question in questions_by_id.items()
+        ),
+        reverse=True,
+    )
+    if not ranked or ranked[0][0] <= 0:
+        raise ValueError(f"Could not match feedback to a known question: {row.get('question', '')!r}")
+    return ranked[0][1]
+
+
+def _feedback_match_score(question_text: set[str], reference_text: set[str], question: Question) -> float:
+    return _jaccard(question_text, _normalized_text(question.question)) + _jaccard(
+        reference_text,
+        _normalized_text(question.reference_answer),
+    )
+
+
+def _normalized_text(value: object) -> set[str]:
+    return {token.strip(".,:;!?()[]").casefold() for token in str(value).split() if token.strip(".,:;!?()[]")}
+
+
+def _jaccard(left: set[str], right: set[str]) -> float:
+    if not left or not right:
+        return 0.0
+    return len(left & right) / len(left | right)

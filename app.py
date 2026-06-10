@@ -49,9 +49,6 @@ def _selected_filter(repository: JsonQuestionRepository) -> QuestionFilter:
 
 
 def _reset_session(questions) -> None:
-    for key in list(st.session_state):
-        if key.startswith(("show_hints_", "hint_index_")):
-            del st.session_state[key]
     st.session_state.quiz_session = QuizSession(questions)
     st.session_state.last_result = None
     st.session_state.feedback_submitted = set()
@@ -87,16 +84,11 @@ def main() -> None:
 
     user_answer = st.text_area("Your answer", key=f"answer_text_{session.current_index}", height=160)
     result = st.session_state.get("last_result")
-    evaluate_column, hints_column, next_column = st.columns([1, 1, 1])
+    evaluate_column, next_column = st.columns([1, 1])
     with evaluate_column:
         evaluate_clicked = st.button("Evaluate Answer", disabled=not user_answer.strip())
-    with hints_column:
-        show_hints = st.toggle("Show Hints", key=f"show_hints_{question.question_id}")
     with next_column:
         next_clicked = st.button("Next Question", disabled=not result)
-
-    if show_hints and not result:
-        _render_progressive_hint(question)
 
     if evaluate_clicked:
         result = get_evaluation_service().evaluate(question, user_answer)
@@ -121,7 +113,6 @@ def main() -> None:
                 st.write(improvements)
             _render_original_multiple_choice(question.original_multiple_choice)
         with source_column:
-            _render_all_hints(question)
             st.write("Detailed answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)
@@ -194,44 +185,6 @@ def _render_feedback_form(question: Question, user_answer: str, score: int) -> N
         )
         submitted.add(question.question_id)
         st.success("Thanks. Your grade correction was saved for review and possible future training.")
-
-
-def _hint_sentences(question: Question) -> list[str]:
-    concepts = [concept.strip() for concept in question.key_concepts if concept.strip()]
-    if not concepts:
-        return []
-
-    hints = [f"Identify the AWS service or feature most closely associated with {concepts[0]}."]
-    hints.extend(
-        f"Include {concept} in your explanation and describe why it matters."
-        for concept in concepts[1:]
-    )
-    return hints
-
-
-def _render_progressive_hint(question: Question) -> None:
-    hints = _hint_sentences(question)
-    if not hints:
-        st.info("No hints are available for this question.")
-        return
-
-    hint_index_key = f"hint_index_{question.question_id}"
-    hint_index = min(st.session_state.get(hint_index_key, 0), len(hints) - 1)
-    st.caption(f"Hint {hint_index + 1} of {len(hints)}")
-    st.info(hints[hint_index])
-    if hint_index < len(hints) - 1 and st.button("More", key=f"more_hints_{question.question_id}"):
-        st.session_state[hint_index_key] = hint_index + 1
-        st.rerun()
-
-
-def _render_all_hints(question: Question) -> None:
-    hints = _hint_sentences(question)
-    if not hints:
-        return
-
-    st.write("Hints")
-    for hint in hints:
-        st.markdown(f"- {hint}")
 
 
 def _render_source_documentation(original: MultipleChoiceQuestion | None) -> None:
