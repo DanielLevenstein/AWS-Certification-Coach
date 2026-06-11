@@ -17,7 +17,7 @@ class CorrectnessJudgment:
     score: int
     correct_option_coverage: list[str] = field(default_factory=list)
     selected_distractors: list[str] = field(default_factory=list)
-    feedback: str = ""
+    feedback: str = field(default="")
     rubric_level: str = ""
 
 
@@ -49,7 +49,7 @@ class MultipleChoiceCorrectnessAgent:
     ) -> CorrectnessJudgment:
         answer = _normalized(user_answer)
         if not answer:
-            return CorrectnessJudgment(0, feedback="No answer was provided.")
+            return CorrectnessJudgment(0, feedback="")
 
         original = question.original_multiple_choice
         if original is None:
@@ -59,7 +59,7 @@ class MultipleChoiceCorrectnessAgent:
             return CorrectnessJudgment(
                 _valid_score(score),
                 correct_option_coverage=["reference_answer"] if score == 100 else [],
-                feedback="The answer was compared with the reviewed reference answer.",
+                feedback="",
             )
 
         correct_ids = set(original.correct_option_ids)
@@ -101,16 +101,11 @@ class MultipleChoiceCorrectnessAgent:
                 user_answer,
             )
 
-        feedback = "The canonical AWS answer is clear."
-        if selected_distractors:
-            feedback = "The answer asserts an incorrect multiple-choice option."
-        elif len(covered) < len(correct_options):
-            feedback = "The canonical AWS answer is incomplete or ambiguous."
         return CorrectnessJudgment(
             score=_valid_score(score),
             correct_option_coverage=covered,
             selected_distractors=selected_distractors,
-            feedback=feedback,
+            feedback="",
         )
 
 
@@ -120,7 +115,7 @@ class ConceptCoverageAgent:
     def evaluate(self, question: Question, user_answer: str) -> ConceptCoverageJudgment:
         if not question.key_concepts:
             score = 100 if user_answer.strip() else 0
-            return ConceptCoverageJudgment(score, feedback="No explicit key concepts were configured.")
+            return ConceptCoverageJudgment(score, feedback="")
 
         if _reference_is_covered(question.reference_answer, user_answer):
             covered = list(question.key_concepts)
@@ -132,12 +127,7 @@ class ConceptCoverageAgent:
             ]
         missing = [concept for concept in question.key_concepts if concept not in covered]
         score = round(100 * len(covered) / len(question.key_concepts))
-        feedback = (
-            "All required AWS concepts are covered."
-            if not missing
-            else "Some required AWS concepts are missing."
-        )
-        return ConceptCoverageJudgment(score, covered, missing, feedback)
+        return ConceptCoverageJudgment(score, covered, missing, feedback="")
 
 
 class AnswerWordingAgent:
@@ -147,10 +137,10 @@ class AnswerWordingAgent:
         del question
         stripped = user_answer.strip()
         if not stripped:
-            return WordingJudgment(0, ["The answer is blank."], "Provide an answer.")
+            return WordingJudgment(0, ["The answer is blank."], feedback="")
         tokens = _tokens(stripped)
         if not tokens:
-            return WordingJudgment(0, ["The answer is unintelligible."], "Use readable words.")
+            return WordingJudgment(0, ["The answer is unintelligible."], feedback="")
 
         issues: list[str] = []
         if len(tokens) == 1 and tokens <= GENERIC_TOKENS:
@@ -159,7 +149,7 @@ class AnswerWordingAgent:
         return WordingJudgment(
             score,
             issues,
-            "The answer is clear." if not issues else "Use more specific wording.",
+            feedback="",
         )
 
 
@@ -239,10 +229,9 @@ def _scorecard_feedback(
         raw_score = _valid_score(judgment.score)
         level = judgment.rubric_level.strip() or _rubric_level(raw_score)
         contribution = raw_score * weight / 100
-        reason = judgment.feedback.strip() or "No explanation was provided."
         lines.append(
             f"- {name} ({weight}%): {raw_score}/100, {level}; "
-            f"weighted contribution {contribution:.1f}/{weight}. Model feedback: {reason}"
+            f"weighted contribution {contribution:.1f}/{weight}."
         )
     if full_credit:
         lines.append("- Full-credit rule: applied because all canonical answers and required concepts were covered.")

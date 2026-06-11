@@ -46,6 +46,13 @@ The first part will contain test cases evaluating how closely the model adheres 
 This should be a package of python packages which evaluate the question answer distribution of training data.
 There is already an existing file called generate_release_metrics.sh that implements the first iteration of this, but it depends on the unit test run.
 
+####  Complexity Metrics and Code Coverage
+
+As part of the release metrics, we should generate code complexity and code coverage metrics. 
+Detailed release notes should be a md file that lives in its own folder called release. 
+
+The existing RELEASE_NOTES.md file should contain only high-level summaries. 
+
 ### Grading Flow
 
 ```mermaid
