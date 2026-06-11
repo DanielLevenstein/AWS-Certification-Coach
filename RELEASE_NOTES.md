@@ -1,13 +1,13 @@
 # Release Notes
 
-
 | Release | Description                                                                                                                                                                 |
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions, <br />trained answer classifier, and partial-credit regression metrics.               |
 | v1.1.0  | Separates the app-facing question bank from training labels,<br /> expands the app bank to 80 AWS-docs-grounded questions and adds stricter wrong-service answer rejection. |
 | v1.1.2  | Changed rating to grade and added feedback system                                                                                                                           |
-## v1.0.0 Release Details
+| v1.1.2.1 | 1 failing test from curated training data: AWS Glacier                                                                                                            |
 
+4-digit release number is weight and documentation update only. 
 ### Model Performance
 
 | Release | Accuracy | Precision | Recall | Full Examples | MSE    | MAE    | Partial Examples | TP  | FP | TN  | FN |
