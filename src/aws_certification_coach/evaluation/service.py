@@ -6,6 +6,7 @@ import json
 from typing import Protocol
 
 from aws_certification_coach.domain import EvaluationResult, Question
+from aws_certification_coach.evaluation.grading import evaluate_with_agents
 from aws_certification_coach.evaluation.prompting import EvaluationPromptBuilder, EvaluationResponseParser
 
 
@@ -32,7 +33,7 @@ class EvaluationService:
     def evaluate(self, question: Question, user_answer: str) -> EvaluationResult:
         prompt = self.prompt_builder.build(question, user_answer)
         response_text = self.provider.evaluate(prompt, question, user_answer)
-        return self.response_parser.parse(response_text)
+        return self.response_parser.parse(response_text, question)
 
 
 class HeuristicEvaluatorProvider:
@@ -40,34 +41,12 @@ class HeuristicEvaluatorProvider:
 
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
         del prompt
-        normalized_answer = user_answer.lower()
-        matched = [
-            concept
-            for concept in question.key_concepts
-            if concept.lower() in normalized_answer
-        ]
-        missing = [concept for concept in question.key_concepts if concept not in matched]
-        score = round((len(matched) / max(1, len(question.key_concepts))) * 100)
+        result = evaluate_with_agents(question, user_answer)
         payload = {
-            "score": score,
-            "missing_concepts": missing,
-            "suggested_improvements": [f"Explain {concept}." for concept in missing],
-            "feedback": _feedback(score),
-            "detailed_answer": _detailed_answer(question, missing),
+            "score": result.score,
+            "missing_concepts": result.missing_concepts,
+            "suggested_improvements": result.suggested_improvements,
+            "feedback": result.feedback,
+            "detailed_answer": result.detailed_answer,
         }
         return json.dumps(payload)
-
-
-def _feedback(score: int) -> str:
-    if score >= 80:
-        return "This answer is close. Review the detailed answer below for exam-ready wording."
-    if score >= 50:
-        return "This answer has part of the idea, but it needs more complete AWS-specific detail."
-    return "This answer misses several expected concepts. Use the detailed answer below as the target."
-
-
-def _detailed_answer(question: Question, missing_concepts: list[str]) -> str:
-    concept_sentence = ""
-    if missing_concepts:
-        concept_sentence = " Be sure to explicitly cover: " + ", ".join(missing_concepts) + "."
-    return f"{question.reference_answer}{concept_sentence}"
