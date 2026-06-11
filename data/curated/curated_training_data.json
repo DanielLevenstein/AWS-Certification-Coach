@@ -27,11 +27,11 @@
     "correct_rating": "D",
     "rating_given": "A"
   },
-    {
-    "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
-    "reference_answer": "Use AWS Secrets Manager",
-    "answer_given": "Parameter Store",
-    "correct_rating": "F",
+  {
+    "question":"Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "reference_answer": "Use S3 Glacier storage classes",
+    "answer_given": "AWS Glacier",
+    "correct_rating": "B",
     "rating_given": "F"
   }
 ]
