@@ -31,7 +31,7 @@ The full-credit invariant takes precedence over the weighted calculation: an und
 
 Initial implementation keeps the existing evaluator-provider boundary for compatibility. The local trained provider supplies evidence used by the three agents, while the OpenAI provider receives a prompt with three explicitly separated judgments. This allows the orchestration and rubric to remain stable as individual agent implementations improve.
 
-## V1.3 Model Testing Update (In Progress)
+## V1.2.1 Model Testing Update (In Progress)
 
 Model evaluation should be separated from unit tests. 
 Currently, our unit tests, functional tests, and model evaluation metrics all live in the same test suite. 

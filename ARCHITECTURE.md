@@ -1,5 +1,18 @@
 # AWS Certification Coach Architecture
 
+I noticed we are still using a single model to store configuration weights even though we split our evaluation into 3 steps. 
+
+Recommended fixes (minimal, practical)
+
+1. Keep a single base config for model architecture, plus 3 small stage-specific override files:
+   * model\_base.yaml (architecture, tokenizer, defaults)
+   * stage\_train.yaml (checkpoint\_save\_dir, training-specific flags)
+   * stage\_val.yaml (validation-specific flags, checkpoint\_to\_load)
+   * stage\_eval.yaml (evaluation\_checkpoint, eval-only flags)
+2. Require explicit checkpoint keys in stage configs, e.g. eval:   checkpoint: /path/to/eval\_model.ckpt train:   checkpoint\_save\_dir: /path/to/train\_ckpts
+3. Enforce at runtime: fail if a stage runs without an explicit checkpoint selection. Add an assert at start of each script: assert config["eval"]["checkpoint"], "eval.checkpoint must be set for evaluation stage"
+4. Use CLI overrides in job specs rather than relying on implicit defaults: run --config model\_base.yaml --override eval.checkpoint=/path/to/eval.ckpt
+5. Add logging at load time (print model checkpoint and config values) so each job’s stdout records exactly which model was loaded.
 
 ## System Overview
 
