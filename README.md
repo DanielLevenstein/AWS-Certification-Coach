@@ -6,6 +6,15 @@ AI study partner for AWS certification exams
 
 *Figure: The coach scores a freeform Amazon Kinesis answer and displays detailed feedback alongside the source multiple-choice question.*
 
+## Project Configuration
+
+```
+echo "Generating questions for app"
+setup.sh
+echo "Running streamlit app on port 8504"
+streamlit run app.py
+```
+
 ## Goal
 
 AWS Certification Coach is a lightweight AI-powered study app for AWS certification practice. It presents pre-generated questions, evaluates learner answers with the trained local classifier or a configured LLM provider, and returns structured coaching feedback.
