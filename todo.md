@@ -16,5 +16,5 @@ Remove completed items from todo.md as a separate commit
 - Release v1.2 is going to be moved to v2 because of extensive heuristic changes.
 - move a todo.md list to todo.txt, which is a non-committed file.
 - create an agent.md file for agent instructions which aren't feature-specific.
-- Merge all feature branches with release v1.1.2 into this branch.
+- Merge all feature branches with release v1.2 into this branch.
 - switch to release/v2 and merge all changes. Hopefully, the merge should be clean since merge conflicts were handled here. 
