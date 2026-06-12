@@ -4,7 +4,7 @@
 - Commit changes at the end of each section after verifying that unit tests pass. If unit tests do not pass, wait for human feedback. 
 
 # Test Framework Redesign
-- Create a branch for features/test_redesign
+- Create a branch for features/test_redesign_$version  
 - Separate model evaluation from a unit test based on info in DESIGN.md
 - Write root-level helper functions for each of the three test suites in the new test framework.
 - Create scripts to measure cyclomatic complexity and code coverage, call these from the release_metrics.sh script. 
