@@ -80,7 +80,7 @@ def main() -> None:
         return
 
     st.caption(f"{question.certification} | {question.domain} | {question.difficulty}")
-    st.subheader(question.question)
+    st.subheader(question.original_multiple_choice.question if question.original_multiple_choice else question.question)
 
     user_answer = st.text_area("Your answer", key=f"answer_text_{session.current_index}", height=160)
     evaluate_column, next_column = st.columns([1, 1])
