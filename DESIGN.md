@@ -17,35 +17,12 @@ Minimum features:
 - Track completed questions and score history for the current session.
 - Display feedback and move to the next question.
 
-Explicitly out of scope for V1:
+### Design Feedback.
 
-- User accounts.
-- Persisted progress.
-- Runtime document ingestion.
-- FAISS, embeddings, vector search, or RAG.
-- Multi-certification recommendation logic.
-- Payment, sharing, or admin features.
-
-## Proposed File Structure
-
-```text
-AWS-Certification-Coach/
-  config/
-  data/
-    questions/
-    training/
-    verification/
-  scripts/
-  src/
-    aws_certification_coach/
-      evaluation/
-      llm/
-      observability/
-      questions/
-      quiz/
-      transforms/
-      training/
-```
+- I think we need to merge all the logic for evaluation partial credit answers and canonical answers 
+into the same code pathways and use MSE as our evaluation metric for all questions. 
+- We were never testing against the validation test set, which is why unit tests always passed. 
+- We should start using the images in docs/images as additional training data. It's unlabeled, but when a user screenshots a question, it usually means it's not producing the intended result. 
 
 ## Core Classes
 

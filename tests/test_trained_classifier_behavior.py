@@ -8,7 +8,7 @@ from aws_certification_coach.questions.json_repository import JsonQuestionReposi
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_generated.json"
+QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "verification" / "questions_with_answers_holdout.json"
 APP_QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "questions" / "sample_questions.json"
 
 

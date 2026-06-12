@@ -27,11 +27,47 @@
     "correct_rating": "D",
     "rating_given": "A"
   },
-  {
-    "question":"Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
-    "reference_answer": "Use S3 Glacier storage classes",
-    "answer_given": "AWS Glacier",
-    "correct_rating": "B",
+    {
+    "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
+    "reference_answer": "Use AWS Secrets Manager",
+    "answer_given": "Parameter Store",
+    "correct_rating": "F",
     "rating_given": "F"
+  },
+  {
+      "schema_version": 1,
+      "question_id": "AWS-APP-020",
+      "question": "Explain which AWS service should manage encryption keys.",
+      "reference_answer": "Use AWS KMS.",
+      "original_multiple_choice": {
+          "question": "Which AWS service manages encryption keys?",
+          "options": [
+              {"option_id": "A", "text": "Use AWS KMS."},
+              {"option_id": "B", "text": "Use Amazon S3."}
+          ],
+          "correct_option_ids": ["A"],
+          "explanation": "AWS KMS manages encryption keys.",
+          "source_name": "AWS KMS documentation",
+          "source_url": "https://docs.aws.amazon.com/kms/",
+          "source_license_notes": "AWS documentation used for topic grounding."
+      },
+      "answer_given": "AWS",
+      "correct_rating": "F",
+      "rating_given": "A"
+  },
+  {
+      "question_id": "AWS-APP-020",
+      "question": "ignored when question_id is present",
+      "reference_answer": "Use AWS KMS",
+      "answer_given": "AWS",
+      "correct_rating": "F",
+      "rating_given": "A"
+  },
+    {
+      "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
+      "reference_answer": "Use AWS Secrets Manager",
+      "answer_given": "AWS",
+      "correct_rating": "A",
+      "rating_given": "F"
   }
 ]

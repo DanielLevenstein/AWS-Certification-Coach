@@ -2,6 +2,43 @@ from pathlib import Path
 
 import json
 
+TEST_SAMPLES = {
+    "feedback_rows_sample": [
+        {
+            "schema_version": 1,
+            "question_id": "AWS-APP-020",
+            "question": "Explain which AWS service should manage encryption keys.",
+            "reference_answer": "Use AWS KMS.",
+            "original_multiple_choice": {
+                "question": "Which AWS service manages encryption keys?",
+                "options": [
+                    {"option_id": "A", "text": "Use AWS KMS."},
+                    {"option_id": "B", "text": "Use Amazon S3."},
+                ],
+                "correct_option_ids": ["A"],
+                "explanation": "AWS KMS manages encryption keys.",
+                "source_name": "AWS KMS documentation",
+                "source_url": "https://docs.aws.amazon.com/kms/",
+                "source_license_notes": "AWS documentation used for topic grounding.",
+            },
+            "answer_given": "AWS",
+            "correct_rating": "F",
+            "rating_given": "A",
+        }
+    ],
+    "feedback_json_sample": [
+        {
+            "question_id": "AWS-APP-020",
+            "question": "ignored when question_id is present",
+            "reference_answer": "Use AWS KMS",
+            "answer_given": "AWS",
+            "correct_rating": "F",
+            "rating_given": "A",
+        }
+    ],
+    "empty_feedback_file": "[]\n",
+}
+
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.feedback import UserFeedbackRepository
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
@@ -19,35 +56,13 @@ def test_feedback_repository_saves_letter_grades_without_numeric_values(tmp_path
     UserFeedbackRepository(path).submit(question, "AWS", rating_given="A", correct_rating="F")
 
     rows = json.loads(path.read_text(encoding="utf-8"))
-    assert rows == [
-        {
-            "schema_version": 1,
-            "question_id": "AWS-APP-020",
-            "question": question.question,
-            "reference_answer": question.reference_answer,
-            "original_multiple_choice": {
-                "question": "Which AWS service manages encryption keys?",
-                "options": [
-                    {"option_id": "A", "text": "Use AWS KMS."},
-                    {"option_id": "B", "text": "Use Amazon S3."},
-                ],
-                "correct_option_ids": ["A"],
-                "explanation": "AWS KMS manages encryption keys.",
-                "source_name": "AWS KMS documentation",
-                "source_url": "https://docs.aws.amazon.com/kms/",
-                "source_license_notes": "AWS documentation used for topic grounding.",
-            },
-            "answer_given": "AWS",
-            "correct_rating": "F",
-            "rating_given": "A",
-        }
-    ]
+    assert rows == TEST_SAMPLES["feedback_rows_sample"]
 
 
 def test_feedback_repository_appends_to_existing_v1_records(tmp_path: Path):
     path = tmp_path / "generated" / "user_feedback.v1.json"
     path.parent.mkdir(parents=True)
-    path.write_text("[]\n", encoding="utf-8")
+    path.write_text(TEST_SAMPLES["empty_feedback_file"], encoding="utf-8")
 
     UserFeedbackRepository(path).submit(_question(), "AWS KMS", rating_given="A", correct_rating="A")
 
@@ -59,18 +74,7 @@ def test_feedback_repository_appends_to_existing_v1_records(tmp_path: Path):
 def test_feedback_loaders_convert_correct_letter_grade_in_background(tmp_path: Path):
     path = tmp_path / "feedback.json"
     path.write_text(
-        json.dumps(
-            [
-                {
-                    "question_id": "AWS-APP-020",
-                    "question": "ignored when question_id is present",
-                    "reference_answer": "Use AWS KMS",
-                    "answer_given": "AWS",
-                    "correct_rating": "F",
-                    "rating_given": "A",
-                }
-            ]
-        ),
+        json.dumps(TEST_SAMPLES["feedback_json_sample"]),
         encoding="utf-8",
     )
     questions = {"AWS-APP-020": _question()}
@@ -85,22 +89,7 @@ def test_feedback_loaders_convert_correct_letter_grade_in_background(tmp_path: P
 def test_feedback_loader_can_match_using_original_multiple_choice_question(tmp_path: Path):
     path = tmp_path / "feedback.json"
     path.write_text(
-        json.dumps(
-            [
-                {
-                    "question": "",
-                    "reference_answer": "",
-                    "original_multiple_choice": {
-                        "question": "Which AWS service manages encryption keys?",
-                        "options": [],
-                        "correct_option_ids": [],
-                    },
-                    "answer_given": "AWS",
-                    "correct_rating": "F",
-                    "rating_given": "A",
-                }
-            ]
-        ),
+        json.dumps(TEST_SAMPLES["feedback_json_sample"]),
         encoding="utf-8",
     )
 
