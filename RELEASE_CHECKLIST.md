@@ -11,8 +11,3 @@ For each merge ensure the following.
 
 If directory paths change between branches commit working changes first, then do a directory path refactoring as a clean commit. 
 Remove completed items from todo.md as a separate commit
-
-# Release v1.1 task list
-- release v1.2 is moving to the release/v2 branch
-- Merge all feature branches from v1.1.x into release/v1.1
-- tag release/v1.1 as v1 and create a clean v1 release branch. 
