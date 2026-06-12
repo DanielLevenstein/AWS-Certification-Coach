@@ -191,7 +191,6 @@ def _render_original_multiple_choice(original: MultipleChoiceQuestion | None) ->
         st.write("No source multiple-choice item is attached.")
         return
     st.caption(original.source_name or "Source item")
-    st.write(original.question)
     correct_ids = set(original.correct_option_ids)
     for option in original.options:
         option_text = f"{option.option_id}. {option.text}"
