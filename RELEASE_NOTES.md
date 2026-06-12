@@ -1,5 +1,7 @@
 # Release Notes
 
+- 4-digit release number is weight and documentation update only. 
+
 | Release | Description                                                                                                                                                                 |
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions, <br />trained answer classifier, and partial-credit regression metrics.               |
@@ -7,7 +9,7 @@
 | v1.1.2  | Changed rating to grade and added feedback system                                                                                                                           |
 | v1.1.2.1 | 1 failing test from curated training data: AWS Glacier                                                                                                                      |
 | v1.1.3 | Added feedback package to source control and switched UI to show original multiple choice quesiton with answers hidden rather than modified version.                   |
-4-digit release number is weight and documentation update only. 
+
 ### Model Performance
 
 | Release | Accuracy | Precision | Recall | Full Examples | MSE    | MAE    | Partial Examples | TP  | FP | TN  | FN |
