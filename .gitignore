@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated and curated data (not committed to source control)
+data/generated/
+data/curated/
+models/
+*.json.bak
+data/verification/questions_with_answers_holdout.json
