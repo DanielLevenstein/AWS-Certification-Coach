@@ -16,3 +16,4 @@ Remove completed items from todo.md as a separate commit
 - release v1.2 is moving to the release/v2 branch
 - Merge all feature branches from v1.1.x into release/v1.1
 - tag release/v1.1 as v1 and create a clean v1 release branch. 
+- put a note in release notes to skip v1.2 going forward because it will be moved to release/v2
