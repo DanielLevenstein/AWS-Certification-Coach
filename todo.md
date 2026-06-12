@@ -1,6 +1,6 @@
 # Refactoring checklist
 For each merge ensure the following.
-- Leave the todo.md file as is copy this file to todo.txt, which is outside source control. 
+- Leave the todo.md file as is copy this file to todo_copy.md, which is outside source control. 
 - Ensure no files in data directory are committed
 - run a clean script which deletes all files in the data directory.
 - Regenerate training data.
