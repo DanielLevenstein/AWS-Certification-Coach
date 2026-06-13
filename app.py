@@ -7,7 +7,25 @@ from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent
 
-import streamlit as st
+try:
+    import streamlit as st
+except Exception:  # pragma: no cover - fallback for test environments without streamlit
+    class _StreamlitStub:
+        def cache_resource(self, func=None, **kwargs):
+            if func is None:
+                def _decorator(f):
+                    return f
+                return _decorator
+            return func
+
+        # minimal placeholders used when tests import this module; runtime code
+        # exercising Streamlit will need the real package.
+        session_state = {}
+
+        def sidebar(self):
+            raise RuntimeError("streamlit not available")
+
+    st = _StreamlitStub()
 
 from aws_certification_coach.domain import MultipleChoiceQuestion, Question, QuestionFilter
 from aws_certification_coach.config import load_evaluator_config
