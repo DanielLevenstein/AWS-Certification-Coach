@@ -1,24 +1,3 @@
-# Project Setup
-- Do not autorun streamlit app on opening codespace.
-- Run all python code in a virtual environment.
-- run setup.sh if a script is available, and if it's not, locate a data generation script instead.
-
-# Helper scripts
-
-ensure the following scripts exist in the current branch, and if they don't, copy them from $FILE$_COPY.*
-- setup.sh
-- generate_data.sh
-- run_tests.sh
-- generate_metrics.sh
-- run_app.sh
-
-Move all script files except those into the script dir
-
-## Documentation Move.
-- Move all documentation files except README.md, todo.md CHECKLIST.md, and AGENTS.md
-- Create a backup TODO file called TODO_COPY.md 
-- Ensure that COPY files are not added to source control.
-
 # Refactoring checklist
 For each merge ensure the following.
 - Leave the todo.md file as is copy this file to todo_copy.md, which is outside source control. 
