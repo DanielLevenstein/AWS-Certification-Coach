@@ -1,24 +1,19 @@
+#!/usr/bin/env bash
 set -euo pipefail
 
-PTYONPATH=src
-rm -rf data
+# Ensure local src is on the import path for scripts
+export PYTHONPATH=src
 
-# Check if the user is already in a virtual environment
-if [ -z "${VIRTUAL_ENV-}" ]; then
-    if [ -d "venv" ]; then
-        source venv/bin/activate
-    else
-        python -m venv venv
-        source venv/bin/activate
-    fi
-fi
+# Ensure the directory exists
+mkdir -p data/curated
+
+cp -f config/curated_training_data.json data/curated/curated_training_data.json
 
 python -m pip install -r requirements.txt
+
 python scripts/generate_sample_training_artifacts.py
 python scripts/generate_app_question_artifacts.py --count 80
 
-mkdir data/curated
-cp config/curated_training_data.json data/curated
-
-
+python -m pytest
+python scripts/release_metrics.py
 
