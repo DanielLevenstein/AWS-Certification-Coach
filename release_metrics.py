@@ -7,8 +7,8 @@ import json
 from pathlib import Path
 
 
-DEFAULT_CLASSIFIER_METRICS = Path("models/answer_classifier_metrics.json")
-DEFAULT_PARTIAL_METRICS = Path("models/partial_answer_regressor_metrics.json")
+DEFAULT_CLASSIFIER_METRICS = Path("scripts/models/answer_classifier_metrics.json")
+DEFAULT_PARTIAL_METRICS = Path("scripts/models/partial_answer_regressor_metrics.json")
 
 
 def main() -> None:
