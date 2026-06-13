@@ -14,13 +14,6 @@
     "rating_given": "A"
   },
   {
-    "question": "Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.",
-    "reference_answer": "S3 lifecycle policies",
-    "answer_given": "S3 version tracking",
-    "correct_rating": "F",
-    "rating_given": "F"
-  },
-  {
     "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
     "reference_answer": "Use AWS Secrets Manager",
     "answer_given": "AWS Key Store",
@@ -28,10 +21,73 @@
     "rating_given": "A"
   },
   {
-    "question":"Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
+    "question": "Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
     "reference_answer": "Use S3 Glacier storage classes",
     "answer_given": "AWS Glacier",
     "correct_rating": "B",
     "rating_given": "F"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.",
+    "reference_answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "answer_given": "AWS Kinesis\n",
+    "correct_rating": "D",
+    "rating_given": "F"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.",
+    "reference_answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
+    "answer_given": "route 55",
+    "correct_rating": "C",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "reference_answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
+    "answer_given": "NoSQL",
+    "correct_rating": "D",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to orchestrate multi-step workflows and coordinate distributed application components.",
+    "reference_answer": "Use AWS Step Functions to orchestrate multi-step workflows and coordinate distributed application components.",
+    "answer_given": "AWS service orchestration",
+    "correct_rating": "D",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.",
+    "reference_answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "answer_given": "AWS Kinesis",
+    "correct_rating": "B",
+    "rating_given": "F"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.",
+    "reference_answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "answer_given": "AWS Compliance Manager",
+    "correct_rating": "F",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "reference_answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "answer_given": "AWS Cost Center",
+    "correct_rating": "B",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.",
+    "reference_answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
+    "answer_given": "route 55",
+    "correct_rating": "C",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "reference_answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
+    "answer_given": "Allow and deny rules",
+    "correct_rating": "C",
+    "rating_given": "A"
   }
 ]
