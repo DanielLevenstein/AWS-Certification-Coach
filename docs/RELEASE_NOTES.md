@@ -7,7 +7,6 @@
 | v1.1.2  | Changed rating to grade and added feedback system                                                                                                                           |
 | v1.1.2.1 | 1 failing test from curated training data: AWS Glacier                                                                                                            |
 
-4-digit release number is weight and documentation update only. 
 ### Model Performance
 
 | Release | Accuracy | Precision | Recall | Full Examples | MSE    | MAE    | Partial Examples | TP  | FP | TN  | FN |
