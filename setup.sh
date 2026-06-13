@@ -1,3 +1,8 @@
+#!/bin/bash
+if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+fi
+
 source .venv/bin/activate
 # Ensure the directory exists
 mkdir -p data/curated
