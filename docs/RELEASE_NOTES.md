@@ -1,13 +1,13 @@
 # Release Notes
 
-| Release | Description                                                                                                       |
-|:--------|:------------------------------------------------------------------------------------------------------------------|
-| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions.                             |
-| v1.1.0  | Expands the question bank to 80 AWS-docs-grounded questions, and adds stricter wrong-service answer rejection.    |
-| v1.1.2  | Changed rating to grade and added feedback system.                                                                |
-| v1.1.3  | Gate feedback behind SHOW_FEEDBACK environmental variable.                                                        |
-| v1.3.0   | Configured application to use the partial answer classifier instead of the binary classification model.  |
-
+| Release | Description                                                                                                    |
+|:--------|:---------------------------------------------------------------------------------------------------------------|
+| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions.                          |
+| v1.1.0  | Expands the question bank to 80 AWS-docs-grounded questions, and adds stricter wrong-service answer rejection. |
+| v1.1.2  | Changed rating to grade and added feedback system.                                                             |
+| v1.1.3  | Gate feedback behind SHOW_FEEDBACK environmental variable.                                                     |
+| v1.3.0  | Configured application to use the partial answer classifier instead of the binary classification model.        |
+| v2.0.1  | Added missing concepts back to UI under heading missing concepts                                               |
 
 ## v1.0.0 Release Details
 

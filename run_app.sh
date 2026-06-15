@@ -10,7 +10,7 @@ fi
 
 echo "To run the app, uncomment the desired command below and re-run this script."
 # Example commands (uncomment one to use):
-# .venv/bin/python app.py
-# .venv/bin/python -m streamlit run app.py
+ .venv/bin/python app.py
+ .venv/bin/python -m streamlit run app.py
 
 exit 0

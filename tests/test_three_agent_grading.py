@@ -1,7 +1,13 @@
 import json
 
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
-from aws_certification_coach.evaluation.grading import evaluate_with_agents
+from aws_certification_coach.evaluation.grading import (
+    ConceptCoverageJudgment,
+    CorrectnessJudgment,
+    EvaluationAggregator,
+    WordingJudgment,
+    evaluate_with_agents,
+)
 from aws_certification_coach.evaluation.prompting import EvaluationPromptBuilder, EvaluationResponseParser
 
 
@@ -46,6 +52,37 @@ def test_multiple_choice_correctness_is_separate_from_concept_coverage():
 
     assert result.score < 70
     assert "AWS KMS" in result.missing_concepts
+    assert result.suggested_improvements == [
+        "Correctness: Use AWS KMS to create and manage encryption keys for data protection.",
+        (
+            "Concept coverage: Use AWS KMS to create and manage encryption keys for data protection. "
+            "This directly addresses AWS KMS."
+        ),
+    ]
+
+
+def test_each_deficient_sub_rubric_gets_a_concrete_answer_sentence():
+    result = EvaluationAggregator().aggregate(
+        _question(),
+        CorrectnessJudgment(score=40),
+        ConceptCoverageJudgment(
+            score=33,
+            missing_concepts=["encryption keys", "data protection"],
+        ),
+        WordingJudgment(score=50, issues=["The answer is too vague to interpret."]),
+    )
+
+    assert result.suggested_improvements == [
+        "Correctness: Use AWS KMS to create and manage encryption keys for data protection.",
+        (
+            "Concept coverage: Use AWS KMS to create and manage encryption keys for data protection. "
+            "This directly addresses encryption keys and data protection."
+        ),
+        (
+            'Wording: A clear, direct answer is, "Use AWS KMS to create and manage encryption keys '
+            'for data protection."'
+        ),
+    ]
 
 
 def test_model_prompt_and_parser_use_three_independent_agent_results():

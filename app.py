@@ -127,8 +127,8 @@ def main() -> None:
             missing_concepts = result.missing_concepts
             results_feedback = result.feedback
             # Consider adding back missing concepts for answers with ratings below A.
-            st.write("Scoring feedback")
-            st.markdown(results_feedback)
+            st.write("Suggested Improvements")
+            st.write(missing_concepts)
             st.write("Detailed answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)

@@ -177,10 +177,12 @@ class EvaluationAggregator:
         score = 100 if full_credit else round(
             correctness.score * 0.70 + concepts.score * 0.20 + wording.score * 0.10
         )
-        improvements = [f"Explain {concept}." for concept in concepts.missing_concepts]
-        if correctness.selected_distractors:
-            improvements.append("Replace the selected distractor with the canonical AWS answer.")
-        improvements.extend(wording.issues)
+        improvements = _rubric_answer_suggestions(
+            question,
+            correctness,
+            concepts,
+            wording,
+        )
         feedback = _scorecard_feedback(
             correctness,
             concepts,
@@ -210,6 +212,48 @@ def evaluate_with_agents(
 
 def _valid_score(value: float | int) -> int:
     return max(0, min(100, round(value)))
+
+
+def _rubric_answer_suggestions(
+    question: Question,
+    correctness: CorrectnessJudgment,
+    concepts: ConceptCoverageJudgment,
+    wording: WordingJudgment,
+) -> list[str]:
+    answer = _complete_sentence(question.reference_answer)
+    suggestions: list[str] = []
+    if correctness.score < 100 or correctness.selected_distractors:
+        suggestions.append(f"Correctness: {answer}")
+    if concepts.score < 100 or concepts.missing_concepts:
+        concept_answer = _concept_answer(answer, concepts.missing_concepts)
+        suggestions.append(f"Concept coverage: {concept_answer}")
+    if wording.score < 100 or wording.issues:
+        suggestions.append(f"Wording: A clear, direct answer is, \"{answer}\"")
+    return suggestions
+
+
+def _concept_answer(reference_answer: str, missing_concepts: list[str]) -> str:
+    if not missing_concepts:
+        return reference_answer
+    concepts = _natural_language_list(missing_concepts)
+    return f"{reference_answer} This directly addresses {concepts}."
+
+
+def _natural_language_list(values: list[str]) -> str:
+    if len(values) == 1:
+        return values[0]
+    if len(values) == 2:
+        return f"{values[0]} and {values[1]}"
+    return f"{', '.join(values[:-1])}, and {values[-1]}"
+
+
+def _complete_sentence(value: str) -> str:
+    sentence = value.strip()
+    if not sentence:
+        return sentence
+    if sentence[-1] not in ".!?":
+        sentence += "."
+    return sentence
 
 
 def _scorecard_feedback(
