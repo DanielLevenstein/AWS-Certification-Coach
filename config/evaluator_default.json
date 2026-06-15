@@ -1,5 +1,5 @@
 {
-  "provider": "trained_classifier",
+  "provider": "trained_regressor",
   "openai": {
     "model": "gpt-5.4-mini",
     "temperature": 0.0,
@@ -9,5 +9,8 @@
   },
   "trained_classifier": {
     "model_path": "models/answer_classifier.json"
+  },
+  "trained_regressor": {
+    "model_path": "models/partial_answer_regressor.json"
   }
 }

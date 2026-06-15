@@ -1,4 +1,4 @@
-"""Evaluator provider backed by the trained answer classification model."""
+"""Evaluator providers backed by locally trained answer models."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.training.answer_classifier import AnswerClassificationModel
+from aws_certification_coach.training.answer_classifier import AnswerClassificationModel, AnswerRegressionModel
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
@@ -15,6 +15,7 @@ SUCCESS_THRESHOLD = 70
 INCORRECT_ANSWER_SCORE_CAP = 49
 QUESTION_RESTATEMENT_SCORE_CAP = 25
 MISSPELLED_SERVICE_SCORE = 65
+EXACT_CORRECT_OPTION_SCORE = 95
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 GENERIC_SERVICE_TOKENS = {"amazon", "aws", "service", "the", "use"}
 
@@ -30,49 +31,66 @@ class TrainedClassifierEvaluatorProvider:
         del prompt
         features = self.feature_extractor.extract(question, user_answer)
         probability = self.model.predict_proba(features)
-        model_score = probability * 100
-        prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
-        if _is_question_restatement(question, user_answer):
-            missing = _missing_concepts(question, user_answer)
-            payload = {
-                "score": min(int(model_score), QUESTION_RESTATEMENT_SCORE_CAP),
-                "missing_concepts": missing,
-                "suggested_improvements": [f"Explain {concept}." for concept in missing],
-                "feedback": "This answer restates the question without identifying and explaining the solution.",
-                "detailed_answer": question.reference_answer,
-            }
-            return json.dumps(payload)
-        if _has_bad_service_spelling(question, user_answer):
-            missing = _missing_concepts(question, user_answer)
-            payload = {
-                "score": MISSPELLED_SERVICE_SCORE,
-                "missing_concepts": missing,
-                "suggested_improvements": [f"Explain {concept}." for concept in missing],
-                "feedback": "The AWS service name appears to be misspelled.",
-                "detailed_answer": question.reference_answer,
-            }
-            return json.dumps(payload)
-        grading_issue = _incorrect_service_answer_issue(question, user_answer)
-        if grading_issue:
-            missing = _missing_concepts(question, user_answer)
-            payload = {
-                "score": min(int(model_score), INCORRECT_ANSWER_SCORE_CAP),
-                "missing_concepts": missing,
-                "suggested_improvements": [f"Explain {concept}." for concept in missing],
-                "feedback": grading_issue,
-                "detailed_answer": question.reference_answer,
-            }
-            return json.dumps(payload)
-        missing = [] if prediction == 1 else _missing_concepts(question, user_answer)
-        score = int(model_score)
+        return _evaluation_response(question, user_answer, probability * 100)
+
+
+class TrainedRegressionEvaluatorProvider:
+    """Uses the partial-credit regression model as the application score source."""
+
+    def __init__(self, model_path: str | Path, feature_extractor: AnswerFeatureExtractor | None = None) -> None:
+        self.model = AnswerRegressionModel.load(model_path)
+        self.feature_extractor = feature_extractor or AnswerFeatureExtractor()
+
+    def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
+        del prompt
+        features = self.feature_extractor.extract(question, user_answer)
+        return _evaluation_response(question, user_answer, self.model.predict(features) * 100)
+
+
+def _evaluation_response(question: Question, user_answer: str, model_score: float) -> str:
+    if _is_exact_correct_option(question, user_answer):
+        model_score = max(model_score, EXACT_CORRECT_OPTION_SCORE)
+    prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
+    if _is_question_restatement(question, user_answer):
+        missing = _missing_concepts(question, user_answer)
         payload = {
-            "score": score,
+            "score": min(int(model_score), QUESTION_RESTATEMENT_SCORE_CAP),
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
-            "feedback": _feedback(model_score, prediction),
+            "feedback": "This answer restates the question without identifying and explaining the solution.",
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
+    if _has_bad_service_spelling(question, user_answer):
+        missing = _missing_concepts(question, user_answer)
+        payload = {
+            "score": MISSPELLED_SERVICE_SCORE,
+            "missing_concepts": missing,
+            "suggested_improvements": [f"Explain {concept}." for concept in missing],
+            "feedback": "The AWS service name appears to be misspelled.",
+            "detailed_answer": question.reference_answer,
+        }
+        return json.dumps(payload)
+    grading_issue = _incorrect_service_answer_issue(question, user_answer)
+    if grading_issue:
+        missing = _missing_concepts(question, user_answer)
+        payload = {
+            "score": min(int(model_score), INCORRECT_ANSWER_SCORE_CAP),
+            "missing_concepts": missing,
+            "suggested_improvements": [f"Explain {concept}." for concept in missing],
+            "feedback": grading_issue,
+            "detailed_answer": question.reference_answer,
+        }
+        return json.dumps(payload)
+    missing = [] if prediction == 1 else _missing_concepts(question, user_answer)
+    payload = {
+        "score": int(model_score),
+        "missing_concepts": missing,
+        "suggested_improvements": [f"Explain {concept}." for concept in missing],
+        "feedback": _feedback(model_score, prediction),
+        "detailed_answer": question.reference_answer,
+    }
+    return json.dumps(payload)
 
 
 def _missing_concepts(question: Question, user_answer: str) -> list[str]:
@@ -116,9 +134,9 @@ def _is_exact_correct_option(question: Question, user_answer: str) -> bool:
     if original is None:
         return False
     correct_ids = set(original.correct_option_ids)
-    normalized_answer = _normalized(user_answer)
+    normalized_answer = _normalized_service_answer(user_answer)
     return normalized_answer in {
-        _normalized(option.text)
+        _normalized_service_answer(option.text)
         for option in original.options
         if option.option_id in correct_ids
     }
@@ -184,6 +202,11 @@ def _feedback(model_score: float, prediction: int) -> str:
 
 def _normalized(value: str) -> str:
     return " ".join(value.casefold().replace(".", "").split())
+
+
+def _normalized_service_answer(value: str) -> str:
+    normalized = _normalized(value)
+    return normalized.removeprefix("use ")
 
 
 def _edit_distance(left: str, right: str) -> int:
