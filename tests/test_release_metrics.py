@@ -1,6 +1,8 @@
 from pathlib import Path
 
 from aws_certification_coach.release_metrics.complexity import measure_complexity
+from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
+from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics
 
@@ -35,19 +37,43 @@ def test_training_graph_writes_png_from_checkpoint_json(tmp_path: Path):
     assert accuracy_output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_release_metrics_puts_accuracy_mse_and_semantic_stub_first(tmp_path: Path):
+def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"
     metrics_dir.mkdir()
     (metrics_dir / "training_history.json").write_text(
         '{"checkpoints": [{"epoch": 1, "mse": 0.1234, "mae": 0.5678, "curated_grade_accuracy": 0.44}]}',
         encoding="utf-8",
     )
+    (metrics_dir / "semantic_similarity.json").write_text(
+        '{"semantic_grade_accuracy": 0.8}',
+        encoding="utf-8",
+    )
 
     markdown = render_release_metrics(metrics_dir)
 
-    assert (
-        "| Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading |"
-        in markdown
+    assert "| Curated grade-band accuracy | Semantic-aware grading |" in markdown
+    assert "| 44.00% | 80.00% |" in markdown
+    assert "Generated-label regression metrics are still written for diagnostics" in markdown
+
+
+def test_semantic_similarity_recognizes_aliases_and_concepts():
+    question = Question(
+        question_id="Q1",
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Which service manages encryption keys?",
+        reference_answer="Use AWS KMS to create and manage encryption keys.",
+        key_concepts=["AWS KMS", "encryption keys", "key management"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service manages encryption keys?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS KMS."),
+                MultipleChoiceOption("B", "Use Amazon S3."),
+            ],
+            correct_option_ids=["A"],
+        ),
     )
-    assert "| 44.00% | 0.1234 | TBD | 0.5678 |" in markdown
-    assert "use curated grade-band accuracy as the primary release signal" in markdown
+
+    assert semantic_similarity_score(question, "KMS manages encryption keys.") >= 80
+    assert semantic_similarity_score(question, "Use Amazon S3.") < 60

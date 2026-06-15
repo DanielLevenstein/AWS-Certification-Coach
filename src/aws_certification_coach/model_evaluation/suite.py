@@ -7,7 +7,7 @@ from pathlib import Path
 
 from aws_certification_coach.evaluation.factory import build_evaluation_service
 from aws_certification_coach.evaluation.service import EvaluationService
-from aws_certification_coach.evaluation.trained_classifier_provider import TrainedRegressionEvaluatorProvider
+from aws_certification_coach.evaluation.trained_classifier_provider import SemanticAwareEvaluatorProvider
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_grade_band, score_to_letter
 from aws_certification_coach.training.answer_classifier import (
@@ -91,9 +91,10 @@ def evaluate_curated_model(
     curated_path: Path,
     questions_by_id: dict,
 ) -> dict[str, float]:
+    del model
     rows = json.loads(curated_path.read_text(encoding="utf-8"))
     examples = load_feedback_regression_examples(curated_path, questions_by_id)
-    service = EvaluationService(TrainedRegressionEvaluatorProvider(model))
+    service = EvaluationService(SemanticAwareEvaluatorProvider())
     matches = 0
     for row, example in zip(rows, examples, strict=True):
         result = service.evaluate(questions_by_id[example.question_id], example.answer)

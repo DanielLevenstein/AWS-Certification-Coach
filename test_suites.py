@@ -36,6 +36,7 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     )
     _run([sys.executable, "scripts/plot_training_history.py"])
     _run([sys.executable, "scripts/curated_failure_report.py"])
+    _run([sys.executable, "scripts/semantic_similarity_evaluation.py"])
     _run([sys.executable, "scripts/quality_metrics.py"])
     _run([sys.executable, "scripts/release_metrics.py"])
 

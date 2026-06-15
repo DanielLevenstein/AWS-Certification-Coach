@@ -7,7 +7,7 @@ import argparse
 import json
 from pathlib import Path
 
-from aws_certification_coach.model_evaluation import run_model_evaluation
+from aws_certification_coach.model_evaluation.suite import run_model_evaluation
 
 
 def main() -> None:

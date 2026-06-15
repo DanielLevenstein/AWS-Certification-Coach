@@ -15,15 +15,19 @@
 | v1.1.3.1 | Removed duplicate question from right side panel.                                                        |
 | v1.3.0   | Configured application to use the partial answer classifier instead of the binary classification model.  |
 | v1.3.1 | Test Case Redesign base accuracy 44% |
+| v1.3.3 | Adds deterministic semantic-aware curated grading accuracy. |
+| v1.3.4 | Swaps app scoring from trained regression to semantic-aware grading. |
 
 ### Model Performance
 
 
 # New Accuracy Metrics
-| Release | Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading | Generated-label MAE |
-|---------|----------------------------:|--------------------:|------------------------|--------------------:|
-| v1.3.1  |                      44.00% |              0.0107 | TBD                    |              0.0761 |
-| v1.3.2  |                      68.00% |              0.0027 | TBD                    |              0.0362 |
+| Release | Curated grade-band accuracy | Semantic-aware grading |
+|---------|----------------------------:|-----------------------:|
+| v1.3.1  |                      44.00% |                    TBD |
+| v1.3.2  |                      68.00% |                    TBD |
+| v1.3.3  |                      68.00% |                 80.00% |
+| v1.3.4  |                      80.00% |                 80.00% |
 ### Scope
 
 Certifications:

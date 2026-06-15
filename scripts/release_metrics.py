@@ -22,21 +22,22 @@ def main() -> None:
 
 def render_release_metrics(metrics_dir: Path) -> str:
     training = _read(metrics_dir / "training_history.json")["checkpoints"]
+    semantic = _read(metrics_dir / "semantic_similarity.json")
     final = training[-1]
     return "\n".join(
         [
             "# Release Metrics",
             "",
-            "| Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading | Generated-label MAE |",
-            "| ---: | ---: | --- | ---: |",
-            f"| {final['curated_grade_accuracy']:.2%} | {final['mse']:.4f} | TBD | "
-            f"{final['mae']:.4f} |",
+            "| Curated grade-band accuracy | Semantic-aware grading |",
+            "| ---: | ---: |",
+            f"| {final['curated_grade_accuracy']:.2%} | {semantic['semantic_grade_accuracy']:.2%} |",
             "",
             "Training curve: `training_performance.png`",
             "Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`",
+            "Semantic-aware grading: `semantic_similarity.json`",
             "Curated failure analysis: `curated_failure_report.md`",
             "",
-            "Regression MSE/MAE measure numeric fit against generated/feedback labels; use curated grade-band accuracy as the primary release signal until semantic-aware grading is implemented.",
+            "Generated-label regression metrics are still written for diagnostics, but release tracking uses curated app-scoring accuracy.",
         ]
     ) + "\n"
 

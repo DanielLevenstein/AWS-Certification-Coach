@@ -10,10 +10,9 @@ from pathlib import Path
 import re
 
 from aws_certification_coach.evaluation.service import EvaluationService
-from aws_certification_coach.evaluation.trained_classifier_provider import TrainedRegressionEvaluatorProvider
+from aws_certification_coach.evaluation.trained_classifier_provider import SemanticAwareEvaluatorProvider
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_grade_band, score_to_letter
-from aws_certification_coach.training.answer_classifier import AnswerRegressionModel
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
@@ -27,17 +26,17 @@ def build_failure_report(
     questions = JsonQuestionRepository(questions_path).all()
     questions_by_id = {question.question_id: question for question in questions}
     examples = load_feedback_regression_examples(curated_path, questions_by_id)
-    model = AnswerRegressionModel.load(model_path)
+    del model_path
     extractor = AnswerFeatureExtractor()
-    service = EvaluationService(TrainedRegressionEvaluatorProvider(model, extractor))
+    service = EvaluationService(SemanticAwareEvaluatorProvider())
     conflicts = _conflicting_labels(rows)
     failures = []
 
     for index, (row, example) in enumerate(zip(rows, examples, strict=True)):
         question = questions_by_id[example.question_id]
         features = extractor.extract(question, example.answer)
-        raw_score = model.predict(features) * 100
         result = service.evaluate(question, example.answer)
+        raw_score = float(result.score)
         expected = str(row["correct_rating"]).strip().upper()
         actual = score_to_letter(result.score)
         expected_band = letter_to_grade_band(expected)
@@ -58,7 +57,7 @@ def build_failure_report(
                 "score": result.score,
                 "raw_score": raw_score,
                 "feedback": result.feedback,
-                "contributions": _top_contributions(model, features),
+                "contributions": [("semantic_similarity_score", raw_score / 100)],
                 "reason": _suspected_reason(
                     expected,
                     actual,
@@ -179,9 +178,9 @@ def _format_markdown(
         "",
         "## Primary Findings",
         "",
-        "1. Training error is low; remaining failures cross the broader A/B, C/D, and F boundaries, indicating a calibration/generalization problem rather than insufficient epochs.",
-        "2. The feature extractor is lexical. It does not encode AWS aliases, semantic equivalence, or calibrated partial-credit concepts.",
-        "3. Full-credit prose does not receive the exact-option boost unless it exactly matches a multiple-choice option.",
+        "1. Generated-label training error is low; remaining app-scoring failures are now semantic-aware calibration cases rather than epoch-count issues.",
+        "2. The semantic-aware scorer recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.",
+        "3. Full-credit prose is scored through service and concept coverage rather than only exact option text.",
         f"4. {conflict_finding}",
         "",
         "## Label Conflicts",
@@ -218,9 +217,9 @@ def _format_markdown(
             "## Recommended Remediation Order",
             "",
             "1. Reconcile conflicting curated labels before changing model code.",
-            "2. Add normalized AWS service aliases and semantic service-match features.",
-            "3. Add concept-coverage features that are independent of full reference-answer overlap.",
-            "4. Calibrate grade boundaries against curated examples rather than relying only on regression MSE.",
+            "2. Expand normalized AWS service aliases and near-service synonym handling.",
+            "3. Tune concept-coverage thresholds against curated examples.",
+            "4. Keep generated-label regression metrics out of release tracking unless the trained model returns to the app path.",
             "5. Revisit runtime exact-option and wrong-service guards so partial-credit expectations are represented consistently.",
             "",
         ]

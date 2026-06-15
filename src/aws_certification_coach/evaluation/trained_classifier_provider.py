@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 
 from aws_certification_coach.domain import Question
+from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from aws_certification_coach.training.answer_classifier import AnswerClassificationModel, AnswerRegressionModel
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
@@ -53,6 +54,14 @@ class TrainedRegressionEvaluatorProvider:
         del prompt
         features = self.feature_extractor.extract(question, user_answer)
         return _evaluation_response(question, user_answer, self.model.predict(features) * 100)
+
+
+class SemanticAwareEvaluatorProvider:
+    """Uses deterministic service and concept matching as the application score source."""
+
+    def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
+        del prompt
+        return _evaluation_response(question, user_answer, semantic_similarity_score(question, user_answer))
 
 
 def _evaluation_response(question: Question, user_answer: str, model_score: float) -> str:
