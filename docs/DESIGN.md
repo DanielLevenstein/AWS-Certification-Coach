@@ -39,12 +39,20 @@ We need to split those up into three separate test suites.
 
 ### True Unit Tests
 The unit test suite should only cover simple assertions like the conversion of numerical grades into letter grades. 
+
+Run this suite with `./run_tests.sh` or `.venv/bin/python test_suites.py unit`.
+
 ### Model Evaluation
 The model evaluation itself needs to live in a separate test suite and should be split into two parts.
 The first part will contain test cases evaluating how closely the model adheres to the grading rubric. 
+
+The model-evaluation suite contains rubric adherence against curated answers and held-out regression performance. It is not collected by pytest. Run it with `.venv/bin/python test_suites.py model`.
+
 ### Release Metrics
 This should be a package of python packages which evaluate the question answer distribution of training data.
 There is already an existing file called generate_release_metrics.sh that implements the first iteration of this, but it depends on the unit test run.
+
+Release metrics run independently with `./generate_metrics.sh` or `.venv/bin/python test_suites.py release`. Generated JSON, Markdown, and SVG artifacts are written under `release/metrics/`.
 
 ####  Complexity Metrics and Code Coverage
 

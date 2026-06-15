@@ -37,8 +37,16 @@ class TrainedClassifierEvaluatorProvider:
 class TrainedRegressionEvaluatorProvider:
     """Uses the partial-credit regression model as the application score source."""
 
-    def __init__(self, model_path: str | Path, feature_extractor: AnswerFeatureExtractor | None = None) -> None:
-        self.model = AnswerRegressionModel.load(model_path)
+    def __init__(
+        self,
+        model_path: str | Path | AnswerRegressionModel,
+        feature_extractor: AnswerFeatureExtractor | None = None,
+    ) -> None:
+        self.model = (
+            model_path
+            if isinstance(model_path, AnswerRegressionModel)
+            else AnswerRegressionModel.load(model_path)
+        )
         self.feature_extractor = feature_extractor or AnswerFeatureExtractor()
 
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:

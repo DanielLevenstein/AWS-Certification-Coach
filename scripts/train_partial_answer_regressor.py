@@ -8,6 +8,7 @@ from pathlib import Path
 import sys
 
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
+from aws_certification_coach.model_evaluation.suite import evaluate_curated_model
 from aws_certification_coach.training.answer_classifier import (
     PartialCreditRegressor,
     evaluate_regression_leave_one_question_out,
@@ -20,6 +21,8 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--questions", default="data/generated/questions_with_answers_generated.json")
     parser.add_argument("--training-data", default="data/generated/questions_with_answers_generated.json")
+    parser.add_argument("--app-questions", default="data/questions/sample_questions.json")
+    parser.add_argument("--curated-data", default="data/curated/curated_training_data.json")
     parser.add_argument(
         "--feedback-data",
         action="append",
@@ -31,6 +34,7 @@ def main() -> None:
     )
     parser.add_argument("--output", default="models/partial_answer_regressor.json")
     parser.add_argument("--metrics-output", default="models/partial_answer_regressor_metrics.json")
+    parser.add_argument("--history-output", default="release/metrics/training_history.json")
     parser.add_argument("--max-mse", type=float, default=0.06)
     parser.add_argument("--min-examples", type=int, default=100)
     parser.add_argument("--eval-mode", choices=["leave-one-question-out", "training"], default="leave-one-question-out")
@@ -51,7 +55,7 @@ def main() -> None:
             f"Refusing to certify regression performance with fewer than {args.min_examples} examples."
         )
 
-    trainer = PartialCreditRegressor(learning_rate=args.learning_rate, epochs=args.epochs)
+    trainer = PartialCreditRegressor(learning_rate=args.learning_rate, epochs=args.epochs, seed=0)
     if args.eval_mode == "leave-one-question-out":
         metrics = evaluate_regression_leave_one_question_out(trainer, questions_by_id, examples)
     else:
@@ -66,13 +70,24 @@ def main() -> None:
         _write_metrics(args.metrics_output, metrics)
         raise SystemExit(f"Held-out partial-credit MSE {metrics['mse']:.3f} exceeds required {args.max_mse:.3f}.")
 
-    model = trainer.train(questions_by_id, examples)
+    app_questions = JsonQuestionRepository(args.app_questions).all()
+    app_questions_by_id = {question.question_id: question for question in app_questions}
+    model, history = trainer.train_with_history(
+        questions_by_id,
+        examples,
+        checkpoint_evaluator=lambda checkpoint_model: evaluate_curated_model(
+            checkpoint_model,
+            Path(args.curated_data),
+            app_questions_by_id,
+        ),
+    )
     model.save(args.output)
+    _write_metrics(args.history_output, {"checkpoints": history})
     _write_metrics(args.metrics_output, metrics)
     print(json.dumps(metrics, indent=2))
 
 
-def _write_metrics(metrics_output: str, metrics: dict[str, float]) -> None:
+def _write_metrics(metrics_output: str, metrics: dict[str, object]) -> None:
     metrics_path = Path(metrics_output)
     metrics_path.parent.mkdir(parents=True, exist_ok=True)
     metrics_path.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")

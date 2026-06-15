@@ -1,28 +1,28 @@
 [
   {
-    "question": "Which service should be used to manage encryption keys",
-    "reference_answer": "Use AWS KMS",
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
     "answer_given": "AWS",
     "correct_rating": "F",
     "rating_given": "A"
   },
   {
     "question": "Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.",
-    "reference_answer": "Use Service Control Policies",
+    "reference_answer": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
     "answer_given": "AWS Roles",
     "correct_rating": "D",
     "rating_given": "A"
   },
   {
     "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
-    "reference_answer": "Use AWS Secrets Manager",
+    "reference_answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
     "answer_given": "AWS Key Store",
     "correct_rating": "D",
     "rating_given": "A"
   },
   {
     "question": "Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
-    "reference_answer": "Use S3 Glacier storage classes",
+    "reference_answer": "Use S3 Glacier storage classes to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.",
     "answer_given": "AWS Glacier",
     "correct_rating": "B",
     "rating_given": "F"
@@ -30,8 +30,8 @@
   {
     "question": "Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.",
     "reference_answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
-    "answer_given": "AWS Kinesis\n",
-    "correct_rating": "D",
+    "answer_given": "AWS Kinesis",
+    "correct_rating": "B",
     "rating_given": "F"
   },
   {
@@ -89,5 +89,99 @@
     "answer_given": "Allow and deny rules",
     "correct_rating": "C",
     "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "AWS",
+    "correct_rating": "F",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.",
+    "reference_answer": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
+    "answer_given": "AWS Roles",
+    "correct_rating": "D",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.",
+    "reference_answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+    "answer_given": "S3 version tracking",
+    "correct_rating": "F",
+    "rating_given": "F"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
+    "reference_answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+    "answer_given": "AWS Key Store",
+    "correct_rating": "D",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
+    "reference_answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+    "answer_given": "Parameter Store",
+    "correct_rating": "F",
+    "rating_given": "F"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "AWS",
+    "correct_rating": "F",
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "AWS",
+    "correct_rating": "F",
+    "rating_given": "A"
+  },
+  {
+    "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
+    "reference_answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
+    "answer_given": "AWS",
+    "correct_rating": "F",
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "AWS",
+    "correct_rating": "F",
+    "rating_given": "A",
+    "source_test": "tests/test_user_feedback.py::test_feedback_repository_saves_letter_grades_without_numeric_values"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "AWS KMS",
+    "correct_rating": "A",
+    "rating_given": "A",
+    "source_test": "tests/test_user_feedback.py::test_feedback_repository_appends_to_existing_v1_records"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "AWS KMS creates and manages encryption keys that protect data.",
+    "correct_rating": "A",
+    "rating_given": "A",
+    "source_test": "tests/test_three_agent_grading.py::test_complete_answer_receives_100_without_a_model_score_cap"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "AWS KMS manages encryption keys.",
+    "correct_rating": "A",
+    "rating_given": "A",
+    "source_test": "tests/test_three_agent_grading.py::test_model_prompt_and_parser_use_three_independent_agent_results"
   }
 ]

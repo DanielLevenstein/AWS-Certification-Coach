@@ -43,7 +43,7 @@ Training and verification data are generated separately:
 
 - `data/generated/questions_with_answers_generated.json`: generated training artifact used by the classifier and partial-credit regressor.
 - `data/generated/user_feedback.v1.json`: learner-submitted grade corrections created by the app using the self-contained v1 schema.
-- `data/curated/curated_training_data.json`: reviewed feedback examples maintained by hand.
+- `data/curated/curated_training_data.json`: reviewed feedback examples containing full question text. Curated rows intentionally omit question IDs so training cannot learn numbering conventions.
 - `data/curated/user_feedback.v1.json`: reviewed learner submissions included in model training.
 - `data/verification/questions_with_answers_holdout.json`: holdout artifact reserved for final verification and not used by training scripts.
 - `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
@@ -66,6 +66,7 @@ python scripts/train_partial_answer_regressor.py
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | v1.1.0  | Separates the app-facing question bank from training labels,<br /> expands the app bank to 80 AWS-docs-grounded questions and adds stricter wrong-service answer rejection. |
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions, <br />trained answer classifier, and partial-credit regression metrics.               |
+| v1.3.1 | Test Case Redesign base accuracy 44% |
 
 #### ```Scope
 
@@ -108,11 +109,32 @@ Then run the app:
 streamlit run app.py
 ```
 
-Run tests:
+Run the fast unit and contract tests:
 
 ```bash
-pytest
+./run_tests.sh
 ```
+
+Run rubric adherence and held-out model evaluation separately:
+
+```bash
+.venv/bin/python test_suites.py model
+```
+
+Generate training history, an SVG learning curve, code coverage, cyclomatic complexity, and the consolidated release report:
+
+```bash
+./run_release_tests.sh
+```
+
+Retrain the partial-credit model and refresh only its graphical learning curve:
+
+```bash
+./run_training_graph.sh
+```
+
+The pandas/Matplotlib graphs are written to `release/metrics/training_performance.png` and `release/metrics/curated_grade_accuracy.png`; curated accuracy compares the three bands `A/B`, `C/D`, and `F`. The underlying checkpoint values are stored in `release/metrics/training_history.json`.
+Detailed failing questions, feature contributions, label conflicts, and suspected causes are written to `release/metrics/curated_failure_report.md`. Each `run_training_graph.sh` run also preserves the generated graphs, metrics, model checkpoint, and failure report under a timestamped `data/charts/` directory.
 
 Regenerate local training, holdout, and app sample artifacts:
 

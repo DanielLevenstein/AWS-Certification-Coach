@@ -205,6 +205,7 @@ tempCodeRunnerFile.py
 
 # Generated training and application data
 /data/
+/release/metrics/
 
 # Ruff stuff:
 .ruff_cache/

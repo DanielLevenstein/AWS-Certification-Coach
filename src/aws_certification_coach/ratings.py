@@ -11,6 +11,13 @@ LETTER_RATING_VALUES = {
     "D": 0.65,
     "F": 0.25,
 }
+GRADE_BANDS = {
+    "A": "A/B",
+    "B": "A/B",
+    "C": "C/D",
+    "D": "C/D",
+    "F": "F",
+}
 
 
 def score_to_letter(score: int) -> str:
@@ -23,6 +30,14 @@ def score_to_letter(score: int) -> str:
     if score >= 60:
         return "D"
     return "F"
+
+
+def letter_to_grade_band(rating: object) -> str:
+    normalized = str(rating).strip().upper()
+    try:
+        return GRADE_BANDS[normalized]
+    except KeyError as exc:
+        raise ValueError(f"Unsupported rating {rating!r}; expected one of {', '.join(LETTER_RATINGS)}.") from exc
 
 
 def letter_to_numeric(rating: object) -> float:

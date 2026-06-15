@@ -14,6 +14,7 @@
 | v1.1.3   | Added feedback package to source control and switched UI to show original question with answers hidden.  |
 | v1.1.3.1 | Removed duplicate question from right side panel.                                                        |
 | v1.3.0   | Configured application to use the partial answer classifier instead of the binary classification model.  |
+| v1.3.1 | Test Case Redesign base accuracy 44% |
 
 ### Model Performance
 
