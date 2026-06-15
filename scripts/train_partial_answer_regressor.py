@@ -25,7 +25,7 @@ def main() -> None:
         action="append",
         default=[
             "data/curated/curated_training_data.json",
-            "data/curated/user_feedback.v1.json",
+            "data/curated/curated_training_data2.json",
             "data/generated/user_feedback.v1.json",
         ],
     )

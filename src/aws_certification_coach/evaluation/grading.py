@@ -235,6 +235,13 @@ def _scorecard_feedback(
         )
     if full_credit:
         lines.append("- Full-credit rule: applied because all canonical answers and required concepts were covered.")
+    model_feedback = " ".join(
+        feedback.strip()
+        for feedback in (correctness.feedback, concepts.feedback, wording.feedback)
+        if feedback.strip()
+    )
+    if model_feedback:
+        lines.append(f"Model feedback: {model_feedback}")
     lines.append(f"Final score: {_valid_score(final_score)}/100.")
     return "\n".join(lines)
 

@@ -9,7 +9,7 @@ from .grading import (
 )
 from .service import EvaluationService, EvaluatorProvider, HeuristicEvaluatorProvider
 from .factory import build_evaluation_service
-from .trained_classifier_provider import TrainedClassifierEvaluatorProvider
+from .trained_classifier_provider import TrainedClassifierEvaluatorProvider, TrainedRegressionEvaluatorProvider
 
 __all__ = [
     "AnswerWordingAgent",
@@ -22,5 +22,6 @@ __all__ = [
     "HeuristicEvaluatorProvider",
     "MultipleChoiceCorrectnessAgent",
     "TrainedClassifierEvaluatorProvider",
+    "TrainedRegressionEvaluatorProvider",
     "build_evaluation_service",
 ]
