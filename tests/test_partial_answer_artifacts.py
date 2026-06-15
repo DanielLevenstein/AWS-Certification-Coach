@@ -16,6 +16,7 @@ def test_generated_answer_artifact_has_expected_letter_ratings():
     assert rows
     assert {row["rating"] for row in rows} == {"A", "B", "C", "D", "F"}
     assert all(isinstance(row["rating"], str) for row in rows)
+    assert {row["intended_coverage"] for row in rows} == {1.0, 0.85, 0.75, 0.5, 0.25, 0.0}
     assert all("question_id" in row for row in rows)
     assert all("answer" in row for row in rows)
 

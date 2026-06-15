@@ -2,7 +2,7 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
+*_COPY.*
 # C extensions
 *.so
 
@@ -202,6 +202,10 @@ cython_debug/
 # .vscode/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
+
+# Generated training and application data
+/data/
+/release/metrics/
 
 # Ruff stuff:
 .ruff_cache/

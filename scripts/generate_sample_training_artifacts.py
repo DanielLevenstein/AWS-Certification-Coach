@@ -124,28 +124,29 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
 
 def _generated_answers(question_id, service, purpose, concepts, distractors, explanation, correct_option, question_text):
     answers = [
-        (correct_option, "A", "generated_exact_answer"),
-        (explanation, "A", "generated_complete_answer"),
-        (f"{service} is appropriate because it helps {purpose}.", "A", "generated_complete_paraphrase"),
-        (_drop_every_nth_word(explanation, 4), "B", "generated_shortened_answer"),
-        (f"The best choice is {service}; key ideas include {', '.join(concepts[:2])}.", "B", "generated_key_concepts"),
-        (_rating_75_answer(service, concepts, 0), "C", "generated_partial_correct"),
-        (_rating_75_answer(service, concepts, 1), "C", "generated_partial_correct_paraphrase"),
-        (_rating_50_answer(service, concepts, 0), "D", "generated_weak_answer"),
-        (_rating_50_answer(service, concepts, 1), "D", "generated_weak_paraphrase"),
-        (_rating_25_answer(question_text), "F", "generated_generic_wrong"),
-        (f"Use {distractors[0]}.", "F", "generated_distractor"),
-        (f"Use {distractors[1]}.", "F", "generated_distractor"),
-        (f"Use {distractors[2]}.", "F", "generated_distractor"),
+        (correct_option, "A", "generated_exact_answer", 1.0),
+        (explanation, "A", "generated_complete_answer", 1.0),
+        (f"{service} is appropriate because it helps {purpose}.", "A", "generated_complete_paraphrase", 1.0),
+        (_drop_every_nth_word(explanation, 4), "B", "generated_shortened_answer", 0.85),
+        (f"The best choice is {service}; key ideas include {', '.join(concepts[:2])}.", "B", "generated_key_concepts", 0.75),
+        (_rating_75_answer(service, concepts, 0), "B", "generated_75_percent_answer", 0.75),
+        (_rating_75_answer(service, concepts, 1), "B", "generated_75_percent_paraphrase", 0.75),
+        (_rating_50_answer(service, concepts, 0), "C", "generated_50_percent_answer", 0.50),
+        (_rating_50_answer(service, concepts, 1), "D", "generated_50_percent_paraphrase", 0.50),
+        (_rating_25_answer(question_text), "D", "generated_25_percent_answer", 0.25),
+        (f"Use {distractors[0]}.", "F", "generated_distractor", 0.0),
+        (f"Use {distractors[1]}.", "F", "generated_distractor", 0.0),
+        (f"Use {distractors[2]}.", "F", "generated_distractor", 0.0),
     ]
     return [
         {
             "question_id": question_id,
             "answer": answer,
             "rating": rating,
+            "intended_coverage": intended_coverage,
             "source": source,
         }
-        for answer, rating, source in answers
+        for answer, rating, source, intended_coverage in answers
     ]
 
 

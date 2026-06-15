@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from aws_certification_coach.config import EvaluatorConfig, load_evaluator_config
 from aws_certification_coach.evaluation.service import EvaluationService, HeuristicEvaluatorProvider
-from aws_certification_coach.evaluation.trained_classifier_provider import TrainedClassifierEvaluatorProvider
+from aws_certification_coach.evaluation.trained_classifier_provider import (
+    SemanticAwareEvaluatorProvider,
+    TrainedClassifierEvaluatorProvider,
+    TrainedRegressionEvaluatorProvider,
+)
 from aws_certification_coach.llm.openai_provider import OpenAIEvaluatorProvider
 
 
@@ -17,6 +21,8 @@ def build_evaluation_service(config: EvaluatorConfig | None = None) -> Evaluatio
         provider = OpenAIEvaluatorProvider(evaluator_config.openai)
     elif provider_name == "trained_classifier":
         provider = TrainedClassifierEvaluatorProvider(evaluator_config.trained_classifier_model_path)
+    elif provider_name in {"semantic_aware", "trained_regressor"}:
+        provider = SemanticAwareEvaluatorProvider()
     else:
         raise ValueError(f"Unsupported evaluator provider: {evaluator_config.provider}")
     return EvaluationService(provider)

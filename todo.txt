@@ -1,3 +1,0 @@
-- Keep two version of curated_training_data one commited to source control in config dir and one that is not in data/curated dir.
-- When training data is copied from config to curated dir the files should either be versioned unless the two files are an exact match.
-- todo.txt shouldn't be in source control but I am committing it for now because of merge conflicts.

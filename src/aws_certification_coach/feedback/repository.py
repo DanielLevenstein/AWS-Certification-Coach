@@ -61,8 +61,7 @@ def build_feedback_record(
     correct_rating: str,
 ) -> dict[str, Any]:
     return {
-        "schema_version": 1,
-        "question_id": question.question_id,
+        "schema_version": 2,
         "question": question.question,
         "reference_answer": question.reference_answer,
         "original_multiple_choice": _multiple_choice_to_json(question.original_multiple_choice),

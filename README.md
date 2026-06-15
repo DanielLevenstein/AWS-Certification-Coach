@@ -16,7 +16,7 @@ This project was inspired from my previous AWS-Documentation-Rag project.
 
 ## Goal
 
-AWS Certification Coach is a lightweight AI-powered study app for AWS certification practice. It presents pre-generated questions, evaluates learner answers with the trained local classifier or a configured LLM provider, and returns structured coaching feedback.
+AWS Certification Coach is a lightweight AI-powered study app for AWS certification practice. It presents pre-generated questions, evaluates learner answers with the trained local partial-credit regressor or a configured LLM provider, and returns structured coaching feedback.
 
 This project was based on a previous project called AWS-Documentation-Rag.
 This version intentionally removes the runtime RAG stack from the earlier prototype.
@@ -51,7 +51,7 @@ Training and verification data are generated separately:
 
 - `data/generated/questions_with_answers_generated.json`: generated training artifact used by the classifier and partial-credit regressor.
 - `data/generated/user_feedback.v1.json`: learner-submitted grade corrections created by the app using the self-contained v1 schema.
-- `data/curated/curated_training_data.json`: reviewed feedback examples maintained by hand.
+- `data/curated/curated_training_data.json`: reviewed feedback examples containing full question text. Curated rows intentionally omit question IDs so training cannot learn numbering conventions.
 - `data/curated/user_feedback.v1.json`: reviewed learner submissions included in model training.
 - `data/verification/questions_with_answers_holdout.json`: holdout artifact reserved for final verification and not used by training scripts.
 - `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
@@ -74,6 +74,7 @@ python scripts/train_partial_answer_regressor.py
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | v1.1.0  | Separates the app-facing question bank from training labels,<br /> expands the app bank to 80 AWS-docs-grounded questions and adds stricter wrong-service answer rejection. |
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions, <br />trained answer classifier, and partial-credit regression metrics.               |
+| v1.3.1 | Test Case Redesign base accuracy 44% |
 
 #### ```Scope
 
@@ -116,11 +117,34 @@ Then run the app:
 streamlit run app.py
 ```
 
-Run tests:
+Run the fast unit and contract tests:
 
 ```bash
-pytest
+./run_tests.sh
 ```
+
+Run rubric adherence and held-out model evaluation separately:
+
+```bash
+.venv/bin/python test_suites.py model
+```
+
+Generate training history, an SVG learning curve, code coverage, cyclomatic complexity, and the consolidated release report:
+
+```bash
+./run_release_tests.sh v1.3.2
+```
+
+The release helper saves the curated accuracy chart as `release/<tag>_accuracy.png`.
+
+Retrain the partial-credit model and refresh only its graphical learning curve:
+
+```bash
+./run_training_graph.sh v1.3.4.1
+```
+
+The pandas/Matplotlib graphs are written to `release/metrics/training_performance.png` and `release/metrics/curated_grade_accuracy.png`; curated accuracy compares the three bands `A/B`, `C/D`, and `F`. The underlying checkpoint values are stored in `release/metrics/training_history.json`.
+Detailed failing questions, feature contributions, label conflicts, and suspected causes are written to `release/metrics/curated_failure_report.md`. When a tag is supplied, `run_training_graph.sh` also publishes `release/<tag>_release_report.md`. Each run preserves the generated graphs, metrics, model checkpoint, and reports under a timestamped `data/charts/` directory.
 
 Regenerate local training, holdout, and app sample artifacts:
 
@@ -129,18 +153,18 @@ python scripts/generate_sample_training_artifacts.py
 python scripts/generate_app_question_artifacts.py --count 80
 ```
 
-Train the deployed answer classifier and enforce the 90% minimum gate:
+Train the deployed partial-credit regressor and enforce its MSE gate:
 
 ```bash
-python scripts/train_answer_classifier.py --min-accuracy 0.90
+python scripts/train_partial_answer_regressor.py
 ```
 
 The default training command uses `data/generated/questions_with_answers_generated.json`, which contains 100 self-authored freeform questions, original multiple-choice provenance, and generated answers spanning grades A through F.
 
-Train the partial-credit regression model and report mean squared error:
+Train the optional binary classifier and enforce the 90% minimum gate:
 
 ```bash
-python scripts/train_partial_answer_regressor.py
+python scripts/train_answer_classifier.py --min-accuracy 0.90
 ```
 
 Print a single release-note-friendly model performance summary:
@@ -178,12 +202,12 @@ The image includes the generated sample questions and trained model artifacts, s
 - Runtime: Docker
 - Port: use Render's `PORT` environment variable; the container defaults to `8501` for local runs.
 - Health check path: `/_stcore/health`
-- Default evaluator: `trained_classifier`
-- API key requirement: none for the default classifier path; set `OPENAI_API_KEY` only when using the OpenAI provider.
+- Default evaluator: `trained_regressor`
+- API key requirement: none for the default local regressor path; set `OPENAI_API_KEY` only when using the OpenAI provider.
 
 ## Evaluator Configuration
 
-V1 defaults to the trained classifier evaluator after `models/answer_classifier.json` has been generated.
+V1 defaults to the trained partial-credit evaluator backed by `models/partial_answer_regressor.json`. Its numeric prediction is the displayed score, and scores of 70 or higher pass.
 
 For LLM-based evaluation, use OpenAI with the configured default model:
 

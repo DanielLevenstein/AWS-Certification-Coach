@@ -1,3 +1,10 @@
+
+#!/bin/bash
+
+if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+fi
+
 #!/usr/bin/env bash
 # Helper script to run model training pipeline
 # Usage: ./train.sh [options]

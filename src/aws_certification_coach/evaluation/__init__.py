@@ -3,7 +3,11 @@
 from .prompting import EvaluationPromptBuilder, EvaluationResponseParser
 from .service import EvaluationService, EvaluatorProvider, HeuristicEvaluatorProvider
 from .factory import build_evaluation_service
-from .trained_classifier_provider import TrainedClassifierEvaluatorProvider
+from .trained_classifier_provider import (
+    SemanticAwareEvaluatorProvider,
+    TrainedClassifierEvaluatorProvider,
+    TrainedRegressionEvaluatorProvider,
+)
 
 __all__ = [
     "EvaluationPromptBuilder",
@@ -11,6 +15,8 @@ __all__ = [
     "EvaluationService",
     "EvaluatorProvider",
     "HeuristicEvaluatorProvider",
+    "SemanticAwareEvaluatorProvider",
     "TrainedClassifierEvaluatorProvider",
+    "TrainedRegressionEvaluatorProvider",
     "build_evaluation_service",
 ]

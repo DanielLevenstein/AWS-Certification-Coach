@@ -7,6 +7,7 @@ import json
 import math
 from pathlib import Path
 import random
+from typing import Callable
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.training.dataset import AnswerClassificationExample, AnswerRegressionExample
@@ -139,13 +140,29 @@ class PartialCreditRegressor:
         questions_by_id: dict[str, Question],
         examples: list[AnswerRegressionExample],
     ) -> AnswerRegressionModel:
+        model, _history = self.train_with_history(questions_by_id, examples)
+        return model
+
+    def train_with_history(
+        self,
+        questions_by_id: dict[str, Question],
+        examples: list[AnswerRegressionExample],
+        evaluation_examples: list[AnswerRegressionExample] | None = None,
+        checkpoints: list[int] | None = None,
+        checkpoint_evaluator: Callable[[AnswerRegressionModel], dict[str, float]] | None = None,
+    ) -> tuple[AnswerRegressionModel, list[dict[str, float]]]:
+        """Train once and record performance from the evolving model."""
+
         rng = random.Random(self.seed) if self.seed is not None else random
         weights = [0.0 for _ in self.feature_extractor.feature_names]
         training_rows = [
             (self.feature_extractor.extract(questions_by_id[example.question_id], example.answer), example.rating)
             for example in examples
         ]
-        for _ in range(self.epochs):
+        evaluation_rows = evaluation_examples if evaluation_examples is not None else examples
+        checkpoint_epochs = _training_checkpoints(self.epochs, checkpoints)
+        history: list[dict[str, float]] = []
+        for epoch in range(1, self.epochs + 1):
             rng.shuffle(training_rows)
             for features, rating in training_rows:
                 prediction = max(0.0, min(1.0, sum(weight * value for weight, value in zip(weights, features))))
@@ -154,10 +171,21 @@ class PartialCreditRegressor:
                     weight - self.learning_rate * ((2 * error * value) + (self.l2_penalty * weight))
                     for weight, value in zip(weights, features)
                 ]
-        return AnswerRegressionModel(
-            feature_names=list(self.feature_extractor.feature_names),
-            weights=weights,
-        )
+            if epoch in checkpoint_epochs:
+                model = AnswerRegressionModel(
+                    feature_names=list(self.feature_extractor.feature_names),
+                    weights=list(weights),
+                )
+                metrics = evaluate_regression_model(
+                    model,
+                    questions_by_id,
+                    evaluation_rows,
+                    self.feature_extractor,
+                )
+                if checkpoint_evaluator is not None:
+                    metrics.update(checkpoint_evaluator(model))
+                history.append({"epoch": epoch, **metrics})
+        return model, history
 
 
 def evaluate_model(
@@ -294,3 +322,10 @@ def _sigmoid(value: float) -> float:
         return 1 / (1 + z)
     z = math.exp(value)
     return z / (1 + z)
+
+
+def _training_checkpoints(epochs: int, checkpoints: list[int] | None) -> set[int]:
+    requested = checkpoints or [1, 5, 10, 25, 50, 100, 250, 500]
+    valid = {epoch for epoch in requested if 1 <= epoch <= epochs}
+    valid.add(epochs)
+    return valid
