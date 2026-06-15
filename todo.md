@@ -1,6 +1,7 @@
 
-# Documentation Cleanup
-- Move all md docs except for the base level README into a docs' folder.
+We need to clean up the test framework for our code. The existing unit tests have test fixtures hard coded into the test and are mixing multiple types of testing into a single test suite.
+
+Also, the new rubric is grading answers too strictly, which is preventing me from releasing this version of the app. 
 
 # Test Framework Redesign
 - Create a branch for features/test_redesign_$version  
