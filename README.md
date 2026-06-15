@@ -1,6 +1,14 @@
 # AWS-Certification-Coach
 
 AI study partner for AWS certification exams
+## Live Demo
+
+This project was inspired from my previous AWS-Documentation-Rag project. 
+
+- v0 GitHub:  [DanielLevenstein/AWS-Documentation-Rag](https://github.com/DanielLevenstein/AWS-Documentation-Rag)
+- v1 Deployment: [AWS Certification Coach](https://aws-certification-coach-latest.onrender.com/)
+
+# Application Screenshot
 
 ![AWS Certification Coach answering an AWS exam-style question](docs/images/aws-certification-coach.png)
 
