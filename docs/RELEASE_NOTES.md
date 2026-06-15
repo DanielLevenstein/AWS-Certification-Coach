@@ -18,16 +18,12 @@
 
 ### Model Performance
 
-| Release | Accuracy | Precision | Recall | Full Examples | MSE    | MAE    | Partial Examples | TP  | FP | TN  | FN |
-|---------|----------|-----------|--------|---------------|--------|--------|------------------|-----|----|-----|----|
-| v1.0.0  | 97.39%   | 97.19%    | 97.83% | 1150          | 0.0193 | 0.1006 | 500              | 587 | 17 | 533 | 13 |
-| v1.1.2  | 99.01%   | 99.71%    | 98.44% | 1314          | 0.0099 | 0.0714 | 1314             | 694 | 2  | 607 | 11 |
-| v1.3.0  | 99.01%   | 99.71%    | 98.44% | 1314          | 0.0105 | 0.0729 | 1321             | 694 | 2  | 607 | 11 |
 
 # New Accuracy Metrics
-| Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading | Generated-label MAE | Unit coverage | Average complexity | Maximum complexity |
-|----------------------------:|-------------------:|------------------------|-------------------:|--------------:|-------------------:|-------------------:|
-|                      44.00% |             0.0107 | TBD                    |             0.0761 |        42.41% |               2.97 |                 11 |
+| Release | Curated grade-band accuracy | Generated-label MSE | Generated-label MAE | 
+|---------|----------------------------:|--------------------:|--------------------:|
+| v1.3.1  |                      44.00% |              0.0107 |              0.0761 |  
+| v1.3.2  |                      68.00% |              0.0027 |              0.0362 |   
 ### Scope
 
 Certifications:
