@@ -191,10 +191,6 @@ def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]
 
 
 def _feedback_question_id(row: dict, questions_by_id: dict[str, Question]) -> str:
-    question_id = str(row.get("question_id", "")).strip()
-    if question_id in questions_by_id:
-        return question_id
-
     question_text = _normalized_text(row.get("question", ""))
     reference_text = _normalized_text(row.get("reference_answer", ""))
     original_question_text = _normalized_text(_feedback_original_question(row))

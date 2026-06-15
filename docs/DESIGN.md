@@ -17,15 +17,80 @@ Minimum features:
 - Track completed questions and score history for the current session.
 - Display feedback and move to the next question.
 
-Explicitly out of scope for V1:
+## V1.2 Three-Agent Grading Design
 
-- User accounts.
-- Persisted progress.
-- Runtime document ingestion.
-- FAISS, embeddings, vector search, or RAG.
-- Multi-certification recommendation logic.
-- Payment, sharing, or admin features.
+The detailed scoring policy lives in `GRADING_RUBRIC.md`. Runtime evaluation is split into three independent grading agents so multiple-choice correctness is not mixed with heuristic judgments:
 
+1. `MultipleChoiceCorrectnessAgent` scores canonical-answer selection and distractor rejection from 0 to 100. It receives the original multiple-choice provenance when available and falls back to the reviewed reference answer.
+2. `ConceptCoverageAgent` scores required AWS concept coverage from 0 to 100. It reports covered and missing concepts without deciding whether a multiple-choice option was selected.
+3. `AnswerWordingAgent` scores clarity, specificity, and readability from 0 to 100. It does not reward verbosity or rescore technical correctness.
+
+The existing `EvaluationService` coordinates provider execution and response parsing. Local providers invoke the three agents directly, while model providers return the three structured judgments. A deterministic `EvaluationAggregator` applies weights of 70% correctness, 20% concept coverage, and 10% wording, then returns the existing `EvaluationResult` contract used by the quiz and UI.
+
+The full-credit invariant takes precedence over the weighted calculation: an understandable answer that identifies every canonical answer, asserts no distractor, and covers every required concept receives 100%. No agent or provider may define fixed maximum scores, letter-grade ceilings, or special-case score caps. Clamping malformed output to the valid 0-100 range remains response validation rather than grading policy.
+
+Initial implementation keeps the existing evaluator-provider boundary for compatibility. The local trained provider supplies evidence used by the three agents, while the OpenAI provider receives a prompt with three explicitly separated judgments. This allows the orchestration and rubric to remain stable as individual agent implementations improve.
+
+## V1.2.1 Model Testing Update (In Progress)
+
+Model evaluation should be separated from unit tests. 
+Currently, our unit tests, functional tests, and model evaluation metrics all live in the same test suite. 
+We need to split those up into three separate test suites. 
+
+### True Unit Tests
+The unit test suite should only cover simple assertions like the conversion of numerical grades into letter grades. 
+
+Run this suite with `./run_tests.sh` or `.venv/bin/python test_suites.py unit`.
+
+### Model Evaluation
+The model evaluation itself needs to live in a separate test suite and should be split into two parts.
+The first part will contain test cases evaluating how closely the model adheres to the grading rubric. 
+
+The model-evaluation suite contains rubric adherence against curated answers and held-out regression performance. It is not collected by pytest. Run it with `.venv/bin/python test_suites.py model`.
+
+### Release Metrics
+This should be a package of python packages which evaluate the question answer distribution of training data.
+There is already an existing file called generate_release_metrics.sh that implements the first iteration of this, but it depends on the unit test run.
+
+Release metrics run independently with `./generate_metrics.sh` or `.venv/bin/python test_suites.py release`. Generated JSON, Markdown, and SVG artifacts are written under `release/metrics/`.
+
+####  Complexity Metrics and Code Coverage
+
+As part of the release metrics, we should generate code complexity and code coverage metrics. 
+Detailed release notes should be a md file that lives in its own folder called release. 
+
+The existing RELEASE_NOTES.md file should contain only high-level summaries. 
+
+### Grading Flow
+
+```mermaid
+flowchart LR
+    Answer[Learner answer]
+    MC[Multiple-choice correctness agent]
+    Concepts[Concept coverage agent]
+    Wording[Answer wording agent]
+    Aggregate[Deterministic aggregator]
+    Result[EvaluationResult]
+
+    Answer --> MC
+    Answer --> Concepts
+    Answer --> Wording
+    MC --> Aggregate
+    Concepts --> Aggregate
+    Wording --> Aggregate
+    Aggregate --> Result
+```
+
+### Agent Contracts
+
+- Each agent returns a score from 0 to 100 plus dimension-specific evidence.
+- Correctness reports covered canonical options and selected distractors.
+- Concept coverage reports covered and missing key concepts.
+- Wording reports clarity issues.
+- Each agent chooses a qualitative rubric band before assigning its independent numeric score. Agent scores must not be tuned to produce a desired combined grade.
+- The aggregator owns weighting, full-credit resolution, learner feedback assembly, and output validation.
+- Learner feedback shows every agent's rubric band, raw score, weight, weighted contribution, and explanation before the final score.
+- Agent internals and confidence values are never shown to learners.
 ## Proposed File Structure
 
 ```text

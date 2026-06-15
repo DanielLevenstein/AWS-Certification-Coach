@@ -14,14 +14,20 @@
 | v1.1.3   | Added feedback package to source control and switched UI to show original question with answers hidden.  |
 | v1.1.3.1 | Removed duplicate question from right side panel.                                                        |
 | v1.3.0   | Configured application to use the partial answer classifier instead of the binary classification model.  |
+| v1.3.1   | Test Case Redesign base accuracy 44% |
+| v1.3.3   | Adds deterministic semantic-aware curated grading accuracy. |
+| v1.3.4   | Swaps app scoring from trained regression to semantic-aware grading. |
+| v1.3.4.1 | publish md report with release notes | 
 
 ### Model Performance
 
-| Release | Accuracy | Precision | Recall | Full Examples | MSE    | MAE    | Partial Examples | TP  | FP | TN  | FN |
-|---------|----------|-----------|--------|---------------|--------|--------|------------------|-----|----|-----|----|
-| v1.0.0  | 97.39%   | 97.19%    | 97.83% | 1150          | 0.0193 | 0.1006 | 500              | 587 | 17 | 533 | 13 |
-| v1.1.2  | 99.01%   | 99.71%    | 98.44% | 1314          | 0.0099 | 0.0714 | 1314             | 694 | 2  | 607 | 11 |
-| v1.3.0  | 99.01%   | 99.71%    | 98.44% | 1314          | 0.0105 | 0.0729 | 1321             | 694 | 2  | 607 | 11 |
+# New Accuracy Metrics
+| Release | Curated grade-band accuracy | Precision | Recall |
+|---------|----------------------------:|----------:|-------:|
+| v1.3.1  |                      44.00% |       TBD |    TBD |
+| v1.3.2  |                      68.00% |       TBD |    TBD |
+| v1.3.3  |                      68.00% |       TBD |    TBD |
+| v1.3.4  |                      80.00% |    87.50% | 87.50% |
 
 ### Scope
 
