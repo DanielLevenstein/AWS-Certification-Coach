@@ -57,5 +57,19 @@
     "answer_given": "AWS",
     "correct_rating": "F",
     "rating_given": "A"
+  },
+  {
+    "question": "which AWS service or feature is best suited to route events from AWS services and applications to targets",
+    "reference_answer": "Use Amazon EventBridge",
+    "answer_given": "AWS Event Bridge can be used to route events from AWS services to event buses and rules.",
+    "correct_rating": "A",
+    "rating_given": "D"
+  },
+  {
+  "question": "which AWS service or feature is best suited to route events from AWS services and applications to targets",
+  "reference_answer": "Use Amazon SNS",
+  "answer_given": "SNS topics",
+  "correct_rating": "C",
+  "rating_given": "F"
   }
 ]
