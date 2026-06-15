@@ -28,16 +28,16 @@ def render_release_metrics(metrics_dir: Path) -> str:
         [
             "# Release Metrics",
             "",
-            "| Curated grade-band accuracy | Semantic-aware grading |",
-            "| ---: | ---: |",
-            f"| {final['curated_grade_accuracy']:.2%} | {semantic['semantic_grade_accuracy']:.2%} |",
+            "| Curated grade-band accuracy | Precision | Recall |",
+            "| ---: | ---: | ---: |",
+            f"| {final['curated_grade_accuracy']:.2%} | "
+            f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} |",
             "",
             "Training curve: `training_performance.png`",
             "Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`",
-            "Semantic-aware grading: `semantic_similarity.json`",
             "Curated failure analysis: `curated_failure_report.md`",
             "",
-            "Generated-label regression metrics are still written for diagnostics, but release tracking uses curated app-scoring accuracy.",
+            "Precision and recall treat A/B and C/D as accepted answers and F as rejected.",
         ]
     ) + "\n"
 

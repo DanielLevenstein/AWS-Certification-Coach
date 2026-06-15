@@ -48,6 +48,7 @@ def evaluate_semantic_curated_answers(
     rows = json.loads(curated_path.read_text(encoding="utf-8"))
     examples = load_feedback_regression_examples(curated_path, questions_by_id)
     matches = 0
+    true_positive = false_positive = true_negative = false_negative = 0
     mismatches = []
     for index, (row, example) in enumerate(zip(rows, examples, strict=True)):
         question = questions_by_id[example.question_id]
@@ -56,6 +57,12 @@ def evaluate_semantic_curated_answers(
         expected = str(row["correct_rating"]).strip().upper()
         actual_band = letter_to_grade_band(actual)
         expected_band = letter_to_grade_band(expected)
+        expected_accept = expected_band != "F"
+        actual_accept = actual_band != "F"
+        true_positive += int(expected_accept and actual_accept)
+        false_positive += int(not expected_accept and actual_accept)
+        true_negative += int(not expected_accept and not actual_accept)
+        false_negative += int(expected_accept and not actual_accept)
         if actual_band == expected_band:
             matches += 1
             continue
@@ -74,8 +81,14 @@ def evaluate_semantic_curated_answers(
     total = len(examples)
     return {
         "semantic_grade_accuracy": matches / max(1, total),
+        "semantic_precision": true_positive / max(1, true_positive + false_positive),
+        "semantic_recall": true_positive / max(1, true_positive + false_negative),
         "semantic_matching_grade_bands": matches,
         "semantic_example_count": total,
+        "semantic_true_positive": true_positive,
+        "semantic_false_positive": false_positive,
+        "semantic_true_negative": true_negative,
+        "semantic_false_negative": false_negative,
         "semantic_mismatches": mismatches,
     }
 

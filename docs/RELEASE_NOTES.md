@@ -21,14 +21,13 @@
 
 ### Model Performance
 
-
 # New Accuracy Metrics
-| Release | Curated grade-band accuracy | Semantic-aware grading |
-|---------|----------------------------:|-----------------------:|
-| v1.3.1  |                      44.00% |                    TBD |
-| v1.3.2  |                      68.00% |                    TBD |
-| v1.3.3  |                      68.00% |                 80.00% |
-| v1.3.4  |                      80.00% |                 80.00% |
+| Release | Curated grade-band accuracy | Precision | Recall |
+|---------|----------------------------:|----------:|-------:|
+| v1.3.1  |                      44.00% |       TBD |    TBD |
+| v1.3.2  |                      68.00% |       TBD |    TBD |
+| v1.3.3  |                      68.00% |       TBD |    TBD |
+| v1.3.4  |                      80.00% |    87.50% | 87.50% |
 
 ### Scope
 

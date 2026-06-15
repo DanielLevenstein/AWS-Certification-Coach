@@ -13,6 +13,13 @@ case "${1:-}" in
     ;;
 esac
 
+.venv/bin/python scripts/train_partial_answer_regressor.py \
+  --eval-mode training \
+  --output release/metrics/partial_answer_regressor.json \
+  --metrics-output release/metrics/training_metrics.json \
+  --history-output release/metrics/training_history.json \
+  "$@"
+
 .venv/bin/python scripts/plot_training_history.py \
   --history release/metrics/training_history.json \
   --output release/metrics/training_performance.png \
@@ -36,7 +43,7 @@ cp -p \
   "$CHART_RUN_DIR/"
 
 if [ -n "$RELEASE_TAG" ]; then
-  RELEASE_REPORT="release/${RELEASE_TAG}_release_report.md"
+  RELEASE_REPORT="release/release_${RELEASE_TAG}_release_report.md"
   mkdir -p release
   {
     printf '# Release %s Detailed Report\n\n' "$RELEASE_TAG"

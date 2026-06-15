@@ -45,15 +45,15 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "semantic_similarity.json").write_text(
-        '{"semantic_grade_accuracy": 0.8}',
+        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75}',
         encoding="utf-8",
     )
 
     markdown = render_release_metrics(metrics_dir)
 
-    assert "| Curated grade-band accuracy | Semantic-aware grading |" in markdown
-    assert "| 44.00% | 80.00% |" in markdown
-    assert "Generated-label regression metrics are still written for diagnostics" in markdown
+    assert "| Curated grade-band accuracy | Precision | Recall |" in markdown
+    assert "| 44.00% | 90.00% | 75.00% |" in markdown
+    assert "A/B and C/D as accepted answers and F as rejected" in markdown
 
 
 def test_semantic_similarity_recognizes_aliases_and_concepts():
