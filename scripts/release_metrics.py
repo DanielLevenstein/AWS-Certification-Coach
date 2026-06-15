@@ -14,28 +14,34 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("release/metrics/summary.md"))
     args = parser.parse_args()
 
-    training = _read(args.metrics_dir / "training_history.json")["checkpoints"]
-    coverage = _read(args.metrics_dir / "coverage.json")
-    complexity = _read(args.metrics_dir / "complexity.json")
+    markdown = render_release_metrics(args.metrics_dir)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(markdown, encoding="utf-8")
+    print(markdown, end="")
+
+
+def render_release_metrics(metrics_dir: Path) -> str:
+    training = _read(metrics_dir / "training_history.json")["checkpoints"]
+    coverage = _read(metrics_dir / "coverage.json")
+    complexity = _read(metrics_dir / "complexity.json")
     final = training[-1]
-    markdown = "\n".join(
+    return "\n".join(
         [
             "# Release Metrics",
             "",
-            "| Unit coverage | Average complexity | Maximum complexity | Final training MSE | Final training MAE | Curated grade-band accuracy |",
-            "| ---: | ---: | ---: | ---: | ---: | ---: |",
-            f"| {coverage['coverage']:.2%} | {complexity['average_complexity']:.2f} | "
-            f"{complexity['maximum_complexity']} | {final['mse']:.4f} | {final['mae']:.4f} | "
-            f"{final['curated_grade_accuracy']:.2%} |",
+            "| Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading | Generated-label MAE | Unit coverage | Average complexity | Maximum complexity |",
+            "| ---: | ---: | --- | ---: | ---: | ---: | ---: |",
+            f"| {final['curated_grade_accuracy']:.2%} | {final['mse']:.4f} | TBD | "
+            f"{final['mae']:.4f} | {coverage['coverage']:.2%} | "
+            f"{complexity['average_complexity']:.2f} | {complexity['maximum_complexity']} |",
             "",
             "Training curve: `training_performance.png`",
             "Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`",
             "Curated failure analysis: `curated_failure_report.md`",
+            "",
+            "Regression MSE/MAE measure numeric fit against generated/feedback labels; use curated grade-band accuracy as the primary release signal until semantic-aware grading is implemented.",
         ]
     ) + "\n"
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(markdown, encoding="utf-8")
-    print(markdown, end="")
 
 
 def _read(path: Path) -> dict[str, object]:

@@ -24,6 +24,10 @@
 | v1.1.2  | 99.01%   | 99.71%    | 98.44% | 1314          | 0.0099 | 0.0714 | 1314             | 694 | 2  | 607 | 11 |
 | v1.3.0  | 99.01%   | 99.71%    | 98.44% | 1314          | 0.0105 | 0.0729 | 1321             | 694 | 2  | 607 | 11 |
 
+# New Accuracy Metrics
+| Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading | Generated-label MAE | Unit coverage | Average complexity | Maximum complexity |
+|----------------------------:|-------------------:|------------------------|-------------------:|--------------:|-------------------:|-------------------:|
+|                      44.00% |             0.0107 | TBD                    |             0.0761 |        42.41% |               2.97 |                 11 |
 ### Scope
 
 Certifications:
