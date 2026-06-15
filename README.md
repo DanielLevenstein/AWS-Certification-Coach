@@ -8,7 +8,7 @@ AI study partner for AWS certification exams
 
 ## Goal
 
-AWS Certification Coach is a lightweight AI-powered study app for AWS certification practice. It presents pre-generated questions, evaluates learner answers with the trained local classifier or a configured LLM provider, and returns structured coaching feedback.
+AWS Certification Coach is a lightweight AI-powered study app for AWS certification practice. It presents pre-generated questions, evaluates learner answers with the trained local partial-credit regressor or a configured LLM provider, and returns structured coaching feedback.
 
 This project was based on a previous project called AWS-Documentation-Rag.
 This version intentionally removes the runtime RAG stack from the earlier prototype.
@@ -121,18 +121,18 @@ python scripts/generate_sample_training_artifacts.py
 python scripts/generate_app_question_artifacts.py --count 80
 ```
 
-Train the deployed answer classifier and enforce the 90% minimum gate:
+Train the deployed partial-credit regressor and enforce its MSE gate:
 
 ```bash
-python scripts/train_answer_classifier.py --min-accuracy 0.90
+python scripts/train_partial_answer_regressor.py
 ```
 
 The default training command uses `data/generated/questions_with_answers_generated.json`, which contains 100 self-authored freeform questions, original multiple-choice provenance, and generated answers spanning grades A through F.
 
-Train the partial-credit regression model and report mean squared error:
+Train the optional binary classifier and enforce the 90% minimum gate:
 
 ```bash
-python scripts/train_partial_answer_regressor.py
+python scripts/train_answer_classifier.py --min-accuracy 0.90
 ```
 
 Print a single release-note-friendly model performance summary:
@@ -170,12 +170,12 @@ The image includes the generated sample questions and trained model artifacts, s
 - Runtime: Docker
 - Port: use Render's `PORT` environment variable; the container defaults to `8501` for local runs.
 - Health check path: `/_stcore/health`
-- Default evaluator: `trained_classifier`
-- API key requirement: none for the default classifier path; set `OPENAI_API_KEY` only when using the OpenAI provider.
+- Default evaluator: `trained_regressor`
+- API key requirement: none for the default local regressor path; set `OPENAI_API_KEY` only when using the OpenAI provider.
 
 ## Evaluator Configuration
 
-V1 defaults to the trained classifier evaluator after `models/answer_classifier.json` has been generated.
+V1 defaults to the trained partial-credit evaluator backed by `models/partial_answer_regressor.json`. Its numeric prediction is the displayed score, and scores of 70 or higher pass.
 
 For LLM-based evaluation, use OpenAI with the configured default model:
 
