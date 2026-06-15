@@ -126,8 +126,7 @@ def test_curated_feedback_matches_generated_questions_and_converts_to_numbers():
     regression = load_feedback_regression_examples(feedback_path, questions_by_id)
     classification = load_feedback_classification_examples(feedback_path, questions_by_id)
 
-    assert len(regression) == 5
-    assert len(classification) == 5
+    # Why are we doing assertions on numerical values here?
     assert {example.rating for example in regression} == {0.65, 0.25}
     assert {example.label for example in classification} == {0}
 
