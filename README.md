@@ -73,21 +73,6 @@ Certifications:
 - Cloud Practitioner
 - Solutions Architect Associate
 
-Domains:
-
-- Analytics
-- Application Integration
-- Billing
-- Compute
-- Database
-- Governance
-- Integration
-- Networking
-- Operations
-- Resilient Architectures
-- Security
-- Storage
-
 Difficulty:
 
 - Easy
