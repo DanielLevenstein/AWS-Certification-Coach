@@ -22,18 +22,15 @@ def main() -> None:
 
 def render_release_metrics(metrics_dir: Path) -> str:
     training = _read(metrics_dir / "training_history.json")["checkpoints"]
-    coverage = _read(metrics_dir / "coverage.json")
-    complexity = _read(metrics_dir / "complexity.json")
     final = training[-1]
     return "\n".join(
         [
             "# Release Metrics",
             "",
-            "| Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading | Generated-label MAE | Unit coverage | Average complexity | Maximum complexity |",
-            "| ---: | ---: | --- | ---: | ---: | ---: | ---: |",
+            "| Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading | Generated-label MAE |",
+            "| ---: | ---: | --- | ---: |",
             f"| {final['curated_grade_accuracy']:.2%} | {final['mse']:.4f} | TBD | "
-            f"{final['mae']:.4f} | {coverage['coverage']:.2%} | "
-            f"{complexity['average_complexity']:.2f} | {complexity['maximum_complexity']} |",
+            f"{final['mae']:.4f} |",
             "",
             "Training curve: `training_performance.png`",
             "Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`",

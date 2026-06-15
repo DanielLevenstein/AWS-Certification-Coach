@@ -42,11 +42,6 @@ def test_release_metrics_puts_accuracy_mse_and_semantic_stub_first(tmp_path: Pat
         '{"checkpoints": [{"epoch": 1, "mse": 0.1234, "mae": 0.5678, "curated_grade_accuracy": 0.44}]}',
         encoding="utf-8",
     )
-    (metrics_dir / "coverage.json").write_text('{"coverage": 0.9}', encoding="utf-8")
-    (metrics_dir / "complexity.json").write_text(
-        '{"average_complexity": 2.5, "maximum_complexity": 7}',
-        encoding="utf-8",
-    )
 
     markdown = render_release_metrics(metrics_dir)
 
@@ -54,5 +49,5 @@ def test_release_metrics_puts_accuracy_mse_and_semantic_stub_first(tmp_path: Pat
         "| Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading |"
         in markdown
     )
-    assert "| 44.00% | 0.1234 | TBD |" in markdown
+    assert "| 44.00% | 0.1234 | TBD | 0.5678 |" in markdown
     assert "use curated grade-band accuracy as the primary release signal" in markdown

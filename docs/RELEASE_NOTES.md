@@ -20,10 +20,10 @@
 
 
 # New Accuracy Metrics
-| Release | Curated grade-band accuracy | Generated-label MSE | Generated-label MAE | 
-|---------|----------------------------:|--------------------:|--------------------:|
-| v1.3.1  |                      44.00% |              0.0107 |              0.0761 |  
-| v1.3.2  |                      68.00% |              0.0027 |              0.0362 |   
+| Release | Curated grade-band accuracy | Generated-label MSE | Semantic-aware grading | Generated-label MAE |
+|---------|----------------------------:|--------------------:|------------------------|--------------------:|
+| v1.3.1  |                      44.00% |              0.0107 | TBD                    |              0.0761 |
+| v1.3.2  |                      68.00% |              0.0027 | TBD                    |              0.0362 |
 ### Scope
 
 Certifications:

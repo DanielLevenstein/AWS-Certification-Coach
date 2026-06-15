@@ -124,8 +124,10 @@ Run rubric adherence and held-out model evaluation separately:
 Generate training history, an SVG learning curve, code coverage, cyclomatic complexity, and the consolidated release report:
 
 ```bash
-./run_release_tests.sh
+./run_release_tests.sh v1.3.2
 ```
+
+The release helper saves the curated accuracy chart as `release/<tag>_accuracy.png`.
 
 Retrain the partial-credit model and refresh only its graphical learning curve:
 
