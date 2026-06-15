@@ -14,9 +14,10 @@
 | v1.1.3   | Added feedback package to source control and switched UI to show original question with answers hidden.  |
 | v1.1.3.1 | Removed duplicate question from right side panel.                                                        |
 | v1.3.0   | Configured application to use the partial answer classifier instead of the binary classification model.  |
-| v1.3.1 | Test Case Redesign base accuracy 44% |
-| v1.3.3 | Adds deterministic semantic-aware curated grading accuracy. |
-| v1.3.4 | Swaps app scoring from trained regression to semantic-aware grading. |
+| v1.3.1   | Test Case Redesign base accuracy 44% |
+| v1.3.3   | Adds deterministic semantic-aware curated grading accuracy. |
+| v1.3.4   | Swaps app scoring from trained regression to semantic-aware grading. |
+| v1.3.4.1 | publish md report with release notes | 
 
 ### Model Performance
 
@@ -28,6 +29,7 @@
 | v1.3.2  |                      68.00% |                    TBD |
 | v1.3.3  |                      68.00% |                 80.00% |
 | v1.3.4  |                      80.00% |                 80.00% |
+
 ### Scope
 
 Certifications:

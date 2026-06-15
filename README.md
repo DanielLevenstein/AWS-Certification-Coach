@@ -132,11 +132,11 @@ The release helper saves the curated accuracy chart as `release/<tag>_accuracy.p
 Retrain the partial-credit model and refresh only its graphical learning curve:
 
 ```bash
-./run_training_graph.sh
+./run_training_graph.sh v1.3.4.1
 ```
 
 The pandas/Matplotlib graphs are written to `release/metrics/training_performance.png` and `release/metrics/curated_grade_accuracy.png`; curated accuracy compares the three bands `A/B`, `C/D`, and `F`. The underlying checkpoint values are stored in `release/metrics/training_history.json`.
-Detailed failing questions, feature contributions, label conflicts, and suspected causes are written to `release/metrics/curated_failure_report.md`. Each `run_training_graph.sh` run also preserves the generated graphs, metrics, model checkpoint, and failure report under a timestamped `data/charts/` directory.
+Detailed failing questions, feature contributions, label conflicts, and suspected causes are written to `release/metrics/curated_failure_report.md`. When a tag is supplied, `run_training_graph.sh` also publishes `release/<tag>_release_report.md`. Each run preserves the generated graphs, metrics, model checkpoint, and reports under a timestamped `data/charts/` directory.
 
 Regenerate local training, holdout, and app sample artifacts:
 

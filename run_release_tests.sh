@@ -13,7 +13,7 @@ fi
 
 RELEASE_TAG="$1"
 case "$RELEASE_TAG" in
-  v[0-9]*.[0-9]*.[0-9]*) ;;
+  v[0-9]*.[0-9]*.[0-9]* | v[0-9]*.[0-9]*.[0-9]*.[0-9]*) ;;
   *)
     echo "Release tag must look like v1.3.2; received: $RELEASE_TAG" >&2
     exit 2
