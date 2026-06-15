@@ -24,18 +24,6 @@ There is no document ingestion, FAISS index, vector database, or embedding model
 
 Certification content is generated and reviewed offline, then served from a simple question repository.
 
-### UX Flow
-
-1. The learner opens the Streamlit app.
-2. The learner selects certification, domain, and difficulty filters.
-3. The app starts or resets a `QuizSession`.
-4. The app displays the current `Question`.
-5. The learner submits a free-text answer.
-6. `EvaluationService` builds a prompt with `EvaluationPromptBuilder`.
-7. The selected evaluator provider returns JSON feedback.
-8. `EvaluationResponseParser` converts the response into an `EvaluationResult`.
-9. The UI displays the result and records an `AnsweredQuestion`.
-10. The learner advances to the next question until the filtered set is complete.
 
 ## Training Data Generation
 
@@ -74,9 +62,11 @@ python scripts/train_partial_answer_regressor.py
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | v1.1.0  | Separates the app-facing question bank from training labels,<br /> expands the app bank to 80 AWS-docs-grounded questions and adds stricter wrong-service answer rejection. |
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions, <br />trained answer classifier, and partial-credit regression metrics.               |
-| v1.3.1 | Test Case Redesign base accuracy 44% |
+| v1.3.1 | Test Case Redesign: Initial Accuracy 44% |
+| v1.3.4  | Semantic Accuracy Update: New Accuracy 80% |
 
-#### ```Scope
+
+#### Scope
 
 Certifications:
 
