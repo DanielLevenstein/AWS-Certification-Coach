@@ -39,6 +39,12 @@ class UserFeedbackRepository:
             rows.append(record)
             self._write(rows)
 
+    def export_json(self) -> str:
+        """Return the stored feedback artifact as formatted JSON."""
+        with self._lock:
+            rows = self._read()
+        return json.dumps(rows, indent=2) + "\n"
+
     def _read(self) -> list[dict[str, Any]]:
         if not self.path.exists():
             return []

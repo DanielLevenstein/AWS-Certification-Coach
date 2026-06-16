@@ -206,6 +206,7 @@ tempCodeRunnerFile.py
 
 # Generated training and application data
 /data/
+/scripts/data/
 /metrics/
 /release/metrics/
 

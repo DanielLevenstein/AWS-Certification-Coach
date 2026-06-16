@@ -72,6 +72,14 @@ def test_feedback_repository_appends_to_existing_v1_records(tmp_path: Path):
     assert rows[0]["original_multiple_choice"]["correct_option_ids"] == ["A"]
 
 
+def test_feedback_repository_exports_empty_json_when_artifact_is_missing(tmp_path: Path):
+    path = tmp_path / "generated" / "user_feedback.v1.json"
+
+    exported = UserFeedbackRepository(path).export_json()
+
+    assert exported == "[]\n"
+
+
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):
     path = tmp_path / "feedback.json"
     path.write_text(

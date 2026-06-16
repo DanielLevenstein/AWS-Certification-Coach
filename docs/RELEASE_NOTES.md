@@ -37,7 +37,7 @@ Difficulty:
 - Medium
 
 <!-- release-metrics:start -->
-# Release Metrics
+# Latest Release Metrics
 
 | Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |
 |:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|

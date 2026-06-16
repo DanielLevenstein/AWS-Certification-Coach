@@ -22,6 +22,7 @@ from aws_certification_coach.ratings import LETTER_RATINGS, score_to_letter
 
 QUESTIONS_PATH = ROOT_DIR / "data" / "questions" / "sample_questions.json"
 USER_FEEDBACK_PATH = ROOT_DIR / "data" / "generated" / "user_feedback.v1.json"
+SHOW_FEEDBACK_ENV = "SHOW_FEEDBACK"
 
 
 @st.cache_resource
@@ -65,6 +66,9 @@ def main() -> None:
 
     if "quiz_session" not in st.session_state:
         _reset_session(questions)
+
+    if _env_enabled(SHOW_FEEDBACK_ENV):
+        _render_feedback_download()
 
     if st.sidebar.button("Start / Reset"):
         _reset_session(questions)
@@ -112,7 +116,7 @@ def main() -> None:
             st.write("Detailed answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)
-            if os.environ.get("SHOW_FEEDBACK"):
+            if _env_enabled(SHOW_FEEDBACK_ENV):
                 _render_feedback_link(question, user_answer, result.score)
         with source_column:
             _render_original_multiple_choice(question.original_multiple_choice)
@@ -176,10 +180,23 @@ def _render_feedback_form(question: Question, user_answer: str, score: int) -> N
             question=question,
             answer_given=user_answer,
             rating_given=rating_given,
-           correct_rating=correct_rating,
+            correct_rating=correct_rating,
         )
         submitted.add(question_key)
         st.success("Thanks. Your grade correction was saved for future training.")
+
+
+def _render_feedback_download() -> None:
+    st.sidebar.download_button(
+        "Download feedback",
+        data=get_feedback_repository().export_json(),
+        file_name=USER_FEEDBACK_PATH.name,
+        mime="application/json",
+    )
+
+
+def _env_enabled(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in {"1", "true", "yes", "on"}
 
 
 def _question_key(question: Question) -> str:
