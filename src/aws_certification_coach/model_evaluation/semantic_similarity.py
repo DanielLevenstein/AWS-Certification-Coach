@@ -9,6 +9,7 @@ from pathlib import Path
 from aws_certification_coach.domain import Question
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
+from aws_certification_coach.training.features import correct_answer_text
 
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
@@ -71,7 +72,7 @@ def evaluate_semantic_curated_answers(
                 "row": index,
                 "question": question.question,
                 "user_answer": example.answer,
-                "correct_answer": question.reference_answer,
+                "correct_answer": correct_answer_text(question),
                 "expected_rating": letter_to_numeric(expected),
                 "expected_band": expected_band,
                 "actual_band": actual_band,
@@ -105,7 +106,7 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
     if _service_is_covered(question, answer):
         return round(80 + (15 * concept_coverage))
 
-    reference_tokens = set(_tokens(question.reference_answer)) - GENERIC_TOKENS
+    reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
     answer_reference_overlap = len(content_tokens & reference_tokens) / max(1, len(content_tokens))
     if concept_coverage >= 0.5:
         return round(63 + (18 * concept_coverage))
@@ -124,7 +125,7 @@ def _service_is_covered(question: Question, answer: str) -> bool:
 def _service_aliases(question: Question) -> set[str]:
     correct_options, _incorrect_options = _option_texts(question)
     values = {_strip_leading_use(option) for option in correct_options}
-    values.add(_strip_leading_use(question.reference_answer.split(" to ")[0]))
+    values.add(_strip_leading_use(correct_answer_text(question)))
     if question.key_concepts:
         values.add(_normalized(question.key_concepts[0]))
 

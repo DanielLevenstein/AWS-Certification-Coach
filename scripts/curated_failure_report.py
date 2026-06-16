@@ -14,7 +14,7 @@ from aws_certification_coach.evaluation.trained_classifier_provider import Seman
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
-from aws_certification_coach.training.features import AnswerFeatureExtractor
+from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 
 
 def build_failure_report(
@@ -47,7 +47,7 @@ def build_failure_report(
             {
                 "row": index,
                 "question": question.question,
-                "correct_answer": question.reference_answer,
+                "correct_answer": correct_answer_text(question),
                 "user_answer": example.answer,
                 "expected_rating": letter_to_numeric(expected),
                 "expected_band": expected_band,

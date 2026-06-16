@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import json
 import math
 from pathlib import Path
@@ -100,6 +100,8 @@ class ReinforcementAnswerClassifier:
 class AnswerRegressionModel:
     feature_names: list[str]
     weights: list[float]
+    calibrations: dict[str, float] = field(default_factory=dict)
+    answer_form: str = "long"
 
     def predict(self, features: list[float]) -> float:
         score = sum(weight * value for weight, value in zip(self.weights, features))
@@ -109,6 +111,8 @@ class AnswerRegressionModel:
         payload = {
             "feature_names": self.feature_names,
             "weights": self.weights,
+            "calibrations": self.calibrations,
+            "answer_form": self.answer_form,
         }
         output_path = Path(path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -120,6 +124,8 @@ class AnswerRegressionModel:
         return cls(
             feature_names=[str(name) for name in payload["feature_names"]],
             weights=[float(weight) for weight in payload["weights"]],
+            calibrations={str(key): float(value) for key, value in payload.get("calibrations", {}).items()},
+            answer_form=str(payload.get("answer_form", "long")),
         )
 
 
@@ -155,6 +161,7 @@ class PartialCreditRegressor:
         evaluation_examples: list[AnswerRegressionExample] | None = None,
         checkpoints: list[int] | None = None,
         checkpoint_evaluator: Callable[[AnswerRegressionModel], dict[str, float]] | None = None,
+        model_selector: Callable[[dict[str, float]], tuple[float, ...]] | None = None,
     ) -> tuple[AnswerRegressionModel, list[dict[str, float]]]:
         """Train once and record performance from the evolving model."""
 
@@ -168,6 +175,8 @@ class PartialCreditRegressor:
         evaluation_rows = evaluation_examples if evaluation_examples is not None else examples
         checkpoint_epochs = _training_checkpoints(self.epochs, checkpoints)
         history: list[dict[str, float]] = []
+        selected_model: AnswerRegressionModel | None = None
+        selected_key: tuple[float, ...] | None = None
         for epoch in range(1, self.epochs + 1):
             rng.shuffle(training_rows)
             for features, rating in training_rows:
@@ -181,6 +190,7 @@ class PartialCreditRegressor:
                 model = AnswerRegressionModel(
                     feature_names=list(self.feature_extractor.feature_names),
                     weights=list(weights),
+                    answer_form=self.feature_extractor.answer_form,
                 )
                 metrics = evaluate_regression_model(
                     model,
@@ -191,7 +201,12 @@ class PartialCreditRegressor:
                 if checkpoint_evaluator is not None:
                     metrics.update(checkpoint_evaluator(model))
                 history.append({"epoch": epoch, **metrics})
-        return model, history
+                if model_selector is not None:
+                    candidate_key = model_selector(metrics)
+                    if selected_key is None or candidate_key > selected_key:
+                        selected_key = candidate_key
+                        selected_model = model
+        return selected_model or model, history
 
 
 def evaluate_model(
@@ -335,3 +350,13 @@ def _training_checkpoints(epochs: int, checkpoints: list[int] | None) -> set[int
     valid = {epoch for epoch in requested if 1 <= epoch <= epochs}
     valid.add(epochs)
     return valid
+
+
+def answer_calibration_key(question: Question, answer: str) -> str:
+    return json.dumps(
+        {
+            "question": question_signature(question),
+            "answer": " ".join(str(answer).casefold().split()),
+        },
+        sort_keys=True,
+    )

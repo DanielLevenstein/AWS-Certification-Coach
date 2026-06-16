@@ -3,6 +3,7 @@ from pathlib import Path
 from aws_certification_coach.release_metrics.complexity import measure_complexity
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
+from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics
 
@@ -44,6 +45,10 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         '{"checkpoints": [{"epoch": 1, "mse": 0.1234, "mae": 0.5678, "curated_grade_accuracy": 0.44}]}',
         encoding="utf-8",
     )
+    (metrics_dir / "training_metrics.json").write_text(
+        '{"answer_form": "long", "saved_model": {"curated_grade_accuracy": 0.96, "calibration_count": 18}}',
+        encoding="utf-8",
+    )
     (metrics_dir / "semantic_similarity.json").write_text(
         '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75}',
         encoding="utf-8",
@@ -51,8 +56,11 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
 
     markdown = render_release_metrics(metrics_dir)
 
-    assert "| Curated grade-band accuracy | Precision | Recall |" in markdown
-    assert "| 44.00% | 90.00% | 75.00% |" in markdown
+    assert "| Saved model curated accuracy | Training checkpoint accuracy | Semantic diagnostic accuracy | Semantic precision | Semantic recall |" in markdown
+    assert "| 96.00% | 44.00% | 80.00% | 90.00% | 75.00% |" in markdown
+    assert "Saved model answer form: `long`" in markdown
+    assert "Saved model calibration count: `18`" in markdown
+    assert "Saved model accuracy is the release gate" in markdown
     assert "A/B and C/D as accepted answers and F as rejected" in markdown
 
 
@@ -76,3 +84,74 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
 
     assert semantic_similarity_score(question, "KMS manages encryption keys.") >= 80
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
+
+
+def test_correct_answer_text_uses_multiple_choice_value_without_answer_cue():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Which service manages encryption keys?",
+        reference_answer="Use AWS KMS to create and manage encryption keys.",
+        key_concepts=["AWS KMS"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service manages encryption keys?",
+            options=[
+                MultipleChoiceOption("A", "A. Use AWS KMS."),
+                MultipleChoiceOption("B", "B. Use Amazon S3."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    assert correct_answer_text(question) == "AWS KMS"
+
+
+def test_answer_feature_extractor_defaults_to_long_form_answer():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Which service manages encryption keys?",
+        reference_answer="Use AWS KMS to create and manage encryption keys.",
+        key_concepts=["AWS KMS"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service manages encryption keys?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS KMS."),
+                MultipleChoiceOption("B", "Use Amazon S3."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+    extractor = AnswerFeatureExtractor()
+
+    features = dict(zip(extractor.feature_names, extractor.extract(question, "AWS KMS")))
+
+    assert features["reference_jaccard"] > 0
+    assert features["short_answer_jaccard"] == 0
+
+
+def test_answer_feature_extractor_can_enable_short_form_answer():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Which service manages encryption keys?",
+        reference_answer="Use AWS KMS to create and manage encryption keys.",
+        key_concepts=["AWS KMS"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service manages encryption keys?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS KMS."),
+                MultipleChoiceOption("B", "Use Amazon S3."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+    extractor = AnswerFeatureExtractor(answer_form="short")
+
+    features = dict(zip(extractor.feature_names, extractor.extract(question, "AWS KMS")))
+
+    assert features["reference_jaccard"] == 0
+    assert features["short_answer_jaccard"] > 0

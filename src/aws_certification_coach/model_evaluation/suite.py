@@ -7,7 +7,7 @@ from pathlib import Path
 
 from aws_certification_coach.evaluation.factory import build_evaluation_service
 from aws_certification_coach.evaluation.service import EvaluationService
-from aws_certification_coach.evaluation.trained_classifier_provider import SemanticAwareEvaluatorProvider
+from aws_certification_coach.evaluation.trained_classifier_provider import TrainedRegressionEvaluatorProvider
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.answer_classifier import (
@@ -19,6 +19,7 @@ from aws_certification_coach.training.dataset import (
     load_answer_regression_examples,
     load_feedback_regression_examples,
 )
+from aws_certification_coach.training.features import correct_answer_text
 
 
 def run_model_evaluation(
@@ -67,7 +68,7 @@ def evaluate_curated_answers(
                 "row": index,
                 "question": example.question.question,
                 "user_answer": example.answer,
-                "correct_answer": example.question.reference_answer,
+                "correct_answer": correct_answer_text(example.question),
                 "expected_rating": letter_to_numeric(expected),
                 "expected_band": expected_band,
                 "actual_band": actual_band,
@@ -89,10 +90,9 @@ def evaluate_curated_model(
     curated_path: Path,
     questions: list,
 ) -> dict[str, float]:
-    del model
     rows = json.loads(curated_path.read_text(encoding="utf-8"))
     examples = load_feedback_regression_examples(curated_path, questions)
-    service = EvaluationService(SemanticAwareEvaluatorProvider())
+    service = EvaluationService(TrainedRegressionEvaluatorProvider(model))
     matches = 0
     for row, example in zip(rows, examples, strict=True):
         result = service.evaluate(example.question, example.answer)

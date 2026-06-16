@@ -8,6 +8,8 @@ from aws_certification_coach.domain import Question
 
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+GENERIC_TOKENS = {"amazon", "aws", "classes", "data", "feature", "service", "the", "use"}
+AMBIGUOUS_TOKENS = {"route", "s3"}
 
 
 class AnswerFeatureExtractor:
@@ -18,6 +20,10 @@ class AnswerFeatureExtractor:
         "reference_jaccard",
         "reference_answer_containment",
         "answer_reference_containment",
+        "short_answer_jaccard",
+        "short_answer_containment",
+        "answer_short_answer_containment",
+        "short_answer_length_ratio",
         "correct_option_exact",
         "correct_option_jaccard",
         "correct_option_answer_containment",
@@ -26,24 +32,45 @@ class AnswerFeatureExtractor:
         "explanation_exact",
         "explanation_jaccard",
         "answer_length_ratio",
+        "correct_distinctive_token_coverage",
+        "has_correct_distinctive_token",
+        "incorrect_distinctive_token_coverage",
     ]
+
+    def __init__(self, answer_form: str = "long") -> None:
+        if answer_form not in {"long", "short", "both"}:
+            raise ValueError("answer_form must be one of: long, short, both")
+        self.answer_form = answer_form
 
     def extract(self, question: Question, answer: str) -> list[float]:
         answer_tokens = _tokens(answer)
         reference_tokens = _tokens(question.reference_answer)
+        short_answer_tokens = _tokens(correct_answer_text(question))
         correct_option_texts, incorrect_option_texts = _option_texts(question)
+        correct_answers = [correct_answer_text(question)]
+        correct_distinctive_tokens = _distinctive_tokens(correct_answer_text(question))
+        use_long = self.answer_form in {"long", "both"}
+        use_short = self.answer_form in {"short", "both"}
         correct_jaccard = max((_jaccard(answer_tokens, _tokens(text)) for text in correct_option_texts), default=0.0)
         incorrect_jaccard = max((_jaccard(answer_tokens, _tokens(text)) for text in incorrect_option_texts), default=0.0)
         correct_containment = max((_containment(_tokens(text), answer_tokens) for text in correct_option_texts), default=0.0)
         incorrect_containment = max((_containment(_tokens(text), answer_tokens) for text in incorrect_option_texts), default=0.0)
+        incorrect_distinctive_coverage = max(
+            (_containment(_distinctive_tokens(text), answer_tokens) for text in incorrect_option_texts),
+            default=0.0,
+        )
         explanation = question.original_multiple_choice.explanation if question.original_multiple_choice else ""
         explanation_tokens = _tokens(explanation)
         return [
             1.0,
-            _jaccard(answer_tokens, reference_tokens),
-            _containment(reference_tokens, answer_tokens),
-            _containment(answer_tokens, reference_tokens),
-            1.0 if _normalized(answer) in {_normalized(text) for text in correct_option_texts} else 0.0,
+            _jaccard(answer_tokens, reference_tokens) if use_long else 0.0,
+            _containment(reference_tokens, answer_tokens) if use_long else 0.0,
+            _containment(answer_tokens, reference_tokens) if use_long else 0.0,
+            _jaccard(answer_tokens, short_answer_tokens) if use_short else 0.0,
+            _containment(short_answer_tokens, answer_tokens) if use_short else 0.0,
+            _containment(answer_tokens, short_answer_tokens) if use_short else 0.0,
+            min(2.0, len(answer_tokens) / max(1, len(short_answer_tokens))) if use_short else 0.0,
+            1.0 if use_short and _normalized_answer(answer) in {_normalized_answer(text) for text in correct_answers} else 0.0,
             correct_jaccard,
             correct_containment,
             incorrect_jaccard,
@@ -51,6 +78,9 @@ class AnswerFeatureExtractor:
             1.0 if explanation and _normalized(answer) == _normalized(explanation) else 0.0,
             _jaccard(answer_tokens, explanation_tokens),
             min(2.0, len(answer_tokens) / max(1, len(reference_tokens))),
+            _containment(correct_distinctive_tokens, answer_tokens) if use_short else 0.0,
+            1.0 if use_short and correct_distinctive_tokens & answer_tokens else 0.0,
+            incorrect_distinctive_coverage,
         ]
 
 
@@ -64,8 +94,27 @@ def _option_texts(question: Question) -> tuple[list[str], list[str]]:
     return correct, incorrect
 
 
+def correct_answer_text(question: Question) -> str:
+    """Return the concise correct answer text used for model training."""
+
+    original = question.original_multiple_choice
+    if original is None:
+        return _clean_answer_text(question.reference_answer)
+    correct_ids = set(original.correct_option_ids)
+    correct_options = [
+        _clean_answer_text(option.text)
+        for option in original.options
+        if option.option_id in correct_ids
+    ]
+    return "; ".join(option for option in correct_options if option) or _clean_answer_text(question.reference_answer)
+
+
 def _tokens(value: str) -> set[str]:
     return set(TOKEN_PATTERN.findall(value.casefold()))
+
+
+def _distinctive_tokens(value: str) -> set[str]:
+    return _tokens(value) - GENERIC_TOKENS - AMBIGUOUS_TOKENS
 
 
 def _jaccard(left: set[str], right: set[str]) -> float:
@@ -82,3 +131,13 @@ def _containment(required: set[str], candidate: set[str]) -> float:
 
 def _normalized(value: str) -> str:
     return " ".join(TOKEN_PATTERN.findall(value.casefold()))
+
+
+def _normalized_answer(value: str) -> str:
+    return _normalized(_clean_answer_text(value))
+
+
+def _clean_answer_text(value: str) -> str:
+    cleaned = re.sub(r"^\s*[A-Z]\s*[\).:-]\s*", "", value.strip(), flags=re.IGNORECASE)
+    cleaned = re.sub(r"^use\s+", "", cleaned, flags=re.IGNORECASE)
+    return cleaned.rstrip(".").strip()
