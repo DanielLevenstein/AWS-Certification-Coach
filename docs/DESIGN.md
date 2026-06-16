@@ -52,7 +52,7 @@ The model-evaluation suite contains rubric adherence against curated answers and
 This should be a package of python packages which evaluate the question answer distribution of training data.
 There is already an existing file called generate_release_metrics.sh that implements the first iteration of this, but it depends on the unit test run.
 
-Release metrics run independently with `./generate_metrics.sh` or `.venv/bin/python test_suites.py release`. Generated JSON, Markdown, and SVG artifacts are written under `release/metrics/`.
+Release metrics run independently with `./generate_metrics.sh` or `.venv/bin/python test_suites.py release`. Generated JSON, Markdown, and chart artifacts are written under a timestamped root-level `metrics/<timestamp>/` directory.
 
 ####  Complexity Metrics and Code Coverage
 

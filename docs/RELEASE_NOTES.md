@@ -11,10 +11,12 @@
 | v1.4.1  | Accuracy went down after switching to long form answer format                                                  |
 | v1.4.3  | Include both long and short form answers in training data                                                      |
 | v1.4.4  | Switch back to long form answers in training data                                                              |
-| Next    | Updated accuracy release script to ensure consistent metrics                                                   |
+| v1.5.0  | Updated accuracy release script to ensure consistent metrics                                                   |
+| v1.5.1  | Fix output of semantic metric chart, and move release metrics to folder with timestamps saved.                 |
+
 ### Model Performance
 
-# New Accuracy Metrics
+# Old Accuracy Metrics
 | Release | Accuracy | Precision | Recall |
 |---------|---------:|----------:|-------:|
 | v1.3.1  |   44.00% |       TBD |    TBD |
@@ -27,9 +29,12 @@
 | v1.4.4  |   68.00% |    84.62% | 68.75% |
 
 
-| Release     | Semantic Accuracy | Training Accuracy | Semantic Diagnostic accuracy | Semantic Precision | Semantic Recall |
-|-------------|------------------:|------------------:|-----------------------------:|-------------------:|----------------:|
-| v1.5 Schema |            96.00% |            68.00% |                       68.00% |             84.62% |          68.75% |
+# Release Metrics
+
+| Release | Saved Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |
+|:--------|---------------:|------------------:|------------------:|-------------------:|----------------:|
+| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |
+| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |
 
 ### Scope
 
@@ -38,22 +43,25 @@ Certifications:
 - Cloud Practitioner
 - Solutions Architect Associate
 
-Domains:
-
-- Analytics
-- Application Integration
-- Billing
-- Compute
-- Database
-- Governance
-- Integration
-- Networking
-- Operations
-- Resilient Architectures
-- Security
-- Storage
-
 Difficulty:
 
 - Easy
 - Medium
+
+<!-- release-metrics:start -->
+# Latest Release Metrics
+
+| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |
+|:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|
+| v1.5.2 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% |
+Saved model answer form: `long`
+Saved model calibration count: `18`
+
+Training curve: `training_performance.png`
+Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`
+Semantic diagnostic accuracy: `semantic_accuracy.png`
+Curated failure analysis: `curated_failure_report.md`
+
+Saved model accuracy is the release gate for the trained regressor. Semantic metrics are diagnostic only.
+Precision and recall treat A/B and C/D as accepted answers and F as rejected.
+<!-- release-metrics:end -->

@@ -102,7 +102,7 @@ Run the release suite and save a tagged accuracy chart:
 ./run_release_tests.sh v1.3.4
 ```
 
-The release helper saves the curated accuracy chart as `release/<tag>_accuracy.png`.
+The release helper saves the semantic diagnostic accuracy chart as `release/<tag>_accuracy.png`.
 
 Refresh the training graph, curated failure report, semantic metrics, and detailed tagged report:
 
@@ -110,7 +110,7 @@ Refresh the training graph, curated failure report, semantic metrics, and detail
 ./run_training_graph.sh v1.3.4.1
 ```
 
-The pandas/Matplotlib graphs are written to `release/metrics/training_performance.png` and `release/metrics/curated_grade_accuracy.png`. Detailed failing questions, label conflicts, and suspected causes are written to `release/metrics/curated_failure_report.md`. When a tag is supplied, `run_training_graph.sh` also publishes `release/release_<tag>_release_report.md`. Each run preserves the generated graphs, metrics, model checkpoint, and reports under a timestamped `data/charts/` directory.
+The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. When a tag is supplied, `run_training_graph.sh` also publishes `release/release_<tag>_release_report.md`.
 
 Regenerate local training, holdout, and app sample artifacts:
 

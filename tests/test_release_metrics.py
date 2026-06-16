@@ -5,7 +5,8 @@ from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQ
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.plot_training_history import plot_training_history
-from scripts.release_metrics import render_release_metrics
+from scripts.release_metrics import render_release_metrics, update_release_notes
+from scripts.semantic_similarity_evaluation import _saved_model_accuracy, plot_semantic_accuracy
 
 
 def test_complexity_reports_branching_functions(tmp_path: Path):
@@ -38,6 +39,47 @@ def test_training_graph_writes_png_from_checkpoint_json(tmp_path: Path):
     assert accuracy_output.read_bytes().startswith(b"\x89PNG")
 
 
+def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
+    output = tmp_path / "semantic_accuracy.png"
+
+    plot_semantic_accuracy(
+        {
+            "semantic_grade_accuracy": 0.8,
+            "semantic_precision": 0.9,
+            "semantic_recall": 0.75,
+        },
+        output,
+    )
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
+def test_semantic_accuracy_chart_accepts_saved_model_accuracy(tmp_path: Path):
+    output = tmp_path / "semantic_accuracy.png"
+
+    plot_semantic_accuracy(
+        {
+            "semantic_grade_accuracy": 0.8,
+            "semantic_precision": 0.9,
+            "semantic_recall": 0.75,
+        },
+        output,
+        saved_model_accuracy=0.96,
+    )
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
+def test_saved_model_accuracy_reads_training_metrics(tmp_path: Path):
+    training_metrics = tmp_path / "training_metrics.json"
+    training_metrics.write_text(
+        '{"saved_model": {"curated_grade_accuracy": 0.96}}',
+        encoding="utf-8",
+    )
+
+    assert _saved_model_accuracy(training_metrics) == 0.96
+
+
 def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"
     metrics_dir.mkdir()
@@ -54,14 +96,30 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
 
-    markdown = render_release_metrics(metrics_dir)
+    markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
 
-    assert "| Saved model curated accuracy | Training checkpoint accuracy | Semantic diagnostic accuracy | Semantic precision | Semantic recall |" in markdown
-    assert "| 96.00% | 44.00% | 80.00% | 90.00% | 75.00% |" in markdown
+    assert "| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |" in markdown
+    assert "| v1.5 Schema | 96.00% | 44.00% | 80.00% | 90.00% | 75.00% |" in markdown
     assert "Saved model answer form: `long`" in markdown
     assert "Saved model calibration count: `18`" in markdown
     assert "Saved model accuracy is the release gate" in markdown
+    assert "Semantic diagnostic accuracy: `semantic_accuracy.png`" in markdown
     assert "A/B and C/D as accepted answers and F as rejected" in markdown
+
+
+def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):
+    release_notes = tmp_path / "RELEASE_NOTES.md"
+    release_notes.write_text("# Release Notes\n\nExisting notes.\n", encoding="utf-8")
+    markdown = "# Release Metrics\n\n| Release | Semantic Accuracy |\n|:--------|------------------:|\n| v1 | 96.00% |\n"
+
+    update_release_notes(release_notes, markdown)
+    update_release_notes(release_notes, markdown.replace("96.00%", "97.00%"))
+
+    content = release_notes.read_text(encoding="utf-8")
+    assert content.count("<!-- release-metrics:start -->") == 1
+    assert "Existing notes." in content
+    assert "97.00%" in content
+    assert "96.00%" not in content
 
 
 def test_semantic_similarity_recognizes_aliases_and_concepts():

@@ -6,6 +6,7 @@ if [ ! -x .venv/bin/python ]; then
 fi
 
 RELEASE_TAG=""
+METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
 case "${1:-}" in
   v[0-9]*.[0-9]*.[0-9]* | v[0-9]*.[0-9]*.[0-9]*.[0-9]*)
     RELEASE_TAG="$1"
@@ -15,45 +16,38 @@ esac
 
 .venv/bin/python scripts/train_answer_accuracy.py \
   --eval-mode training \
-  --output release/metrics/answer_regressor_model.json \
-  --metrics-output release/metrics/training_metrics.json \
-  --history-output release/metrics/training_history.json \
+  --output "$METRICS_DIR/answer_regressor_model.json" \
+  --metrics-output "$METRICS_DIR/training_metrics.json" \
+  --history-output "$METRICS_DIR/training_history.json" \
   "$@"
 
 .venv/bin/python scripts/plot_training_history.py \
-  --history release/metrics/training_history.json \
-  --output release/metrics/training_performance.png \
-  --accuracy-output release/metrics/curated_grade_accuracy.png
+  --history "$METRICS_DIR/training_history.json" \
+  --output "$METRICS_DIR/training_performance.png" \
+  --accuracy-output "$METRICS_DIR/curated_grade_accuracy.png"
 
-.venv/bin/python scripts/curated_failure_report.py
-.venv/bin/python scripts/semantic_similarity_evaluation.py
-.venv/bin/python scripts/release_metrics.py
-
-CHART_RUN_DIR="data/charts/$(date '+%Y%m%d_%H%M%S')"
-mkdir -p "$CHART_RUN_DIR"
-cp -p \
-  release/metrics/training_performance.png \
-  release/metrics/curated_grade_accuracy.png \
-  release/metrics/training_history.json \
-  release/metrics/training_metrics.json \
-  release/metrics/answer_regressor_model.json \
-  release/metrics/curated_failure_report.md \
-  release/metrics/semantic_similarity.json \
-  release/metrics/summary.md \
-  "$CHART_RUN_DIR/"
+.venv/bin/python scripts/curated_failure_report.py \
+  --model "$METRICS_DIR/answer_regressor_model.json" \
+  --output "$METRICS_DIR/curated_failure_report.md"
+.venv/bin/python scripts/semantic_similarity_evaluation.py \
+  --output "$METRICS_DIR/semantic_similarity.json" \
+  --chart-output "$METRICS_DIR/semantic_accuracy.png"
+.venv/bin/python scripts/release_metrics.py \
+  --metrics-dir "$METRICS_DIR" \
+  --output "$METRICS_DIR/summary.md"
 
 if [ -n "$RELEASE_TAG" ]; then
   RELEASE_REPORT="release/release_${RELEASE_TAG}_release_report.md"
   mkdir -p release
   {
     printf '# Release %s Detailed Report\n\n' "$RELEASE_TAG"
-    cat release/metrics/summary.md
+    cat "$METRICS_DIR/summary.md"
     printf '\n'
-    cat release/metrics/curated_failure_report.md
+    cat "$METRICS_DIR/curated_failure_report.md"
   } > "$RELEASE_REPORT"
   echo "Detailed release report: $RELEASE_REPORT"
 fi
 
-echo "Checkpoint data: release/metrics/training_history.json"
-echo "Failure report: release/metrics/curated_failure_report.md"
-echo "Preserved release artifacts: $CHART_RUN_DIR"
+echo "Checkpoint data: $METRICS_DIR/training_history.json"
+echo "Failure report: $METRICS_DIR/curated_failure_report.md"
+echo "Preserved release artifacts: $METRICS_DIR"

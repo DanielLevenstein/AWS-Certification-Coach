@@ -3,19 +3,7 @@
 - Run all python code in a virtual environment.
 - run setup.sh if a script is available, and if it's not, locate a data generation script instead.
 
-# Helper scripts
-
-- clean.sh
-- setup.sh
-- generate_data.sh
-- run_tests.sh
-- generate_metrics.sh
-- run_app.sh
-
-Move all script files except those into the script dir 
-
 ## Documentation Files.
-- Move all documentation files except README.md, todo.md and AGENTS.md, and live in the docs directory.
 - Create a backup TODO file called TODO_COPY.md 
 - Create a backup copy of AGENTS.md called AGENTS_COPY.md
 - Ensure no copy files are committed to source control 
