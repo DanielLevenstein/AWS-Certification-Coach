@@ -29,7 +29,8 @@ def test_sample_question_artifact_excludes_training_answer_sections():
 
     assert rows
     assert all(training_only_fields.isdisjoint(row) for row in rows)
-    assert all(row["question_id"].startswith("AWS-APP") for row in rows)
+    assert all("question" in row for row in rows)
+    assert all("reference_answer" in row for row in rows)
 
 
 def test_combined_training_artifact_keeps_answer_sections_with_questions():

@@ -7,7 +7,7 @@ from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 def test_trained_regressor_config_uses_semantic_aware_application_score(tmp_path):
     feature_names = list(AnswerFeatureExtractor.feature_names)
-    model_path = tmp_path / "partial_answer_regressor.json"
+    model_path = tmp_path / "answer_regressor_model.json"
     # A bias-only model makes the expected runtime score independent of an answer text.
     AnswerRegressionModel(
         feature_names=feature_names,
@@ -20,7 +20,6 @@ def test_trained_regressor_config_uses_semantic_aware_application_score(tmp_path
         )
     )
     question = Question(
-        question_id="TEST-001",
         certification="Test",
         domain="Test",
         difficulty="Easy",

@@ -11,6 +11,6 @@
     "model_path": "models/answer_classifier.json"
   },
   "trained_regressor": {
-    "model_path": "models/partial_answer_regressor.json"
+    "model_path": "models/answer_regressor_model.json"
   }
 }

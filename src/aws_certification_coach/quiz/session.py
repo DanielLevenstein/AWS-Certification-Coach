@@ -28,8 +28,7 @@ class QuizSession:
         user_answer: str,
         evaluation: EvaluationResult,
     ) -> None:
-        existing_ids = {answered.question.question_id for answered in self.completed}
-        if question.question_id in existing_ids:
+        if any(answered.question == question for answered in self.completed):
             return
         self.completed.append(AnsweredQuestion(question, user_answer, evaluation))
 

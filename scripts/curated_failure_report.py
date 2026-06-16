@@ -12,7 +12,7 @@ import re
 from aws_certification_coach.evaluation.service import EvaluationService
 from aws_certification_coach.evaluation.trained_classifier_provider import SemanticAwareEvaluatorProvider
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
-from aws_certification_coach.ratings import letter_to_grade_band, score_to_letter
+from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
@@ -24,8 +24,7 @@ def build_failure_report(
 ) -> str:
     rows = json.loads(curated_path.read_text(encoding="utf-8"))
     questions = JsonQuestionRepository(questions_path).all()
-    questions_by_id = {question.question_id: question for question in questions}
-    examples = load_feedback_regression_examples(curated_path, questions_by_id)
+    examples = load_feedback_regression_examples(curated_path, questions)
     del model_path
     extractor = AnswerFeatureExtractor()
     service = EvaluationService(SemanticAwareEvaluatorProvider())
@@ -33,7 +32,7 @@ def build_failure_report(
     failures = []
 
     for index, (row, example) in enumerate(zip(rows, examples, strict=True)):
-        question = questions_by_id[example.question_id]
+        question = example.question
         features = extractor.extract(question, example.answer)
         result = service.evaluate(question, example.answer)
         raw_score = float(result.score)
@@ -48,10 +47,9 @@ def build_failure_report(
             {
                 "row": index,
                 "question": question.question,
-                "reference_answer": question.reference_answer,
-                "answer": example.answer,
-                "expected": expected,
-                "actual": actual,
+                "correct_answer": question.reference_answer,
+                "user_answer": example.answer,
+                "expected_rating": letter_to_numeric(expected),
                 "expected_band": expected_band,
                 "actual_band": actual_band,
                 "score": result.score,
@@ -139,16 +137,16 @@ def _group_failures(failures: list[dict]) -> list[dict]:
     for failure in failures:
         key = (
             failure["question"],
-            _normalized(failure["answer"]),
-            failure["expected"],
-            failure["actual"],
+            _normalized(failure["user_answer"]),
+            failure["expected_rating"],
+            failure["actual_band"],
         )
         if key not in grouped:
             grouped[key] = {**failure, "rows": [failure["row"]], "occurrences": 1}
         else:
             grouped[key]["rows"].append(failure["row"])
             grouped[key]["occurrences"] += 1
-    return sorted(grouped.values(), key=lambda item: (item["question"], item["answer"], item["expected"]))
+    return sorted(grouped.values(), key=lambda item: (item["question"], item["user_answer"], item["expected_rating"]))
 
 
 def _format_markdown(
@@ -157,7 +155,7 @@ def _format_markdown(
     grouped: list[dict],
     conflicts: dict[tuple[str, str], set[str]],
 ) -> str:
-    actual_counts = Counter(failure["actual"] for failure in failures)
+    actual_counts = Counter(failure["actual_band"] for failure in failures)
     conflict_finding = (
         "At least one normalized question/answer pair has contradictory curated grades, "
         "making perfect accuracy impossible until labels are reconciled."
@@ -174,7 +172,7 @@ def _format_markdown(
         f"- Grade-band accuracy: {(len(rows) - len(failures)) / max(1, len(rows)):.2%}",
         f"- Unique failing question/answer/grade cases: {len(grouped)}",
         f"- Conflicting normalized label sets: {len(conflicts)}",
-        f"- Actual grades among failures: {dict(sorted(actual_counts.items()))}",
+        f"- Actual grade bands among failures: {dict(sorted(actual_counts.items()))}",
         "",
         "## Primary Findings",
         "",
@@ -202,9 +200,9 @@ def _format_markdown(
                 "",
                 f"- Rows: `{', '.join(str(row) for row in failure['rows'])}`; occurrences: `{failure['occurrences']}`",
                 f"- Question: {failure['question']}",
-                f"- Letter grades: expected `{failure['expected']}`, received `{failure['actual']}`",
-                f"- Curated answer: `{failure['answer'].strip()}`",
-                f"- Reference answer: {failure['reference_answer']}",
+                f"- Expected rating: `{failure['expected_rating']:.2f}`",
+                f"- User answer: `{failure['user_answer'].strip()}`",
+                f"- Correct answer: {failure['correct_answer']}",
                 f"- Raw model score: `{failure['raw_score']:.2f}`; runtime score: `{failure['score']}`",
                 f"- Runtime feedback: {failure['feedback']}",
                 f"- Largest feature contributions: {contribution_text}",
@@ -229,7 +227,7 @@ def _format_markdown(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", type=Path, default=Path("release/metrics/partial_answer_regressor.json"))
+    parser.add_argument("--model", type=Path, default=Path("release/metrics/answer_regressor_model.json"))
     parser.add_argument("--curated", type=Path, default=Path("data/curated/curated_training_data.json"))
     parser.add_argument("--questions", type=Path, default=Path("data/questions/sample_questions.json"))
     parser.add_argument("--output", type=Path, default=Path("release/metrics/curated_failure_report.md"))

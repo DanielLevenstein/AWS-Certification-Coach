@@ -58,7 +58,6 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
 
 def test_semantic_similarity_recognizes_aliases_and_concepts():
     question = Question(
-        question_id="Q1",
         certification="Cloud Practitioner",
         domain="Security",
         difficulty="Easy",

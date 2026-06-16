@@ -15,4 +15,4 @@ def test_holdout_verification_artifacts_are_separate_and_large_enough():
 
     assert len(questions) >= 100
     assert len(examples) >= 100
-    assert all(question.question_id.startswith("AWS-HOLDOUT") for question in questions)
+    assert all(question.question for question in questions)

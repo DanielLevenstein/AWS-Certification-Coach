@@ -13,9 +13,9 @@ case "${1:-}" in
     ;;
 esac
 
-.venv/bin/python scripts/train_partial_answer_regressor.py \
+.venv/bin/python scripts/train_answer_accuracy.py \
   --eval-mode training \
-  --output release/metrics/partial_answer_regressor.json \
+  --output release/metrics/answer_regressor_model.json \
   --metrics-output release/metrics/training_metrics.json \
   --history-output release/metrics/training_history.json \
   "$@"
@@ -36,7 +36,7 @@ cp -p \
   release/metrics/curated_grade_accuracy.png \
   release/metrics/training_history.json \
   release/metrics/training_metrics.json \
-  release/metrics/partial_answer_regressor.json \
+  release/metrics/answer_regressor_model.json \
   release/metrics/curated_failure_report.md \
   release/metrics/semantic_similarity.json \
   release/metrics/summary.md \

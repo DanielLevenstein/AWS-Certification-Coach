@@ -182,7 +182,7 @@ AWS-Certification-Coach/
 - `PartialCreditRegressor`: trains continuous partial-credit scoring by minimizing mean squared error.
 - `AnswerRegressionModel`: persisted partial-credit regression weights.
 - `scripts/train_answer_classifier.py`: trains the classifier and fails if accuracy is below the required gate or suspiciously perfect.
-- `scripts/train_partial_answer_regressor.py`: trains the partial-credit regressor and reports MSE/MAE.
+- `scripts/train_answer_regressor_model.py`: trains the partial-credit regressor and reports MSE/MAE.
 
 ## Initial Implementation Notes
 
@@ -193,8 +193,8 @@ AWS-Certification-Coach/
 - `scripts/generate_app_question_artifacts.py` refreshes the app sample file from app-facing source specs with AWS documentation URLs and no training-only answer labels.
 - `scripts/select_sample_questions.py` can still project app-facing rows from a combined artifact for debugging, but it should not be the default app-data generation path.
 - The final verification set lives at `data/verification/questions_with_answers_holdout.json` and must not be used by training scripts.
-- `scripts/train_partial_answer_regressor.py` must stay below the configured held-out MSE gate before its artifact is used by the app.
-- V1 defaults to the trained partial-credit regressor in `models/partial_answer_regressor.json`; its prediction supplies the application score and the 70-point threshold supplies pass/fail behavior.
+- `scripts/train_answer_regressor_model.py` must stay below the configured held-out MSE gate before its artifact is used by the app.
+- V1 defaults to the trained partial-credit regressor in `models/answer_regressor_model.json`; its prediction supplies the application score and the 70-point threshold supplies pass/fail behavior.
 - The default real evaluator model is `gpt-5.4-mini`, selected as a quality/cost/latency balance for structured answer evaluation. Offline transformation and training-data generation can use the larger `gpt-5.5` configuration when quality matters more than cost.
 - Evaluator provider, model name, and hyperparameters live in `config/evaluator_default.json` and can be overridden with environment variables.
 - Set `AWS_COACH_EVALUATOR_PROVIDER=openai` and `OPENAI_API_KEY` to use the OpenAI evaluator provider instead of the trained classifier.

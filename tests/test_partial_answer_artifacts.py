@@ -17,7 +17,6 @@ def test_generated_answer_artifact_has_expected_letter_ratings():
     assert {row["rating"] for row in rows} == {"A", "B", "C", "D", "F"}
     assert all(isinstance(row["rating"], str) for row in rows)
     assert {row["intended_coverage"] for row in rows} == {1.0, 0.85, 0.75, 0.5, 0.25, 0.0}
-    assert all("question_id" in row for row in rows)
     assert all("answer" in row for row in rows)
 
     numeric_examples = load_answer_regression_examples(TRAINING_ARTIFACT)
@@ -29,7 +28,7 @@ def test_holdout_graded_answer_artifact_is_separate():
 
     assert rows
     assert {row["rating"] for row in rows} == {"A", "B", "C", "D", "F"}
-    assert all(row["question_id"].startswith("AWS-HOLDOUT") for row in rows)
+    assert all("answer" in row for row in rows)
 
 
 def _answer_rows(path: Path) -> list[dict]:

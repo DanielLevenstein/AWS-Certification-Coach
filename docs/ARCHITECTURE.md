@@ -51,7 +51,6 @@ Example question shape:
 
 ```json
 {
-  "question_id": "AWS-001",
   "certification": "Cloud Practitioner",
   "domain": "Security",
   "difficulty": "Easy",

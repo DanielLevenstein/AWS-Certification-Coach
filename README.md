@@ -122,7 +122,7 @@ Regenerate local training, holdout, and app sample artifacts:
 Train the diagnostic partial-credit regressor:
 
 ```bash
-.venv/bin/python scripts/train_partial_answer_regressor.py
+.venv/bin/python scripts/train_answer_regressor_model.py
 ```
 
 The regression metrics are retained for diagnostics, but release tracking uses curated app-scoring accuracy, precision, and recall.

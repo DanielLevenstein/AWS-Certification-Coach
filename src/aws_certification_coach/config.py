@@ -25,8 +25,7 @@ class OpenAIModelConfig:
 class EvaluatorConfig:
     provider: str = "heuristic"
     openai: OpenAIModelConfig = field(default_factory=OpenAIModelConfig)
-    trained_classifier_model_path: str = "models/answer_classifier.json"
-    trained_regressor_model_path: str = "models/partial_answer_regressor.json"
+    trained_regressor_model_path: str = "models/answer_regressor_model.json"
 
 
 def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:
@@ -36,20 +35,12 @@ def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:
     return EvaluatorConfig(
         provider=provider,
         openai=_openai_config(raw.get("openai", {})),
-        trained_classifier_model_path=str(
-            os.getenv(
-                "AWS_COACH_CLASSIFIER_MODEL_PATH",
-                raw.get("trained_classifier", {}).get("model_path", "models/answer_classifier.json")
-                if isinstance(raw.get("trained_classifier", {}), dict)
-                else "models/answer_classifier.json",
-            )
-        ),
         trained_regressor_model_path=str(
             os.getenv(
                 "AWS_COACH_REGRESSOR_MODEL_PATH",
-                raw.get("trained_regressor", {}).get("model_path", "models/partial_answer_regressor.json")
+                raw.get("trained_regressor", {}).get("model_path", "models/answer_regressor_model.json")
                 if isinstance(raw.get("trained_regressor", {}), dict)
-                else "models/partial_answer_regressor.json",
+                else "models/answer_regressor_model.json",
             )
         ),
     )

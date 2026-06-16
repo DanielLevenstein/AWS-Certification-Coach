@@ -78,9 +78,6 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
         index = start_index + offset
         service, domain, certification, difficulty, purpose, concepts, distractors = SERVICE_SPECS[index % len(SERVICE_SPECS)]
         variant = VARIANTS[index % len(VARIANTS)]
-        question_id = f"AWS-GEN-{index + 1:03d}"
-        if question_prefix != "AWS-GEN":
-            question_id = f"{question_prefix}-{offset + 1:03d}"
         mcq_question = variant.format(purpose=purpose)
         explanation = f"Use {service} to {purpose}."
         correct_option = f"Use {service}."
@@ -99,7 +96,6 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
             "source_license_notes": "Generated for this project; not copied from an official exam or practice test.",
         }
         question = {
-            "question_id": question_id,
             "certification": certification,
             "domain": domain,
             "difficulty": difficulty,
@@ -108,7 +104,6 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
             "key_concepts": concepts,
             "original_multiple_choice": original_multiple_choice,
             "generated_answers": _generated_answers(
-                question_id,
                 service,
                 purpose,
                 concepts,
@@ -122,7 +117,7 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
     return {"questions": questions}
 
 
-def _generated_answers(question_id, service, purpose, concepts, distractors, explanation, correct_option, question_text):
+def _generated_answers(service, purpose, concepts, distractors, explanation, correct_option, question_text):
     answers = [
         (correct_option, "A", "generated_exact_answer", 1.0),
         (explanation, "A", "generated_complete_answer", 1.0),
@@ -140,7 +135,6 @@ def _generated_answers(question_id, service, purpose, concepts, distractors, exp
     ]
     return [
         {
-            "question_id": question_id,
             "answer": answer,
             "rating": rating,
             "intended_coverage": intended_coverage,
@@ -187,11 +181,6 @@ def _drop_every_nth_word(value: str, n: int) -> str:
     words = value.split()
     kept = [word for index, word in enumerate(words, start=1) if index % n != 0]
     return " ".join(kept) if kept else value
-
-
-def _question_number(question_id: str) -> int:
-    digits = "".join(character for character in question_id if character.isdigit())
-    return int(digits or "0")
 
 
 def _write_json(path, payload) -> None:

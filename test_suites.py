@@ -25,11 +25,11 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     _run(
         [
             sys.executable,
-            "scripts/train_partial_answer_regressor.py",
+            "scripts/train_answer_accuracy.py",
             "--eval-mode",
             "training",
             "--output",
-            "release/metrics/partial_answer_regressor.json",
+            "release/metrics/answer_regressor_model.json",
             "--metrics-output",
             "release/metrics/training_metrics.json",
         ]

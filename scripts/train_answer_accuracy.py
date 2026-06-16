@@ -32,8 +32,8 @@ def main() -> None:
             "data/generated/user_feedback.v1.json",
         ],
     )
-    parser.add_argument("--output", default="models/partial_answer_regressor.json")
-    parser.add_argument("--metrics-output", default="models/partial_answer_regressor_metrics.json")
+    parser.add_argument("--output", default="models/answer_regressor_model.json")
+    parser.add_argument("--metrics-output", default="models/answer_regressor_model_metrics.json")
     parser.add_argument("--history-output", default="release/metrics/training_history.json")
     parser.add_argument("--max-mse", type=float, default=0.06)
     parser.add_argument("--min-examples", type=int, default=100)
@@ -43,12 +43,12 @@ def main() -> None:
     args = parser.parse_args()
 
     questions = JsonQuestionRepository(args.questions).all()
-    questions_by_id = {question.question_id: question for question in questions}
     examples = load_answer_regression_examples(args.training_data)
+    app_questions = JsonQuestionRepository(args.app_questions).all()
+    feedback_questions = questions + app_questions
     for feedback_path in args.feedback_data:
         if Path(feedback_path).exists():
-            examples.extend(load_feedback_regression_examples(feedback_path, questions_by_id))
-    _validate_examples(questions_by_id, examples)
+            examples.extend(load_feedback_regression_examples(feedback_path, feedback_questions))
     if len(examples) < args.min_examples:
         raise SystemExit(
             f"Only {len(examples)} partial-credit examples are available. "
@@ -57,10 +57,10 @@ def main() -> None:
 
     trainer = PartialCreditRegressor(learning_rate=args.learning_rate, epochs=args.epochs, seed=0)
     if args.eval_mode == "leave-one-question-out":
-        metrics = evaluate_regression_leave_one_question_out(trainer, questions_by_id, examples)
+        metrics = evaluate_regression_leave_one_question_out(trainer, questions, examples)
     else:
-        model_for_training_metrics = trainer.train(questions_by_id, examples)
-        metrics = evaluate_regression_model(model_for_training_metrics, questions_by_id, examples)
+        model_for_training_metrics = trainer.train(questions, examples)
+        metrics = evaluate_regression_model(model_for_training_metrics, questions, examples)
 
     metrics["eval_mode"] = args.eval_mode
     metrics["min_examples"] = args.min_examples
@@ -70,15 +70,13 @@ def main() -> None:
         _write_metrics(args.metrics_output, metrics)
         raise SystemExit(f"Held-out partial-credit MSE {metrics['mse']:.3f} exceeds required {args.max_mse:.3f}.")
 
-    app_questions = JsonQuestionRepository(args.app_questions).all()
-    app_questions_by_id = {question.question_id: question for question in app_questions}
     model, history = trainer.train_with_history(
-        questions_by_id,
+        questions,
         examples,
         checkpoint_evaluator=lambda checkpoint_model: evaluate_curated_model(
             checkpoint_model,
             Path(args.curated_data),
-            app_questions_by_id,
+            app_questions,
         ),
     )
     model.save(args.output)
@@ -91,12 +89,6 @@ def _write_metrics(metrics_output: str, metrics: dict[str, object]) -> None:
     metrics_path = Path(metrics_output)
     metrics_path.parent.mkdir(parents=True, exist_ok=True)
     metrics_path.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
-
-
-def _validate_examples(questions_by_id, examples) -> None:
-    missing = sorted({example.question_id for example in examples if example.question_id not in questions_by_id})
-    if missing:
-        raise ValueError(f"Training examples reference unknown question IDs: {', '.join(missing)}")
 
 
 if __name__ == "__main__":

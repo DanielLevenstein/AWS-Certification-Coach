@@ -7,6 +7,7 @@
 | v1.1.2   | Changed rating to grade and added feedback system.                                                                |
 | v1.1.3   | Gate feedback behind SHOW_FEEDBACK environmental variable.                                                        |
 | v1.3.4  | Swaps app scoring from trained regression to semantic-aware grading. |
+| v1.4.0 | v1.4.0 Cleaning up schema|
 
 ### Model Performance
 

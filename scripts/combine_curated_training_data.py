@@ -32,7 +32,7 @@ def combine_curated_training_data(config_dir: Path, output: Path) -> tuple[int, 
             raise ValueError(f"Curated training data must be a JSON list: {path}")
         for index, row in enumerate(rows):
             _validate_curated_row(row, path, index)
-        combined_rows.extend(rows)
+            combined_rows.append(_curated_row(row))
 
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(combined_rows, indent=2) + "\n", encoding="utf-8")
@@ -42,10 +42,21 @@ def combine_curated_training_data(config_dir: Path, output: Path) -> tuple[int, 
 def _validate_curated_row(row: object, path: Path, index: int) -> None:
     if not isinstance(row, dict):
         raise ValueError(f"Curated training row {index} must be a JSON object: {path}")
-    if "question_id" in row:
-        raise ValueError(f"Curated training row {index} must use question text, not question_id: {path}")
     if not str(row.get("question", "")).strip():
         raise ValueError(f"Curated training row {index} is missing full question text: {path}")
+
+
+def _curated_row(row: dict) -> dict:
+    allowed_fields = {
+        "schema_version",
+        "question",
+        "reference_answer",
+        "original_multiple_choice",
+        "answer_given",
+        "correct_rating",
+        "rating_given",
+    }
+    return {key: value for key, value in row.items() if key in allowed_fields}
 
 
 def main() -> None:

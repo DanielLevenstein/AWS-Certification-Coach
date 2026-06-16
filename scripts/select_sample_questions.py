@@ -34,7 +34,6 @@ def _app_question_row(row: object) -> dict:
     if not isinstance(row, dict):
         raise ValueError("Question rows must be JSON objects.")
     allowed_fields = {
-        "question_id",
         "certification",
         "domain",
         "difficulty",

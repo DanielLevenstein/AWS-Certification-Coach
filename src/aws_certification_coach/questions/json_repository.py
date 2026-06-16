@@ -45,14 +45,13 @@ class JsonQuestionRepository:
             rows = json.load(f)
         if not isinstance(rows, list):
             raise ValueError(f"Question file must contain a list: {self.path}")
-        return [_question_from_json(row) for row in rows]
+        return [question_from_json(row) for row in rows]
 
 
-def _question_from_json(row: object) -> Question:
+def question_from_json(row: object) -> Question:
     if not isinstance(row, dict):
         raise ValueError("Question rows must be JSON objects.")
     required = [
-        "question_id",
         "certification",
         "domain",
         "difficulty",
@@ -67,7 +66,6 @@ def _question_from_json(row: object) -> Question:
     if not isinstance(key_concepts, list):
         raise ValueError("Question key_concepts must be a list.")
     return Question(
-        question_id=str(row["question_id"]),
         certification=str(row["certification"]),
         domain=str(row["domain"]),
         difficulty=str(row["difficulty"]),

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
 from pathlib import Path
 
@@ -157,7 +158,8 @@ def _render_feedback_link(question: Question, user_answer: str, score: int) -> N
 
 def _render_feedback_form(question: Question, user_answer: str, score: int) -> None:
     submitted = st.session_state.setdefault("feedback_submitted", set())
-    if question.question_id in submitted:
+    question_key = _question_key(question)
+    if question_key in submitted:
         st.success("Thanks. Your grade correction was saved for future training.")
         return
 
@@ -167,17 +169,32 @@ def _render_feedback_form(question: Question, user_answer: str, score: int) -> N
         "What grade should this answer receive?",
         LETTER_RATINGS,
         index=LETTER_RATINGS.index(rating_given),
-        key=f"feedback_rating_{question.question_id}",
+        key=f"feedback_rating_{question_key}",
     )
-    if st.button("Submit Feedback", key=f"submit_feedback_{question.question_id}"):
+    if st.button("Submit Feedback", key=f"submit_feedback_{question_key}"):
         get_feedback_repository().submit(
             question=question,
             answer_given=user_answer,
             rating_given=rating_given,
            correct_rating=correct_rating,
         )
-        submitted.add(question.question_id)
+        submitted.add(question_key)
         st.success("Thanks. Your grade correction was saved for future training.")
+
+
+def _question_key(question: Question) -> str:
+    original = question.original_multiple_choice
+    raw_key = "\n".join(
+        [
+            question.certification,
+            question.domain,
+            question.difficulty,
+            question.question,
+            question.reference_answer,
+            original.question if original else "",
+        ]
+    )
+    return hashlib.sha1(raw_key.encode("utf-8")).hexdigest()[:16]
 
 
 def _render_source_documentation(original: MultipleChoiceQuestion | None) -> None:

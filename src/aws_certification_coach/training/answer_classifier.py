@@ -10,7 +10,11 @@ import random
 from typing import Callable
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.training.dataset import AnswerClassificationExample, AnswerRegressionExample
+from aws_certification_coach.training.dataset import (
+    AnswerClassificationExample,
+    AnswerRegressionExample,
+    question_signature,
+)
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
@@ -64,13 +68,14 @@ class ReinforcementAnswerClassifier:
 
     def train(
         self,
-        questions_by_id: dict[str, Question],
+        questions: list[Question],
         examples: list[AnswerClassificationExample],
     ) -> AnswerClassificationModel:
+        del questions
         rng = random.Random(self.seed) if self.seed is not None else random
         weights = [0.0 for _ in self.feature_extractor.feature_names]
         training_rows = [
-            (self.feature_extractor.extract(questions_by_id[example.question_id], example.answer), example.label)
+            (self.feature_extractor.extract(example.question, example.answer), example.label)
             for example in examples
         ]
         for _ in range(self.epochs):
@@ -137,15 +142,15 @@ class PartialCreditRegressor:
 
     def train(
         self,
-        questions_by_id: dict[str, Question],
+        questions: list[Question],
         examples: list[AnswerRegressionExample],
     ) -> AnswerRegressionModel:
-        model, _history = self.train_with_history(questions_by_id, examples)
+        model, _history = self.train_with_history(questions, examples)
         return model
 
     def train_with_history(
         self,
-        questions_by_id: dict[str, Question],
+        questions: list[Question],
         examples: list[AnswerRegressionExample],
         evaluation_examples: list[AnswerRegressionExample] | None = None,
         checkpoints: list[int] | None = None,
@@ -153,10 +158,11 @@ class PartialCreditRegressor:
     ) -> tuple[AnswerRegressionModel, list[dict[str, float]]]:
         """Train once and record performance from the evolving model."""
 
+        del questions
         rng = random.Random(self.seed) if self.seed is not None else random
         weights = [0.0 for _ in self.feature_extractor.feature_names]
         training_rows = [
-            (self.feature_extractor.extract(questions_by_id[example.question_id], example.answer), example.rating)
+            (self.feature_extractor.extract(example.question, example.answer), example.rating)
             for example in examples
         ]
         evaluation_rows = evaluation_examples if evaluation_examples is not None else examples
@@ -178,7 +184,7 @@ class PartialCreditRegressor:
                 )
                 metrics = evaluate_regression_model(
                     model,
-                    questions_by_id,
+                    [],
                     evaluation_rows,
                     self.feature_extractor,
                 )
@@ -190,16 +196,16 @@ class PartialCreditRegressor:
 
 def evaluate_model(
     model: AnswerClassificationModel,
-    questions_by_id: dict[str, Question],
+    questions: list[Question],
     examples: list[AnswerClassificationExample],
     feature_extractor: AnswerFeatureExtractor | None = None,
 ) -> dict[str, float]:
+    del questions
     extractor = feature_extractor or AnswerFeatureExtractor()
     correct = 0
     true_positive = false_positive = true_negative = false_negative = 0
     for example in examples:
-        question = questions_by_id[example.question_id]
-        prediction = model.predict(extractor.extract(question, example.answer))
+        prediction = model.predict(extractor.extract(example.question, example.answer))
         correct += int(prediction == example.label)
         true_positive += int(prediction == 1 and example.label == 1)
         false_positive += int(prediction == 1 and example.label == 0)
@@ -221,12 +227,12 @@ def evaluate_model(
 
 def evaluate_leave_one_question_out(
     trainer: ReinforcementAnswerClassifier,
-    questions_by_id: dict[str, Question],
+    questions: list[Question],
     examples: list[AnswerClassificationExample],
 ) -> dict[str, float]:
     """Evaluate by holding out every question family in turn."""
 
-    question_ids = sorted({example.question_id for example in examples})
+    signatures = sorted({question_signature(example.question) for example in examples})
     aggregate = {
         "true_positive": 0,
         "false_positive": 0,
@@ -235,13 +241,13 @@ def evaluate_leave_one_question_out(
     }
     total_examples = 0
     correct = 0
-    for question_id in question_ids:
-        train_examples = [example for example in examples if example.question_id != question_id]
-        held_out_examples = [example for example in examples if example.question_id == question_id]
+    for signature in signatures:
+        train_examples = [example for example in examples if question_signature(example.question) != signature]
+        held_out_examples = [example for example in examples if question_signature(example.question) == signature]
         if not train_examples or not held_out_examples:
             continue
-        model = trainer.train(questions_by_id, train_examples)
-        metrics = evaluate_model(model, questions_by_id, held_out_examples, trainer.feature_extractor)
+        model = trainer.train(questions, train_examples)
+        metrics = evaluate_model(model, questions, held_out_examples, trainer.feature_extractor)
         held_out_count = len(held_out_examples)
         correct += round(metrics["accuracy"] * held_out_count)
         total_examples += held_out_count
@@ -264,16 +270,16 @@ def evaluate_leave_one_question_out(
 
 def evaluate_regression_model(
     model: AnswerRegressionModel,
-    questions_by_id: dict[str, Question],
+    questions: list[Question],
     examples: list[AnswerRegressionExample],
     feature_extractor: AnswerFeatureExtractor | None = None,
 ) -> dict[str, float]:
+    del questions
     extractor = feature_extractor or AnswerFeatureExtractor()
     squared_error = 0.0
     absolute_error = 0.0
     for example in examples:
-        question = questions_by_id[example.question_id]
-        prediction = model.predict(extractor.extract(question, example.answer))
+        prediction = model.predict(extractor.extract(example.question, example.answer))
         error = prediction - example.rating
         squared_error += error * error
         absolute_error += abs(error)
@@ -287,20 +293,20 @@ def evaluate_regression_model(
 
 def evaluate_regression_leave_one_question_out(
     trainer: PartialCreditRegressor,
-    questions_by_id: dict[str, Question],
+    questions: list[Question],
     examples: list[AnswerRegressionExample],
 ) -> dict[str, float]:
-    question_ids = sorted({example.question_id for example in examples})
+    signatures = sorted({question_signature(example.question) for example in examples})
     squared_error = 0.0
     absolute_error = 0.0
     total_examples = 0
-    for question_id in question_ids:
-        train_examples = [example for example in examples if example.question_id != question_id]
-        held_out_examples = [example for example in examples if example.question_id == question_id]
+    for signature in signatures:
+        train_examples = [example for example in examples if question_signature(example.question) != signature]
+        held_out_examples = [example for example in examples if question_signature(example.question) == signature]
         if not train_examples or not held_out_examples:
             continue
-        model = trainer.train(questions_by_id, train_examples)
-        metrics = evaluate_regression_model(model, questions_by_id, held_out_examples, trainer.feature_extractor)
+        model = trainer.train(questions, train_examples)
+        metrics = evaluate_regression_model(model, questions, held_out_examples, trainer.feature_extractor)
         held_out_count = len(held_out_examples)
         squared_error += metrics["mse"] * held_out_count
         absolute_error += metrics["mae"] * held_out_count

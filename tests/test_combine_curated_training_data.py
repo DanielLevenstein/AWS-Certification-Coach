@@ -1,7 +1,5 @@
 import json
 
-import pytest
-
 from scripts.combine_curated_training_data import combine_curated_training_data
 
 
@@ -29,13 +27,17 @@ def test_combines_curated_training_fragments_in_filename_order(tmp_path):
     ]
 
 
-def test_rejects_question_ids_in_curated_training_data(tmp_path):
+def test_combiner_keeps_only_supported_curated_fields(tmp_path):
     config_dir = tmp_path / "config"
     config_dir.mkdir()
-    (config_dir / "curated_training_invalid.json").write_text(
-        '[{"question_id": "Q1", "question": "Readable question"}]',
+    (config_dir / "curated_training_extra.json").write_text(
+        '[{"question": "Readable question", "answer_given": "answer", "extra": "ignored"}]',
         encoding="utf-8",
     )
 
-    with pytest.raises(ValueError, match="question text, not question_id"):
-        combine_curated_training_data(config_dir, tmp_path / "combined.json")
+    output = tmp_path / "combined.json"
+    combine_curated_training_data(config_dir, output)
+
+    assert json.loads(output.read_text(encoding="utf-8")) == [
+        {"question": "Readable question", "answer_given": "answer"}
+    ]

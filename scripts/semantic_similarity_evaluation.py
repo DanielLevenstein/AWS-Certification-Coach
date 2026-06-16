@@ -21,8 +21,7 @@ def main() -> None:
     args = parser.parse_args()
 
     questions = JsonQuestionRepository(args.questions).all()
-    questions_by_id = {question.question_id: question for question in questions}
-    metrics = evaluate_semantic_curated_answers(args.curated, questions_by_id)
+    metrics = evaluate_semantic_curated_answers(args.curated, questions)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(metrics, indent=2))
