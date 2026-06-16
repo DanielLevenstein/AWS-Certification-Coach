@@ -25,6 +25,11 @@ METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
 
 ACCURACY_SOURCE="$METRICS_DIR/semantic_accuracy.png"
 ACCURACY_OUTPUT="release/${RELEASE_TAG}_semantic_accuracy.png"
+LATEST_REPORT="release/$METRICS_DIR/curated_failure_report.md"
+REPORT_OUTPUT="release/curated_failure_report.md"
 mkdir -p release
 cp -p "$ACCURACY_SOURCE" "$ACCURACY_OUTPUT"
+cp -p "$LATEST_REPORT" "$REPORT_OUTPUT"
 echo "Saved tagged accuracy chart: $ACCURACY_OUTPUT"
+echo "Saved latest release report $REPORT_OUTPUT"
+

@@ -58,17 +58,21 @@ VARIANTS = [
 
 
 def main() -> None:
-    training_artifacts = _build_artifacts(start_index=0, count=100, question_prefix="AWS-GEN")
-    holdout_artifacts = _build_artifacts(start_index=100, count=100, question_prefix="AWS-HOLDOUT")
+    training_artifacts = _build_artifacts(start_index=0, count=24, question_prefix="AWS-TRAIN")
+    validation_artifacts = _build_artifacts(start_index=24, count=8, question_prefix="AWS-VALIDATION")
+    test_artifacts = _build_artifacts(start_index=32, count=8, question_prefix="AWS-TEST")
 
-    _write_json("data/generated/questions_with_answers_generated.json", training_artifacts["questions"])
-    _write_json("data/verification/questions_with_answers_holdout.json", holdout_artifacts["questions"])
+    _write_json("data/generated/questions_with_answers_training.json", training_artifacts["questions"])
+    _write_json("data/generated/questions_with_answers_validation.json", validation_artifacts["questions"])
+    _write_json("data/generated/questions_with_answers_test.json", test_artifacts["questions"])
     print(
         "Generated "
         f"{len(training_artifacts['questions'])} training questions, "
         f"{sum(len(question['generated_answers']) for question in training_artifacts['questions'])} graded training answers, "
-        f"{len(holdout_artifacts['questions'])} holdout questions, "
-        f"{sum(len(question['generated_answers']) for question in holdout_artifacts['questions'])} graded holdout answers."
+        f"{len(validation_artifacts['questions'])} validation questions, "
+        f"{sum(len(question['generated_answers']) for question in validation_artifacts['questions'])} graded validation answers, "
+        f"{len(test_artifacts['questions'])} test questions, "
+        f"{sum(len(question['generated_answers']) for question in test_artifacts['questions'])} graded test answers."
     )
 
 

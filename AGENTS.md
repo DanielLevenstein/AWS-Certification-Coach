@@ -17,8 +17,3 @@ For each merge ensure the following.
 - run setup script
 - Ensure test cases are using verification data, not training data.
 - Get all unit tests passing, adding comments for updated tests. 
-- delete data directory 
-- Ensure all code is committed 
-
-If directory paths change between branches commit working changes first, then do a directory path refactoring as a clean commit. 
-Remove completed items from todo.md as a separate commit

@@ -33,11 +33,12 @@ Each generated question keeps its source-style multiple-choice item in the same 
 
 Training and verification data are generated separately:
 
-- `data/generated/questions_with_answers_generated.json`: generated training artifact used by diagnostic regression training.
+- `data/generated/questions_with_answers_training.json`: generated training artifact used by diagnostic regression training.
+- `data/generated/questions_with_answers_validation.json`: generated validation artifact used for training-time validation and checkpoint selection.
+- `data/generated/questions_with_answers_test.json`: generated test artifact reserved for final model checks.
 - `data/generated/user_feedback.v1.json`: learner-submitted grade corrections created by the app using the self-contained v1 schema.
 - `data/curated/curated_training_data.json`: reviewed feedback examples containing full question text. Curated rows intentionally omit question IDs so training cannot learn numbering conventions.
 - `data/curated/user_feedback.v1.json`: optional reviewed learner submissions included in diagnostic model training when present.
-- `data/verification/questions_with_answers_holdout.json`: holdout artifact reserved for final verification and not used by training scripts.
 - `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
 
 Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C/D`, and `F`. Precision and recall treat `A/B` and `C/D` as accepted answers and `F` as rejected.
@@ -56,7 +57,7 @@ To regenerate local data:
 | v1.1.0 | Separated the app-facing question bank from training labels and expanded the app bank to 80 AWS-docs-grounded questions. |
 | v1.3.1 | Test framework redesign; initial curated grade-band accuracy was 44%. |
 | v1.3.4 | Swapped default app scoring to semantic-aware grading; curated grade-band accuracy reached 80%. |
-
+| v1.5.3 | Updated test data to have proper train, test, validation split |
 
 #### Scope
 
@@ -112,7 +113,7 @@ Refresh the training graph, curated failure report, semantic metrics, and detail
 
 The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. When a tag is supplied, `run_training_graph.sh` also publishes `release/release_<tag>_release_report.md`.
 
-Regenerate local training, holdout, and app sample artifacts:
+Regenerate local training, validation, test, and app sample artifacts:
 
 ```bash
 .venv/bin/python scripts/generate_sample_training_artifacts.py
@@ -133,7 +134,7 @@ Print a single release-note-friendly model performance summary:
 .venv/bin/python scripts/release_metrics.py
 ```
 
-Final verification data is stored separately in `data/verification/questions_with_answers_holdout.json`. Do not use that file for training.
+Final verification data is stored separately in `data/generated/questions_with_answers_test.json`. Do not use that file for training.
 
 ## Docker
 
@@ -167,7 +168,7 @@ The OpenAI provider code remains available for explicit experiments, but it is n
 
 ## Question Transformation
 
-Source multiple-choice artifacts may live in `data/questions/source_multiple_choice_*.json`. Transformed and generated app artifacts preserve the original MCQ under `original_multiple_choice`. The generated training and holdout files keep each freeform question and its answer examples together in one combined JSON row.
+Source multiple-choice artifacts may live in `data/questions/source_multiple_choice_*.json`. Transformed and generated app artifacts preserve the original MCQ under `original_multiple_choice`. The generated training, validation, and test files keep each freeform question and its answer examples together in one combined JSON row.
 
 ```bash
 .venv/bin/python scripts/transform_questions.py \

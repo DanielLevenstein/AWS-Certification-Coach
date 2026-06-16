@@ -16,6 +16,10 @@ esac
 
 .venv/bin/python scripts/train_answer_accuracy.py \
   --eval-mode training \
+  --questions data/generated/questions_with_answers_training.json \
+  --training-data data/generated/questions_with_answers_training.json \
+  --validation-questions data/generated/questions_with_answers_validation.json \
+  --validation-data data/generated/questions_with_answers_validation.json \
   --output "$METRICS_DIR/answer_regressor_model.json" \
   --metrics-output "$METRICS_DIR/training_metrics.json" \
   --history-output "$METRICS_DIR/training_history.json" \

@@ -22,8 +22,10 @@ from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--questions", default="data/generated/questions_with_answers_generated.json")
-    parser.add_argument("--training-data", default="data/generated/questions_with_answers_generated.json")
+    parser.add_argument("--questions", default="data/generated/questions_with_answers_training.json")
+    parser.add_argument("--training-data", default="data/generated/questions_with_answers_training.json")
+    parser.add_argument("--validation-questions", default="data/generated/questions_with_answers_validation.json")
+    parser.add_argument("--validation-data", default="data/generated/questions_with_answers_validation.json")
     parser.add_argument("--app-questions", default="data/questions/sample_questions.json")
     parser.add_argument("--curated-data", default="data/curated/curated_training_data.json")
     parser.add_argument(
@@ -49,6 +51,8 @@ def main() -> None:
 
     questions = JsonQuestionRepository(args.questions).all()
     examples = load_answer_regression_examples(args.training_data)
+    validation_questions = JsonQuestionRepository(args.validation_questions).all()
+    validation_examples = load_answer_regression_examples(args.validation_data)
     app_questions = JsonQuestionRepository(args.app_questions).all()
     feedback_questions = questions + app_questions
     feedback_examples = []
@@ -72,13 +76,14 @@ def main() -> None:
         metrics = evaluate_regression_leave_one_question_out(trainer, questions, examples)
     else:
         model_for_training_metrics = trainer.train(questions, examples)
-        metrics = evaluate_regression_model(model_for_training_metrics, questions, examples)
+        metrics = evaluate_regression_model(model_for_training_metrics, validation_questions, validation_examples)
 
     metrics["eval_mode"] = args.eval_mode
     metrics["min_examples"] = args.min_examples
     metrics["max_mse"] = args.max_mse
     metrics["curated_weight"] = args.curated_weight
     metrics["answer_form"] = args.answer_form
+    metrics["validation_data"] = args.validation_data
 
     if metrics["mse"] > args.max_mse:
         _write_metrics(args.metrics_output, metrics)
@@ -87,14 +92,16 @@ def main() -> None:
     model, history = trainer.train_with_history(
         questions,
         examples,
+        evaluation_examples=validation_examples,
         checkpoint_evaluator=lambda checkpoint_model: evaluate_curated_model(
             checkpoint_model,
             Path(args.curated_data),
             app_questions,
         ),
         model_selector=lambda checkpoint_metrics: (
-            checkpoint_metrics.get("curated_grade_accuracy", 0.0),
             -checkpoint_metrics.get("mae", 0.0),
+            -checkpoint_metrics.get("mse", 0.0),
+            checkpoint_metrics.get("curated_grade_accuracy", 0.0),
         ),
     )
     model = _with_calibrations(model, feedback_examples)

@@ -34,9 +34,9 @@ def test_sample_question_artifact_excludes_training_answer_sections():
 
 
 def test_combined_training_artifact_keeps_answer_sections_with_questions():
-    artifact = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_generated.json"
+    artifact = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_training.json"
     rows = JsonQuestionRepository(artifact).all()
     raw_rows = json.loads(artifact.read_text(encoding="utf-8"))
 
-    assert len(rows) >= 100
+    assert len(rows) >= 24
     assert all(row.get("generated_answers") for row in raw_rows)

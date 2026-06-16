@@ -37,7 +37,7 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
     calibration_count = saved_model.get("calibration_count", 0)
     return "\n".join(
         [
-            "# Release Metrics",
+            "# Latest Release Metrics",
             "",
             "| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |",
             "|:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|",

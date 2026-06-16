@@ -12,9 +12,9 @@ from aws_certification_coach.model_evaluation.suite import run_model_evaluation
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--questions", type=Path, default=Path("data/generated/questions_with_answers_generated.json"))
+    parser.add_argument("--questions", type=Path, default=Path("data/generated/questions_with_answers_test.json"))
     parser.add_argument("--app-questions", type=Path, default=Path("data/questions/sample_questions.json"))
-    parser.add_argument("--training-data", type=Path, default=Path("data/generated/questions_with_answers_generated.json"))
+    parser.add_argument("--training-data", type=Path, default=Path("data/generated/questions_with_answers_test.json"))
     parser.add_argument("--curated-data", type=Path, default=Path("data/curated/curated_training_data.json"))
     parser.add_argument("--output", type=Path, default=Path("release/metrics/model_evaluation.json"))
     parser.add_argument("--epochs", type=int, default=500)

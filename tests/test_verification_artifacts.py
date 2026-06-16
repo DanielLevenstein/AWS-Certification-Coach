@@ -5,14 +5,14 @@ from aws_certification_coach.training.dataset import load_answer_classification_
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-HOLDOUT_QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "verification" / "questions_with_answers_holdout.json"
-HOLDOUT_ANSWER_ARTIFACT = PROJECT_ROOT / "data" / "verification" / "questions_with_answers_holdout.json"
+TEST_QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_test.json"
+TEST_ANSWER_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_test.json"
 
 
-def test_holdout_verification_artifacts_are_separate_and_large_enough():
-    questions = JsonQuestionRepository(HOLDOUT_QUESTION_ARTIFACT).all()
-    examples = load_answer_classification_examples(HOLDOUT_ANSWER_ARTIFACT)
+def test_test_verification_artifacts_are_separate_and_large_enough():
+    questions = JsonQuestionRepository(TEST_QUESTION_ARTIFACT).all()
+    examples = load_answer_classification_examples(TEST_ANSWER_ARTIFACT)
 
-    assert len(questions) >= 100
+    assert len(questions) >= 8
     assert len(examples) >= 100
     assert all(question.question for question in questions)

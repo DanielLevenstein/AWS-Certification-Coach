@@ -13,20 +13,8 @@
 | v1.4.4  | Switch back to long form answers in training data                                                              |
 | v1.5.0  | Updated accuracy release script to ensure consistent metrics                                                   |
 | v1.5.1  | Fix output of semantic metric chart, and move release metrics to folder with timestamps saved.                 |
-
+| v1.5.3 | Updated test data to have proper train, test, validation split |
 ### Model Performance
-
-# Old Accuracy Metrics
-| Release | Accuracy | Precision | Recall |
-|---------|---------:|----------:|-------:|
-| v1.3.1  |   44.00% |       TBD |    TBD |
-| v1.3.2  |   68.00% |       TBD |    TBD |
-| v1.3.3  |   68.00% |       TBD |    TBD |
-| v1.3.4  |   80.00% |    87.50% | 87.50% |
-| v1.4.1  |   68.00% |    87.50% | 87.50% |
-| v1.4.2  |   76.00% |    84.62% | 68.75% |
-| v1.4.3  |   76.00% |    84.62% | 68.75% |
-| v1.4.4  |   68.00% |    84.62% | 68.75% |
 
 
 # Release Metrics
@@ -35,7 +23,7 @@
 |:--------|---------------:|------------------:|------------------:|-------------------:|----------------:|
 | v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |
 | v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |
-
+| v1.5.3 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% |
 ### Scope
 
 Certifications:
@@ -49,11 +37,12 @@ Difficulty:
 - Medium
 
 <!-- release-metrics:start -->
-# Latest Release Metrics
+# Release Metrics
 
 | Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |
 |:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|
-| v1.5.2 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% |
+| v1.5.3 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% |
+
 Saved model answer form: `long`
 Saved model calibration count: `18`
 
