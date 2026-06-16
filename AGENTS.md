@@ -3,19 +3,7 @@
 - Run all python code in a virtual environment.
 - run setup.sh if a script is available, and if it's not, locate a data generation script instead.
 
-# Helper scripts
-
-- clean.sh
-- setup.sh
-- generate_data.sh
-- run_tests.sh
-- generate_metrics.sh
-- run_app.sh
-
-Move all script files except those into the script dir 
-
 ## Documentation Files.
-- Move all documentation files except README.md, todo.md and AGENTS.md, and live in the docs directory.
 - Create a backup TODO file called TODO_COPY.md 
 - Create a backup copy of AGENTS.md called AGENTS_COPY.md
 - Ensure no copy files are committed to source control 
@@ -29,8 +17,3 @@ For each merge ensure the following.
 - run setup script
 - Ensure test cases are using verification data, not training data.
 - Get all unit tests passing, adding comments for updated tests. 
-- delete data directory 
-- Ensure all code is committed 
-
-If directory paths change between branches commit working changes first, then do a directory path refactoring as a clean commit. 
-Remove completed items from todo.md as a separate commit

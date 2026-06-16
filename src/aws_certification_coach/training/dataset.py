@@ -7,12 +7,13 @@ import json
 from pathlib import Path
 
 from aws_certification_coach.domain import Question
+from aws_certification_coach.questions.json_repository import question_from_json
 from aws_certification_coach.ratings import letter_to_binary_label, letter_to_numeric
 
 
 @dataclass(frozen=True)
 class AnswerClassificationExample:
-    question_id: str
+    question: Question
     answer: str
     label: int
     source: str = ""
@@ -20,7 +21,7 @@ class AnswerClassificationExample:
 
 @dataclass(frozen=True)
 class AnswerRegressionExample:
-    question_id: str
+    question: Question
     answer: str
     rating: float
     source: str = ""
@@ -44,11 +45,11 @@ def load_answer_regression_examples(path: str | Path) -> list[AnswerRegressionEx
 
 def load_feedback_classification_examples(
     path: str | Path,
-    questions_by_id: dict[str, Question],
+    questions: list[Question],
 ) -> list[AnswerClassificationExample]:
     return [
         AnswerClassificationExample(
-            question_id=_feedback_question_id(row, questions_by_id),
+            question=_feedback_question(row, questions),
             answer=str(row["answer_given"]),
             label=letter_to_binary_label(row["correct_rating"]),
             source="user_feedback",
@@ -60,11 +61,11 @@ def load_feedback_classification_examples(
 
 def load_feedback_regression_examples(
     path: str | Path,
-    questions_by_id: dict[str, Question],
+    questions: list[Question],
 ) -> list[AnswerRegressionExample]:
     return [
         AnswerRegressionExample(
-            question_id=_feedback_question_id(row, questions_by_id),
+            question=_feedback_question(row, questions),
             answer=str(row["answer_given"]),
             rating=letter_to_numeric(row["correct_rating"]),
             source="user_feedback",
@@ -85,14 +86,14 @@ def _load_rows(path: str | Path) -> list[object]:
 def _classification_examples_from_json(row: object) -> list[AnswerClassificationExample]:
     if not isinstance(row, dict):
         raise ValueError("Training examples must be JSON objects.")
+    question = question_from_json(row)
     if "binary_answers" in row:
-        question_id = str(row["question_id"])
         answers = row["binary_answers"]
         if not isinstance(answers, list):
             raise ValueError("Combined question binary_answers must be a list.")
         examples = [
             AnswerClassificationExample(
-                question_id=str(answer.get("question_id", question_id)),
+                question=question,
                 answer=str(answer["answer"]),
                 label=int(answer["label"]),
                 source=str(answer.get("source", "")),
@@ -104,7 +105,7 @@ def _classification_examples_from_json(row: object) -> list[AnswerClassification
         if isinstance(partial_answers, list):
             examples.extend(
                 AnswerClassificationExample(
-                    question_id=str(answer.get("question_id", question_id)),
+                    question=question,
                     answer=str(answer["answer"]),
                     label=0,
                     source=str(answer.get("source", "partial_rejected")),
@@ -114,13 +115,12 @@ def _classification_examples_from_json(row: object) -> list[AnswerClassification
             )
         return examples
     if "generated_answers" in row:
-        question_id = str(row["question_id"])
         answers = row["generated_answers"]
         if not isinstance(answers, list):
             raise ValueError("Combined question generated_answers must be a list.")
         return [
             AnswerClassificationExample(
-                question_id=str(answer.get("question_id", question_id)),
+                question=question,
                 answer=str(answer["answer"]),
                 label=letter_to_binary_label(answer["rating"]),
                 source=str(answer.get("source", "generated_answer")),
@@ -130,7 +130,7 @@ def _classification_examples_from_json(row: object) -> list[AnswerClassification
         ]
     return [
         AnswerClassificationExample(
-            question_id=str(row["question_id"]),
+            question=question,
             answer=str(row["answer"]),
             label=int(row["label"]),
             source=str(row.get("source", "")),
@@ -148,14 +148,14 @@ def _is_rejected_partial_answer(answer: dict) -> bool:
 def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]:
     if not isinstance(row, dict):
         raise ValueError("Training examples must be JSON objects.")
+    question = question_from_json(row)
     if "partial_answers" in row:
-        question_id = str(row["question_id"])
         answers = row["partial_answers"]
         if not isinstance(answers, list):
             raise ValueError("Combined question partial_answers must be a list.")
         return [
             AnswerRegressionExample(
-                question_id=str(answer.get("question_id", question_id)),
+                question=question,
                 answer=str(answer["answer"]),
                 rating=float(answer["rating"]),
                 source=str(answer.get("source", "")),
@@ -164,13 +164,12 @@ def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]
             if isinstance(answer, dict)
         ]
     if "generated_answers" in row:
-        question_id = str(row["question_id"])
         answers = row["generated_answers"]
         if not isinstance(answers, list):
             raise ValueError("Combined question generated_answers must be a list.")
         return [
             AnswerRegressionExample(
-                question_id=str(answer.get("question_id", question_id)),
+                question=question,
                 answer=str(answer["answer"]),
                 rating=letter_to_numeric(answer["rating"]),
                 source=str(answer.get("source", "generated_answer")),
@@ -182,7 +181,7 @@ def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]
         return []
     return [
         AnswerRegressionExample(
-            question_id=str(row["question_id"]),
+            question=question,
             answer=str(row["answer"]),
             rating=float(row["rating"]),
             source=str(row.get("source", "")),
@@ -190,7 +189,16 @@ def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]
     ]
 
 
-def _feedback_question_id(row: dict, questions_by_id: dict[str, Question]) -> str:
+def question_signature(question: Question) -> tuple[str, str, str]:
+    original = question.original_multiple_choice
+    return (
+        _normalized_joined(question.question),
+        _normalized_joined(question.reference_answer),
+        _normalized_joined(original.question if original else ""),
+    )
+
+
+def _feedback_question(row: dict, questions: list[Question]) -> Question:
     question_text = _normalized_text(row.get("question", ""))
     reference_text = _normalized_text(row.get("reference_answer", ""))
     original_question_text = _normalized_text(_feedback_original_question(row))
@@ -203,15 +211,17 @@ def _feedback_question_id(row: dict, questions_by_id: dict[str, Question]) -> st
                     original_question_text,
                     question,
                 ),
-                candidate_id,
+                question_signature(question),
+                question,
             )
-            for candidate_id, question in questions_by_id.items()
+            for question in questions
         ),
+        key=lambda item: (item[0], item[1]),
         reverse=True,
     )
     if not ranked or ranked[0][0] <= 0:
         raise ValueError(f"Could not match feedback to a known question: {row.get('question', '')!r}")
-    return ranked[0][1]
+    return ranked[0][2]
 
 
 def _feedback_match_score(
@@ -239,6 +249,10 @@ def _feedback_original_question(row: dict) -> object:
 
 def _normalized_text(value: object) -> set[str]:
     return {token.strip(".,:;!?()[]").casefold() for token in str(value).split() if token.strip(".,:;!?()[]")}
+
+
+def _normalized_joined(value: object) -> str:
+    return " ".join(sorted(_normalized_text(value)))
 
 
 def _jaccard(left: set[str], right: set[str]) -> float:

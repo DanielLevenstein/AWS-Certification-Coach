@@ -7,8 +7,9 @@ import re
 from pathlib import Path
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.ratings import letter_to_grade_band, score_to_letter
+from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
+from aws_certification_coach.training.features import correct_answer_text
 
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
@@ -43,15 +44,15 @@ AMBIGUOUS_ALIAS_TOKENS = {
 
 def evaluate_semantic_curated_answers(
     curated_path: Path,
-    questions_by_id: dict[str, Question],
+    questions: list[Question],
 ) -> dict[str, object]:
     rows = json.loads(curated_path.read_text(encoding="utf-8"))
-    examples = load_feedback_regression_examples(curated_path, questions_by_id)
+    examples = load_feedback_regression_examples(curated_path, questions)
     matches = 0
     true_positive = false_positive = true_negative = false_negative = 0
     mismatches = []
     for index, (row, example) in enumerate(zip(rows, examples, strict=True)):
-        question = questions_by_id[example.question_id]
+        question = example.question
         score = semantic_similarity_score(question, example.answer)
         actual = score_to_letter(score)
         expected = str(row["correct_rating"]).strip().upper()
@@ -69,10 +70,10 @@ def evaluate_semantic_curated_answers(
         mismatches.append(
             {
                 "row": index,
-                "question_id": example.question_id,
-                "answer": example.answer,
-                "expected": expected,
-                "actual": actual,
+                "question": question.question,
+                "user_answer": example.answer,
+                "correct_answer": correct_answer_text(question),
+                "expected_rating": letter_to_numeric(expected),
                 "expected_band": expected_band,
                 "actual_band": actual_band,
                 "score": score,
@@ -105,7 +106,7 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
     if _service_is_covered(question, answer):
         return round(80 + (15 * concept_coverage))
 
-    reference_tokens = set(_tokens(question.reference_answer)) - GENERIC_TOKENS
+    reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
     answer_reference_overlap = len(content_tokens & reference_tokens) / max(1, len(content_tokens))
     if concept_coverage >= 0.5:
         return round(63 + (18 * concept_coverage))
@@ -124,7 +125,7 @@ def _service_is_covered(question: Question, answer: str) -> bool:
 def _service_aliases(question: Question) -> set[str]:
     correct_options, _incorrect_options = _option_texts(question)
     values = {_strip_leading_use(option) for option in correct_options}
-    values.add(_strip_leading_use(question.reference_answer.split(" to ")[0]))
+    values.add(_strip_leading_use(correct_answer_text(question)))
     if question.key_concepts:
         values.add(_normalized(question.key_concepts[0]))
 

@@ -5,13 +5,13 @@ from aws_certification_coach.training.answer_classifier import AnswerRegressionM
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
-def test_trained_regressor_config_uses_semantic_aware_application_score(tmp_path):
+def test_trained_regressor_config_uses_saved_regression_model(tmp_path):
     feature_names = list(AnswerFeatureExtractor.feature_names)
-    model_path = tmp_path / "partial_answer_regressor.json"
-    # A bias-only model makes the expected runtime score independent of an answer text.
+    model_path = tmp_path / "answer_regressor_model.json"
+    # A bias-only model makes the runtime score prove the saved regressor was used.
     AnswerRegressionModel(
         feature_names=feature_names,
-        weights=[0.75] + [0.0] * (len(feature_names) - 1),
+        weights=[0.42] + [0.0] * (len(feature_names) - 1),
     ).save(model_path)
     service = build_evaluation_service(
         EvaluatorConfig(
@@ -20,7 +20,6 @@ def test_trained_regressor_config_uses_semantic_aware_application_score(tmp_path
         )
     )
     question = Question(
-        question_id="TEST-001",
         certification="Test",
         domain="Test",
         difficulty="Easy",
@@ -39,4 +38,4 @@ def test_trained_regressor_config_uses_semantic_aware_application_score(tmp_path
 
     result = service.evaluate(question, "KMS manages encryption keys.")
 
-    assert result.score >= 80
+    assert result.score == 42

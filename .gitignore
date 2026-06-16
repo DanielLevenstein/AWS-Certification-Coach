@@ -3,6 +3,7 @@ __pycache__/
 *.py[codz]
 *$py.class
 *_COPY.*
+.DS_Store
 # C extensions
 *.so
 
@@ -205,6 +206,8 @@ tempCodeRunnerFile.py
 
 # Generated training and application data
 /data/
+/scripts/data/
+/metrics/
 /release/metrics/
 
 # Ruff stuff:

@@ -10,7 +10,7 @@ import random
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="data/generated/questions_with_answers_generated.json")
+    parser.add_argument("--input", default="data/generated/questions_with_answers_training.json")
     parser.add_argument("--output", default="data/questions/sample_questions.json")
     parser.add_argument("--count", type=int, default=10)
     parser.add_argument("--seed", type=int, default=None)
@@ -34,7 +34,6 @@ def _app_question_row(row: object) -> dict:
     if not isinstance(row, dict):
         raise ValueError("Question rows must be JSON objects.")
     allowed_fields = {
-        "question_id",
         "certification",
         "domain",
         "difficulty",

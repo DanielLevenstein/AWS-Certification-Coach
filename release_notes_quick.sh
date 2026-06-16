@@ -20,10 +20,16 @@ case "$RELEASE_TAG" in
     ;;
 esac
 
-.venv/bin/python test_suites.py release
+METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
+.venv/bin/python test_suites.py release --release-label "$RELEASE_TAG" --release-notes docs/RELEASE_NOTES.md --metrics-dir "$METRICS_DIR"
 
-ACCURACY_SOURCE="release/metrics/curated_grade_accuracy.png"
-ACCURACY_OUTPUT="release/${RELEASE_TAG}_accuracy.png"
+ACCURACY_SOURCE="$METRICS_DIR/semantic_accuracy.png"
+ACCURACY_OUTPUT="release/${RELEASE_TAG}_semantic_accuracy.png"
+LATEST_REPORT="release/$METRICS_DIR/curated_failure_report.md"
+REPORT_OUTPUT="release/curated_failure_report.md"
 mkdir -p release
 cp -p "$ACCURACY_SOURCE" "$ACCURACY_OUTPUT"
+cp -p "$LATEST_REPORT" "$REPORT_OUTPUT"
 echo "Saved tagged accuracy chart: $ACCURACY_OUTPUT"
+echo "Saved latest release report $REPORT_OUTPUT"
+

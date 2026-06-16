@@ -1,28 +1,13 @@
-# Release v1.3.4.1 Detailed Report
-
-# Release Metrics
-
-| Curated grade-band accuracy | Semantic-aware grading | Precision | Recall |
-| ---: | ---: | ---: | ---: |
-| 80.00% | 80.00% | 87.50% | 87.50% |
-
-Training curve: `training_performance.png`
-Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`
-Semantic-aware grading: `semantic_similarity.json`
-Curated failure analysis: `curated_failure_report.md`
-
-Generated-label regression metrics are still written for diagnostics, but release tracking uses curated app-scoring accuracy.
-
 # Curated Grade Failure Report
 
 - Curated examples: 25
 - Evaluation bands: `A/B`, `C/D`, `F`
-- Passing grade-band predictions: 20
-- Failing grade-band predictions: 5
-- Grade-band accuracy: 80.00%
-- Unique failing question/answer/grade cases: 4
+- Passing grade-band predictions: 17
+- Failing grade-band predictions: 8
+- Grade-band accuracy: 68.00%
+- Unique failing question/answer/grade cases: 6
 - Conflicting normalized label sets: 0
-- Actual grades among failures: {'D': 3, 'F': 2}
+- Actual grade bands among failures: {'C/D': 3, 'F': 5}
 
 ## Primary Findings
 
@@ -41,9 +26,9 @@ Generated-label regression metrics are still written for diagnostics, but releas
 
 - Rows: `15`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
-- Letter grades: expected `F`, received `D`
-- Curated answer: `S3 version tracking`
-- Reference answer: Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.
+- Expected rating: `0.25`
+- User answer: `S3 version tracking`
+- Correct answer: S3 lifecycle policies
 - Raw model score: `62.00`; runtime score: `62`
 - Runtime feedback: This answer needs more AWS-specific detail.
 - Largest feature contributions: `semantic_similarity_score` +0.620
@@ -51,35 +36,59 @@ Generated-label regression metrics are still written for diagnostics, but releas
 
 ### 2. Expected C/D, received F
 
-- Rows: `1, 14`; occurrences: `2`
-- Question: Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.
-- Letter grades: expected `D`, received `F`
-- Curated answer: `AWS Roles`
-- Reference answer: Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.
+- Rows: `5`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
+- Expected rating: `0.75`
+- User answer: `route 55`
+- Correct answer: Amazon EventBridge
 - Raw model score: `25.00`; runtime score: `25`
 - Runtime feedback: This answer needs more AWS-specific detail.
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 3. Expected A/B, received C/D
+### 3. Expected C/D, received F
+
+- Rows: `1, 14`; occurrences: `2`
+- Question: Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.
+- Expected rating: `0.65`
+- User answer: `AWS Roles`
+- Correct answer: Service Control Policies
+- Raw model score: `25.00`; runtime score: `25`
+- Runtime feedback: This answer needs more AWS-specific detail.
+- Largest feature contributions: `semantic_similarity_score` +0.250
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+
+### 4. Expected C/D, received F
+
+- Rows: `2, 16`; occurrences: `2`
+- Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
+- Expected rating: `0.65`
+- User answer: `AWS Key Store`
+- Correct answer: AWS Secrets Manager
+- Raw model score: `25.00`; runtime score: `25`
+- Runtime feedback: This answer needs more AWS-specific detail.
+- Largest feature contributions: `semantic_similarity_score` +0.250
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+
+### 5. Expected A/B, received C/D
 
 - Rows: `10`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
-- Letter grades: expected `B`, received `D`
-- Curated answer: `AWS Cost Center`
-- Reference answer: Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.
+- Expected rating: `0.85`
+- User answer: `AWS Cost Center`
+- Correct answer: AWS Budgets
 - Raw model score: `65.00`; runtime score: `65`
 - Runtime feedback: This answer needs more AWS-specific detail.
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 4. Expected F, received C/D
+### 6. Expected F, received C/D
 
 - Rows: `9`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.
-- Letter grades: expected `F`, received `D`
-- Curated answer: `AWS Compliance Manager`
-- Reference answer: Use AWS Config to track resource configuration history and evaluate compliance against rules.
+- Expected rating: `0.25`
+- User answer: `AWS Compliance Manager`
+- Correct answer: AWS Config
 - Raw model score: `65.00`; runtime score: `65`
 - Runtime feedback: This answer needs more AWS-specific detail.
 - Largest feature contributions: `semantic_similarity_score` +0.650

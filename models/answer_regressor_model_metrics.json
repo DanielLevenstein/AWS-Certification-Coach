@@ -1,0 +1,25 @@
+{
+  "mse": 0.01292239095805838,
+  "mae": 0.07916279733914201,
+  "example_count": 1800,
+  "eval_mode": "training",
+  "min_examples": 100,
+  "max_mse": 0.06,
+  "curated_weight": 20,
+  "answer_form": "long",
+  "selected_checkpoint": {
+    "epoch": 25,
+    "mse": 0.012694280749141737,
+    "mae": 0.07900749857503611,
+    "example_count": 1800,
+    "curated_grade_accuracy": 0.72,
+    "curated_example_count": 25
+  },
+  "saved_model": {
+    "answer_form": "long",
+    "feature_count": 19,
+    "calibration_count": 18,
+    "curated_grade_accuracy": 0.96,
+    "curated_example_count": 25
+  }
+}

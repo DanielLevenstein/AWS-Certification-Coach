@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
 from pathlib import Path
 
@@ -21,6 +22,7 @@ from aws_certification_coach.ratings import LETTER_RATINGS, score_to_letter
 
 QUESTIONS_PATH = ROOT_DIR / "data" / "questions" / "sample_questions.json"
 USER_FEEDBACK_PATH = ROOT_DIR / "data" / "generated" / "user_feedback.v1.json"
+SHOW_FEEDBACK_ENV = "SHOW_FEEDBACK"
 
 
 @st.cache_resource
@@ -64,6 +66,9 @@ def main() -> None:
 
     if "quiz_session" not in st.session_state:
         _reset_session(questions)
+
+    if _env_enabled(SHOW_FEEDBACK_ENV):
+        _render_feedback_download()
 
     if st.sidebar.button("Start / Reset"):
         _reset_session(questions)
@@ -111,7 +116,7 @@ def main() -> None:
             st.write("Detailed answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)
-            if os.environ.get("SHOW_FEEDBACK"):
+            if _env_enabled(SHOW_FEEDBACK_ENV):
                 _render_feedback_link(question, user_answer, result.score)
         with source_column:
             _render_original_multiple_choice(question.original_multiple_choice)
@@ -157,7 +162,8 @@ def _render_feedback_link(question: Question, user_answer: str, score: int) -> N
 
 def _render_feedback_form(question: Question, user_answer: str, score: int) -> None:
     submitted = st.session_state.setdefault("feedback_submitted", set())
-    if question.question_id in submitted:
+    question_key = _question_key(question)
+    if question_key in submitted:
         st.success("Thanks. Your grade correction was saved for future training.")
         return
 
@@ -167,17 +173,45 @@ def _render_feedback_form(question: Question, user_answer: str, score: int) -> N
         "What grade should this answer receive?",
         LETTER_RATINGS,
         index=LETTER_RATINGS.index(rating_given),
-        key=f"feedback_rating_{question.question_id}",
+        key=f"feedback_rating_{question_key}",
     )
-    if st.button("Submit Feedback", key=f"submit_feedback_{question.question_id}"):
+    if st.button("Submit Feedback", key=f"submit_feedback_{question_key}"):
         get_feedback_repository().submit(
             question=question,
             answer_given=user_answer,
             rating_given=rating_given,
-           correct_rating=correct_rating,
+            correct_rating=correct_rating,
         )
-        submitted.add(question.question_id)
+        submitted.add(question_key)
         st.success("Thanks. Your grade correction was saved for future training.")
+
+
+def _render_feedback_download() -> None:
+    st.sidebar.download_button(
+        "Download feedback",
+        data=get_feedback_repository().export_json(),
+        file_name=USER_FEEDBACK_PATH.name,
+        mime="application/json",
+    )
+
+
+def _env_enabled(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _question_key(question: Question) -> str:
+    original = question.original_multiple_choice
+    raw_key = "\n".join(
+        [
+            question.certification,
+            question.domain,
+            question.difficulty,
+            question.question,
+            question.reference_answer,
+            original.question if original else "",
+        ]
+    )
+    return hashlib.sha1(raw_key.encode("utf-8")).hexdigest()[:16]
 
 
 def _render_source_documentation(original: MultipleChoiceQuestion | None) -> None:

@@ -6,3 +6,4 @@ if [ ! -x .venv/bin/python ]; then
 fi
 
 rm -rf data
+rm -rf metrics

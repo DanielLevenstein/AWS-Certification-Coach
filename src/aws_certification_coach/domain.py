@@ -18,7 +18,6 @@ class EvaluationResult:
 
 @dataclass(frozen=True)
 class Question:
-    question_id: str
     certification: str
     domain: str
     difficulty: str

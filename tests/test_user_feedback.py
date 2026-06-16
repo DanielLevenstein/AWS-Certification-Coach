@@ -60,8 +60,24 @@ def test_feedback_repository_appends_to_existing_v1_records(tmp_path: Path):
 
     rows = json.loads(path.read_text(encoding="utf-8"))
     assert rows[0]["schema_version"] == 2
-    assert "question_id" not in rows[0]
+    assert set(rows[0]) == {
+        "schema_version",
+        "question",
+        "reference_answer",
+        "original_multiple_choice",
+        "answer_given",
+        "correct_rating",
+        "rating_given",
+    }
     assert rows[0]["original_multiple_choice"]["correct_option_ids"] == ["A"]
+
+
+def test_feedback_repository_exports_empty_json_when_artifact_is_missing(tmp_path: Path):
+    path = tmp_path / "generated" / "user_feedback.v1.json"
+
+    exported = UserFeedbackRepository(path).export_json()
+
+    assert exported == "[]\n"
 
 
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):
@@ -70,7 +86,7 @@ def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: P
         json.dumps(
             [
                 {
-                    "question_id": "LEGACY-WRONG-ID",
+                    "legacy_marker": "ignored",
                     "question": _question().question,
                     "reference_answer": "Use AWS KMS",
                     "answer_given": "AWS",
@@ -81,14 +97,14 @@ def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: P
         ),
         encoding="utf-8",
     )
-    questions = {"AWS-APP-020": _question()}
+    questions = [_question()]
 
     regression = load_feedback_regression_examples(path, questions)
     classification = load_feedback_classification_examples(path, questions)
 
     assert regression[0].rating == 0.25
     assert classification[0].label == 0
-    assert regression[0].question_id == "AWS-APP-020"
+    assert regression[0].question == _question()
 
 
 def test_feedback_loader_can_match_using_original_multiple_choice_question(tmp_path: Path):
@@ -113,9 +129,9 @@ def test_feedback_loader_can_match_using_original_multiple_choice_question(tmp_p
         encoding="utf-8",
     )
 
-    examples = load_feedback_classification_examples(path, {"AWS-APP-020": _question()})
+    examples = load_feedback_classification_examples(path, [_question()])
 
-    assert examples[0].question_id == "AWS-APP-020"
+    assert examples[0].question == _question()
 
 
 def test_rating_conversions_follow_display_grade_boundaries():
@@ -148,7 +164,6 @@ def test_curated_label_conflicts_only_count_cross_band_disagreements():
 
 def _question() -> Question:
     return Question(
-        question_id="AWS-APP-020",
         certification="Cloud Practitioner",
         domain="Security",
         difficulty="Easy",

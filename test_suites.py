@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 from pathlib import Path
 import subprocess
 import sys
@@ -21,24 +22,77 @@ def run_model_evaluation(extra_args: list[str] | None = None) -> None:
 
 
 def run_release_metrics(extra_args: list[str] | None = None) -> None:
-    del extra_args
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--release-label", default="Current")
+    parser.add_argument("--release-notes", default=None)
+    parser.add_argument("--metrics-dir", type=Path, default=None)
+    args = parser.parse_args(extra_args or [])
+    metrics_dir = args.metrics_dir or timestamped_metrics_dir()
     _run(
         [
             sys.executable,
-            "scripts/train_partial_answer_regressor.py",
+            "scripts/train_answer_accuracy.py",
             "--eval-mode",
             "training",
             "--output",
-            "release/metrics/partial_answer_regressor.json",
+            str(metrics_dir / "answer_regressor_model.json"),
             "--metrics-output",
-            "release/metrics/training_metrics.json",
+            str(metrics_dir / "training_metrics.json"),
+            "--history-output",
+            str(metrics_dir / "training_history.json"),
         ]
     )
-    _run([sys.executable, "scripts/plot_training_history.py"])
-    _run([sys.executable, "scripts/curated_failure_report.py"])
-    _run([sys.executable, "scripts/semantic_similarity_evaluation.py"])
-    _run([sys.executable, "scripts/quality_metrics.py"])
-    _run([sys.executable, "scripts/release_metrics.py"])
+    _run(
+        [
+            sys.executable,
+            "scripts/plot_training_history.py",
+            "--history",
+            str(metrics_dir / "training_history.json"),
+            "--output",
+            str(metrics_dir / "training_performance.png"),
+            "--accuracy-output",
+            str(metrics_dir / "curated_grade_accuracy.png"),
+        ]
+    )
+    _run(
+        [
+            sys.executable,
+            "scripts/curated_failure_report.py",
+            "--model",
+            str(metrics_dir / "answer_regressor_model.json"),
+            "--output",
+            str(metrics_dir / "curated_failure_report.md"),
+        ]
+    )
+    _run(
+        [
+            sys.executable,
+            "scripts/semantic_similarity_evaluation.py",
+            "--output",
+            str(metrics_dir / "semantic_similarity.json"),
+            "--chart-output",
+            str(metrics_dir / "semantic_accuracy.png"),
+        ]
+    )
+    _run([sys.executable, "scripts/quality_metrics.py", "--output-dir", str(metrics_dir)])
+    release_metrics_command = [
+        sys.executable,
+        "scripts/release_metrics.py",
+        "--metrics-dir",
+        str(metrics_dir),
+        "--output",
+        str(metrics_dir / "summary.md"),
+        "--release-label",
+        args.release_label,
+    ]
+    if args.release_notes is not None:
+        release_metrics_command.extend(["--release-notes", args.release_notes])
+    _run(release_metrics_command)
+    print(f"Release metrics directory: {metrics_dir}")
+
+
+def timestamped_metrics_dir() -> Path:
+    return Path("metrics") / datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 def main() -> None:

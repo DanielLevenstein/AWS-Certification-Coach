@@ -79,13 +79,11 @@ def _build_app_questions(count: int) -> list[dict]:
         spec = SERVICE_SPECS[index % len(SERVICE_SPECS)]
         variant = APP_VARIANTS[index // len(SERVICE_SPECS)]
         service, domain, certification, difficulty, purpose, concepts, distractors = spec
-        question_id = f"AWS-APP-{index + 1:03d}"
         correct_option = f"Use {service}."
         explanation = f"Use {service} to {purpose}."
         mcq_question = variant.format(purpose=purpose)
         questions.append(
             {
-                "question_id": question_id,
                 "certification": certification,
                 "domain": domain,
                 "difficulty": difficulty,

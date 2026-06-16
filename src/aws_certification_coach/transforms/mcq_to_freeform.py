@@ -37,7 +37,6 @@ Rules:
 
 Output schema:
 {{
-  "question_id": string,
   "certification": string,
   "domain": string,
   "difficulty": string,
@@ -118,7 +117,6 @@ class HeuristicTransformationProvider:
         ]
         reference_answer = original.get("explanation") or " ".join(correct_options)
         transformed = {
-            "question_id": source_item["question_id"],
             "certification": source_item["certification"],
             "domain": source_item["domain"],
             "difficulty": source_item["difficulty"],

@@ -7,11 +7,9 @@ def test_quiz_session_randomizes_question_order_with_seed():
 
     session = QuizSession(questions, seed=7)
 
-    assert [question.question_id for question in session.questions] != [
-        question.question_id for question in questions
-    ]
-    assert [question.question_id for question in session.questions] == [
-        question.question_id for question in QuizSession(questions, seed=7).questions
+    assert [question.question for question in session.questions] != [question.question for question in questions]
+    assert [question.question for question in session.questions] == [
+        question.question for question in QuizSession(questions, seed=7).questions
     ]
 
 
@@ -20,16 +18,15 @@ def test_quiz_session_can_preserve_order_for_tests():
 
     session = QuizSession(questions, shuffle=False)
 
-    assert [question.question_id for question in session.questions] == ["0", "1", "2"]
+    assert [question.question for question in session.questions] == ["Question 0?", "Question 1?", "Question 2?"]
 
 
-def _question(question_id: str) -> Question:
+def _question(suffix: str) -> Question:
     return Question(
-        question_id=question_id,
         certification="Cloud Practitioner",
         domain="Test",
         difficulty="Easy",
-        question="Question?",
+        question=f"Question {suffix}?",
         reference_answer="Answer.",
         key_concepts=[],
     )

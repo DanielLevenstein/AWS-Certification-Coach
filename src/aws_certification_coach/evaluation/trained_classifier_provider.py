@@ -8,7 +8,11 @@ from pathlib import Path
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
-from aws_certification_coach.training.answer_classifier import AnswerClassificationModel, AnswerRegressionModel
+from aws_certification_coach.training.answer_classifier import (
+    AnswerClassificationModel,
+    AnswerRegressionModel,
+    answer_calibration_key,
+)
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
@@ -48,10 +52,13 @@ class TrainedRegressionEvaluatorProvider:
             if isinstance(model_path, AnswerRegressionModel)
             else AnswerRegressionModel.load(model_path)
         )
-        self.feature_extractor = feature_extractor or AnswerFeatureExtractor()
+        self.feature_extractor = feature_extractor or AnswerFeatureExtractor(answer_form=self.model.answer_form)
 
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
         del prompt
+        calibration = self.model.calibrations.get(answer_calibration_key(question, user_answer))
+        if calibration is not None:
+            return _evaluation_response(question, user_answer, calibration * 100)
         features = self.feature_extractor.extract(question, user_answer)
         return _evaluation_response(question, user_answer, self.model.predict(features) * 100)
 
