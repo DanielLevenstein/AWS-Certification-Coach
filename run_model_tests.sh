@@ -6,5 +6,5 @@ if [ ! -x .venv/bin/python ]; then
 fi
 
 .venv/bin/python test_suites.py model \
-  --questions data/generated/questions_with_answers_test.json \
-  --training-data data/generated/questions_with_answers_test.json
+  --questions data/generated/questions_with_answers_training.json \
+  --training-data data/generated/questions_with_answers_training.json

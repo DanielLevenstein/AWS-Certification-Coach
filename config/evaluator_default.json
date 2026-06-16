@@ -1,5 +1,5 @@
 {
-  "provider": "trained_regressor",
+  "provider": "semantic_similarity",
   "openai": {
     "model": "gpt-5.4-mini",
     "temperature": 0.0,

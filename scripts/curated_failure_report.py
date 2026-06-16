@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 
 from aws_certification_coach.evaluation.service import EvaluationService
-from aws_certification_coach.evaluation.trained_classifier_provider import SemanticAwareEvaluatorProvider
+from aws_certification_coach.evaluation.trained_classifier_provider import SemanticSimilarityEvaluatorProvider
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
@@ -27,7 +27,7 @@ def build_failure_report(
     examples = load_feedback_regression_examples(curated_path, questions)
     del model_path
     extractor = AnswerFeatureExtractor()
-    service = EvaluationService(SemanticAwareEvaluatorProvider())
+    service = EvaluationService(SemanticSimilarityEvaluatorProvider())
     conflicts = _conflicting_labels(rows)
     failures = []
 
@@ -176,8 +176,8 @@ def _format_markdown(
         "",
         "## Primary Findings",
         "",
-        "1. Generated-label training error is low; remaining app-scoring failures are now semantic-aware calibration cases rather than epoch-count issues.",
-        "2. The semantic-aware scorer recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.",
+        "1. Generated-label training error is low; remaining app-scoring failures are now `semantic_similarity` calibration cases rather than epoch-count issues.",
+        "2. The `semantic_similarity` model recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.",
         "3. Full-credit prose is scored through service and concept coverage rather than only exact option text.",
         f"4. {conflict_finding}",
         "",

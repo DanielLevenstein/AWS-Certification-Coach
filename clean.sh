@@ -7,3 +7,4 @@ fi
 
 rm -rf data
 rm -rf metrics
+rm -rf scripts/data

@@ -5,6 +5,7 @@ from .service import EvaluationService, EvaluatorProvider, HeuristicEvaluatorPro
 from .factory import build_evaluation_service
 from .trained_classifier_provider import (
     SemanticAwareEvaluatorProvider,
+    SemanticSimilarityEvaluatorProvider,
     TrainedClassifierEvaluatorProvider,
     TrainedRegressionEvaluatorProvider,
 )
@@ -16,6 +17,7 @@ __all__ = [
     "EvaluatorProvider",
     "HeuristicEvaluatorProvider",
     "SemanticAwareEvaluatorProvider",
+    "SemanticSimilarityEvaluatorProvider",
     "TrainedClassifierEvaluatorProvider",
     "TrainedRegressionEvaluatorProvider",
     "build_evaluation_service",

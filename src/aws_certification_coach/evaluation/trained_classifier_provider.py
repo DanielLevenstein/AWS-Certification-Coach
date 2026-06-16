@@ -63,12 +63,15 @@ class TrainedRegressionEvaluatorProvider:
         return _evaluation_response(question, user_answer, self.model.predict(features) * 100)
 
 
-class SemanticAwareEvaluatorProvider:
-    """Uses deterministic service and concept matching as the application score source."""
+class SemanticSimilarityEvaluatorProvider:
+    """Uses deterministic semantic_similarity scoring as the application score source."""
 
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
         del prompt
         return _evaluation_response(question, user_answer, semantic_similarity_score(question, user_answer))
+
+
+SemanticAwareEvaluatorProvider = SemanticSimilarityEvaluatorProvider
 
 
 def _evaluation_response(question: Question, user_answer: str, model_score: float) -> str:

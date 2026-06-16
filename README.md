@@ -17,7 +17,7 @@ This project was inspired by my previous AWS Documentation RAG project.
 
 ## Goal
 
-AWS Certification Coach is a lightweight study app for AWS certification practice. It presents pre-generated freeform questions, evaluates learner answers with a local semantic-aware scorer by default, and returns structured coaching feedback.
+AWS Certification Coach is a lightweight study app for AWS certification practice. It presents pre-generated freeform questions, evaluates learner answers with the local `semantic_similarity` model by default, and returns structured coaching feedback.
 
 This version intentionally removes the runtime RAG stack from the earlier prototype. There is no document ingestion, FAISS index, vector database, or embedding model in the deployed app. Certification content is generated and reviewed offline, then served from a simple question repository.
 
@@ -56,8 +56,9 @@ To regenerate local data:
 | v1.0.0 | Initial Streamlit/Docker release with generated AWS certification practice questions and local grading artifacts. |
 | v1.1.0 | Separated the app-facing question bank from training labels and expanded the app bank to 80 AWS-docs-grounded questions. |
 | v1.3.1 | Test framework redesign; initial curated grade-band accuracy was 44%. |
-| v1.3.4 | Swapped default app scoring to semantic-aware grading; curated grade-band accuracy reached 80%. |
+| v1.3.4 | Swapped default app scoring to `semantic_similarity`; curated grade-band accuracy reached 80%. |
 | v1.5.3 | Updated test data to have proper train, test, validation split |
+| v1.5.4 | Made `semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
 
 #### Scope
 
@@ -100,18 +101,18 @@ Run model-quality checks separately:
 Run the release suite and save a tagged accuracy chart:
 
 ```bash
-./run_release_tests.sh v1.3.4
+./release_notes_quick.sh v1.5.4
 ```
 
-The release helper saves the semantic diagnostic accuracy chart as `release/<tag>_accuracy.png`.
+The release helper saves the `semantic_similarity` diagnostic chart as `release/<tag>_semantic_accuracy.png`.
 
 Refresh the training graph, curated failure report, semantic metrics, and detailed tagged report:
 
 ```bash
-./run_training_graph.sh v1.3.4.1
+./release_notes_full.sh v1.5.4
 ```
 
-The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. When a tag is supplied, `run_training_graph.sh` also publishes `release/release_<tag>_release_report.md`.
+The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper also publishes `release/<tag>_semantic_accuracy.png` and `release/curated_failure_report.md`.
 
 Regenerate local training, validation, test, and app sample artifacts:
 
@@ -123,10 +124,10 @@ Regenerate local training, validation, test, and app sample artifacts:
 Train the diagnostic partial-credit regressor:
 
 ```bash
-.venv/bin/python scripts/train_answer_regressor_model.py
+.venv/bin/python scripts/train_answer_accuracy.py
 ```
 
-The regression metrics are retained for diagnostics, but release tracking uses curated app-scoring accuracy, precision, and recall.
+The regression metrics are retained for diagnostics, but release tracking uses `semantic_similarity` precision as the guardrail.
 
 Print a single release-note-friendly model performance summary:
 
@@ -157,12 +158,12 @@ The image includes generated sample questions and local scoring code. The defaul
 - Runtime: Docker
 - Port: use Render's `PORT` environment variable; the container defaults to `8501` for local runs.
 - Health check path: `/_stcore/health`
-- Default evaluator: local semantic-aware scoring
+- Default evaluator: local `semantic_similarity` scoring
 - API key requirement: none for the default local path.
 
 ## Evaluator Configuration
 
-V1 defaults to local semantic-aware scoring. The scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap. The legacy `trained_regressor` provider name is still accepted by configuration for compatibility, but the app-facing score is semantic-aware.
+V1 defaults to the local `semantic_similarity` model. The scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap. The legacy `semantic_aware` and `trained_regressor` provider names are still accepted by configuration for compatibility, but the app-facing score is produced by `semantic_similarity`.
 
 The OpenAI provider code remains available for explicit experiments, but it is not part of the default app or release flow.
 
