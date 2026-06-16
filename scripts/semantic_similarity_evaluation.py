@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Evaluate curated answers with deterministic semantic-aware scoring."""
+"""Evaluate curated answers with the deterministic semantic_similarity model."""
 
 from __future__ import annotations
 
@@ -58,7 +58,7 @@ def plot_semantic_accuracy(
         colors = ["#ff7f0e", *colors]
     figure, axis = plt.subplots(figsize=(8, 5))
     bars = axis.bar(values.keys(), values.values(), color=colors)
-    axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Release target (90%)")
+    axis.axhline(80, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (80%)")
     axis.set_title("Semantic Diagnostic Accuracy")
     axis.set_ylabel("Percent")
     axis.set_ylim(0, 100)

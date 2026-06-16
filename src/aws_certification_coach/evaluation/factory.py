@@ -5,7 +5,7 @@ from __future__ import annotations
 from aws_certification_coach.config import EvaluatorConfig, load_evaluator_config
 from aws_certification_coach.evaluation.service import EvaluationService, HeuristicEvaluatorProvider
 from aws_certification_coach.evaluation.trained_classifier_provider import (
-    SemanticAwareEvaluatorProvider,
+    SemanticSimilarityEvaluatorProvider,
     TrainedClassifierEvaluatorProvider,
     TrainedRegressionEvaluatorProvider,
 )
@@ -21,8 +21,8 @@ def build_evaluation_service(config: EvaluatorConfig | None = None) -> Evaluatio
         provider = OpenAIEvaluatorProvider(evaluator_config.openai)
     elif provider_name == "trained_classifier":
         provider = TrainedClassifierEvaluatorProvider(evaluator_config.trained_classifier_model_path)
-    elif provider_name == "semantic_aware":
-        provider = SemanticAwareEvaluatorProvider()
+    elif provider_name in {"semantic_similarity", "semantic_aware"}:
+        provider = SemanticSimilarityEvaluatorProvider()
     elif provider_name == "trained_regressor":
         provider = TrainedRegressionEvaluatorProvider(evaluator_config.trained_regressor_model_path)
     else:

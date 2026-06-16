@@ -1,8 +1,6 @@
-# Model performance Optimization
+# Pre-release refactoring
 
-Recommended Remediation Order
-- Reconcile conflicting curated labels before changing model code.
-- Add normalized AWS service aliases and semantic service-match features.
-- Add concept-coverage features that are independent of full reference-answer overlap.
-- Calibrate grade boundaries against curated examples rather than relying only on regression MSE.
-- Revisit runtime exact-option and wrong-service guards so partial-credit expectations are represented consistently.
+- Update model release tests to use semantic precision as the release guardrail and set the threshold to 80%
+- Rename current model to Semantic similarity model and update documentation appropriately. 
+- Update release_notes_full.sh and release_notes_quick.sh so that they will accept tags that aren't in the correct form so that test builds are easier. 
+- Run release_notes_full.sh with the tag v1.5.4 and commit changes with a one-line release summary.

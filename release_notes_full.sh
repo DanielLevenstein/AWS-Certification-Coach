@@ -7,25 +7,19 @@ fi
 
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <release-tag>" >&2
-  echo "Example: $0 v1.3.2" >&2
+  echo "Example: $0 v1.3.2 or test-build" >&2
   exit 2
 fi
 
 RELEASE_TAG="$1"
-case "$RELEASE_TAG" in
-  v[0-9]*.[0-9]*.[0-9]* | v[0-9]*.[0-9]*.[0-9]*.[0-9]*) ;;
-  *)
-    echo "Release tag must look like v1.3.2; received: $RELEASE_TAG" >&2
-    exit 2
-    ;;
-esac
+RELEASE_FILE_STEM="$(printf '%s' "$RELEASE_TAG" | tr -c '[:alnum:]._-' '_')"
 .venv/bin/python test_suites.py model
 METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
 .venv/bin/python test_suites.py release --release-label "$RELEASE_TAG" --release-notes docs/RELEASE_NOTES.md --metrics-dir "$METRICS_DIR"
 
 ACCURACY_SOURCE="$METRICS_DIR/semantic_accuracy.png"
-ACCURACY_OUTPUT="release/${RELEASE_TAG}_semantic_accuracy.png"
-LATEST_REPORT="release/$METRICS_DIR/curated_failure_report.md"
+ACCURACY_OUTPUT="release/${RELEASE_FILE_STEM}_semantic_accuracy.png"
+LATEST_REPORT="$METRICS_DIR/curated_failure_report.md"
 REPORT_OUTPUT="release/curated_failure_report.md"
 mkdir -p release
 cp -p "$ACCURACY_SOURCE" "$ACCURACY_OUTPUT"

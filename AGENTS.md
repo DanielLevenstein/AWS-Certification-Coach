@@ -1,12 +1,9 @@
 # Project Setup
 - Do not autorun streamlit app on opening codespace.
 - Run all python code in a virtual environment.
-- run setup.sh if a script is available, and if it's not, locate a data generation script instead.
-
-## Documentation Files.
-- Create a backup TODO file called TODO_COPY.md 
-- Create a backup copy of AGENTS.md called AGENTS_COPY.md
-- Ensure no copy files are committed to source control 
+- run clean.sh to clean out the data directory for any changes that brake the existing schema
+- run setup.sh to regenerate test data.
+- ensure that scripts/data and metrics directory aren't committed to source control
 
 # Refactoring checklist
 For each merge ensure the following.

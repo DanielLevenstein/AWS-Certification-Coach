@@ -1,4 +1,4 @@
-"""Deterministic semantic-aware grading for curated answer diagnostics."""
+"""Deterministic semantic_similarity grading for curated answer diagnostics."""
 
 from __future__ import annotations
 

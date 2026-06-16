@@ -11,8 +11,8 @@
 
 ## Primary Findings
 
-1. Generated-label training error is low; remaining app-scoring failures are now semantic-aware calibration cases rather than epoch-count issues.
-2. The semantic-aware scorer recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.
+1. Generated-label training error is low; remaining app-scoring failures are now `semantic_similarity` calibration cases rather than epoch-count issues.
+2. The `semantic_similarity` model recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.
 3. Full-credit prose is scored through service and concept coverage rather than only exact option text.
 4. No cross-band duplicate-label conflicts were detected in the curated data.
 

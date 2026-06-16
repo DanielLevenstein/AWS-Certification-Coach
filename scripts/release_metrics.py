@@ -49,10 +49,10 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
             "",
             "Training curve: `training_performance.png`",
             "Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`",
-            "Semantic diagnostic accuracy: `semantic_accuracy.png`",
+            "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`",
             "Curated failure analysis: `curated_failure_report.md`",
             "",
-            "Saved model accuracy is the release gate for the trained regressor. Semantic metrics are diagnostic only.",
+            "Semantic precision is the release guardrail for the `semantic_similarity` model.",
             "Precision and recall treat A/B and C/D as accepted answers and F as rejected.",
         ]
     ) + "\n"

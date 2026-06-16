@@ -8,6 +8,7 @@ from pathlib import Path
 from aws_certification_coach.evaluation.factory import build_evaluation_service
 from aws_certification_coach.evaluation.service import EvaluationService
 from aws_certification_coach.evaluation.trained_classifier_provider import TrainedRegressionEvaluatorProvider
+from aws_certification_coach.model_evaluation.semantic_similarity import evaluate_semantic_curated_answers
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.answer_classifier import (
@@ -39,9 +40,11 @@ def run_model_evaluation(
         training_examples,
     )
     rubric = evaluate_curated_answers(curated_path, app_questions)
+    semantic = evaluate_semantic_curated_answers(curated_path, app_questions)
     return {
         "held_out_performance": held_out,
         "rubric_adherence": rubric,
+        "semantic_similarity": semantic,
     }
 
 

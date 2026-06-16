@@ -20,9 +20,9 @@ README.md has a shorter release notes section for only major releases.
 1) Run all three test scripts prior to each release
 - `run_unit_tests.sh`
 - `run_model_tests.sh`
-- `run_release_tests.sh v1.3.x`
-2) Update RELEASE_NOTES.md with a description of the release and output from `run_release_tests.sh`.
-3) Review `metrics/<timestamp>/training_performance.png`, `metrics/<timestamp>/curated_grade_accuracy.png`, and `metrics/<timestamp>/semantic_accuracy.png`. Run `run_training_graph.sh v1.3.x` directly when only the training graphs and detailed release report need to be refreshed.
+- `release_notes_full.sh v1.5.x`
+2) Update RELEASE_NOTES.md with a description of the release and output from `release_notes_full.sh`.
+3) Review `metrics/<timestamp>/training_performance.png`, `metrics/<timestamp>/curated_grade_accuracy.png`, and `metrics/<timestamp>/semantic_accuracy.png`. Run `release_notes_quick.sh v1.5.x` when only the release metrics and report need to be refreshed.
 4) Review `metrics/<timestamp>/curated_failure_report.md` and reconcile contradictory labels before tuning the model.
 5) Create a docker tag for release using the following command.
 `docker buildx build --platform linux/amd64 -t daniellevenstein/aws-certification-coach:tag . --push`

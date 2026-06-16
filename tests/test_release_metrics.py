@@ -102,8 +102,8 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     assert "| v1.5 Schema | 96.00% | 44.00% | 80.00% | 90.00% | 75.00% |" in markdown
     assert "Saved model answer form: `long`" in markdown
     assert "Saved model calibration count: `18`" in markdown
-    assert "Saved model accuracy is the release gate" in markdown
-    assert "Semantic diagnostic accuracy: `semantic_accuracy.png`" in markdown
+    assert "Semantic precision is the release guardrail" in markdown
+    assert "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`" in markdown
     assert "A/B and C/D as accepted answers and F as rejected" in markdown
 
 
