@@ -101,18 +101,18 @@ Run model-quality checks separately:
 Run the release suite and save a tagged accuracy chart:
 
 ```bash
-./release_notes_quick.sh v1.5.4
+./release_notes.sh --quick v2.2.0
 ```
 
-The release helper saves the `semantic_similarity` diagnostic chart as `release/<tag>_semantic_accuracy.png`.
+The release helper saves the `semantic_similarity` diagnostic chart as `release/<tag>_semantic_accuracy.png` and the question coverage chart as `release/<tag>_question_coverage.png`.
 
 Refresh the training graph, curated failure report, semantic metrics, and detailed tagged report:
 
 ```bash
-./release_notes_full.sh v1.5.4
+./release_notes.sh --full v2.2.0
 ```
 
-The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper also publishes `release/<tag>_semantic_accuracy.png` and `release/curated_failure_report.md`.
+The legacy `release_notes_quick.sh` and `release_notes_full.sh` wrappers call the combined release helper. The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, `question_coverage.png`, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper also publishes `release/<tag>_semantic_accuracy.png`, `release/<tag>_question_coverage.png`, and `release/curated_failure_report.md`.
 
 Regenerate local training, validation, test, and app sample artifacts:
 

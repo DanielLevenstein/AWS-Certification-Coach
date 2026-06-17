@@ -30,6 +30,7 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
     model_evaluation = _optional_read(metrics_dir / "model_evaluation.json")
     semantic = _read(metrics_dir / "semantic_similarity.json")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
+    question_coverage = _optional_read(metrics_dir / "question_coverage.json")
     final = training[-1]
     saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
     saved_model_accuracy = _saved_model_accuracy(saved_model, model_evaluation, final)
@@ -51,11 +52,16 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
             f"Question fidelity sample count: `{question_fidelity.get('sample_count', 0)}`",
             f"Developer source question count: `{question_fidelity.get('source_count', 0)}`",
             f"Developer generated question count: `{question_fidelity.get('generated_question_count', question_fidelity.get('sample_count', 0))}`",
+            f"App question count: `{question_coverage.get('question_count', 0)}`",
+            f"Question coverage domain count: `{question_coverage.get('domain_count', 0)}`",
+            f"Question coverage concept count: `{question_coverage.get('concept_count', 0)}`",
+            f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
             f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
             "",
             "Training curve: `training_performance.png`",
             "Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`",
             "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`",
+            "Question coverage chart: `question_coverage.png`",
             "Curated failure analysis: `curated_failure_report.md`",
             "",
             "Semantic precision is the release guardrail for the `semantic_similarity` model.",

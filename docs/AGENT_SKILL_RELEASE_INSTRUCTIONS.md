@@ -76,7 +76,7 @@ If the skill change is tied to model training or release metrics, include the la
 1. Run the normal release script before commit:
 
 ```bash
-./release_notes_full.sh <release-tag>
+./release_notes.sh --full <release-tag>
 ```
 
 2. Confirm generated artifacts are not staged:

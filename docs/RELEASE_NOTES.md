@@ -18,6 +18,7 @@
 | v1.5.5  | Created automated deployment script                                                                                                                            |
 | v2.1.1  | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                                               |
 | v2.1.2  | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
+| v2.2.0  | Designs service-comparison freeform questions, expanded source sampling, and a concept coverage chart for release notes.                                      |
 
 
 # Release Metrics
@@ -39,6 +40,8 @@ Developer questions use `AWS Certified Developer` as the display certification l
 For v2.1.1 - v2.1.2,
 I noticed a huge update to Semantic Accuracy and Semantic Recall after the latest update, but Training Accuracy is still in the 60s.
 Also, I am worried about why Saved Accuracy is so much higher than Semantic Accuracy. 
+
+For v2.2.0 design planning, comparison-style freeform questions should ask learners to explain why the best service or feature beats the strongest near-miss distractor. The design is documented in [V2_2_ENHANCED_SERVICES_COMPARISON_DESIGN.md](V2_2_ENHANCED_SERVICES_COMPARISON_DESIGN.md). The release metrics run now generates a real question coverage chart as `question_coverage.png` and publishes the first tagged copy as `release/v2.2.0_question_coverage.png`.
 
 
 ### Scope

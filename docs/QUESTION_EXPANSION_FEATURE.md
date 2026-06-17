@@ -173,7 +173,7 @@ Question fidelity should combine concept fidelity and exam-style calibration. Re
 - Reject batches where questions are AWS-valid but not exam-valid.
 - Run unit tests with `./run_unit_tests.sh`.
 - Run model-quality checks with `./run_model_tests.sh`.
-- Run `./release_notes_full.sh <release-tag>` before commits.
+- Run `./release_notes.sh --full <release-tag>` before commits.
 - Confirm no `/data/`, `/scripts/data/`, or `/metrics/` files are staged.
 
 ## Open Questions

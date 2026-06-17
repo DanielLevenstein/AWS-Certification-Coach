@@ -1,6 +1,9 @@
 from pathlib import Path
+import struct
+import subprocess
 
 from aws_certification_coach.release_metrics.complexity import measure_complexity
+from aws_certification_coach.release_metrics.question_coverage import measure_question_coverage, plot_question_coverage
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
@@ -70,6 +73,75 @@ def test_semantic_accuracy_chart_accepts_saved_model_accuracy(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
+def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
+    rows = [
+        {
+            "certification": "AWS Certified Developer",
+            "domain": "Development with AWS Services",
+            "difficulty": "Medium",
+            "question_type": "service_comparison",
+            "question": "Compare Lambda with SQS for this retry scenario.",
+            "key_concepts": ["Lambda", "SQS", "dead-letter queue"],
+            "original_multiple_choice": {"source_name": "AWS Documentation: Lambda"},
+        },
+        {
+            "certification": "AWS Certified Developer",
+            "domain": "Development with AWS Services",
+            "difficulty": "Medium",
+            "question": "Which service should run code when a schedule fires?",
+            "key_concepts": ["Lambda", "EventBridge"],
+            "original_multiple_choice": {"source_name": "AWS Documentation: EventBridge"},
+        },
+        {
+            "certification": "Solutions Architect Associate",
+            "domain": "Storage",
+            "difficulty": "Easy",
+            "question": "Which lifecycle policy configuration should transition older objects?",
+            "key_concepts": ["Amazon S3", "replication"],
+            "original_multiple_choice": {"source_name": "AWS Documentation: S3"},
+        },
+    ]
+    output = tmp_path / "question_coverage.png"
+
+    metrics = measure_question_coverage(rows)
+    plot_question_coverage(metrics, output)
+
+    assert metrics["question_count"] == 3
+    assert metrics["domain_count"] == 2
+    assert metrics["concept_count"] == 6
+    assert {"name": "Comparison tradeoff", "count": 1} in metrics["question_intents"]
+    assert {"name": "Service or feature selection", "count": 1} in metrics["question_intents"]
+    assert {"name": "Configuration decision", "count": 1} in metrics["question_intents"]
+    assert output.read_bytes().startswith(b"\x89PNG")
+    width, height = _png_dimensions(output)
+    assert width >= 3000
+    assert height >= 2000
+
+
+def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
+    project_root = Path(__file__).resolve().parents[1]
+    tagged_output = project_root / "release" / "test-build_question_coverage.png"
+    result = subprocess.run(
+        ["./generate_question_coverage.sh", "test-build"],
+        cwd=project_root,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "release/test-build_question_coverage.png" in result.stdout
+    assert tagged_output.exists()
+    tagged_output.unlink()
+
+
+def _png_dimensions(path: Path) -> tuple[int, int]:
+    with path.open("rb") as image_file:
+        header = image_file.read(24)
+    if not header.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise ValueError(f"Not a PNG file: {path}")
+    return struct.unpack(">II", header[16:24])
+
+
 def test_saved_model_accuracy_reads_training_metrics(tmp_path: Path):
     training_metrics = tmp_path / "training_metrics.json"
     training_metrics.write_text(
@@ -99,6 +171,10 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         '{"model_name": "question_fidelity_heuristic_v1", "question_fidelity": 88.4, "sample_count": 5, "source_count": 12, "generated_question_count": 12}',
         encoding="utf-8",
     )
+    (metrics_dir / "question_coverage.json").write_text(
+        '{"question_count": 92, "domain_count": 15, "concept_count": 184, "question_intent_count": 4}',
+        encoding="utf-8",
+    )
 
     markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
 
@@ -109,11 +185,16 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     assert "Question fidelity model: `question_fidelity_heuristic_v1`" in markdown
     assert "Developer source question count: `12`" in markdown
     assert "Developer generated question count: `12`" in markdown
+    assert "App question count: `92`" in markdown
+    assert "Question coverage domain count: `15`" in markdown
+    assert "Question coverage concept count: `184`" in markdown
+    assert "Question coverage intent count: `4`" in markdown
     assert "Semantic answer evaluation count: `25`" in markdown
     assert "Semantic precision is the release guardrail" in markdown
     assert "Question fidelity is the release guardrail" in markdown
     assert "question expansion quality is tracked separately by Question Fidelity" in markdown
     assert "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`" in markdown
+    assert "Question coverage chart: `question_coverage.png`" in markdown
     assert "A/B and C/D as accepted answers and F as rejected" in markdown
 
 
