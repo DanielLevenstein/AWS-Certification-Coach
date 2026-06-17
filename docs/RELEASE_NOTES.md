@@ -36,6 +36,10 @@ For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
 Developer questions use `AWS Certified Developer` as the display certification label and keep `DVA-C02` as internal exam-code metadata.
 
+For v2.1.1 - v2.1.2,
+I noticed a huge update to Semantic Accuracy and Semantic Recall after the latest update, but Training Accuracy is still in the 60s.
+Also, I am worried about why Saved Accuracy is so much higher than Semantic Accuracy. 
+
 
 ### Scope
 

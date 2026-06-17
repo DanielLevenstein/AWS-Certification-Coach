@@ -19,20 +19,16 @@ Once this feature is stable, it will be merged into release/v2.2
 - Each time the release metric code is run commit local changes with a commit message with form v2.1.x Change made.
 - Don't make any pushes to docker or create any GitHub tags until a human reviews the changes. 
 
-### Version 2.1.2 Release Metric Evaluation: No Code Changes
+
+### Version 2.1.3 Enhanced Services Comparison Questions Design
+Multiple choice exam questions often have one good answer alongside a few bad options. 
+For the next set of freeform answers, I want us to generate a set of questions asking the user to compare the advantage of two or more services. 
+
+There are already existing exam questions that are covered by this, however, these questions simply ask what service a user should use, not why.
+Since the format of this exam is freeform questions, we have the opportunity to create scenario-based exam questions which are not possible in a multiple-choice format. 
 
 
-| Release | Saved Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
-|:--------|---------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|
-| v2.1.1  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |            96.80% |
-| v2.1.2  |         93.33% |            63.33% |            83.33% |             90.00% |          90.00% |            96.00% |
-
-I noticed a huge update to Semantic Accuracy and Semantic Recall after the latest update, but Training Accuracy is still in the 60s.
-Also, I am worried about why Saved Accuracy is so much higher than Semantic Accuracy. 
-I wanted to know if you had any idea what could cause that. 
-Again, we aren't making any code changes until we figure out what is causing the current behavior. 
-
-## Version 2.1.3 User Feedback Update
+## User Feedback Update
 - Update user feedback generation to include freeform user feedback text as well as a new field called "correct_answer_text"
 - Set "schema_version" in a generated JSON file to 2.
 - In the training and setup script read data from user_feedback.*.json file and copy it to data directory.
@@ -44,12 +40,16 @@ Again, we aren't making any code changes until we figure out what is causing the
   - generated_feedback.*.json
   - user_feedback.*.json 
 
-## Version 2.2.0 heuristic_scoring Feature Design. 
+For now the freeform user feedback will only be used for manual code changes, but eventually it should also be used when training models. 
+We are already getting into a situation where freeform feedback could apply either to the question generation or the answer grading, and it's only going to get worse if we expand our answer heuristic grading. 
+
+
+# Future Release heuristic_scoring Feature Design. 
 
 - Before making a code change, create the HEURISTIC_SCORING_FEATURE.md document with a proposed design for the new feature which follows the requirements listed in TODO.md file 
 - Update the existing heuristic_scoring skill based on information in a design document.
 
-### Version 2.2.1 heuristic_scoring Implementation
+##  Future Release heuristic_scoring Implementation
 Heuristic-based scoring was originally implemented on feature/heuristic_scoring
 This branch was originally intended to be release/v2 but cannot be merged in directly because too much code drift has happened since it was created. 
 
