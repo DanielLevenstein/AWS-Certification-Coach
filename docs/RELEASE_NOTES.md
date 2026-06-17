@@ -16,22 +16,29 @@
 | v1.5.3 | Updated test data to have proper train, test, validation split                                                 |
 | v1.5.4 | Made `semantic_similarity` the official model name, moved release gating to 80% semantic precision.            |
 | v1.5.5 | Created automated deployment script |
+| v2.1.1 | Adds Developer Associate freeform question generation and independent question-fidelity scoring. |
 
 
 # Release Metrics
 
-| Release | Saved Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |
-|:--------|---------------:|------------------:|------------------:|-------------------:|----------------:|
-| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |
-| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |
-| v1.5.3 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% |
-| v1.5.4 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% |
+| Release | Saved Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
+|:--------|---------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|
+| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% | N/A |
+| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% | N/A |
+| v1.5.3 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | N/A |
+| v1.5.4 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | N/A |
+| v2.1.1 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | 96.80% |
+
+For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
+
+
 ### Scope
 
 Certifications:
 
 - Cloud Practitioner
 - Solutions Architect Associate
+- AWS Certified Developer - Associate
 
 Difficulty:
 
@@ -41,12 +48,15 @@ Difficulty:
 <!-- release-metrics:start -->
 # Latest Release Metrics
 
-| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |
-|:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|
-| v1.5.4 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% |
+| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
+|:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|
+| v2.1.1 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | 96.80% |
 
 Saved model answer form: `long`
 Saved model calibration count: `18`
+Question fidelity model: `question_fidelity_heuristic_v1`
+Question fidelity sample count: `5`
+Semantic answer evaluation count: `25`
 
 Training curve: `training_performance.png`
 Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`
@@ -54,5 +64,7 @@ Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`
 Curated failure analysis: `curated_failure_report.md`
 
 Semantic precision is the release guardrail for the `semantic_similarity` model.
+Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
+Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.
 Precision and recall treat A/B and C/D as accepted answers and F as rejected.
 <!-- release-metrics:end -->

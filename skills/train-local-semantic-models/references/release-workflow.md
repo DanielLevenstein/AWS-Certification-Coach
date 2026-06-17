@@ -22,7 +22,7 @@ Update `docs/RELEASE_NOTES.md` with:
 - The latest release metrics table.
 - A comment below the table when model performance is below the quality standard.
 
-For question expansion, add a `question fidelity` metric on a 0-100 scale. Keep it separate from answer semantic accuracy, precision, and recall.
+For question expansion, add a `question fidelity` metric displayed as a percentage in release notes. Keep it separate from answer semantic accuracy, precision, and recall.
 
 ## Guardrails
 

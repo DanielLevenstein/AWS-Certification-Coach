@@ -29,6 +29,7 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
     training_metrics = _optional_read(metrics_dir / "training_metrics.json")
     model_evaluation = _optional_read(metrics_dir / "model_evaluation.json")
     semantic = _read(metrics_dir / "semantic_similarity.json")
+    question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
     final = training[-1]
     saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
     saved_model_accuracy = _saved_model_accuracy(saved_model, model_evaluation, final)
@@ -39,13 +40,16 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
         [
             "# Latest Release Metrics",
             "",
-            "| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |",
-            "|:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|",
+            "| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |",
+            "|:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|",
             f"| {release_label} | {saved_model_accuracy:.2%} | {checkpoint_accuracy:.2%} | {semantic['semantic_grade_accuracy']:.2%} | "
-            f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} |",
+            f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | {_question_fidelity_cell(question_fidelity)} |",
             "",
             f"Saved model answer form: `{answer_form}`",
             f"Saved model calibration count: `{calibration_count}`",
+            f"Question fidelity model: `{question_fidelity.get('model_name', 'not-run')}`",
+            f"Question fidelity sample count: `{question_fidelity.get('sample_count', 0)}`",
+            f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
             "",
             "Training curve: `training_performance.png`",
             "Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`",
@@ -53,6 +57,8 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
             "Curated failure analysis: `curated_failure_report.md`",
             "",
             "Semantic precision is the release guardrail for the `semantic_similarity` model.",
+            "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
+            "Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.",
             "Precision and recall treat A/B and C/D as accepted answers and F as rejected.",
         ]
     ) + "\n"
@@ -69,6 +75,12 @@ def _optional_read(path: Path) -> dict[str, object]:
     if not path.exists():
         return {}
     return _read(path)
+
+
+def _question_fidelity_cell(question_fidelity: dict[str, object]) -> str:
+    if "question_fidelity" not in question_fidelity:
+        return "N/A"
+    return f"{float(question_fidelity['question_fidelity']):.2f}%"
 
 
 def update_release_notes(release_notes: Path, markdown: str) -> None:

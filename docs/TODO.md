@@ -11,7 +11,7 @@ Once this feature is stable, it will be merged into release/v2.2
 
 - Download a set of example questions and save them to the data/original_questions directory
 - Create a set of new freeform questions and implement a semantic grading model which identifies concept fidelity of the generated questions compared to the original
-- Report question fidelity metric in the release notes under the column question fidelity on a scale of 0–100
+- Report question fidelity metric in the release notes under the column question fidelity as a percentage
 - Use a different model for question fidelity rating from the model used for semantic evaluation of answers. 
 - Ensure that the release note is updated with each change and include a one-line description of the release along with detailed release metrics in RELEASE_NOTES.md 
 - Each time the release metric code is run commit local changes with a commit message with form v2.1.x Change made.

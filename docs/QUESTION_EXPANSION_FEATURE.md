@@ -13,7 +13,7 @@ This design covers the Version 2.1.0 work described in `docs/TODO.md`. The imple
 - Store downloaded or collected source metadata and calibration notes under `data/original_questions/`.
 - Generate self-authored freeform questions from source concepts without copying restricted exam text.
 - Train a separate local semantic model for question fidelity scoring.
-- Report a `question fidelity` metric on a 0-100 scale in release notes.
+- Report a `question fidelity` metric as a percentage in release notes.
 - Keep question-fidelity scoring independent from answer semantic evaluation.
 - Maintain train, validation, and test separation for all model work.
 
@@ -161,7 +161,7 @@ Release notes should include a one-line change description and a metrics table w
 |:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|
 | v2.1.x | TBD | TBD | TBD | TBD | TBD | TBD |
 
-`question fidelity` should be reported as a percentage or integer score derived from held-out validation/test examples. A suggested initial gate is 80/100, with a release-note comment required when the score is below the quality standard.
+`question fidelity` should be reported as a percentage derived from the model's 0-100 score on held-out validation/test examples. A suggested initial gate is 80%, with a release-note comment required when the score is below the quality standard.
 
 Question fidelity should combine concept fidelity and exam-style calibration. Release notes should make the metric label clear if the implementation reports them separately, for example `question concept fidelity` and `question exam-style fidelity`.
 

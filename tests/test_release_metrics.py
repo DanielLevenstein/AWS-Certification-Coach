@@ -92,17 +92,25 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "semantic_similarity.json").write_text(
-        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75}',
+        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, "semantic_example_count": 25}',
+        encoding="utf-8",
+    )
+    (metrics_dir / "question_fidelity.json").write_text(
+        '{"model_name": "question_fidelity_heuristic_v1", "question_fidelity": 88.4, "sample_count": 5}',
         encoding="utf-8",
     )
 
     markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
 
-    assert "| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall |" in markdown
-    assert "| v1.5 Schema | 96.00% | 44.00% | 80.00% | 90.00% | 75.00% |" in markdown
+    assert "| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |" in markdown
+    assert "| v1.5 Schema | 96.00% | 44.00% | 80.00% | 90.00% | 75.00% | 88.40% |" in markdown
     assert "Saved model answer form: `long`" in markdown
     assert "Saved model calibration count: `18`" in markdown
+    assert "Question fidelity model: `question_fidelity_heuristic_v1`" in markdown
+    assert "Semantic answer evaluation count: `25`" in markdown
     assert "Semantic precision is the release guardrail" in markdown
+    assert "Question fidelity is the release guardrail" in markdown
+    assert "question expansion quality is tracked separately by Question Fidelity" in markdown
     assert "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`" in markdown
     assert "A/B and C/D as accepted answers and F as rejected" in markdown
 
