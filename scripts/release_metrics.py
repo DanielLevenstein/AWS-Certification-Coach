@@ -49,6 +49,8 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
             f"Saved model calibration count: `{calibration_count}`",
             f"Question fidelity model: `{question_fidelity.get('model_name', 'not-run')}`",
             f"Question fidelity sample count: `{question_fidelity.get('sample_count', 0)}`",
+            f"Developer source question count: `{question_fidelity.get('source_count', 0)}`",
+            f"Developer generated question count: `{question_fidelity.get('generated_question_count', question_fidelity.get('sample_count', 0))}`",
             f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
             "",
             "Training curve: `training_performance.png`",

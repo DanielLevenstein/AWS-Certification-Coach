@@ -42,6 +42,32 @@ def test_sample_question_artifact_includes_developer_question_fidelity_metadata(
     assert all(row.get("question_fidelity", {}).get("question_fidelity_score", 0) >= 80 for row in developer_rows)
 
 
+def test_developer_questions_do_not_include_multiple_choice_instructions():
+    rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
+    developer_rows = [row for row in rows if row.get("certification") == "AWS Certified Developer - Associate"]
+
+    assert developer_rows
+    assert all("Choose the best answer" not in row["question"] for row in developer_rows)
+    assert all(
+        "Choose the best answer" not in row["original_multiple_choice"]["question"]
+        for row in developer_rows
+    )
+
+
+def test_developer_multiple_choice_options_use_short_service_answers():
+    rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
+    developer_rows = [row for row in rows if row.get("certification") == "AWS Certified Developer - Associate"]
+
+    assert developer_rows
+    for row in developer_rows:
+        correct_option = next(
+            option
+            for option in row["original_multiple_choice"]["options"]
+            if option["option_id"] in row["original_multiple_choice"]["correct_option_ids"]
+        )
+        assert len(correct_option["text"]) < len(row["reference_answer"])
+
+
 def test_combined_training_artifact_keeps_answer_sections_with_questions():
     artifact = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_training.json"
     rows = JsonQuestionRepository(artifact).all()

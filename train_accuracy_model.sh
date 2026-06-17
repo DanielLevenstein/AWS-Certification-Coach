@@ -20,6 +20,12 @@ esac
   --training-data data/generated/questions_with_answers_training.json \
   --validation-questions data/generated/questions_with_answers_validation.json \
   --validation-data data/generated/questions_with_answers_validation.json \
+  --feedback-data data/curated/curated_training_data.json \
+  --feedback-data data/generated/user_feedback.v1.json \
+  --feedback-data data/generated/generated_feedback.vs.json \
+  --evaluation-data data/curated/curated_training_data.json \
+  --evaluation-data data/generated/user_feedback.v1.json \
+  --evaluation-data data/generated/generated_feedback.vs.json \
   --output "$METRICS_DIR/answer_regressor_model.json" \
   --metrics-output "$METRICS_DIR/training_metrics.json" \
   --history-output "$METRICS_DIR/training_history.json" \
@@ -34,8 +40,13 @@ esac
   --model "$METRICS_DIR/answer_regressor_model.json" \
   --output "$METRICS_DIR/curated_failure_report.md"
 .venv/bin/python scripts/semantic_similarity_evaluation.py \
+  --evaluation-data data/curated/curated_training_data.json \
+  --evaluation-data data/generated/user_feedback.v1.json \
+  --evaluation-data data/generated/generated_feedback.vs.json \
   --output "$METRICS_DIR/semantic_similarity.json" \
   --chart-output "$METRICS_DIR/semantic_accuracy.png"
+.venv/bin/python scripts/question_fidelity_evaluation.py \
+  --output "$METRICS_DIR/question_fidelity.json"
 .venv/bin/python scripts/release_metrics.py \
   --metrics-dir "$METRICS_DIR" \
   --output "$METRICS_DIR/summary.md"

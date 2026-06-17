@@ -96,7 +96,7 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "question_fidelity.json").write_text(
-        '{"model_name": "question_fidelity_heuristic_v1", "question_fidelity": 88.4, "sample_count": 5}',
+        '{"model_name": "question_fidelity_heuristic_v1", "question_fidelity": 88.4, "sample_count": 5, "source_count": 12, "generated_question_count": 12}',
         encoding="utf-8",
     )
 
@@ -107,6 +107,8 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     assert "Saved model answer form: `long`" in markdown
     assert "Saved model calibration count: `18`" in markdown
     assert "Question fidelity model: `question_fidelity_heuristic_v1`" in markdown
+    assert "Developer source question count: `12`" in markdown
+    assert "Developer generated question count: `12`" in markdown
     assert "Semantic answer evaluation count: `25`" in markdown
     assert "Semantic precision is the release guardrail" in markdown
     assert "Question fidelity is the release guardrail" in markdown
@@ -150,6 +152,40 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
 
     assert semantic_similarity_score(question, "KMS manages encryption keys.") >= 80
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
+
+
+def test_semantic_similarity_caps_question_rephrases_without_answer_detail():
+    question = Question(
+        certification="AWS Certified Developer - Associate",
+        domain="Security",
+        difficulty="Medium",
+        question=(
+            "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach "
+            "the backend function. Which API Gateway feature should the developer configure?"
+        ),
+        reference_answer=(
+            "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend "
+            "Lambda integration."
+        ),
+        key_concepts=["API Gateway", "Lambda authorizer", "custom authorization", "backend integration"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question=(
+                "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach "
+                "the backend function. Which API Gateway feature should the developer configure?"
+            ),
+            options=[
+                MultipleChoiceOption("A", "Use an API Gateway Lambda authorizer."),
+                MultipleChoiceOption("B", "Attach an EC2 security group."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    assert semantic_similarity_score(
+        question,
+        "Which API Gateway feature should be used to run token validation on requests?",
+    ) < 80
+    assert semantic_similarity_score(question, "Use an API Gateway Lambda authorizer.") >= 80
 
 
 def test_correct_answer_text_uses_multiple_choice_value_without_answer_cue():

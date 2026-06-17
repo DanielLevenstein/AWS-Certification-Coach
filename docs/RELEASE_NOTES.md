@@ -17,6 +17,7 @@
 | v1.5.4 | Made `semantic_similarity` the official model name, moved release gating to 80% semantic precision.            |
 | v1.5.5 | Created automated deployment script |
 | v2.1.1 | Adds Developer Associate freeform question generation and independent question-fidelity scoring. |
+| v2.1.2 | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
 
 
 # Release Metrics
@@ -28,8 +29,11 @@
 | v1.5.3 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | N/A |
 | v1.5.4 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | N/A |
 | v2.1.1 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | 96.80% |
+| v2.1.2 | 93.33% | 63.33% | 83.33% | 90.00% | 90.00% | 96.00% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
+
+For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
 
 
 ### Scope
@@ -38,7 +42,7 @@ Certifications:
 
 - Cloud Practitioner
 - Solutions Architect Associate
-- AWS Certified Developer - Associate
+- AWS Certified Developer—Associate
 
 Difficulty:
 
@@ -50,13 +54,15 @@ Difficulty:
 
 | Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
 |:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|
-| v2.1.1 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | 96.80% |
+| v2.1.2 | 93.33% | 63.33% | 83.33% | 90.00% | 90.00% | 96.00% |
 
 Saved model answer form: `long`
-Saved model calibration count: `18`
+Saved model calibration count: `24`
 Question fidelity model: `question_fidelity_heuristic_v1`
-Question fidelity sample count: `5`
-Semantic answer evaluation count: `25`
+Question fidelity sample count: `12`
+Developer source question count: `12`
+Developer generated question count: `12`
+Semantic answer evaluation count: `30`
 
 Training curve: `training_performance.png`
 Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`

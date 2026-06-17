@@ -1,0 +1,56 @@
+[
+  {
+    "schema_version": 2,
+    "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
+    "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
+    "answer_given": "Which API Gateway feature should be used to run token validation on requests?",
+    "correct_rating": "D",
+    "rating_given": "B",
+    "feedback_text": "This restates the prompt and mentions API Gateway, but it does not identify Lambda authorizers or explain the authorization behavior."
+  },
+  {
+    "schema_version": 2,
+    "question": "A Lambda function processes messages from an SQS queue. A few messages repeatedly fail and delay later processing. Which configuration should the developer use to isolate failed messages while allowing successful messages to continue?",
+    "reference_answer": "Configure the Lambda event source mapping with an SQS dead-letter queue so failed messages can be isolated after retries.",
+    "answer_given": "Which configuration should isolate failed messages while successful messages continue?",
+    "correct_rating": "D",
+    "rating_given": "B",
+    "feedback_text": "This is a question rephrase. It does not name an SQS dead-letter queue or the Lambda event source mapping behavior."
+  },
+  {
+    "schema_version": 2,
+    "question": "Two application instances may try to create the same DynamoDB item at the same time. Which DynamoDB write approach should the developer use to prevent replacing an existing item?",
+    "reference_answer": "Use a DynamoDB conditional write with a condition expression such as attribute_not_exists to avoid overwriting an existing item.",
+    "answer_given": "Which DynamoDB write approach prevents replacing an existing item?",
+    "correct_rating": "D",
+    "rating_given": "B",
+    "feedback_text": "This repeats the ask and the service name, but it misses conditional writes and condition expressions."
+  },
+  {
+    "schema_version": 2,
+    "question": "A development team wants its release pipeline to compile code and run unit tests automatically before deployment. Which AWS service should be added as the build action?",
+    "reference_answer": "Add AWS CodeBuild as a CodePipeline build stage to compile the application and run tests automatically.",
+    "answer_given": "Use AWS CodeBuild.",
+    "correct_rating": "B",
+    "rating_given": "A",
+    "feedback_text": "The service name is correct for a multiple-choice option, but a freeform answer should also connect CodeBuild to the CodePipeline build stage and automated tests."
+  },
+  {
+    "schema_version": 2,
+    "question": "A serverless application has intermittent latency across several downstream calls. Which AWS service should the developer use to trace each request through the distributed workflow?",
+    "reference_answer": "Use AWS X-Ray distributed tracing and service maps to follow requests and identify latency across downstream calls.",
+    "answer_given": "Use AWS X-Ray.",
+    "correct_rating": "B",
+    "rating_given": "A",
+    "feedback_text": "The service is correct, but the answer omits distributed tracing, service maps, and latency troubleshooting detail."
+  },
+  {
+    "schema_version": 2,
+    "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
+    "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
+    "answer_given": "Use an API Gateway Lambda authorizer.",
+    "correct_rating": "B",
+    "rating_given": "A",
+    "feedback_text": "The service feature is correct and acceptable, but the freeform answer needs more detail about custom authorization before invoking the backend Lambda integration for full credit."
+  }
+]

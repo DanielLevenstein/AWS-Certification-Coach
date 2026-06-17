@@ -24,6 +24,7 @@ class UserFeedbackRepository:
         answer_given: str,
         rating_given: str,
         correct_rating: str,
+        feedback_text: str = "",
     ) -> None:
         # Validate grades without writing derived numeric values to the artifact.
         letter_to_numeric(rating_given)
@@ -33,6 +34,7 @@ class UserFeedbackRepository:
             answer_given=answer_given,
             rating_given=rating_given,
             correct_rating=correct_rating,
+            feedback_text=feedback_text,
         )
         with self._lock:
             rows = self._read()
@@ -65,6 +67,7 @@ def build_feedback_record(
     answer_given: str,
     rating_given: str,
     correct_rating: str,
+    feedback_text: str = "",
 ) -> dict[str, Any]:
     return {
         "schema_version": 2,
@@ -74,6 +77,7 @@ def build_feedback_record(
         "answer_given": answer_given,
         "correct_rating": correct_rating,
         "rating_given": rating_given,
+        "feedback_text": feedback_text.strip(),
     }
 
 

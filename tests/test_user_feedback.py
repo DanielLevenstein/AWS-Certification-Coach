@@ -24,7 +24,13 @@ def test_feedback_repository_saves_letter_grades_without_numeric_values(tmp_path
     path = tmp_path / "generated" / "user_feedback.json"
     question = _question()
 
-    UserFeedbackRepository(path).submit(question, "AWS", rating_given="A", correct_rating="F")
+    UserFeedbackRepository(path).submit(
+        question,
+        "AWS",
+        rating_given="A",
+        correct_rating="F",
+        feedback_text="This only names the cloud provider.",
+    )
 
     rows = json.loads(path.read_text(encoding="utf-8"))
     assert rows == [
@@ -47,6 +53,7 @@ def test_feedback_repository_saves_letter_grades_without_numeric_values(tmp_path
             "answer_given": "AWS",
             "correct_rating": "F",
             "rating_given": "A",
+            "feedback_text": "This only names the cloud provider.",
         }
     ]
 
@@ -68,6 +75,7 @@ def test_feedback_repository_appends_to_existing_v1_records(tmp_path: Path):
         "answer_given",
         "correct_rating",
         "rating_given",
+        "feedback_text",
     }
     assert rows[0]["original_multiple_choice"]["correct_option_ids"] == ["A"]
 

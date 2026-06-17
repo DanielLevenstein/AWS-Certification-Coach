@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
+from collections.abc import Iterable
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
@@ -43,15 +44,14 @@ AMBIGUOUS_ALIAS_TOKENS = {
 
 
 def evaluate_semantic_curated_answers(
-    curated_path: Path,
+    curated_path: Path | Iterable[Path],
     questions: list[Question],
 ) -> dict[str, object]:
-    rows = json.loads(curated_path.read_text(encoding="utf-8"))
-    examples = load_feedback_regression_examples(curated_path, questions)
     matches = 0
     true_positive = false_positive = true_negative = false_negative = 0
     mismatches = []
-    for index, (row, example) in enumerate(zip(rows, examples, strict=True)):
+    rows_and_examples = _feedback_rows_and_examples(curated_path, questions)
+    for index, (source_path, source_row, row, example) in enumerate(rows_and_examples):
         question = example.question
         score = semantic_similarity_score(question, example.answer)
         actual = score_to_letter(score)
@@ -70,6 +70,8 @@ def evaluate_semantic_curated_answers(
         mismatches.append(
             {
                 "row": index,
+                "source": str(source_path),
+                "source_row": source_row,
                 "question": question.question,
                 "user_answer": example.answer,
                 "correct_answer": correct_answer_text(question),
@@ -79,7 +81,7 @@ def evaluate_semantic_curated_answers(
                 "score": score,
             }
         )
-    total = len(examples)
+    total = len(rows_and_examples)
     return {
         "semantic_grade_accuracy": matches / max(1, total),
         "semantic_precision": true_positive / max(1, true_positive + false_positive),
@@ -94,11 +96,35 @@ def evaluate_semantic_curated_answers(
     }
 
 
+def _feedback_rows_and_examples(
+    curated_path: Path | Iterable[Path],
+    questions: list[Question],
+) -> list[tuple[Path, int, dict, object]]:
+    paths = [curated_path] if isinstance(curated_path, Path) else list(curated_path)
+    rows_and_examples = []
+    for path in paths:
+        if not path.exists():
+            continue
+        rows = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(rows, list):
+            raise ValueError(f"Curated feedback must be a JSON list: {path}")
+        examples = load_feedback_regression_examples(path, questions)
+        rows_and_examples.extend(
+            (path, row_index, row, example)
+            for row_index, (row, example) in enumerate(zip(rows, examples, strict=True))
+            if isinstance(row, dict)
+        )
+    return rows_and_examples
+
+
 def semantic_similarity_score(question: Question, answer: str) -> int:
     """Score an answer using service-alias recognition plus concept coverage."""
 
     if _matches_incorrect_option(question, answer):
         return 35
+
+    if _rephrases_question_without_answer(question, answer):
+        return 65
 
     answer_tokens = set(_tokens(answer))
     content_tokens = answer_tokens - GENERIC_TOKENS
@@ -115,6 +141,25 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
     if content_tokens & reference_tokens:
         return 58
     return 25
+
+
+def _rephrases_question_without_answer(question: Question, answer: str) -> bool:
+    answer_tokens = set(_tokens(answer)) - GENERIC_TOKENS
+    if len(answer_tokens) < 4:
+        return False
+    normalized_answer = _normalized(answer)
+    if not normalized_answer.startswith(("which ", "what ", "how ", "why ", "when ", "where ")):
+        return False
+    question_tokens = set(_tokens(question.question)) - GENERIC_TOKENS
+    question_overlap = len(answer_tokens & question_tokens) / max(1, len(answer_tokens))
+    if question_overlap < 0.5:
+        return False
+
+    reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
+    answer_specific_tokens = reference_tokens - question_tokens
+    if not answer_specific_tokens:
+        return True
+    return len(answer_tokens & answer_specific_tokens) / len(answer_specific_tokens) < 0.5
 
 
 def _service_is_covered(question: Question, answer: str) -> bool:

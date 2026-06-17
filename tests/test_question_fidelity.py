@@ -39,6 +39,8 @@ def test_question_fidelity_batch_reports_0_to_100_metric():
 
     assert 0 <= metrics["question_fidelity"] <= 100
     assert metrics["sample_count"] == 2
+    assert metrics["source_count"] == 2
+    assert metrics["generated_question_count"] == 2
     assert metrics["model_name"] == "question_fidelity_heuristic_v1"
 
 

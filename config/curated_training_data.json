@@ -38,7 +38,7 @@
     "question": "Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.",
     "reference_answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
     "answer_given": "route 55",
-    "correct_rating": "C",
+    "correct_rating": "F",
     "rating_given": "A"
   },
   {
@@ -98,25 +98,11 @@
     "rating_given": "A"
   },
   {
-    "question": "Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.",
-    "reference_answer": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
-    "answer_given": "AWS Roles",
-    "correct_rating": "D",
-    "rating_given": "A"
-  },
-  {
     "question": "Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.",
     "reference_answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
     "answer_given": "S3 version tracking",
     "correct_rating": "F",
     "rating_given": "F"
-  },
-  {
-    "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
-    "reference_answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
-    "answer_given": "AWS Key Store",
-    "correct_rating": "D",
-    "rating_given": "A"
   },
   {
     "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
@@ -184,4 +170,5 @@
     "rating_given": "A",
     "source_test": "tests/test_three_agent_grading.py::test_model_prompt_and_parser_use_three_independent_agent_results"
   }
+
 ]

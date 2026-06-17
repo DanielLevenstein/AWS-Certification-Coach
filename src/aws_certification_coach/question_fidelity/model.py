@@ -139,6 +139,8 @@ def evaluate_question_batch(sources: Iterable[dict[str, object]], generated_ques
         "question_exam_style_fidelity": round(average_exam_style, 2),
         "threshold": model.score_threshold,
         "sample_count": len(scored_rows),
+        "source_count": len(source_by_id),
+        "generated_question_count": len(scored_rows),
         "accept_count": sum(1 for row in scored_rows if row.review_recommendation == "accept"),
         "revise_count": sum(1 for row in scored_rows if row.review_recommendation == "revise"),
         "reject_count": sum(1 for row in scored_rows if row.review_recommendation == "reject"),
