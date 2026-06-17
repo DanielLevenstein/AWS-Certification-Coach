@@ -1,13 +1,13 @@
 # Curated Grade Failure Report
 
-- Curated examples: 23
+- Curated examples: 25
 - Evaluation bands: `A/B`, `C/D`, `F`
 - Passing grade-band predictions: 18
-- Failing grade-band predictions: 5
-- Grade-band accuracy: 78.26%
-- Unique failing question/answer/grade cases: 5
+- Failing grade-band predictions: 7
+- Grade-band accuracy: 72.00%
+- Unique failing question/answer/grade cases: 6
 - Conflicting normalized label sets: 0
-- Actual grade bands among failures: {'C/D': 3, 'F': 2}
+- Actual grade bands among failures: {'C/D': 3, 'F': 4}
 
 ## Primary Findings
 
@@ -22,9 +22,21 @@
 
 ## Failing Cases
 
-### 1. Expected F, received C/D
+### 1. Expected C/D, received F
 
-- Rows: `14`; occurrences: `1`
+- Rows: `20, 23`; occurrences: `2`
+- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
+- Expected rating: `0.75`
+- User answer: `AWS KMS Keys`
+- Correct answer: AWS Secrets Manager
+- Raw model score: `35.00`; runtime score: `35`
+- Runtime feedback: This answer needs more AWS-specific detail.
+- Largest feature contributions: `semantic_similarity_score` +0.350
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+
+### 2. Expected F, received C/D
+
+- Rows: `12`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
 - Expected rating: `0.25`
 - User answer: `S3 version tracking`
@@ -34,7 +46,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 2. Expected C/D, received F
+### 3. Expected C/D, received F
 
 - Rows: `1`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.
@@ -46,7 +58,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 3. Expected C/D, received F
+### 4. Expected C/D, received F
 
 - Rows: `2`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -58,9 +70,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 4. Expected A/B, received C/D
+### 5. Expected A/B, received C/D
 
-- Rows: `10`; occurrences: `1`
+- Rows: `9`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
 - Expected rating: `0.85`
 - User answer: `AWS Cost Center`
@@ -70,9 +82,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 5. Expected F, received C/D
+### 6. Expected F, received C/D
 
-- Rows: `9`; occurrences: `1`
+- Rows: `8`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.
 - Expected rating: `0.25`
 - User answer: `AWS Compliance Manager`

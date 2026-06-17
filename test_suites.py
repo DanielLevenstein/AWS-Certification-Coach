@@ -88,8 +88,8 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             "scripts/generate_question_coverage.py",
             "--output",
             str(metrics_dir / "question_coverage.json"),
-            "--chart-output",
-            str(metrics_dir / "question_coverage.png"),
+            "--chart-output-dir",
+            str(metrics_dir),
         ]
     )
     _run([sys.executable, "scripts/quality_metrics.py", "--output-dir", str(metrics_dir)])

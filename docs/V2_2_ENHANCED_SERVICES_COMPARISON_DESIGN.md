@@ -98,8 +98,10 @@ Recommended chart panels:
 
 Suggested artifact name:
 
-- `metrics/<timestamp>/question_coverage.png` for the release-metrics run.
-- `release/v2.2.0_question_coverage.png` for the first v2.2.0 release output.
+- `metrics/<timestamp>/question_domain_coverage.png` for domain coverage.
+- `metrics/<timestamp>/question_intent_coverage.png` for question-intent coverage.
+- `metrics/<timestamp>/question_certification_coverage.png` for certification split.
+- `release/v2.2.0_question_*_coverage.png` for the first v2.2.0 release outputs.
 
 Release-note language should describe the chart as concept coverage for the generated question bank, not as proof of exam equivalence.
 
@@ -144,7 +146,7 @@ For v2.2.0, add or retain:
 - `Comparison Fidelity`: average score for service-comparison questions only.
 - `Comparison Candidate Count`: number of source MCQs eligible for comparison transformation.
 - `Generated Comparison Question Count`: number of app-facing comparison questions generated.
-- `Concept Coverage Chart`: path to the release PNG artifact.
+- `Concept Coverage Charts`: paths to the domain, intent, and certification release PNG artifacts.
 
 If `Comparison Fidelity` is below the quality standard, add a note below the release metrics table explaining whether the issue is concept fidelity, near-miss quality, technical correctness, or exam-style fit.
 

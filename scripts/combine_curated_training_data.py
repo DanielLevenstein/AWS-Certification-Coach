@@ -10,6 +10,8 @@ from pathlib import Path
 
 DEFAULT_PATTERNS = (
     "curated_training_data.json",
+    "curated_training_*.json",
+    "curated_training_*.data",
     "user_feedback.*.json",
 )
 
@@ -26,8 +28,6 @@ def combine_curated_training_data(config_dir: Path, output: Path) -> tuple[int, 
     if not input_paths:
         patterns = ", ".join(DEFAULT_PATTERNS)
         raise FileNotFoundError(f"No curated training data found in {config_dir} matching {patterns}")
-
-
     combined_rows: list[object] = []
     seen_rows: set[str] = set()
     for path in input_paths:
@@ -78,11 +78,13 @@ def _curated_row(row: dict) -> dict:
     ordered_keys = [
         "schema_version",
         "question",
+        "exam_code",
         "reference_answer",
         "answer_given",
         "correct_rating",
         "rating_given",
         "correct_answer_text",
+        "feedback_text",
     ]
     return {key: curated[key] for key in ordered_keys if key in curated}
 

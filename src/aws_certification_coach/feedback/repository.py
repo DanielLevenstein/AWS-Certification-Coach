@@ -14,11 +14,10 @@ from aws_certification_coach.ratings import letter_to_numeric
 class UserFeedbackRepository:
     """Appends human-readable grade corrections to a local JSON artifact."""
 
-    schema_version = 2
-
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self._lock = threading.Lock()
+        self.schema_version = _schema_version_from_path(self.path)
 
     def submit(
         self,
@@ -26,7 +25,7 @@ class UserFeedbackRepository:
         answer_given: str,
         rating_given: str,
         correct_rating: str,
-        feedback_text: str,
+        feedback_text: str = "",
     ) -> None:
         # Validate grades without writing derived numeric values to the artifact.
         letter_to_numeric(rating_given)
@@ -37,6 +36,7 @@ class UserFeedbackRepository:
             rating_given=rating_given,
             correct_rating=correct_rating,
             feedback_text=feedback_text,
+            schema_version=self.schema_version,
         )
         with self._lock:
             rows = self._read()
@@ -70,9 +70,10 @@ def build_feedback_record(
     rating_given: str,
     correct_rating: str,
     feedback_text: str = "",
+    schema_version: int = 1,
 ) -> dict[str, Any]:
     return {
-        "schema_version": UserFeedbackRepository.schema_version,
+        "schema_version": schema_version,
         "question": question.question,
         "exam_code": question.exam_code,
         "reference_answer": question.reference_answer,
@@ -82,6 +83,15 @@ def build_feedback_record(
         "rating_given": rating_given,
         "feedback_text": feedback_text.strip(),
     }
+
+
+def _schema_version_from_path(path: Path) -> int:
+    name = path.name
+    if ".v2." in name:
+        return 2
+    if name.startswith("generated_feedback"):
+        return 0
+    return 1
 
 
 def _multiple_choice_to_json(original: MultipleChoiceQuestion | None) -> dict[str, Any] | None:

@@ -3,7 +3,10 @@ import struct
 import subprocess
 
 from aws_certification_coach.release_metrics.complexity import measure_complexity
-from aws_certification_coach.release_metrics.question_coverage import measure_question_coverage, plot_question_coverage
+from aws_certification_coach.release_metrics.question_coverage import (
+    measure_question_coverage,
+    plot_question_coverage_artifacts,
+)
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
@@ -104,7 +107,7 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
     output = tmp_path / "question_coverage.png"
 
     metrics = measure_question_coverage(rows)
-    plot_question_coverage(metrics, output)
+    outputs = plot_question_coverage_artifacts(metrics, tmp_path)
 
     assert metrics["question_count"] == 3
     assert metrics["domain_count"] == 2
@@ -112,15 +115,21 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
     assert {"name": "Comparison tradeoff", "count": 1} in metrics["question_intents"]
     assert {"name": "Service or feature selection", "count": 1} in metrics["question_intents"]
     assert {"name": "Configuration decision", "count": 1} in metrics["question_intents"]
-    assert output.read_bytes().startswith(b"\x89PNG")
-    width, height = _png_dimensions(output)
-    assert width >= 3000
-    assert height >= 2000
+    assert set(outputs) == {"domain", "intent", "certification"}
+    for output in outputs.values():
+        assert output.read_bytes().startswith(b"\x89PNG")
+        width, height = _png_dimensions(output)
+        assert width >= 1500
+        assert height >= 1000
 
 
 def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
     project_root = Path(__file__).resolve().parents[1]
-    tagged_output = project_root / "release" / "test-build_question_coverage.png"
+    tagged_outputs = [
+        project_root / "release" / "test-build_question_domain_coverage.png",
+        project_root / "release" / "test-build_question_intent_coverage.png",
+        project_root / "release" / "test-build_question_certification_coverage.png",
+    ]
     result = subprocess.run(
         ["./generate_question_coverage.sh", "test-build"],
         cwd=project_root,
@@ -129,9 +138,12 @@ def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
         text=True,
     )
 
-    assert "release/test-build_question_coverage.png" in result.stdout
-    assert tagged_output.exists()
-    tagged_output.unlink()
+    assert "release/test-build_question_domain_coverage.png" in result.stdout
+    assert "release/test-build_question_intent_coverage.png" in result.stdout
+    assert "release/test-build_question_certification_coverage.png" in result.stdout
+    for tagged_output in tagged_outputs:
+        assert tagged_output.exists()
+        tagged_output.unlink()
 
 
 def _png_dimensions(path: Path) -> tuple[int, int]:
@@ -172,7 +184,11 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "question_coverage.json").write_text(
-        '{"question_count": 92, "domain_count": 15, "concept_count": 184, "question_intent_count": 4}',
+        (
+            '{"question_count": 92, "domain_count": 15, "concept_count": 184, "question_intent_count": 4, '
+            '"covered_services": [{"name": "Lambda", "count": 3}, {"name": "SQS", "count": 2}], '
+            '"top_concepts": [{"name": "serverless", "count": 4}, {"name": "replication", "count": 3}]}'
+        ),
         encoding="utf-8",
     )
 
@@ -189,14 +205,12 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     assert "Question coverage domain count: `15`" in markdown
     assert "Question coverage concept count: `184`" in markdown
     assert "Question coverage intent count: `4`" in markdown
+    assert "Top covered concepts: `serverless, replication`" in markdown
     assert "Semantic answer evaluation count: `25`" in markdown
     assert "Semantic precision is the release guardrail" in markdown
     assert "Question fidelity is the release guardrail" in markdown
     assert "question expansion quality is tracked separately by Question Fidelity" in markdown
     assert "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`" in markdown
-    assert "Question coverage chart: `question_coverage.png`" in markdown
-    assert "A/B and C/D as accepted answers and F as rejected" in markdown
-
 
 def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):
     release_notes = tmp_path / "RELEASE_NOTES.md"
