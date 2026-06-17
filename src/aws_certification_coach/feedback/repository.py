@@ -14,7 +14,7 @@ from aws_certification_coach.ratings import letter_to_numeric
 class UserFeedbackRepository:
     """Appends human-readable grade corrections to a local JSON artifact."""
 
-    schema_version = 1
+    schema_version = 2
 
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
@@ -26,7 +26,7 @@ class UserFeedbackRepository:
         answer_given: str,
         rating_given: str,
         correct_rating: str,
-        feedback_text: str = "",
+        feedback_text: str,
     ) -> None:
         # Validate grades without writing derived numeric values to the artifact.
         letter_to_numeric(rating_given)
