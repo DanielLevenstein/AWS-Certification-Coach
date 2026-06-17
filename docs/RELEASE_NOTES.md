@@ -1,35 +1,35 @@
 # Release Notes
 
-| Release | Description                                                                                                    |
-|:--------|:---------------------------------------------------------------------------------------------------------------|
-| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions.                          |
-| v1.1.0  | Expands the question bank to 80 AWS-docs-grounded questions, and adds stricter wrong-service answer rejection. |
-| v1.1.2  | Changed rating to grade and added feedback system.                                                             |
-| v1.1.3  | Gate feedback behind SHOW_FEEDBACK environmental variable.                                                     |
-| v1.3.4  | Swaps app scoring from trained regression to `semantic_similarity`.                                            |
-| v1.4.0  | v1.4.0 Cleaning up schema                                                                                      |
-| v1.4.1  | Accuracy went down after switching to long form answer format                                                  |
-| v1.4.3  | Include both long and short form answers in training data                                                      |
-| v1.4.4  | Switch back to long form answers in training data                                                              |
-| v1.5.0  | Updated accuracy release script to ensure consistent metrics                                                   |
-| v1.5.1  | Fix output of semantic metric chart, and move release metrics to folder with timestamps saved.                 |
-| v1.5.3 | Updated test data to have proper train, test, validation split                                                 |
-| v1.5.4 | Made `semantic_similarity` the official model name, moved release gating to 80% semantic precision.            |
-| v1.5.5 | Created automated deployment script |
-| v2.1.1 | Adds Developer Associate freeform question generation and independent question-fidelity scoring. |
-| v2.1.2 | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
+| Release | Description                                                                                                                                                    |
+|:--------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions.                                                                          |
+| v1.1.0  | Expands the question bank to 80 AWS-docs-grounded questions, and adds stricter wrong-service answer rejection.                                                 |
+| v1.1.2  | Changed rating to grade and added feedback system.                                                                                                             |
+| v1.1.3  | Gate feedback behind SHOW_FEEDBACK environmental variable.                                                                                                     |
+| v1.3.4  | Swaps app scoring from trained regression to `semantic_similarity`.                                                                                            |
+| v1.4.0  | v1.4.0 Cleaning up schema                                                                                                                                      |
+| v1.4.1  | Accuracy went down after switching to long form answer format                                                                                                  |
+| v1.4.3  | Include both long and short form answers in training data                                                                                                      |
+| v1.4.4  | Switch back to long form answers in training data                                                                                                              |
+| v1.5.0  | Updated accuracy release script to ensure consistent metrics                                                                                                   |
+| v1.5.1  | Fix output of semantic metric chart, and move release metrics to folder with timestamps saved.                                                                 |
+| v1.5.3  | Updated test data to have proper train, test, validation split                                                                                                 |
+| v1.5.4  | Made `semantic_similarity` the official model name, moved release gating to 80% semantic precision.                                                            |
+| v1.5.5  | Created automated deployment script                                                                                                                            |
+| v2.1.1  | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                                               |
+| v2.1.2  | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
 
 
 # Release Metrics
 
 | Release | Saved Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
 |:--------|---------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|
-| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% | N/A |
-| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% | N/A |
-| v1.5.3 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | N/A |
-| v1.5.4 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | N/A |
-| v2.1.1 | 96.00% | 68.00% | 68.00% | 84.62% | 68.75% | 96.80% |
-| v2.1.2 | 93.33% | 63.33% | 83.33% | 90.00% | 90.00% | 96.00% |
+| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |               N/A |
+| v1.5.0  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |               N/A |
+| v1.5.3  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |               N/A |
+| v1.5.4  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |               N/A |
+| v2.1.1  |         96.00% |            68.00% |            68.00% |             84.62% |          68.75% |            96.80% |
+| v2.1.2  |         93.33% |            63.33% |            83.33% |             90.00% |          90.00% |            96.00% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 

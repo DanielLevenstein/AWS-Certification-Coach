@@ -157,8 +157,7 @@
     "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
     "answer_given": "AWS",
     "correct_rating": "F",
-    "rating_given": "A",
-    "source_test": "tests/test_user_feedback.py::test_feedback_repository_saves_letter_grades_without_numeric_values"
+    "rating_given": "A"
   },
   {
     "schema_version": 1,
@@ -166,8 +165,7 @@
     "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
     "answer_given": "AWS KMS",
     "correct_rating": "A",
-    "rating_given": "A",
-    "source_test": "tests/test_user_feedback.py::test_feedback_repository_appends_to_existing_v1_records"
+    "rating_given": "A"
   },
   {
     "schema_version": 1,
@@ -175,8 +173,7 @@
     "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
     "answer_given": "AWS KMS creates and manages encryption keys that protect data.",
     "correct_rating": "A",
-    "rating_given": "A",
-    "source_test": "tests/test_three_agent_grading.py::test_complete_answer_receives_100_without_a_model_score_cap"
+    "rating_given": "A"
   },
   {
     "schema_version": 1,
@@ -184,7 +181,19 @@
     "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
     "answer_given": "AWS KMS manages encryption keys.",
     "correct_rating": "A",
-    "rating_given": "A",
-    "source_test": "tests/test_three_agent_grading.py::test_model_prompt_and_parser_use_three_independent_agent_results"
+    "rating_given": "A"
+  },
+  {
+    "schema_version": 2,
+    "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
+    "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
+    "answer_given": "Which API Gateway feature should be used to run token validation on requests? ",
+    "correct_rating": "D",
+    "rating_given": "B",
+    "correct_answer_id": [
+      "A"
+    ],
+    "correct_answer_text": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
+    "freeform_feedback": "Generated question contains multiple choice answer selections which are too long compared to distraction questions."
   }
 ]

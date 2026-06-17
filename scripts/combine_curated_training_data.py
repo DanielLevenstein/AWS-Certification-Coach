@@ -10,8 +10,7 @@ from pathlib import Path
 
 DEFAULT_PATTERNS = (
     "curated_training_data.json",
-    "curated_training_*.data",
-    "curated_training_*.json",
+    "user_feedback.*.json",
 )
 
 
@@ -56,13 +55,27 @@ def _curated_row(row: dict) -> dict:
         "question",
         "exam_code",
         "reference_answer",
-        "original_multiple_choice",
         "answer_given",
         "correct_rating",
         "rating_given",
         "feedback_text",
     }
-    return {key: value for key, value in row.items() if key in allowed_fields}
+    curated = {key: value for key, value in row.items() if key in allowed_fields}
+    
+    # if original_multiple_choice answer is present add correct_answer_text to schema and update a version to v2 otherwise leave field out. 
+    # Add correct_answer_text if possible
+    original_mcq = row.get("original_multiple_choice", {})
+    if isinstance(original_mcq, dict) and "correct_option_ids" in original_mcq:
+        # print correct_option_ids if present else skip row.
+        print(original_mcq["correct_option_ids"])
+        curated["correct_answer_id"] = original_mcq["correct_option_ids"]
+        # Fix fix expression
+        for option in original_mcq.get("options", []):
+            if option["option_id"] in curated["correct_answer_id"]:
+                print(option["text"])
+                curated["correct_answer_text"] = option["text"]
+        curated["schema_version"] = 2
+    return curated
 
 
 def main() -> None:
