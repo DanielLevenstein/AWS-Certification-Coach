@@ -1,0 +1,4 @@
+interface:
+  display_name: "Train Local Semantic Models"
+  short_description: "Train local semantic scoring models"
+  default_prompt: "Use $train-local-semantic-models to train and evaluate a separate local question-fidelity model."

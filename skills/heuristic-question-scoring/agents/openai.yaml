@@ -1,0 +1,4 @@
+interface:
+  display_name: "Heuristic Question Scoring"
+  short_description: "Guide heuristic question fidelity scoring"
+  default_prompt: "Use $heuristic-question-scoring to design heuristic scoring for generated AWS question fidelity."

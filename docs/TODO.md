@@ -1,35 +1,32 @@
-# Helper scripts
+# feature/question_expansion
+This feature will be used to expand the question selection to better match AWS Developer Certificate exam.
+Once this feature is stable, it will be merged into release/v2.2
 
-ensure the following scripts exist in the current branch, and if they don't, copy them from $FILE$_COPY.*
-- setup.sh
-- generate_data.sh
-- run_tests.sh
-- generate_metrics.sh
-- run_app.sh
+## Version 2.1.0 Feature Design. 
+- Before making a code change, create a QUESTION_EXPANSION_FEATURE.md document with a proposed design for the new feature which follows the requirements listed in TODO.md file 
+- Create a new skill for training new local semantic models which will be used in the next section to implement the Question Heuristic Grading. 
+- Create an additional heuristic_scoring to assist in evaluating question fidelity to an original AWS question set. 
+- Add all new documentation files to the docs folder except AGENTS.md and SKILL.md
+### Version 2.1.1 Question Heuristic Grading
 
-Move all script files except those into the script dir
+- Download a set of example questions and save them to the data/original_questions directory
+- Create a set of new freeform questions and implement a semantic grading model which identifies concept fidelity of the generated questions compared to the original
+- Report question fidelity metric in the release notes under the column question fidelity on a scale of 0–100
+- Use a different model for question fidelity rating from the model used for semantic evaluation of answers. 
+- Ensure that the release note is updated with each change and include a one-line description of the release along with detailed release metrics in RELEASE_NOTES.md 
+- Each time the release metric code is run commit local changes with a commit message with form v2.1.x Change made.
+- Don't make any pushes to docker or create any GitHub tags until a human reviews the changes. 
 
-## Documentation Move.
-- Move all documentation files except README.md, todo.md and CHECKLIST.md
-- Make backup copies of all files mentioned above with format $FILE$_COPY.* 
-- Ensure that COPY files are not added to source control.
+## Version 2.2.0 heuristic_scoring Feature Design. 
 
-# Refactoring checklist
-For each merge ensure the following.
-- Leave the todo.md file as is copy this file to todo_copy.md, which is outside source control. 
-- Ensure no files in data directory are committed
-- run a clean script which deletes all files in the data directory.
-- Regenerate training data.
-- Ensure test cases are using verification data, not training data.
-- Copy config/curated_training_data.json to data/curated folder. 
-- Get all unit tests passing, adding comments for updated tests. 
-- Ensure all code is committed 
+- Before making a code change, create the HEURISTIC_SCORING_FEATURE.md document with a proposed design for the new feature which follows the requirements listed in TODO.md file 
+- Update existing heuristic_scoring skill based on information in a design document.
 
-If directory paths change between branches commit working changes first, then do a directory path refactoring as a clean commit. 
-Remove completed items from todo.md as a separate commit
+### Version 2.2.1 heuristic_scoring Implementation
+Heuristic-based scoring was originally implemented on feature/heuristic_scoring
+This branch was originally intended to be release/v2 but cannot be merged in directly because too much code drift has happened since it was created. 
 
-# Release v1.1 task list
-- release v1.2 is moving to the release/v2 branch
-- Merge all feature branches from v1.1.x into release/v1.1
-- tag release/v1.1 as v1 and create a clean v1 release branch. 
-- put a note in release notes to skip v1.2 going forward because it will be moved to release/v2
+- Implement heuristic-based answer scoring as a third model which returns an answer score between values of 0 and 100
+- Ensure that model weights between semantic scoring and heuristic scoring are not linked in the code base.
+- Ensure that both heuristic-based scoring and semantic-based scoring use proper train, test, validation split for data.
+- For each round of training update the release notes with a one-line change description output release metrics in table. 

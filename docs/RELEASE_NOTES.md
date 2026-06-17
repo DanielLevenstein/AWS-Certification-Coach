@@ -16,7 +16,6 @@
 | v1.5.3 | Updated test data to have proper train, test, validation split                                                 |
 | v1.5.4 | Made `semantic_similarity` the official model name, moved release gating to 80% semantic precision.            |
 | v1.5.5 | Created automated deployment script |
-### Model Performance
 
 
 # Release Metrics
