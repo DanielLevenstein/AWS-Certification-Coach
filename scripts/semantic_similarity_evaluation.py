@@ -44,7 +44,7 @@ def main() -> None:
         or [
             args.curated,
             Path("data/generated/user_feedback.v1.json"),
-            Path("data/generated/generated_feedback.vs.json"),
+            Path("data/generated/generated_feedback.json"),
         ],
         questions,
     )

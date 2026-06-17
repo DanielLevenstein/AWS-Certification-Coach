@@ -59,12 +59,12 @@ def main() -> None:
     feedback_data = args.feedback_data or [
         "data/curated/curated_training_data.json",
         "data/generated/user_feedback.v1.json",
-        "data/generated/generated_feedback.vs.json",
+        "data/generated/generated_feedback.json",
     ]
     evaluation_data = args.evaluation_data or [
         "data/curated/curated_training_data.json",
         "data/generated/user_feedback.v1.json",
-        "data/generated/generated_feedback.vs.json",
+        "data/generated/generated_feedback.json",
     ]
     evaluation_paths = [Path(path) for path in evaluation_data]
     feedback_examples = []

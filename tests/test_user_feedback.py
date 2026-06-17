@@ -35,8 +35,9 @@ def test_feedback_repository_saves_letter_grades_without_numeric_values(tmp_path
     rows = json.loads(path.read_text(encoding="utf-8"))
     assert rows == [
         {
-            "schema_version": 2,
+            "schema_version": 1,
             "question": question.question,
+            "exam_code": "",
             "reference_answer": question.reference_answer,
             "original_multiple_choice": {
                 "question": "Which AWS service manages encryption keys?",
@@ -66,10 +67,11 @@ def test_feedback_repository_appends_to_existing_v1_records(tmp_path: Path):
     UserFeedbackRepository(path).submit(_question(), "AWS KMS", rating_given="A", correct_rating="A")
 
     rows = json.loads(path.read_text(encoding="utf-8"))
-    assert rows[0]["schema_version"] == 2
+    assert rows[0]["schema_version"] == 1
     assert set(rows[0]) == {
         "schema_version",
         "question",
+        "exam_code",
         "reference_answer",
         "original_multiple_choice",
         "answer_given",
@@ -80,12 +82,32 @@ def test_feedback_repository_appends_to_existing_v1_records(tmp_path: Path):
     assert rows[0]["original_multiple_choice"]["correct_option_ids"] == ["A"]
 
 
+def test_user_feedback_v1_filename_uses_schema_version_1(tmp_path: Path):
+    path = tmp_path / "generated" / "user_feedback.v1.json"
+
+    UserFeedbackRepository(path).submit(_question(), "AWS KMS", rating_given="A", correct_rating="A")
+
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    assert {row["schema_version"] for row in rows} == {1}
+
+
 def test_feedback_repository_exports_empty_json_when_artifact_is_missing(tmp_path: Path):
     path = tmp_path / "generated" / "user_feedback.v1.json"
 
     exported = UserFeedbackRepository(path).export_json()
 
     assert exported == "[]\n"
+
+
+def test_config_feedback_schema_versions_match_file_roles():
+    project_root = Path(__file__).resolve().parents[1]
+    user_rows = json.loads((project_root / "config" / "user_feedback.v1.json").read_text(encoding="utf-8"))
+    generated_rows = json.loads((project_root / "config" / "generated_feedback.json").read_text(encoding="utf-8"))
+
+    assert user_rows
+    assert generated_rows
+    assert {row["schema_version"] for row in user_rows} == {1}
+    assert {row["schema_version"] for row in generated_rows} == {0}
 
 
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):

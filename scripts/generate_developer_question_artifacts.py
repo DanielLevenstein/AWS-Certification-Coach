@@ -92,6 +92,7 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
         ]
         row = {
             "certification": source["certification"],
+            "exam_code": source.get("exam_code", ""),
             "domain": source["domain"],
             "difficulty": source["difficulty"],
             "question": question_text,

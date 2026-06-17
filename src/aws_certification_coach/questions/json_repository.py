@@ -72,6 +72,7 @@ def question_from_json(row: object) -> Question:
         question=str(row["question"]),
         reference_answer=str(row["reference_answer"]),
         key_concepts=[str(concept) for concept in key_concepts],
+        exam_code=str(row.get("exam_code", "")),
         original_multiple_choice=_multiple_choice_from_json(row.get("original_multiple_choice")),
     )
 

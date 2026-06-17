@@ -156,7 +156,8 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
 
 def test_semantic_similarity_caps_question_rephrases_without_answer_detail():
     question = Question(
-        certification="AWS Certified Developer - Associate",
+        certification="AWS Certified Developer",
+        exam_code="DVA-C02",
         domain="Security",
         difficulty="Medium",
         question=(

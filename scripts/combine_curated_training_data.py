@@ -8,7 +8,11 @@ import json
 from pathlib import Path
 
 
-DEFAULT_PATTERNS = ("curated_training_*.data", "curated_training_*.json")
+DEFAULT_PATTERNS = (
+    "curated_training_data.json",
+    "curated_training_*.data",
+    "curated_training_*.json",
+)
 
 
 def combine_curated_training_data(config_dir: Path, output: Path) -> tuple[int, int]:
@@ -50,11 +54,13 @@ def _curated_row(row: dict) -> dict:
     allowed_fields = {
         "schema_version",
         "question",
+        "exam_code",
         "reference_answer",
         "original_multiple_choice",
         "answer_given",
         "correct_rating",
         "rating_given",
+        "feedback_text",
     }
     return {key: value for key, value in row.items() if key in allowed_fields}
 

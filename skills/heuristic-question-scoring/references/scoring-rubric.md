@@ -4,15 +4,15 @@ Use this rubric to design question-fidelity scoring for generated AWS certificat
 
 ## Recommended Dimensions
 
-| Dimension | Suggested Weight | Purpose |
-|:----------|-----------------:|:--------|
-| Concept fidelity | 35 | Generated question tests the same AWS concept, service boundary, and decision point as the source set. |
-| Exam-style fidelity | 25 | Scenario shape, reasoning depth, and prompt framing resemble permitted AWS Developer Associate calibration examples. |
-| Distractor quality | 15 | Wrong options are plausible AWS services/features and expose the intended misconception. |
-| Technical correctness | 15 | Reference answer and explanation are accurate according to AWS documentation. |
-| Source safety | 10 | Generated text is self-authored and does not copy restricted or official practice text. |
+| Dimension             | Suggested Weight | Purpose                                                                                                              |
+|:----------------------|-----------------:|:---------------------------------------------------------------------------------------------------------------------|
+| Concept fidelity      |               35 | Generated question tests the same AWS concept, service boundary, and decision point as the source set.               |
+| Exam-style fidelity   |               25 | Scenario shape, reasoning depth, and prompt framing resemble permitted AWS Developer Associate calibration examples. |
+| Distractor quality    |               15 | Wrong options are plausible AWS services/features and expose the intended misconception.                             |
+| Technical correctness |               15 | Reference answer and explanation are accurate according to AWS documentation.                                        |
+| Source safety         |               10 | Generated text is self-authored and does not copy restricted or official practice text.                              |
 
-Scores should be reported on a 0-100 scale. If separate metrics are clearer, use `question concept fidelity` and `question exam-style fidelity` instead of hiding both behind one number.
+Scores should be reported as a percentage value. If separate metrics are clearer, use `question concept fidelity` and `question exam-style fidelity` instead of hiding both behind one number.
 
 ## Hard Rejection Rules
 

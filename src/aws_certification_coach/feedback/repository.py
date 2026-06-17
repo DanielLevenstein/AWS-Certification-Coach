@@ -14,6 +14,8 @@ from aws_certification_coach.ratings import letter_to_numeric
 class UserFeedbackRepository:
     """Appends human-readable grade corrections to a local JSON artifact."""
 
+    schema_version = 1
+
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self._lock = threading.Lock()
@@ -70,8 +72,9 @@ def build_feedback_record(
     feedback_text: str = "",
 ) -> dict[str, Any]:
     return {
-        "schema_version": 2,
+        "schema_version": UserFeedbackRepository.schema_version,
         "question": question.question,
+        "exam_code": question.exam_code,
         "reference_answer": question.reference_answer,
         "original_multiple_choice": _multiple_choice_to_json(question.original_multiple_choice),
         "answer_given": answer_given,

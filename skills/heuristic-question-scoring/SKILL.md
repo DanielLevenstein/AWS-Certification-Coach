@@ -41,7 +41,7 @@ When asked for a heuristic scoring design, include:
 
 Always distinguish:
 
-- `AWS-valid`: the question and answer are technically accurate according to AWS documentation.
+- `AWS-valid`: the question and answer are technically accurate, according to AWS documentation.
 - `exam-valid`: the question resembles a permitted AWS Developer Associate exam-style calibration pattern and tests the expected domain reasoning.
 
 Generated question batches should pass both checks before release.

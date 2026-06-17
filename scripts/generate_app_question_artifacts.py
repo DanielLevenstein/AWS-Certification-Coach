@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from generate_sample_training_artifacts import SERVICE_SPECS
+from generate_sample_training_artifacts import CERTIFICATION_EXAM_CODES, SERVICE_SPECS
 
 
 APP_VARIANTS = [
@@ -85,6 +85,7 @@ def _build_app_questions(count: int) -> list[dict]:
         questions.append(
             {
                 "certification": certification,
+                "exam_code": CERTIFICATION_EXAM_CODES[certification],
                 "domain": domain,
                 "difficulty": difficulty,
                 "question": f"Explain which AWS service or feature should be used to {purpose}.",

@@ -10,4 +10,4 @@ fi
   --training-data data/generated/questions_with_answers_training.json \
   --evaluation-data data/curated/curated_training_data.json \
   --evaluation-data data/generated/user_feedback.v1.json \
-  --evaluation-data data/generated/generated_feedback.vs.json
+  --evaluation-data data/generated/generated_feedback.json

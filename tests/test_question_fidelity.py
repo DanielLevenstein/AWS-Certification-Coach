@@ -52,7 +52,8 @@ def test_developer_question_artifact_preserves_source_examples(tmp_path: Path):
 
     row = json.loads(output.read_text(encoding="utf-8"))[0]
 
-    assert row["certification"] == "AWS Certified Developer - Associate"
+    assert row["certification"] == "AWS Certified Developer"
+    assert row["exam_code"] == "DVA-C02"
     assert row["source_examples"] == [sources[0]["source_id"]]
     assert row["question_fidelity"]["question_fidelity_score"] >= 80
     assert row["original_multiple_choice"]["source_url"].startswith("https://docs.aws.amazon.com/")
