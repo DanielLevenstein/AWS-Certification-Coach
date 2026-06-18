@@ -14,9 +14,14 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("release/metrics/summary.md"))
     parser.add_argument("--release-label", default="Current")
     parser.add_argument("--release-notes", type=Path, default=None)
+    parser.add_argument("--strict-grading", action="store_true")
     args = parser.parse_args()
 
-    markdown = render_release_metrics(args.metrics_dir, release_label=args.release_label)
+    markdown = render_release_metrics(
+        args.metrics_dir,
+        release_label=args.release_label,
+        strict_grading=args.strict_grading,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(markdown, encoding="utf-8")
     if args.release_notes is not None:
@@ -24,7 +29,11 @@ def main() -> None:
     print(markdown, end="")
 
 
-def render_release_metrics(metrics_dir: Path, release_label: str = "Current") -> str:
+def render_release_metrics(
+    metrics_dir: Path,
+    release_label: str = "Current",
+    strict_grading: bool = False,
+) -> str:
     training_metrics = _optional_read(metrics_dir / "training_metrics.json")
     semantic = _read(metrics_dir / "semantic_similarity.json")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
@@ -52,6 +61,7 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
             f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
             f"Top covered concepts: `{_coverage_names(question_coverage, 'top_concepts', limit=12)}`",
             f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
+            f"Strict grading: `{_strict_grading_label(strict_grading)}`",
             "",
             # "Training curve: `training_performance.png`",
             # "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`",
@@ -62,7 +72,7 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
             "",
             "Semantic precision is the release guardrail for the `semantic_similarity` model.",
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
-            "Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.",
+            _answer_metric_note(strict_grading),
         ]
     ) + "\n"
 
@@ -96,6 +106,16 @@ def _coverage_names(question_coverage: dict[str, object], key: str, limit: int |
         if isinstance(row, dict) and str(row.get("name", "")).strip()
     ]
     return ", ".join(names) if names else "not-run"
+
+
+def _strict_grading_label(strict_grading: bool) -> str:
+    return "exact-letter" if strict_grading else "standard"
+
+
+def _answer_metric_note(strict_grading: bool) -> str:
+    if strict_grading:
+        return "Answer-scoring accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement; precision and recall remain accepted-answer diagnostics."
+    return "Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity."
 
 
 def _release_file_stem(release_label: str) -> str:

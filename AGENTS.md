@@ -6,6 +6,12 @@
 - run setup.sh to regenerate test data.
 - ensure that scripts/data and metrics directory aren't committed to source control
 
+# Local Changes
+
+- Never delete local files without permission.
+- If local changes cause merge conflicts, copy the old version to filename_COPY.type prior to merge. 
+- 
+
 # Commit checklist
 
 - run `release_notes.sh --full tag` prior to every code commit.

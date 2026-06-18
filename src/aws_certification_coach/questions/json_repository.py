@@ -72,6 +72,12 @@ def question_from_json(row: object) -> Question:
         question=str(row["question"]),
         reference_answer=str(row["reference_answer"]),
         key_concepts=[str(concept) for concept in key_concepts],
+        question_type=str(row.get("question_type", "service_selection")),
+        required_concepts=_string_list_from_json(row.get("required_concepts", key_concepts)),
+        bonus_concepts=_string_list_from_json(row.get("bonus_concepts", [])),
+        common_misconceptions=_string_list_from_json(row.get("common_misconceptions", [])),
+        acceptable_answers=_string_list_from_json(row.get("acceptable_answers", [])),
+        must_not_claim=_string_list_from_json(row.get("must_not_claim", [])),
         exam_code=str(row.get("exam_code", "")),
         original_multiple_choice=_multiple_choice_from_json(row.get("original_multiple_choice")),
     )
@@ -79,6 +85,12 @@ def question_from_json(row: object) -> Question:
 
 def _unique_sorted(values: Iterable[str]) -> list[str]:
     return sorted(set(values))
+
+
+def _string_list_from_json(value: object) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item) for item in value if str(item).strip()]
 
 
 def _multiple_choice_from_json(value: object) -> MultipleChoiceQuestion | None:

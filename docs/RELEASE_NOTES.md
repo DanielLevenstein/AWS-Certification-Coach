@@ -12,7 +12,9 @@
 | v2.1.2  | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
 | v2.2.0  | Designs service-comparison freeform questions, expanded source sampling, and a concept coverage chart for release notes.                                       |
 | v2.2.4  | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.                             |
-| v2.3.0 | Release notes cleanup. |
+| v2.3.0  | Release notes cleanup.                                                                                                                                         |
+| v2.3.1  | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.                               |
+
 # Release Metrics
 
 
@@ -23,6 +25,7 @@
 | v2.1.1  |            68.00% |             84.62% |          68.75% |            96.80% |
 | v2.1.2  |            83.33% |             90.00% |          90.00% |            96.00% |
 | v2.2.4  |            64.00% |             94.44% |          94.44% |            95.12% |
+| v2.3.1  |            55.17% |             95.45% |          95.45% |            95.12% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -37,9 +40,14 @@ For v2.2.0 design planning, comparison-style freeform questions should ask learn
 
 For v2.2.4, the maintained release metrics table is `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, and `Question Fidelity`.
 
-`Training Accuracy` and `Saved Accuracy` have been removed from the release table because they no longer reflect the actual heuristic used in the app. `Semantic Accuracy` now requires exact `A`, `B`, `C`, `D`, or `F` agreement with the curated answer label.
+`Training Accuracy` and `Saved Accuracy` have been removed from the release table because they no longer reflect the actual heuristic used in the app. `Semantic Accuracy`.
+
+For v2.3.1, generated question artifacts now include `question_type`, rubric concept metadata, acceptable answers, misconception notes, and `must_not_claim` guardrails. The held-out exact-letter grade dataset is generated from the test split for rubric verification.
+Strict grading release notes are enabled with `./release_notes.sh --full --strict-grading v2.3.1`; the exact-letter semantic accuracy is below the precision guardrail because several curated A/B/C boundary cases are intentionally counted as strict calibration misses.
 
 ### Current Coverage
+
+
 ![Release Metrics Chart](../release/release_metrics_chart.png)
 
 <!-- release-metrics:start -->
@@ -47,7 +55,7 @@ For v2.2.4, the maintained release metrics table is `Release`, `Semantic Accurac
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|------------------:|
-| v2.3.0 | 61.54% | 94.74% | 94.74% | 95.12% |
+| v2.3.1 | 55.17% | 95.45% | 95.45% | 95.12% |
 
 Saved model answer form: `long`
 Saved model calibration count: `22`
@@ -58,10 +66,11 @@ Question coverage domain count: `15`
 Question coverage concept count: `276`
 Question coverage intent count: `5`
 Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, DynamoDB, Secrets Manager`
-Semantic answer evaluation count: `26`
+Semantic answer evaluation count: `29`
+Strict grading: `exact-letter`
 
 
 Semantic precision is the release guardrail for the `semantic_similarity` model.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
-Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.
+Answer-scoring accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement; precision and recall remain accepted-answer diagnostics.
 <!-- release-metrics:end -->

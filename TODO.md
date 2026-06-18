@@ -50,7 +50,7 @@ Validate app in prod to ensure that new AWS Developer Certification questions di
 
 
 ## Answer Rubric Data Contract
-Target Version: 2.2.5
+Target Version: 2.3.1
 
 Purpose: introduce the data shape needed for consistent answer grading without changing the learner experience too much at once.
 

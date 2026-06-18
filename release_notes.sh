@@ -6,28 +6,38 @@ if [ ! -x .venv/bin/python ]; then
 fi
 
 MODE="full"
+STRICT_GRADING=0
 if [ "$#" -gt 0 ]; then
-  case "$1" in
-    --full)
-      MODE="full"
-      shift
-      ;;
-    --quick)
-      MODE="quick"
-      shift
-      ;;
-    -h|--help)
-      echo "Usage: $0 [--full|--quick] <release-tag>" >&2
-      echo "Example: $0 --full v2.2.0" >&2
-      echo "Example: $0 --quick test-build" >&2
-      exit 0
-      ;;
-  esac
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      --full)
+        MODE="full"
+        shift
+        ;;
+      --quick)
+        MODE="quick"
+        shift
+        ;;
+      --strict-grading)
+        STRICT_GRADING=1
+        shift
+        ;;
+      -h|--help)
+        echo "Usage: $0 [--full|--quick] [--strict-grading] <release-tag>" >&2
+        echo "Example: $0 --full --strict-grading v2.3.1" >&2
+        echo "Example: $0 --quick test-build" >&2
+        exit 0
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
 fi
 
 if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 [--full|--quick] <release-tag>" >&2
-  echo "Example: $0 --full v2.2.0" >&2
+  echo "Usage: $0 [--full|--quick] [--strict-grading] <release-tag>" >&2
+  echo "Example: $0 --full --strict-grading v2.3.1" >&2
   echo "Example: $0 --quick test-build" >&2
   exit 2
 fi
@@ -39,10 +49,18 @@ if [ "$MODE" = "full" ]; then
 fi
 
 METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
-.venv/bin/python test_suites.py release \
-  --release-label "$RELEASE_TAG" \
-  --release-notes docs/RELEASE_NOTES.md \
-  --metrics-dir "$METRICS_DIR"
+if [ "$STRICT_GRADING" = "1" ]; then
+  .venv/bin/python test_suites.py release \
+    --release-label "$RELEASE_TAG" \
+    --release-notes docs/RELEASE_NOTES.md \
+    --metrics-dir "$METRICS_DIR" \
+    --strict-grading
+else
+  .venv/bin/python test_suites.py release \
+    --release-label "$RELEASE_TAG" \
+    --release-notes docs/RELEASE_NOTES.md \
+    --metrics-dir "$METRICS_DIR"
+fi
 
 ACCURACY_SOURCE="$METRICS_DIR/semantic_accuracy.png"
 ACCURACY_OUTPUT="release/semantic_accuracy.png"

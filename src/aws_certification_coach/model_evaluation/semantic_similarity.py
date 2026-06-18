@@ -184,8 +184,9 @@ def _service_aliases(question: Question) -> set[str]:
     correct_options, _incorrect_options = _option_texts(question)
     values = {_strip_leading_use(option) for option in correct_options}
     values.add(_strip_leading_use(correct_answer_text(question)))
-    if question.key_concepts:
-        values.add(_normalized(question.key_concepts[0]))
+    concepts = _required_concepts(question)
+    if concepts:
+        values.add(_normalized(concepts[0]))
 
     aliases: set[str] = set()
     for value in values:
@@ -211,7 +212,8 @@ def _concept_coverage(question: Question, answer: str) -> float:
     normalized_answer = _normalized(answer)
     answer_tokens = set(_tokens(answer))
     covered = 0
-    for concept in question.key_concepts:
+    required_concepts = _required_concepts(question)
+    for concept in required_concepts:
         concept_tokens = [
             token
             for token in _tokens(concept)
@@ -230,7 +232,11 @@ def _concept_coverage(question: Question, answer: str) -> float:
             if len(concept_token_set) > 1 and len(matched_tokens) < 2:
                 continue
             covered += 1
-    return covered / max(1, len(question.key_concepts))
+    return covered / max(1, len(required_concepts))
+
+
+def _required_concepts(question: Question) -> list[str]:
+    return question.required_concepts or question.key_concepts
 
 
 def _matches_near_miss_option(question: Question, answer: str) -> bool:

@@ -70,6 +70,8 @@ def main() -> None:
     _write_json("data/generated/questions_with_answers_training.json", training_artifacts["questions"])
     _write_json("data/generated/questions_with_answers_validation.json", validation_artifacts["questions"])
     _write_json("data/generated/questions_with_answers_test.json", test_artifacts["questions"])
+    exact_grade_examples = _exact_letter_grade_examples(test_artifacts["questions"])
+    _write_json("data/generated/exact_letter_grade_answer_examples.json", exact_grade_examples)
     print(
         "Generated "
         f"{len(training_artifacts['questions'])} training questions, "
@@ -77,7 +79,8 @@ def main() -> None:
         f"{len(validation_artifacts['questions'])} validation questions, "
         f"{sum(len(question['generated_answers']) for question in validation_artifacts['questions'])} graded validation answers, "
         f"{len(test_artifacts['questions'])} test questions, "
-        f"{sum(len(question['generated_answers']) for question in test_artifacts['questions'])} graded test answers."
+        f"{sum(len(question['generated_answers']) for question in test_artifacts['questions'])} graded test answers, "
+        f"{len(exact_grade_examples)} exact-letter rubric examples."
     )
 
 
@@ -109,9 +112,11 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
             "exam_code": CERTIFICATION_EXAM_CODES[certification],
             "domain": domain,
             "difficulty": difficulty,
+            "question_type": "service_selection",
             "question": f"Explain which AWS service or feature should be used to {purpose}.",
             "reference_answer": explanation,
             "key_concepts": concepts,
+            **_rubric_metadata(service, concepts, distractors, correct_option, explanation),
             "original_multiple_choice": original_multiple_choice,
             "generated_answers": _generated_answers(
                 service,
@@ -152,6 +157,46 @@ def _generated_answers(service, purpose, concepts, distractors, explanation, cor
         }
         for answer, rating, source, intended_coverage in answers
     ]
+
+
+def _exact_letter_grade_examples(questions: list[dict]) -> list[dict[str, object]]:
+    examples = []
+    for question in questions:
+        for answer in question.get("generated_answers", []):
+            if not isinstance(answer, dict):
+                continue
+            examples.append(
+                {
+                    "question": question["question"],
+                    "reference_answer": question["reference_answer"],
+                    "question_type": question["question_type"],
+                    "required_concepts": question["required_concepts"],
+                    "bonus_concepts": question["bonus_concepts"],
+                    "common_misconceptions": question["common_misconceptions"],
+                    "acceptable_answers": question["acceptable_answers"],
+                    "must_not_claim": question["must_not_claim"],
+                    "answer": answer["answer"],
+                    "expected_letter_grade": answer["rating"],
+                    "source": answer["source"],
+                }
+            )
+    return examples
+
+
+def _rubric_metadata(
+    service: str,
+    concepts: list[str],
+    distractors: list[str],
+    correct_option: str,
+    explanation: str,
+) -> dict[str, list[str]]:
+    return {
+        "required_concepts": concepts,
+        "bonus_concepts": [],
+        "common_misconceptions": [f"{distractor} is the best fit for this requirement." for distractor in distractors],
+        "acceptable_answers": [correct_option, explanation, service],
+        "must_not_claim": [f"{distractor} satisfies the scenario better than {service}." for distractor in distractors],
+    }
 
 
 def _rating_75_answer(service_name: str, concepts: list[str], index: int) -> str:

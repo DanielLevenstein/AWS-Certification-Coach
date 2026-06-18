@@ -95,9 +95,11 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
             "exam_code": source.get("exam_code", ""),
             "domain": source["domain"],
             "difficulty": source["difficulty"],
+            "question_type": str(source.get("question_type", "scenario_multiple_choice")),
             "question": question_text,
             "reference_answer": reference_answer,
             "key_concepts": concepts,
+            **_rubric_metadata(source, source_id, service, concepts, reference_answer),
             "original_multiple_choice": {
                 "question": question_text,
                 "options": options,
@@ -117,6 +119,24 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
         row["question_fidelity"] = model.score(source, row).__dict__
         questions.append(row)
     return questions
+
+
+def _rubric_metadata(
+    source: dict[str, object],
+    source_id: str,
+    service: str,
+    concepts: list[str],
+    reference_answer: str,
+) -> dict[str, list[str]]:
+    distractors = _distractors(source, source_id)
+    correct_option = _correct_option(source, source_id)
+    return {
+        "required_concepts": concepts,
+        "bonus_concepts": [],
+        "common_misconceptions": [f"{distractor} is the best fit for this scenario." for distractor in distractors],
+        "acceptable_answers": [correct_option, reference_answer, service],
+        "must_not_claim": [f"{distractor} satisfies the scenario better than {service}." for distractor in distractors],
+    }
 
 
 def _generated_question(source: dict[str, object], source_id: str) -> str:

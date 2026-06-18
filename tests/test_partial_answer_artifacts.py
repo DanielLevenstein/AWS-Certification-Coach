@@ -9,6 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TRAINING_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_training.json"
 VALIDATION_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_validation.json"
 TEST_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_test.json"
+EXACT_GRADE_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "exact_letter_grade_answer_examples.json"
 
 
 def test_generated_answer_artifact_has_expected_letter_ratings():
@@ -36,6 +37,18 @@ def test_validation_and_test_answer_artifacts_are_separate():
     assert _question_texts(training_questions).isdisjoint(_question_texts(validation_questions))
     assert _question_texts(training_questions).isdisjoint(_question_texts(test_questions))
     assert _question_texts(validation_questions).isdisjoint(_question_texts(test_questions))
+
+
+def test_exact_letter_grade_dataset_is_clean_and_held_out():
+    examples = json.loads(EXACT_GRADE_ARTIFACT.read_text(encoding="utf-8"))
+    training_questions = _questions(TRAINING_ARTIFACT)
+
+    assert examples
+    assert {example["expected_letter_grade"] for example in examples} == {"A", "B", "C", "D", "F"}
+    assert all(example["question_type"] == "service_selection" for example in examples)
+    assert all(example["required_concepts"] for example in examples)
+    assert all(example["acceptable_answers"] for example in examples)
+    assert _question_texts(training_questions).isdisjoint({str(example["question"]) for example in examples})
 
 
 def _answer_rows(path: Path) -> list[dict]:

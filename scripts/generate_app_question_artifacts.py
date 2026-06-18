@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from generate_sample_training_artifacts import CERTIFICATION_EXAM_CODES, SERVICE_SPECS
+from generate_sample_training_artifacts import CERTIFICATION_EXAM_CODES, SERVICE_SPECS, _rubric_metadata
 
 
 APP_VARIANTS = [
@@ -88,9 +88,11 @@ def _build_app_questions(count: int) -> list[dict]:
                 "exam_code": CERTIFICATION_EXAM_CODES[certification],
                 "domain": domain,
                 "difficulty": difficulty,
+                "question_type": "service_selection",
                 "question": f"Explain which AWS service or feature should be used to {purpose}.",
                 "reference_answer": explanation,
                 "key_concepts": concepts,
+                **_rubric_metadata(service, concepts, distractors, correct_option, explanation),
                 "original_multiple_choice": {
                     "question": mcq_question,
                     "options": [

@@ -26,6 +26,7 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     parser.add_argument("--release-label", default="Current")
     parser.add_argument("--release-notes", default=None)
     parser.add_argument("--metrics-dir", type=Path, default=None)
+    parser.add_argument("--strict-grading", action="store_true")
     args = parser.parse_args(extra_args or [])
     metrics_dir = args.metrics_dir or timestamped_metrics_dir()
     _run(
@@ -113,6 +114,8 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     ]
     if args.release_notes is not None:
         release_metrics_command.extend(["--release-notes", args.release_notes])
+    if args.strict_grading:
+        release_metrics_command.append("--strict-grading")
     _run(release_metrics_command)
     print(f"Release metrics directory: {metrics_dir}")
 

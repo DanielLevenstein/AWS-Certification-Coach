@@ -217,8 +217,23 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
 
     assert "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |" in markdown
+    assert "Strict grading: `standard`" in markdown
     assert "Saved model grade-band accuracy" not in markdown
     assert "Training accuracy" not in markdown
+
+
+def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
+    metrics_dir = tmp_path / "metrics"
+    metrics_dir.mkdir()
+    (metrics_dir / "semantic_similarity.json").write_text(
+        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, "semantic_example_count": 25}',
+        encoding="utf-8",
+    )
+
+    markdown = render_release_metrics(metrics_dir, release_label="v2.3.1", strict_grading=True)
+
+    assert "Strict grading: `exact-letter`" in markdown
+    assert "requires exact `A`, `B`, `C`, `D`, or `F` agreement" in markdown
 
 
 def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):

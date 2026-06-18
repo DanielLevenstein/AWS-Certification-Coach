@@ -12,7 +12,15 @@ class EvaluationPromptBuilder:
 
     def build(self, question: Question, user_answer: str) -> str:
         concepts = "\n".join(f"- {concept}" for concept in question.key_concepts)
+        required_concepts = "\n".join(f"- {concept}" for concept in _required_concepts(question))
+        bonus_concepts = "\n".join(f"- {concept}" for concept in question.bonus_concepts) or "- None"
+        acceptable_answers = "\n".join(f"- {answer}" for answer in question.acceptable_answers) or "- None"
+        common_misconceptions = "\n".join(f"- {concept}" for concept in question.common_misconceptions) or "- None"
+        must_not_claim = "\n".join(f"- {claim}" for claim in question.must_not_claim) or "- None"
         return f"""Evaluate the learner's answer against the reference answer.
+
+Question type:
+{question.question_type}
 
 Question:
 {question.question}
@@ -22,6 +30,21 @@ Reference answer:
 
 Key concepts:
 {concepts}
+
+Required rubric concepts:
+{required_concepts}
+
+Bonus concepts:
+{bonus_concepts}
+
+Acceptable answers:
+{acceptable_answers}
+
+Common misconceptions:
+{common_misconceptions}
+
+Must not claim:
+{must_not_claim}
 
 Learner answer:
 {user_answer}
@@ -61,3 +84,7 @@ def _string_list(value: object) -> list[str]:
     if not isinstance(value, list):
         return []
     return [str(item) for item in value if str(item).strip()]
+
+
+def _required_concepts(question: Question) -> list[str]:
+    return question.required_concepts or question.key_concepts

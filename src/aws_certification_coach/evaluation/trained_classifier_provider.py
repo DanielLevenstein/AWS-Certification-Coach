@@ -124,7 +124,7 @@ def _missing_concepts(question: Question, user_answer: str) -> list[str]:
     normalized_answer = user_answer.casefold()
     return [
         concept
-        for concept in question.key_concepts
+        for concept in _required_concepts(question)
         if concept.casefold() not in normalized_answer
     ]
 
@@ -197,9 +197,14 @@ def _has_bad_service_spelling(question: Question, user_answer: str) -> bool:
 
 
 def _expected_service_tokens(question: Question) -> set[str]:
-    if not question.key_concepts:
+    concepts = _required_concepts(question)
+    if not concepts:
         return set()
-    return set(TOKEN_PATTERN.findall(question.key_concepts[0].casefold()))
+    return set(TOKEN_PATTERN.findall(concepts[0].casefold()))
+
+
+def _required_concepts(question: Question) -> list[str]:
+    return question.required_concepts or question.key_concepts
 
 
 def _is_incorrect_service_selection(question: Question, user_answer: str) -> bool:
