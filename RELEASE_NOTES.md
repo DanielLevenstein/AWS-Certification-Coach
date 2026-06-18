@@ -30,7 +30,9 @@
 | v2.3.1  |            86.21% |             95.45% |          95.45% |                55.17% |            95.12% |
 | v2.3.2  |            86.21% |             95.45% |          95.45% |                55.17% |            95.12% |
 | v2.3.3  |            88.46% |             94.74% |          94.74% |                61.54% |            94.95% |
-| v2.3.4  | 82.35% | 96.00% | 88.89% | 55.88% | 94.95% |
+| v2.3.4  |            82.35% |             96.00% |          88.89% |                55.88% |            94.95% |
+| v2.3.5  |            86.84% |             96.55% |          90.32% |                57.89% |            94.95% |
+
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -61,18 +63,18 @@ For v2.3.2 the strict-grading parameter was deprecated and a new column added fo
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|------------------:|
-| v2.3.3 | 82.35% | 96.00% | 88.89% | 55.88% | 94.95% |
+| v2.3.6 | 83.33% | 88.24% | 93.75% | 57.14% | 95.12% |
 
 Saved model answer form: `long`
-Saved model calibration count: `27`
+Saved model calibration count: `26`
 Question fidelity model: `question_fidelity_heuristic_v1`
-Developer source question count: `38`
-App question count: `118`
+Developer source question count: `34`
+App question count: `114`
 Question coverage domain count: `15`
-Question coverage concept count: `288`
+Question coverage concept count: `276`
 Question coverage intent count: `5`
-Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic answer evaluation count: `34`
+Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, DynamoDB, Secrets Manager`
+Semantic answer evaluation count: `42`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Semantic precision has a 90% release guardrail for the `semantic_similarity` model.

@@ -1,25 +1,25 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 32
+- Curated examples reviewed: 40
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 8, 'B': 3, 'C': 8, 'D': 6, 'F': 7}`
-- Suggested label updates: 15
+- Current grade distribution: `{'A': 11, 'B': 4, 'C': 7, 'D': 8, 'F': 10}`
+- Suggested label updates: 18
 
 ## Suggested Answer Updates
+
+### Row 5: A -> F
+
+- Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
+- Answer: `route 53`
+- Reference: Amazon EventBridge
+- Semantic score: `25`
+- Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
 ### Row 9: B -> F
 
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
 - Answer: `AWS Cost Center`
 - Reference: AWS Budgets
-- Semantic score: `25`
-- Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
-
-### Row 10: C -> F
-
-- Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
-- Answer: `route 55`
-- Reference: Amazon Route 53
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
@@ -55,13 +55,13 @@
 - Semantic score: `88`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 20: C -> D
+### Row 20: F -> D
 
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Answer: `AWS KMS Keys`
 - Reference: AWS Secrets Manager
 - Semantic score: `65`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
 
 ### Row 21: C -> D
 
@@ -95,23 +95,47 @@
 - Semantic score: `84`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 28: C -> B
-
-- Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
-- Answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. `
-- Reference: Configure SNS subscription filter policies
-- Semantic score: `84`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 29: A -> F
+### Row 29: A -> B
 
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
-- Answer: `AWS Kenesis`
+- Answer: `AWS Kinesis`
 - Reference: Amazon Kinesis Data Streams
-- Semantic score: `25`
-- Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
+- Semantic score: `80`
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 30: C -> D
+### Row 30: F -> D
+
+- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
+- Answer: `AWS KMS Keys`
+- Reference: AWS Secrets Manager
+- Semantic score: `65`
+- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
+
+### Row 31: C -> D
+
+- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
+- Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
+- Reference: DynamoDB global tables
+- Semantic score: `62`
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 33: F -> D
+
+- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
+- Answer: `AWS KMS Keys`
+- Reference: AWS Secrets Manager
+- Semantic score: `65`
+- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
+
+### Row 34: C -> D
+
+- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
+- Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
+- Reference: DynamoDB global tables
+- Semantic score: `62`
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 37: C -> D
 
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Answer: `AWS KMS Keys`
@@ -119,7 +143,7 @@
 - Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 31: C -> D
+### Row 38: C -> D
 
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
 - Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
