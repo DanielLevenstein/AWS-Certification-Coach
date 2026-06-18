@@ -25,16 +25,11 @@ def main() -> None:
 
 
 def render_release_metrics(metrics_dir: Path, release_label: str = "Current") -> str:
-    training = _read(metrics_dir / "training_history.json")["checkpoints"]
     training_metrics = _optional_read(metrics_dir / "training_metrics.json")
-    model_evaluation = _optional_read(metrics_dir / "model_evaluation.json")
     semantic = _read(metrics_dir / "semantic_similarity.json")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
     question_coverage = _optional_read(metrics_dir / "question_coverage.json")
-    final = training[-1]
     saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
-    saved_model_accuracy = _saved_model_accuracy(saved_model, model_evaluation, final)
-    checkpoint_accuracy = final["curated_grade_accuracy"]
     answer_form = saved_model.get("answer_form", training_metrics.get("answer_form", "unknown") if training_metrics else "unknown")
     calibration_count = saved_model.get("calibration_count", 0)
     release_file_stem = _release_file_stem(release_label)
@@ -42,9 +37,9 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
         [
             "# Latest Release Metrics",
             "",
-            "| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |",
-            "|:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|",
-            f"| {release_label} | {saved_model_accuracy:.2%} | {checkpoint_accuracy:.2%} | {semantic['semantic_grade_accuracy']:.2%} | "
+            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |",
+            "|:--------|------------------:|-------------------:|----------------:|------------------:|",
+            f"| {release_label} | {semantic['semantic_grade_accuracy']:.2%} | "
             f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | {_question_fidelity_cell(question_fidelity)} |",
             "",
             f"Saved model answer form: `{answer_form}`",
@@ -61,16 +56,18 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
             f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
             "",
             "Training curve: `training_performance.png`",
-            "Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`",
+            "Curated exact-letter accuracy (A/B/C/D/F): `curated_grade_accuracy.png`",
             "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`",
             "Question intent coverage chart: `question_intent_coverage.png`",
             "Certification coverage chart: `question_certification_coverage.png`",
             "Curated failure analysis: `curated_failure_report.md`",
+            "Curated rubric review: `curated_rubric_review.md`",
             "",
             "Semantic precision is the release guardrail for the `semantic_similarity` model.",
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
             "Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.",
-            "Precision and recall treat A/B and C/D as accepted answers and F as rejected.",
+            "Semantic accuracy requires exact A/B/C/D/F agreement with curated labels.",
+            "Precision and recall remain accepted-answer diagnostics: A/B/C/D are accepted answers and F is rejected.",
             "",
             '<img src="../release/' + release_file_stem + '_question_intent_coverage.png" alt="Question intent coverage" width="960">',
             "",

@@ -39,6 +39,8 @@ esac
 .venv/bin/python scripts/curated_failure_report.py \
   --model "$METRICS_DIR/answer_regressor_model.json" \
   --output "$METRICS_DIR/curated_failure_report.md"
+.venv/bin/python scripts/curated_rubric_review.py \
+  --output "$METRICS_DIR/curated_rubric_review.md"
 .venv/bin/python scripts/semantic_similarity_evaluation.py \
   --evaluation-data data/curated/curated_training_data.json \
   --evaluation-data data/generated/user_feedback.v1.json \
@@ -59,6 +61,8 @@ if [ -n "$RELEASE_TAG" ]; then
     cat "$METRICS_DIR/summary.md"
     printf '\n'
     cat "$METRICS_DIR/curated_failure_report.md"
+    printf '\n'
+    cat "$METRICS_DIR/curated_rubric_review.md"
   } > "$RELEASE_REPORT"
   echo "Detailed release report: $RELEASE_REPORT"
 fi

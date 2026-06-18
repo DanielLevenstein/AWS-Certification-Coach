@@ -8,7 +8,10 @@ from aws_certification_coach.release_metrics.question_coverage import (
     plot_question_coverage_artifacts,
 )
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
-from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
+from aws_certification_coach.model_evaluation.semantic_similarity import (
+    evaluate_semantic_curated_answers,
+    semantic_similarity_score,
+)
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics, update_release_notes
@@ -194,23 +197,11 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
 
     markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
 
-    assert "| Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |" in markdown
-    assert "| v1.5 Schema | 96.00% | 44.00% | 80.00% | 90.00% | 75.00% | 88.40% |" in markdown
-    assert "Saved model answer form: `long`" in markdown
-    assert "Saved model calibration count: `18`" in markdown
-    assert "Question fidelity model: `question_fidelity_heuristic_v1`" in markdown
-    assert "Developer source question count: `12`" in markdown
-    assert "Developer generated question count: `12`" in markdown
-    assert "App question count: `92`" in markdown
-    assert "Question coverage domain count: `15`" in markdown
-    assert "Question coverage concept count: `184`" in markdown
-    assert "Question coverage intent count: `4`" in markdown
-    assert "Top covered concepts: `serverless, replication`" in markdown
-    assert "Semantic answer evaluation count: `25`" in markdown
-    assert "Semantic precision is the release guardrail" in markdown
-    assert "Question fidelity is the release guardrail" in markdown
-    assert "question expansion quality is tracked separately by Question Fidelity" in markdown
-    assert "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`" in markdown
+    assert "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |" in markdown
+    assert "Saved model grade-band accuracy" not in markdown
+    assert "Training accuracy" not in markdown
+    assert "Semantic accuracy requires exact A/B/C/D/F agreement" in markdown
+
 
 def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):
     release_notes = tmp_path / "RELEASE_NOTES.md"
@@ -247,6 +238,80 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
 
     assert semantic_similarity_score(question, "KMS manages encryption keys.") >= 80
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
+
+
+def test_semantic_accuracy_requires_exact_letter_match(tmp_path: Path):
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Which service manages encryption keys?",
+        reference_answer="Use AWS KMS to create and manage encryption keys.",
+        key_concepts=["AWS KMS", "encryption keys", "key management"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service manages encryption keys?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS KMS."),
+                MultipleChoiceOption("B", "Use Amazon S3."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+    curated = tmp_path / "curated.json"
+    curated.write_text(
+        (
+            '[{"question": "Which service manages encryption keys?", '
+            '"reference_answer": "Use AWS KMS to create and manage encryption keys.", '
+            '"answer_given": "KMS", '
+            '"correct_rating": "A", "rating_given": "A"}]'
+        ),
+        encoding="utf-8",
+    )
+
+    metrics = evaluate_semantic_curated_answers(curated, [question])
+
+    assert metrics["semantic_grade_accuracy"] == 0
+    assert metrics["semantic_matching_letter_grades"] == 0
+    assert metrics["semantic_mismatches"][0]["expected_letter"] == "A"
+    assert metrics["semantic_mismatches"][0]["actual_letter"] == "B"
+
+
+def test_semantic_similarity_awards_adjacent_partial_credit_without_family_token_false_positive():
+    secrets_question = Question(
+        certification="AWS Certified Developer",
+        domain="Security",
+        difficulty="Medium",
+        question="Which service should store database passwords and rotate them?",
+        reference_answer="Use AWS Secrets Manager to store database credentials and configure scheduled rotation.",
+        key_concepts=["Secrets Manager", "secret rotation", "database credentials", "scheduled rotation"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service should store database passwords and rotate them?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS Secrets Manager."),
+                MultipleChoiceOption("B", "Use AWS KMS keys alone."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+    s3_question = Question(
+        certification="Cloud Practitioner",
+        domain="Storage",
+        difficulty="Easy",
+        question="Which feature automatically transitions or expires S3 objects?",
+        reference_answer="Use S3 lifecycle policies.",
+        key_concepts=["S3 Lifecycle", "object expiration"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which feature automatically transitions or expires S3 objects?",
+            options=[
+                MultipleChoiceOption("A", "Use S3 lifecycle policies."),
+                MultipleChoiceOption("B", "Use S3 bucket policies."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    assert 60 <= semantic_similarity_score(secrets_question, "AWS KMS Keys") < 70
+    assert semantic_similarity_score(s3_question, "S3 version tracking") < 60
 
 
 def test_semantic_similarity_caps_question_rephrases_without_answer_detail():

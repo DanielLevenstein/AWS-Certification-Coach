@@ -11,7 +11,7 @@ from aws_certification_coach.evaluation.service import EvaluationService
 from aws_certification_coach.evaluation.trained_classifier_provider import TrainedRegressionEvaluatorProvider
 from aws_certification_coach.model_evaluation.semantic_similarity import evaluate_semantic_curated_answers
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
-from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
+from aws_certification_coach.ratings import letter_to_numeric, score_to_letter
 from aws_certification_coach.training.answer_classifier import (
     AnswerRegressionModel,
     PartialCreditRegressor,
@@ -61,9 +61,7 @@ def evaluate_curated_answers(
         result = service.evaluate(example.question, example.answer)
         expected = str(row["correct_rating"]).strip().upper()
         actual = score_to_letter(result.score)
-        expected_band = letter_to_grade_band(expected)
-        actual_band = letter_to_grade_band(actual)
-        if actual_band == expected_band:
+        if actual == expected:
             matches += 1
             continue
         mismatches.append(
@@ -75,17 +73,17 @@ def evaluate_curated_answers(
                 "user_answer": example.answer,
                 "correct_answer": correct_answer_text(example.question),
                 "expected_rating": letter_to_numeric(expected),
-                "expected_band": expected_band,
-                "actual_band": actual_band,
+                "expected_letter": expected,
+                "actual_letter": actual,
                 "score": result.score,
             }
         )
     total = len(rows_and_examples)
     return {
         "example_count": total,
-        "matching_grade_bands": matches,
+        "matching_letter_grades": matches,
         "grade_accuracy": matches / max(1, total),
-        "grade_bands": ["A/B", "C/D", "F"],
+        "grade_scale": ["A", "B", "C", "D", "F"],
         "mismatches": mismatches,
     }
 
@@ -102,7 +100,7 @@ def evaluate_curated_model(
         result = service.evaluate(example.question, example.answer)
         actual = score_to_letter(result.score)
         expected = str(row["correct_rating"]).strip().upper()
-        matches += int(letter_to_grade_band(actual) == letter_to_grade_band(expected))
+        matches += int(actual == expected)
     return {
         "curated_grade_accuracy": matches / max(1, len(rows_and_examples)),
         "curated_example_count": len(rows_and_examples),

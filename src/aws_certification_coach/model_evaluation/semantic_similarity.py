@@ -8,7 +8,7 @@ from pathlib import Path
 from collections.abc import Iterable
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
+from aws_certification_coach.ratings import letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
 from aws_certification_coach.training.features import correct_answer_text
 
@@ -28,6 +28,16 @@ GENERIC_TOKENS = {
     "the",
     "to",
     "use",
+}
+SERVICE_FAMILY_TOKENS = {
+    "dynamodb",
+    "ec2",
+    "iam",
+    "kinesis",
+    "lambda",
+    "rds",
+    "s3",
+    "vpc",
 }
 AMBIGUOUS_ALIAS_TOKENS = {
     "allow",
@@ -56,15 +66,13 @@ def evaluate_semantic_curated_answers(
         score = semantic_similarity_score(question, example.answer)
         actual = score_to_letter(score)
         expected = str(row["correct_rating"]).strip().upper()
-        actual_band = letter_to_grade_band(actual)
-        expected_band = letter_to_grade_band(expected)
-        expected_accept = expected_band != "F"
-        actual_accept = actual_band != "F"
+        expected_accept = expected != "F"
+        actual_accept = actual != "F"
         true_positive += int(expected_accept and actual_accept)
         false_positive += int(not expected_accept and actual_accept)
         true_negative += int(not expected_accept and not actual_accept)
         false_negative += int(expected_accept and not actual_accept)
-        if actual_band == expected_band:
+        if actual == expected:
             matches += 1
             continue
         mismatches.append(
@@ -76,8 +84,8 @@ def evaluate_semantic_curated_answers(
                 "user_answer": example.answer,
                 "correct_answer": correct_answer_text(question),
                 "expected_rating": letter_to_numeric(expected),
-                "expected_band": expected_band,
-                "actual_band": actual_band,
+                "expected_letter": expected,
+                "actual_letter": actual,
                 "score": score,
             }
         )
@@ -86,8 +94,9 @@ def evaluate_semantic_curated_answers(
         "semantic_grade_accuracy": matches / max(1, total),
         "semantic_precision": true_positive / max(1, true_positive + false_positive),
         "semantic_recall": true_positive / max(1, true_positive + false_negative),
-        "semantic_matching_grade_bands": matches,
+        "semantic_matching_letter_grades": matches,
         "semantic_example_count": total,
+        "semantic_grade_scale": ["A", "B", "C", "D", "F"],
         "semantic_true_positive": true_positive,
         "semantic_false_positive": false_positive,
         "semantic_true_negative": true_negative,
@@ -120,6 +129,9 @@ def _feedback_rows_and_examples(
 def semantic_similarity_score(question: Question, answer: str) -> int:
     """Score an answer using service-alias recognition plus concept coverage."""
 
+    if _matches_near_miss_option(question, answer):
+        return 65
+
     if _matches_incorrect_option(question, answer):
         return 35
 
@@ -129,15 +141,16 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
     answer_tokens = set(_tokens(answer))
     content_tokens = answer_tokens - GENERIC_TOKENS
     concept_coverage = _concept_coverage(question, answer)
+    if _has_adjacent_domain_signal(question, answer):
+        concept_coverage = max(concept_coverage, 0.25)
     if _service_is_covered(question, answer):
         return round(80 + (15 * concept_coverage))
 
     reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
-    answer_reference_overlap = len(content_tokens & reference_tokens) / max(1, len(content_tokens))
     if concept_coverage >= 0.5:
         return round(63 + (18 * concept_coverage))
-    if concept_coverage > 0 or answer_reference_overlap >= 0.5:
-        return 65 if "aws" in answer_tokens or answer_reference_overlap >= 0.5 else 62
+    if concept_coverage > 0 or _meaningful_reference_overlap(content_tokens, reference_tokens):
+        return 65 if "aws" in answer_tokens or _meaningful_reference_overlap(content_tokens, reference_tokens) else 62
     if content_tokens & reference_tokens:
         return 58
     return 25
@@ -210,9 +223,32 @@ def _concept_coverage(question: Question, answer: str) -> float:
         if " ".join(concept_tokens) in normalized_answer:
             covered += 1
             continue
-        if len(concept_token_set & answer_tokens) / len(concept_token_set) >= 0.5:
+        matched_tokens = concept_token_set & answer_tokens
+        if len(matched_tokens) / len(concept_token_set) >= 0.5:
+            if matched_tokens <= SERVICE_FAMILY_TOKENS:
+                continue
+            if len(concept_token_set) > 1 and len(matched_tokens) < 2:
+                continue
             covered += 1
     return covered / max(1, len(question.key_concepts))
+
+
+def _matches_near_miss_option(question: Question, answer: str) -> bool:
+    _correct_options, incorrect_options = _option_texts(question)
+    normalized_answer = _normalized(answer)
+    answer_tokens = set(_tokens(answer)) - GENERIC_TOKENS
+    if not answer_tokens:
+        return False
+    for option in incorrect_options:
+        option_tokens = set(_tokens(option)) - GENERIC_TOKENS
+        if not {"alone", "only"} & option_tokens:
+            continue
+        normalized_option = _normalized(option)
+        if normalized_answer in {normalized_option, _strip_leading_use(option)} or answer_tokens <= option_tokens:
+            return _has_adjacent_domain_signal(question, answer) or bool(
+                answer_tokens & set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
+            )
+    return False
 
 
 def _matches_incorrect_option(question: Question, answer: str) -> bool:
@@ -228,6 +264,28 @@ def _matches_incorrect_option(question: Question, answer: str) -> bool:
         if normalized_answer in {_normalized(option), _strip_leading_use(option)}:
             return True
     return False
+
+
+def _has_adjacent_domain_signal(question: Question, answer: str) -> bool:
+    question_tokens = set(_tokens(question.question))
+    reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
+    answer_tokens = set(_tokens(answer)) - GENERIC_TOKENS
+    if {"permissions", "permission"} & question_tokens and {"role", "roles", "iam"} & answer_tokens:
+        return True
+    if {"secret", "secrets", "credential", "credentials", "password", "passwords"} & question_tokens:
+        return bool({"key", "keys", "kms", "parameter", "store"} & answer_tokens)
+    if {"orchestrate", "orchestrates", "orchestration", "workflow", "workflows"} & question_tokens:
+        return bool({"orchestrate", "orchestration", "workflow", "workflows"} & answer_tokens)
+    return bool((answer_tokens & reference_tokens) - SERVICE_FAMILY_TOKENS)
+
+
+def _meaningful_reference_overlap(answer_tokens: set[str], reference_tokens: set[str]) -> bool:
+    overlap = answer_tokens & reference_tokens
+    if not overlap:
+        return False
+    if overlap <= SERVICE_FAMILY_TOKENS:
+        return False
+    return len(overlap) / max(1, len(answer_tokens)) >= 0.5
 
 
 def _option_texts(question: Question) -> tuple[list[str], list[str]]:

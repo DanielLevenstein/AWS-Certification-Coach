@@ -67,6 +67,14 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     _run(
         [
             sys.executable,
+            "scripts/curated_rubric_review.py",
+            "--output",
+            str(metrics_dir / "curated_rubric_review.md"),
+        ]
+    )
+    _run(
+        [
+            sys.executable,
             "scripts/semantic_similarity_evaluation.py",
             "--output",
             str(metrics_dir / "semantic_similarity.json"),

@@ -1,20 +1,20 @@
 # Curated Grade Failure Report
 
 - Curated examples: 23
-- Evaluation bands: `A/B`, `C/D`, `F`
-- Passing grade-band predictions: 17
-- Failing grade-band predictions: 6
-- Grade-band accuracy: 73.91%
-- Unique failing question/answer/grade cases: 6
+- Evaluation grades: `A`, `B`, `C`, `D`, `F`
+- Passing exact-letter predictions: 15
+- Failing exact-letter predictions: 8
+- Exact-letter accuracy: 65.22%
+- Unique failing question/answer/grade cases: 8
 - Conflicting normalized label sets: 0
-- Actual grade bands among failures: {'C/D': 3, 'F': 3}
+- Actual letter grades among failures: {'B': 2, 'D': 5, 'F': 1}
 
 ## Primary Findings
 
 1. Generated-label training error is low; remaining app-scoring failures are now `semantic_similarity` calibration cases rather than epoch-count issues.
 2. The `semantic_similarity` model recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.
 3. Full-credit prose is scored through service and concept coverage rather than only exact option text.
-4. No cross-band duplicate-label conflicts were detected in the curated data.
+4. No exact-letter duplicate-label conflicts were detected in the curated data.
 
 ## Label Conflicts
 
@@ -22,77 +22,101 @@
 
 ## Failing Cases
 
-### 1. Expected C/D, received F
+### 1. Expected C, received D
 
 - Rows: `21`; occurrences: `1`
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Expected rating: `0.75`
 - User answer: `AWS KMS Keys`
 - Correct answer: AWS Secrets Manager
-- Raw model score: `35.00`; runtime score: `35`
+- Raw model score: `65.00`; runtime score: `65`
 - Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.350
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+- Largest feature contributions: `semantic_similarity_score` +0.650
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 2. Expected F, received C/D
+### 2. Expected A, received B
 
-- Rows: `12`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
-- Expected rating: `0.25`
-- User answer: `S3 version tracking`
-- Correct answer: S3 lifecycle policies
+- Rows: `17`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
+- Expected rating: `0.95`
+- User answer: `AWS KMS creates and manages encryption keys that protect data.`
+- Correct answer: AWS KMS
+- Raw model score: `88.00`; runtime score: `88`
+- Runtime feedback: This answer covers the expected AWS concepts.
+- Largest feature contributions: `semantic_similarity_score` +0.880
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 3. Expected A, received B
+
+- Rows: `18`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
+- Expected rating: `0.95`
+- User answer: `AWS KMS manages encryption keys.`
+- Correct answer: AWS KMS
+- Raw model score: `88.00`; runtime score: `88`
+- Runtime feedback: This answer covers the expected AWS concepts.
+- Largest feature contributions: `semantic_similarity_score` +0.880
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 4. Expected C, received D
+
+- Rows: `10`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
+- Expected rating: `0.75`
+- User answer: `route 55`
+- Correct answer: Amazon Route 53
+- Raw model score: `65.00`; runtime score: `65`
+- Runtime feedback: This answer needs more AWS-specific detail.
+- Largest feature contributions: `semantic_similarity_score` +0.650
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
+
+### 5. Expected C, received D
+
+- Rows: `11`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
+- Expected rating: `0.75`
+- User answer: `Allow and deny rules`
+- Correct answer: network ACLs
 - Raw model score: `62.00`; runtime score: `62`
 - Runtime feedback: This answer needs more AWS-specific detail.
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 3. Expected C/D, received F
+### 6. Expected C, received D
 
-- Rows: `1`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.
-- Expected rating: `0.65`
-- User answer: `AWS Roles`
-- Correct answer: Service Control Policies
-- Raw model score: `25.00`; runtime score: `25`
+- Rows: `22`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
+- Expected rating: `0.75`
+- User answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
+- Correct answer: DynamoDB global tables
+- Raw model score: `62.00`; runtime score: `62`
 - Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+- Largest feature contributions: `semantic_similarity_score` +0.620
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 4. Expected C/D, received F
+### 7. Expected F, received D
 
-- Rows: `2`; occurrences: `1`
+- Rows: `13`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
-- Expected rating: `0.65`
-- User answer: `AWS Key Store`
+- Expected rating: `0.25`
+- User answer: `Parameter Store`
 - Correct answer: AWS Secrets Manager
-- Raw model score: `25.00`; runtime score: `25`
+- Raw model score: `65.00`; runtime score: `65`
 - Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+- Largest feature contributions: `semantic_similarity_score` +0.650
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 5. Expected A/B, received C/D
+### 8. Expected B, received F
 
 - Rows: `9`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
 - Expected rating: `0.85`
 - User answer: `AWS Cost Center`
 - Correct answer: AWS Budgets
-- Raw model score: `65.00`; runtime score: `65`
+- Raw model score: `25.00`; runtime score: `25`
 - Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 6. Expected F, received C/D
-
-- Rows: `8`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.
-- Expected rating: `0.25`
-- User answer: `AWS Compliance Manager`
-- Correct answer: AWS Config
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
+- Largest feature contributions: `semantic_similarity_score` +0.250
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
 ## Recommended Remediation Order
 

@@ -179,7 +179,7 @@ def test_letter_grades_map_to_three_evaluation_bands():
     assert letter_to_grade_band("F") == "F"
 
 
-def test_curated_label_conflicts_only_count_cross_band_disagreements():
+def test_curated_label_conflicts_count_exact_letter_disagreements():
     rows = [
         {"question": "Question one", "answer_given": "Answer", "correct_rating": "A"},
         {"question": "Question one", "answer_given": "Answer", "correct_rating": "B"},
@@ -189,7 +189,7 @@ def test_curated_label_conflicts_only_count_cross_band_disagreements():
 
     conflicts = _conflicting_labels(rows)
 
-    assert ("question one", "answer") not in conflicts
+    assert conflicts[("question one", "answer")] == {"A", "B"}
     assert conflicts[("question two", "answer")] == {"B", "D"}
 
 def _question() -> Question:
