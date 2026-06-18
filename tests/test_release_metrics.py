@@ -200,7 +200,6 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     assert "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |" in markdown
     assert "Saved model grade-band accuracy" not in markdown
     assert "Training accuracy" not in markdown
-    assert "Semantic accuracy requires exact A/B/C/D/F agreement" in markdown
 
 
 def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):

@@ -70,7 +70,6 @@ def _plot_curated_accuracy(frame: pd.DataFrame, output_path: Path) -> None:
     axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Release target (90%)")
     axis.set_title("Curated Exact-Letter Accuracy During Training")
     axis.set_xlabel("Training epoch")
-    axis.set_ylabel("Exact-letter accuracy (A/B/C/D/F)")
     axis.set_xscale("log")
     axis.set_xticks(frame.index)
     axis.set_xticklabels([str(int(epoch)) for epoch in frame.index])

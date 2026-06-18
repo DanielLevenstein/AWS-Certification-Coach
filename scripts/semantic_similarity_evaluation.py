@@ -72,7 +72,7 @@ def plot_semantic_accuracy(
         colors = ["#ff7f0e", *colors]
     figure, axis = plt.subplots(figsize=(8, 5))
     bars = axis.bar(values.keys(), values.values(), color=colors)
-    axis.axhline(80, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (80%)")
+    axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (80%)")
     axis.set_title("Semantic Diagnostic Accuracy")
     axis.set_ylabel("Percent")
     axis.set_ylim(0, 100)
