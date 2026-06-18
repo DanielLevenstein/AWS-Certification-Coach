@@ -1,4 +1,4 @@
-# Question Quality and Tradeoff Analysis Expansion
+# Question Quality Expansion Architecture
 
 ## Overview
 
@@ -7,7 +7,7 @@ The current version of AWS Certification Coach focuses on multiple-choice questi
 1. The multiple-choice question pool lacks sufficient variety and begins repeating concepts too frequently.
 2. Existing question formats do not adequately test architectural reasoning or service selection tradeoffs that commonly appear on AWS certification exams.
 
-This document proposes an expansion of the question framework to improve exam realism and introduce structured freeform questions focused on AWS service tradeoffs and architectural decision-making.
+This document defines the Phase 1 question-quality architecture from `docs/QUESTION_IMPROVEMENT_ROADMAP.md`: increase question diversity, improve distractors, add distractor classifications, and improve exam realism. Later roadmap phases can build on this foundation for code/configuration review, tradeoff analysis, and advanced feedback.
 
 ## Motivation
 
@@ -22,7 +22,21 @@ Real AWS certification exams frequently require candidates to:
 
 These skills are challenging to evaluate using traditional multiple-choice questions alone.
 
-Introducing structured freeform tradeoff questions provides a way to evaluate conceptual understanding while differentiating AWS Certification Coach from traditional exam simulators.
+Introducing structured freeform service-selection, service-comparison, and architecture-tradeoff questions provides a way to evaluate conceptual understanding while differentiating AWS Certification Coach from traditional exam simulators.
+
+## Standard Language
+
+Use the same language as `docs/QUESTION_EXPANSION_FEATURE.md` and `docs/ANSWER_RUBRIC.md`.
+
+- `question quality`: the overall app-facing quality of a question batch, including diversity, distractor quality, domain coverage, exam realism, and source safety.
+- `question fidelity`: release-facing score for generated question quality. It may combine `concept fidelity`, `exam-style fidelity`, distractor quality, technical correctness, and source safety.
+- `concept fidelity`: whether the generated question preserves the intended AWS concept, service boundary, decision point, and reasoning pattern.
+- `exam-style fidelity`: whether the generated question resembles permitted Developer Associate calibration patterns and requires applied exam reasoning.
+- `learner-answer grading`: A/B/C/D/F grading of a learner response. This is separate from question fidelity.
+- `AWS-valid`: the question and reference answer are technically accurate according to AWS documentation.
+- `exam-valid`: the question resembles a permitted Developer Associate exam-style calibration pattern and tests the expected domain reasoning.
+
+Use A/B/C/D/F only for learner-answer grades. Use 0-100 percentages or accept/revise/reject decisions for generated-question review.
 
 ## Goals
 
@@ -45,6 +59,16 @@ Questions should better reflect the style and complexity of AWS certification ex
 - Increased use of scenario-driven prompts.
 - More realistic distractor answers.
 - Greater emphasis on architectural reasoning.
+
+### Add Distractor Classifications
+
+Generated multiple-choice provenance should classify each incorrect answer so the project can measure distractor quality and later provide better feedback.
+
+#### Success Criteria
+
+- Incorrect options include `distractor_classifications`.
+- Distractor rationales explain why each option is tempting and why it is not the best answer.
+- Plausible distractors are distinguished from wrong-service-category and nonsensical distractors.
 
 ## Rollout Recommendation
 
@@ -89,9 +113,9 @@ Suggested release metrics:
 - Should distractor quality affect only question-fidelity scoring, or should it also influence learner feedback for wrong multiple-choice answers?
 - Should service-comparison questions be generated from curated service pairs rather than individual source rows?
 
-## Introduce Tradeoff Analysis Questions
+## Introduce Structured Freeform Questions
 
-Provide freeform questions that require users to explain advantages, disadvantages, and service selection decisions.
+Provide freeform questions that require users to explain service selection, service comparisons, and tradeoff reasoning.
 
 ### Success Criteria
 
@@ -103,6 +127,8 @@ Provide freeform questions that require users to explain advantages, disadvantag
 
 ### Traditional Multiple Choice
 
+`question_type`: `multiple_choice`
+
 Users select a single best answer.
 
 Example:
@@ -111,6 +137,8 @@ Example:
 - Which AWS database stores NoSQL data?
 
 ### Scenario-Based Multiple Choice
+
+`question_type`: `scenario_multiple_choice`
 
 Users evaluate a realistic engineering scenario.
 
@@ -121,6 +149,8 @@ An application experiences unpredictable traffic spikes and requires asynchronou
 - Which AWS service should be introduced?
 
 ### Multi-Select Source Questions
+
+`question_type`: `multi_select_source`
 
 Users answer a freeform version of a source question that originally required choosing more than one option, such as "pick two out of five."
 
@@ -133,6 +163,8 @@ An application needs to process events asynchronously and retain failed messages
 In the app, the freeform prompt should remain the main question form factor. The original multi-select question should be shown as source provenance so the learner understands that the reference answer expects multiple required choices.
 
 ### Service Comparison Questions
+
+`question_type`: `service_comparison`
 
 Users compare two AWS services and explain tradeoffs.
 
@@ -149,6 +181,8 @@ Discuss:
 
 ### Architecture Tradeoff Questions
 
+`question_type`: `architecture_tradeoff`
+
 Users explain the benefits and drawbacks of a design decision.
 
 Example:
@@ -163,6 +197,8 @@ Explain:
 - Cost implications
 
 ### Service Selection Questions
+
+`question_type`: `service_selection`
 
 Users recommend a solution and justify their choice.
 
@@ -184,15 +220,17 @@ Many AWS exam questions contain:
 - One plausible but suboptimal answer
 - Several clearly incorrect answers
 
-The evaluation framework should distinguish between these cases.
+Learner-answer grading should distinguish between these cases with the shared A/B/C/D/F grade language in `docs/ANSWER_RUBRIC.md`. Question-fidelity review should score distractor quality separately from the learner's grade.
 
 ## Distractor Classification
 
 Each question should classify incorrect answers.
 
-- `classification`: `nonsensical`
 - `classification`: `plausible_but_suboptimal`
+- `classification`: `over_engineered`
+- `classification`: `under_engineered`
 - `classification`: `wrong_service_category`
+- `classification`: `nonsensical`
 
 ### Distractor Categories
 
@@ -246,15 +284,15 @@ Example:
 
 ---
 
-## Freeform Evaluation Framework
+## Learner-Answer Evaluation Framework
 
-Tradeoff questions should be evaluated using concept coverage rather than exact-answer matching.
+Freeform learner answers should be evaluated using concept coverage, scenario constraints, and reasoning quality rather than exact-answer matching.
 
 ---
 
 ## Required Concepts
 
-Core ideas expected in a passing answer.
+Core ideas expected in a passing learner answer.
 
 Example:
 
@@ -270,7 +308,7 @@ Required Concepts:
 
 ## Bonus Concepts
 
-Additional details demonstrating deeper understanding.
+Additional details demonstrating deeper learner understanding.
 
 Examples:
 
@@ -282,7 +320,7 @@ Examples:
 
 ## Common Misconceptions
 
-Known incorrect assumptions.
+Known incorrect assumptions that should affect learner-answer grading.
 
 Examples:
 
@@ -294,12 +332,12 @@ Examples:
 
 ## Feedback Model
 
-Instead of returning only a score, feedback should include:
+Instead of returning only a grade, feedback should include:
 
-- Concepts identified: concepts successfully discussed by the user.
-- Missing concepts: expected concepts not mentioned.
-- Misconceptions detected: potential misunderstandings requiring correction.
-- Suggested improvements: specific recommendations for strengthening the response.
+- `covered_concepts`: concepts successfully discussed by the learner.
+- `missing_concepts`: expected concepts not mentioned.
+- `misconceptions`: potential misunderstandings requiring correction.
+- `improvement_suggestion`: specific recommendation for strengthening the response.
 
 ---
 
@@ -382,7 +420,7 @@ These two flows can use similar evidence fields, such as covered concepts and mi
 
 The proposed question types should have an explicit schema before implementation. A useful minimum contract would include:
 
-- `question_type`: `multiple_choice`, `scenario_multiple_choice`, `service_comparison`, `architecture_tradeoff`, or `service_selection`.
+- `question_type`: `multiple_choice`, `scenario_multiple_choice`, `multi_select_source`, `service_selection`, `service_comparison`, or `architecture_tradeoff`.
 - `certification` and `exam_code`.
 - `domain` and, when available, exam-guide task statement.
 - `difficulty`.
@@ -393,7 +431,7 @@ The proposed question types should have an explicit schema before implementation
 - `common_misconceptions`.
 - `source_examples`.
 - `exam_calibration`.
-- `question_fidelity`.
+- `question_fidelity`, with `concept_fidelity` and `exam_style_fidelity` when reported separately.
 
 Multiple-choice questions additionally need:
 

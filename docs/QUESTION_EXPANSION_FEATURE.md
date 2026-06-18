@@ -1,14 +1,15 @@
-# Question Expansion Feature Design
+# Question Quality Expansion Feature Design
 
 ## Purpose
 
-The `feature/question_expansion` branch expands the local question bank so AWS Certification Coach better reflects the AWS Certified Developer Associate exam while preserving the project rule that app-facing questions, model-training labels, and final verification data stay separate.
+Phase 1 expands the local question bank so AWS Certification Coach better reflects the AWS Certified Developer Associate exam while preserving the project rule that app-facing questions, model-training labels, and final verification data stay separate.
 
-This design covers the Version 2.1.0 work described in `docs/TODO.md`. The implementation should remain compatible with a later merge into `release/v2.2`.
+This design supports the roadmap in `docs/QUESTION_IMPROVEMENT_ROADMAP.md` and the rubric-stabilization work in `docs/TODO.md`. The current pass is code-free: standardize the question-quality, question-fidelity, and learner-answer language before changing implementation behavior.
 
 ## Goals
 
 - Add AWS Developer Associate coverage to the app-facing question bank.
+- Increase question diversity, improve distractors, add distractor classifications, and improve exam realism.
 - Use permitted AWS exam-style calibration material to validate that generated questions resemble the AWS Certified Developer Associate exam, not just general AWS documentation.
 - Store downloaded or collected source metadata and calibration notes under `data/original_questions/`.
 - Generate self-authored freeform questions from source concepts without copying restricted exam text.
@@ -16,6 +17,20 @@ This design covers the Version 2.1.0 work described in `docs/TODO.md`. The imple
 - Report a `question fidelity` metric as a percentage in release notes.
 - Keep question-fidelity scoring independent from answer semantic evaluation.
 - Maintain train, validation, and test separation for all model work.
+
+## Standard Language
+
+Use these terms consistently across the question-expansion architecture, answer rubric, and implementation notes:
+
+- `question quality`: the overall app-facing quality of a question batch, including diversity, distractor quality, domain coverage, exam realism, and source safety.
+- `question fidelity`: release-facing score for generated question quality. It may combine `concept fidelity`, `exam-style fidelity`, distractor quality, technical correctness, and source safety.
+- `concept fidelity`: whether the generated question preserves the intended AWS concept, service boundary, decision point, and reasoning pattern.
+- `exam-style fidelity`: whether the generated question resembles permitted Developer Associate calibration patterns and requires applied exam reasoning.
+- `learner-answer grading`: A/B/C/D/F grading of a learner response. This is separate from question fidelity.
+- `AWS-valid`: the question and reference answer are technically accurate according to AWS documentation.
+- `exam-valid`: the question resembles a permitted Developer Associate exam-style calibration pattern and tests the expected domain reasoning.
+
+Use A/B/C/D/F only for learner-answer grades. Use 0-100 percentages or accept/revise/reject decisions for generated-question review.
 
 ## Non-Goals
 
@@ -104,18 +119,26 @@ The feature should not ship generated Developer Associate questions that are onl
 
 Generated app questions should keep the existing question schema and add enough provenance for fidelity scoring:
 
+- `question_type`: `multiple_choice`, `scenario_multiple_choice`, `multi_select_source`, `service_selection`, `service_comparison`, or `architecture_tradeoff`
 - `certification`
+- `exam_code`
 - `domain`
+- `task_statement`
 - `difficulty`
 - `question`
 - `reference_answer`
-- `key_concepts`
-- `original_multiple_choice`
+- `required_concepts`
+- `bonus_concepts`
+- `common_misconceptions`
+- `acceptable_answers`
+- `must_not_claim`
 - `source_examples`
 - `question_fidelity`
 - `exam_calibration`
 
 The generated question text must be self-authored. The source examples should be treated as concept coverage and style references, not copied content.
+
+Multiple-choice provenance should also preserve `options`, `correct_option_ids`, `distractor_rationales`, and `distractor_classifications`. Multi-select source questions should preserve `selection_instruction`, such as `Choose TWO`, and `required_selection_count` even when transformed into a learner-facing freeform prompt.
 
 ## Question Fidelity Model
 
@@ -159,11 +182,11 @@ Release notes should include a one-line change description and a metrics table w
 
 | Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
 |:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|
-| v2.1.x | TBD | TBD | TBD | TBD | TBD | TBD |
+| Next release | TBD | TBD | TBD | TBD | TBD | TBD |
 
 `question fidelity` should be reported as a percentage derived from the model's 0-100 score on held-out validation/test examples. A suggested initial gate is 80%, with a release-note comment required when the score is below the quality standard.
 
-Question fidelity should combine concept fidelity and exam-style calibration. Release notes should make the metric label clear if the implementation reports them separately, for example `question concept fidelity` and `question exam-style fidelity`.
+Question fidelity should combine concept fidelity and exam-style fidelity. Release notes should make the metric label clear if the implementation reports them separately, for example `question concept fidelity` and `question exam-style fidelity`.
 
 ## Validation Plan
 
@@ -178,7 +201,7 @@ Question fidelity should combine concept fidelity and exam-style calibration. Re
 
 ## Open Questions
 
-- What minimum Developer Associate domain distribution should v2.1 require before merging?
+- What minimum Developer Associate domain distribution should the rubric-stabilization milestone require before deeper testing resumes?
 - Should source examples be weighted equally, or should official exam-guide objectives and official sample-question calibration carry more weight than service docs?
-- Should question fidelity block release when the score is below threshold, or only annotate release notes during the first v2.1 iterations?
-- What minimum number of permitted official exam-style calibration examples is enough for v2.1?
+- Should question fidelity block release when the score is below threshold, or only annotate release notes during early Phase 1 iterations?
+- What minimum number of permitted official exam-style calibration examples is enough for Phase 1?

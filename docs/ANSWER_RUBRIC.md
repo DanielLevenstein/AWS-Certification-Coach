@@ -4,9 +4,22 @@
 
 This rubric defines a consistent answer-grading scale for AWS Certification Coach.
 
-The same grade language should apply across multiple-choice, scenario-based multiple-choice, service-selection, service-comparison, and architecture tradeoff questions. Individual question types may use different evidence fields, but the final grade should mean the same thing to learners throughout the app.
+The same grade language should apply across `multiple_choice`, `scenario_multiple_choice`, `multi_select_source`, `service_selection`, `service_comparison`, and `architecture_tradeoff` questions. Individual question types may use different evidence fields, but the final grade should mean the same thing to learners throughout the app.
 
 This rubric evaluates learner answers. It is separate from question-fidelity scoring, which evaluates whether generated questions are safe, accurate, and exam-valid before release.
+
+## Standard Language
+
+Use these terms consistently with `docs/QUESTION_EXPANSION_FEATURE.md` and `docs/QUESTION_EXPANSION_ARCHITECTURE.md`:
+
+- `learner-answer grading`: A/B/C/D/F grading of a learner response.
+- `question fidelity`: release-facing score for generated question quality. It is not a learner grade.
+- `concept fidelity`: whether a generated question preserves the intended AWS concept, service boundary, decision point, and reasoning pattern.
+- `exam-style fidelity`: whether a generated question resembles permitted Developer Associate calibration patterns and requires applied exam reasoning.
+- `AWS-valid`: the question and reference answer are technically accurate according to AWS documentation.
+- `exam-valid`: the question resembles a permitted Developer Associate exam-style calibration pattern and tests the expected domain reasoning.
+
+Use A/B/C/D/F only for learner answers. Generated-question review should use 0-100 fidelity scores, hard rejection rules, and accept/revise/reject decisions.
 
 ## Grading Principles
 
@@ -51,7 +64,7 @@ Some AWS-style source questions require more than one correct option, such as "C
 
 In AWS Certification Coach, these questions should still be transformed into freeform prompts. The original multi-select question should be preserved and displayed as source provenance so the learner understands that the reference answer expects multiple required services, features, or patterns.
 
-For freeform grading, score how completely the learner covers the required correct options:
+For freeform grading, assign the learner grade based on how completely the response covers the required correct options:
 
 | Freeform Coverage | Default Grade | Notes |
 |:------------------|:--------------|:------|

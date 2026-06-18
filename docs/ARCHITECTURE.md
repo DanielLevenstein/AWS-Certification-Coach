@@ -1,7 +1,8 @@
 # AWS Certification Coach Architecture
 
-
 ## System Overview
+
+AWS Certification Coach is a Streamlit study application backed by local question artifacts, answer evaluation modules, feedback formatting, and release-quality checks.
 
 ```mermaid
 flowchart TD
@@ -9,70 +10,70 @@ flowchart TD
     UI[Streamlit UI]
     Controller[Quiz Controller]
     Repo[Question Repository]
-    Prompt[Prompt Builder]
-    Eval[Evaluation Service]
-    Classifier[Trained Classifier]
-    Feedback[Feedback Engine]
+    Eval[Answer Evaluation Service]
+    Feedback[Feedback Formatter]
     Results[Results Display]
 
     User --> UI
     UI --> Controller
-
     Controller --> Repo
-    Controller --> Prompt
-
-    Prompt --> Eval
-    Eval --> Classifier
+    Controller --> Eval
     Eval --> Feedback
-
     Feedback --> Results
     Results --> UI
 ```
 
-## Runtime Components
+The runtime app should stay focused on the learner study loop. Question generation, source calibration, model training, release metrics, and human review happen offline before artifacts are shipped into the app.
 
-### Streamlit UI
+## Core Boundaries
 
-The UI is responsible for the learner-facing workflow:
+### Runtime Study Flow
 
-- Select certification, domain, and difficulty filters.
-- Present one question at a time.
-- Accept free-text learner responses.
-- Display scores, missing concepts, recommended review topics, and a detailed correct answer.
-- Show session progress and recent score history.
+The runtime flow is responsible for:
 
-The UI should stay thin. It should delegate quiz state, question selection, prompt generation, model calls, and response formatting to application modules.
+- Loading reviewed app-facing questions from local JSON artifacts.
+- Filtering questions by certification, domain, difficulty, and eventually `question_type`.
+- Presenting one question at a time.
+- Accepting learner answers.
+- Evaluating learner answers with the configured answer evaluator.
+- Returning learner-facing feedback using the shared A/B/C/D/F grade language from `docs/ANSWER_RUBRIC.md`.
+- Tracking in-session progress and recent results.
+
+Runtime learner-answer grading is separate from generated-question review. A learner answer receives an A/B/C/D/F grade; a generated question receives question-fidelity scores and accept/revise/reject review decisions before release.
 
 ### Question Repository
 
-The question repository stores reviewed certification practice content. The MVP can use JSON files because the app only needs read-heavy access to a curated question bank.
+The question repository stores reviewed certification practice content. JSON remains a suitable storage format while the app is read-heavy and single-user.
 
-Example question shape:
+App-facing question artifacts should move toward the shared question contract described in `docs/QUESTION_EXPANSION_FEATURE.md`:
 
-```json
-{
-  "certification": "Cloud Practitioner",
-  "domain": "Security",
-  "difficulty": "Easy",
-  "question": "What is the purpose of IAM roles?",
-  "reference_answer": "IAM roles grant temporary permissions that AWS services, applications, or users can assume without long-lived credentials.",
-  "key_concepts": [
-    "IAM",
-    "temporary credentials",
-    "least privilege",
-    "trusted entities"
-  ]
-}
-```
+- `question_type`
+- `certification`
+- `exam_code`
+- `domain`
+- `task_statement`
+- `difficulty`
+- `question`
+- `reference_answer`
+- `required_concepts`
+- `bonus_concepts`
+- `common_misconceptions`
+- `acceptable_answers`
+- `must_not_claim`
+- `source_examples`
+- `question_fidelity`
+- `exam_calibration`
+
+Multiple-choice provenance should preserve options, correct option IDs, distractor rationales, and distractor classifications. Multi-select source questions should preserve the original selection instruction, such as `Choose TWO`, while still supporting a learner-facing freeform prompt.
 
 Repository responsibilities:
 
 - Load question files.
 - Validate required fields.
-- Filter by certification, domain, and difficulty.
+- Filter by certification, domain, difficulty, and question type.
 - Support randomized quiz order.
-- Preserve original multiple-choice source questions for post-answer review.
-- Keep storage swappable for SQLite, PostgreSQL, or DynamoDB later.
+- Preserve source provenance for post-answer review and release audit.
+- Keep storage swappable for a database later if multi-user persistence becomes necessary.
 
 ### Quiz Controller
 
@@ -80,232 +81,102 @@ The quiz controller owns session behavior:
 
 - Select the next question.
 - Track completed question IDs.
-- Track score history.
+- Track answer history and grades.
 - Avoid repeating questions during a session.
 - Maintain current filters and quiz mode.
 
-Future versions can add adaptive difficulty, weak-area targeting, timed exam simulation, and persisted learner profiles.
+Future advanced-feedback work can add adaptive difficulty, weak-area targeting, timed exam simulation, and persisted learner profiles.
 
-### Evaluation Prompt Builder
+### Answer Evaluation Service
 
-The prompt builder converts a question, reference answer, key concepts, and learner answer into a consistent scoring request.
-
-Prompt contract:
-
-```text
-Evaluate the learner's answer against the reference answer.
-
-Question:
-{question}
-
-Reference answer:
-{reference_answer}
-
-Key concepts:
-{key_concepts}
-
-Learner answer:
-{user_answer}
-
-Return JSON only with:
-- score: integer from 0 to 100
-- missing_concepts: array of strings
-- suggested_improvements: array of strings
-- feedback: concise learner-facing explanation
-- detailed_answer: detailed correct answer that covers the reference answer and every missing concept
-```
-
-The prompt builder should keep scoring instructions centralized so that every model provider receives the same evaluation contract.
-
-### Evaluation Service
-
-The evaluation service is the only runtime component that talks to the model provider. Runtime grading defaults to the trained classifier and can be switched to OpenAI through configuration, but the app should expose a narrow interface such as `evaluate_answer(prompt) -> EvaluationResult`.
+The answer evaluation service evaluates learner answers only. It should not perform generated-question fidelity scoring.
 
 Responsibilities:
 
-- Load provider configuration.
-- Reuse model clients across requests when possible.
-- Apply deterministic generation settings for grading.
-- Capture latency and provider errors.
-- Return parseable JSON or a controlled error state.
+- Load evaluator configuration.
+- Use the configured local or external answer evaluator through a narrow interface.
+- Apply the shared answer rubric from `docs/ANSWER_RUBRIC.md`.
+- Return structured evidence such as covered concepts, missing concepts, misconceptions, and improvement suggestions.
+- Preserve deterministic behavior where possible so release metrics are reproducible.
+- Return controlled errors or fallback feedback when evaluation fails.
 
-### Feedback Engine
+The learner-facing grade scale is A/B/C/D/F. Numeric model internals or diagnostic scores may exist for implementation and release analysis, but they should not replace the shared grade language in learner feedback.
 
-The feedback engine turns raw model output into the final learner display.
+### Feedback Formatter
 
-Responsibilities:
+The feedback formatter turns structured evaluation evidence into the final learner display.
 
-- Parse and validate model JSON.
-- Normalize score values.
-- Provide fallback feedback if the model returns malformed output.
-- Format missed concepts, recommendations, and detailed answer guidance for the UI.
+Each graded response should include:
 
-Example display content:
+- The assigned grade.
+- Concepts the learner identified correctly.
+- Missing concepts needed for a stronger answer.
+- Misconceptions, if any.
+- A concise improvement suggestion.
+- A reference-quality answer or explanation.
 
-```text
-Score: 85%
+Feedback should explain why plausible but suboptimal answers fall short instead of treating all wrong answers the same way.
 
-Areas to improve:
-- Mention temporary credentials.
-- Connect roles to least privilege.
+## Offline Question Quality Flow
 
-Detailed answer:
-Review IAM roles, trust policies, and temporary security credentials.
-```
-
-## Offline Content Generation
-
-Practice questions are produced before deployment.
+Question expansion and fidelity review happen outside the runtime app.
 
 ```mermaid
 flowchart TD
-    Docs[AWS Documentation & Exam Guide]
-    Script[Content Generation Script]
-    Generated[Scripted Self-Authored Generation]
-    Review[Human Quality Review]
-    Bank[JSON Question Bank]
-    App[AWS Certification Coach]
+    Sources[AWS documentation and exam objectives]
+    Calibration[Permitted exam-style calibration notes]
+    Original[data/original_questions]
+    Generator[Question generation scripts]
+    Generated[Generated question artifacts]
+    Fidelity[Question fidelity scoring]
+    Review[Human sample review]
+    Bank[App-facing question bank]
+    Metrics[Release metrics]
 
-    Docs --> Script
-    Script --> Generated
+    Sources --> Original
+    Calibration --> Original
+    Original --> Generator
+    Generator --> Generated
+    Generated --> Fidelity
     Generated --> Review
+    Fidelity --> Review
     Review --> Bank
-    Bank --> App
+    Bank --> Metrics
 ```
 
-Offline generation outputs:
+Generated questions must be self-authored from allowed sources. Do not use exam dumps, copied paid practice-test content, restricted Skill Builder text, or source material whose terms do not allow calibration use.
 
-- Combined question and answer files.
-- Reference answers.
-- Key concepts.
-- Domain and difficulty metadata.
-- Original multiple-choice provenance for transformed freeform questions.
-- Binary, wrong-answer, and continuous partial-credit answer examples.
+Question-fidelity review answers different questions than learner-answer grading:
 
-Keeping generation offline reduces runtime memory usage, startup time, and deployment complexity.
+- Is the generated question AWS-valid?
+- Is the generated question exam-valid?
+- Does it preserve the intended source concept, service boundary, and reasoning pattern?
+- Are distractors plausible and classified correctly?
+- Is the generated wording self-authored and safe to ship?
 
-## Multiple-Choice to Freeform Transformation
+See `docs/QUESTION_EXPANSION_FEATURE.md` and `docs/QUESTION_EXPANSION_ARCHITECTURE.md` for the detailed source policy, question types, fidelity fields, and release metrics.
 
-V1 uses freeform learner prompts, but the source material should remain aligned with exam-style multiple-choice questions. The offline transformation pipeline converts licensed or self-authored multiple-choice questions into paragraph-answer prompts.
+## Data Separation
 
-```mermaid
-flowchart TD
-    Source[Source Multiple-Choice Artifact]
-    Prompt[Transformation Prompt Builder]
-    LLM[High-Quality LLM Transformer]
-    Freeform[Freeform Question Artifact]
-    Original[Original Multiple-Choice Source Preserved]
+The project should keep these data categories separate:
 
-    Source --> Prompt
-    Prompt --> LLM
-    LLM --> Freeform
+- App-facing question artifacts used by the Streamlit app.
+- Source and calibration artifacts under `data/original_questions/`.
+- Training examples used to tune or evaluate answer grading.
+- Final verification data that must not be used for training or threshold tuning.
+- Release metrics and generated reports.
 
-    Source --> Original
-```
+Do not commit `data/`, `scripts/data/`, or `metrics/`. Regenerate local artifacts with `./clean.sh` and `./setup.sh` when schema or generated-data behavior changes.
 
-The transformed artifact keeps the original multiple-choice question, answer choices, correct answer IDs, explanation, source name, source URL, and license notes. Generated training artifacts also keep answer examples in the same question row so human test cases can be added without synchronizing separate question and answer files. The app uses the transformed freeform prompt for recall practice, then displays the original multiple-choice item next to generated feedback after the learner submits an answer.
+## Release Checks
 
-## Deployment
+Before a milestone is considered ready:
 
-### Phase 1
+- Confirm architecture and rubric docs use the same terminology.
+- Confirm learner-answer grading remains separate from question-fidelity scoring.
+- Confirm answer-training rows and final verification rows remain separate.
+- Run unit tests with `./run_unit_tests.sh`.
+- Run release metrics and update `docs/RELEASE_NOTES.md`.
+- Confirm generated data and metrics artifacts are not staged.
 
-```mermaid
-flowchart TD
-    User[Student]
-    App[AWS Certification Coach<br/>Streamlit Application]
-    Classifier[Trained Classifier<br/>Bundled Model Artifact]
-    OpenAI[Optional OpenAI Provider]
-
-    User --> App
-    App --> Classifier
-    App -. configurable .-> OpenAI
-```
-
-Recommended targets:
-
-- Render for a simple MVP.
-- EC2 if local model hosting is required.
-- A managed LLM API if startup time and small images are higher priority than fully local inference.
-
-OpenAI remains available as an optional provider for model-based evaluation, but the default V1 deployment uses the trained local classifier and bundled model artifact.
-
-Expected benefits:
-
-- Smaller Docker image than the RAG prototype.
-- Faster startup.
-- Lower memory use.
-- Fewer runtime artifacts to package.
-
-### Phase 2
-
-```mermaid
-flowchart TD
-    User[Student]
-    CF[CloudFront CDN]
-    ALB[Application Load Balancer]
-    ECS[AWS Certification Coach<br/>ECS/Fargate Service]
-    DDB[Question Bank<br/>DynamoDB]
-    Bedrock[Answer Evaluation<br/>Amazon Bedrock]
-
-    User --> CF
-    CF --> ALB
-    ALB --> ECS
-
-    ECS --> DDB
-    ECS --> Bedrock
-```
-
-Optional AWS services:
-
-- CloudWatch for logs and metrics.
-- S3 for question bank storage.
-- Cognito for authentication.
-- DynamoDB for learner progress.
-
-## MVP Scope
-
-Included:
-
-- Question display.
-- Free-text answer submission.
-- Answer evaluation through the trained classifier or a configured provider.
-- Score generation.
-- Feedback generation.
-- Domain and difficulty filtering.
-- Session progress tracking.
-
-Excluded:
-
-- Runtime RAG.
-- FAISS.
-- Embeddings.
-- Document ingestion.
-- User authentication.
-- Multi-user persistence.
-
-## Success Criteria
-
-- Docker image under 1 GB when using a managed LLM provider.
-- Startup under 30 seconds.
-- Answer evaluation under 10 seconds for normal requests.
-- Successful cloud deployment.
-- At least 100 reviewed AWS certification questions.
-- Evaluation responses are valid JSON at least 95% of the time in smoke tests.
-
-## Reusable Code Candidates
-
-The previous RAG prototype contains pieces worth carrying forward, even though the RAG-specific code should be left behind:
-
-- Model configuration loading and overrides.
-- Cached model/client lifecycle management.
-- Timing helpers for cold start and request latency.
-- Chat-completion wrapper for deterministic responses.
-- Response trimming for local models that emit reasoning markers.
-
-Do not carry forward:
-
-- FAISS loading and querying.
-- Sentence-transformer embedding setup.
-- Pickled chunk loading.
-- RAG-only prompts.
-- Document chunking and ingestion.
+Release gates and metric names should live in release tooling and release notes. Roadmap milestones may have target versions, but architecture should describe durable boundaries rather than fixed release sequencing.
