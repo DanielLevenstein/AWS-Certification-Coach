@@ -19,6 +19,8 @@ from aws_certification_coach.training.answer_classifier import (
 from aws_certification_coach.training.dataset import load_answer_regression_examples, load_feedback_regression_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
+CURRENT_FEEDBACK_SCHEMA_VERSION = "2.3"
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -48,6 +50,7 @@ def main() -> None:
     parser.add_argument("--learning-rate", type=float, default=0.02)
     parser.add_argument("--curated-weight", type=int, default=20)
     parser.add_argument("--answer-form", choices=["long", "short", "both"], default="long")
+    parser.add_argument("--max-feedback-schema-version", default=CURRENT_FEEDBACK_SCHEMA_VERSION)
     args = parser.parse_args()
 
     questions = JsonQuestionRepository(args.questions).all()
@@ -70,7 +73,13 @@ def main() -> None:
     feedback_examples = []
     for feedback_path in feedback_data:
         if Path(feedback_path).exists():
-            feedback_examples.extend(load_feedback_regression_examples(feedback_path, feedback_questions))
+            feedback_examples.extend(
+                load_feedback_regression_examples(
+                    feedback_path,
+                    feedback_questions,
+                    max_schema_version=args.max_feedback_schema_version,
+                )
+            )
     examples.extend(_weighted_examples(feedback_examples, args.curated_weight))
     if len(examples) < args.min_examples:
         raise SystemExit(

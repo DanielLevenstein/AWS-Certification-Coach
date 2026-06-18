@@ -14,6 +14,26 @@ from aws_certification_coach.training.features import correct_answer_text
 
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+SYNTAX_ALIASES = {
+    "api gateway": "apigateway",
+    "cloud formation": "cloudformation",
+    "cloud front": "cloudfront",
+    "cloud trail": "cloudtrail",
+    "cloud watch": "cloudwatch",
+    "code build": "codebuild",
+    "code deploy": "codedeploy",
+    "code pipeline": "codepipeline",
+    "dynamo db": "dynamodb",
+    "event bridge": "eventbridge",
+    "route 53": "route53",
+    "secret manager": "secretsmanager",
+    "secrets manager": "secretsmanager",
+    "step function": "stepfunctions",
+    "step functions": "stepfunctions",
+    "systems manager": "systemsmanager",
+    "time to live": "ttl",
+    "x ray": "xray",
+}
 GENERIC_TOKENS = {
     "amazon",
     "and",
@@ -137,6 +157,9 @@ def _feedback_rows_and_examples(
 def semantic_similarity_score(question: Question, answer: str) -> int:
     """Score an answer using service-alias recognition plus concept coverage."""
 
+    if _is_exact_correct_answer(question, answer):
+        return 95
+
     if _matches_near_miss_option(question, answer):
         return 65
 
@@ -186,6 +209,15 @@ def _rephrases_question_without_answer(question: Question, answer: str) -> bool:
 def _service_is_covered(question: Question, answer: str) -> bool:
     normalized_answer = _normalized(answer)
     return any(alias in normalized_answer for alias in _service_aliases(question))
+
+
+def _is_exact_correct_answer(question: Question, answer: str) -> bool:
+    correct_options, _incorrect_options = _option_texts(question)
+    normalized_answer = _strip_leading_use(answer)
+    return bool(normalized_answer) and normalized_answer in {
+        _strip_leading_use(option)
+        for option in correct_options
+    }
 
 
 def _service_aliases(question: Question) -> set[str]:
@@ -321,4 +353,11 @@ def _normalized(value: str) -> str:
 
 
 def _tokens(value: str) -> list[str]:
-    return TOKEN_PATTERN.findall(value.casefold())
+    return TOKEN_PATTERN.findall(_canonical_syntax(value))
+
+
+def _canonical_syntax(value: str) -> str:
+    normalized = " ".join(TOKEN_PATTERN.findall(value.casefold()))
+    for alias, canonical in sorted(SYNTAX_ALIASES.items(), key=lambda item: len(item[0]), reverse=True):
+        normalized = re.sub(rf"\b{re.escape(alias)}\b", canonical, normalized)
+    return normalized
