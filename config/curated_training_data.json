@@ -43,8 +43,8 @@
     "schema_version": 0,
     "question": "Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.",
     "reference_answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
-    "answer_given": "route 55",
-    "correct_rating": "F",
+    "answer_given": "route 53",
+    "correct_rating": "A",
     "rating_given": "A"
   },
   {
@@ -74,7 +74,7 @@
   {
     "schema_version": 0,
     "question": "Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.",
-    "reference_answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "reference_answer": "Use AWS Cost Center to track cost or usage thresholds and send alerts for actual or forecasted spending.",
     "answer_given": "AWS Cost Center",
     "correct_rating": "B",
     "rating_given": "A"
@@ -84,7 +84,7 @@
     "question": "Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.",
     "reference_answer": "Use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications.",
     "answer_given": "route 55",
-    "correct_rating": "C",
+    "correct_rating": "F",
     "rating_given": "A"
   },
   {
@@ -165,7 +165,7 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
     "answer_given": "AWS KMS Keys",
-    "correct_rating": "C",
+    "correct_rating": "F",
     "rating_given": "F",
     "feedback_text": "We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection."
   },
@@ -270,7 +270,7 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
     "answer_given": "AWS KMS Keys",
-    "correct_rating": "C",
+    "correct_rating": "F",
     "rating_given": "F",
     "correct_answer_text": "Use AWS Secrets Manager.",
     "feedback_text": "We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection."
@@ -312,7 +312,7 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
     "answer_given": "AWS KMS Keys",
-    "correct_rating": "C",
+    "correct_rating": "F",
     "rating_given": "F",
     "correct_answer_text": "Use AWS Secrets Manager.",
     "feedback_text": "We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection."
