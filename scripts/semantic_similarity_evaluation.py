@@ -50,8 +50,7 @@ def main() -> None:
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
-    training_metrics = args.training_metrics or args.output.parent / "training_metrics.json"
-    plot_semantic_accuracy(metrics, args.chart_output, saved_model_accuracy=_saved_model_accuracy(training_metrics))
+    plot_semantic_accuracy(metrics, args.chart_output)
     print(json.dumps(metrics, indent=2))
     print(f"Semantic accuracy graph: {args.chart_output}")
 
@@ -59,7 +58,6 @@ def main() -> None:
 def plot_semantic_accuracy(
     metrics: dict[str, object],
     output_path: Path,
-    saved_model_accuracy: float | None = None,
 ) -> None:
     values = {
         "Semantic Accuracy": float(metrics["semantic_grade_accuracy"]) * 100,
@@ -67,9 +65,6 @@ def plot_semantic_accuracy(
         "Semantic Recall": float(metrics["semantic_recall"]) * 100,
     }
     colors = ["#2ca02c", "#1f77b4", "#9467bd"]
-    if saved_model_accuracy is not None:
-        values = {"Saved Model Accuracy": saved_model_accuracy * 100, **values}
-        colors = ["#ff7f0e", *colors]
     figure, axis = plt.subplots(figsize=(8, 5))
     bars = axis.bar(values.keys(), values.values(), color=colors)
     axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (80%)")
@@ -92,19 +87,6 @@ def plot_semantic_accuracy(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=160)
     plt.close(figure)
-
-
-def _saved_model_accuracy(training_metrics_path: Path) -> float | None:
-    if not training_metrics_path.exists():
-        return None
-    training_metrics = json.loads(training_metrics_path.read_text(encoding="utf-8"))
-    if not isinstance(training_metrics, dict):
-        raise ValueError(f"Expected a JSON object: {training_metrics_path}")
-    saved_model = training_metrics.get("saved_model", {})
-    if isinstance(saved_model, dict) and "curated_grade_accuracy" in saved_model:
-        return float(saved_model["curated_grade_accuracy"])
-    return None
-
 
 if __name__ == "__main__":
     main()

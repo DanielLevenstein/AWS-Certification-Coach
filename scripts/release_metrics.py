@@ -45,9 +45,7 @@ def render_release_metrics(metrics_dir: Path, release_label: str = "Current") ->
             f"Saved model answer form: `{answer_form}`",
             f"Saved model calibration count: `{calibration_count}`",
             f"Question fidelity model: `{question_fidelity.get('model_name', 'not-run')}`",
-            f"Question fidelity sample count: `{question_fidelity.get('sample_count', 0)}`",
             f"Developer source question count: `{question_fidelity.get('source_count', 0)}`",
-            f"Developer generated question count: `{question_fidelity.get('generated_question_count', question_fidelity.get('sample_count', 0))}`",
             f"App question count: `{question_coverage.get('question_count', 0)}`",
             f"Question coverage domain count: `{question_coverage.get('domain_count', 0)}`",
             f"Question coverage concept count: `{question_coverage.get('concept_count', 0)}`",
@@ -116,19 +114,6 @@ def update_release_notes(release_notes: Path, markdown: str) -> None:
         return
     separator = "\n" if content.endswith("\n") or not content else "\n\n"
     release_notes.write_text(content + separator + generated_block, encoding="utf-8")
-
-
-def _saved_model_accuracy(
-    saved_model: dict[str, object],
-    model_evaluation: dict[str, object],
-    final_checkpoint: dict[str, object],
-) -> float:
-    if "curated_grade_accuracy" in saved_model:
-        return float(saved_model["curated_grade_accuracy"])
-    rubric = model_evaluation.get("rubric_adherence", {}) if model_evaluation else {}
-    if isinstance(rubric, dict) and "grade_accuracy" in rubric:
-        return float(rubric["grade_accuracy"])
-    return float(final_checkpoint["curated_grade_accuracy"])
 
 
 if __name__ == "__main__":

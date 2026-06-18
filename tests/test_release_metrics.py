@@ -15,7 +15,8 @@ from aws_certification_coach.model_evaluation.semantic_similarity import (
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics, update_release_notes
-from scripts.semantic_similarity_evaluation import _saved_model_accuracy, plot_semantic_accuracy
+from scripts.semantic_similarity_evaluation import plot_semantic_accuracy
+from scripts.combine_release_charts import combine_release_charts
 
 
 def test_complexity_reports_branching_functions(tmp_path: Path):
@@ -63,7 +64,7 @@ def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_semantic_accuracy_chart_accepts_saved_model_accuracy(tmp_path: Path):
+def test_semantic_accuracy_chart_uses_only_semantic_metrics(tmp_path: Path):
     output = tmp_path / "semantic_accuracy.png"
 
     plot_semantic_accuracy(
@@ -73,7 +74,6 @@ def test_semantic_accuracy_chart_accepts_saved_model_accuracy(tmp_path: Path):
             "semantic_recall": 0.75,
         },
         output,
-        saved_model_accuracy=0.96,
     )
 
     assert output.read_bytes().startswith(b"\x89PNG")
@@ -128,10 +128,10 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
 
 def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
     project_root = Path(__file__).resolve().parents[1]
-    tagged_outputs = [
-        project_root / "release" / "test-build_question_domain_coverage.png",
-        project_root / "release" / "test-build_question_intent_coverage.png",
-        project_root / "release" / "test-build_question_certification_coverage.png",
+    latest_outputs = [
+        project_root / "release" / "question_domain_coverage.png",
+        project_root / "release" / "question_intent_coverage.png",
+        project_root / "release" / "question_certification_coverage.png",
     ]
     result = subprocess.run(
         ["./generate_question_coverage.sh", "test-build"],
@@ -141,12 +141,41 @@ def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
         text=True,
     )
 
-    assert "release/test-build_question_domain_coverage.png" in result.stdout
-    assert "release/test-build_question_intent_coverage.png" in result.stdout
-    assert "release/test-build_question_certification_coverage.png" in result.stdout
-    for tagged_output in tagged_outputs:
-        assert tagged_output.exists()
-        tagged_output.unlink()
+    assert "release/question_domain_coverage.png" in result.stdout
+    assert "release/question_intent_coverage.png" in result.stdout
+    assert "release/question_certification_coverage.png" in result.stdout
+    for latest_output in latest_outputs:
+        assert latest_output.exists()
+
+
+def test_combine_release_charts_writes_four_panel_png(tmp_path: Path):
+    chart_paths = []
+    for index, title in enumerate(["Semantic", "Domain", "Intent", "Certification"]):
+        path = tmp_path / f"chart_{index}.png"
+        _write_sample_chart(path, title)
+        chart_paths.append((title, path))
+    output = tmp_path / "release_metrics_chart.png"
+
+    combine_release_charts(chart_paths, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+    width, height = _png_dimensions(output)
+    assert width >= 2500
+    assert height >= 1800
+
+
+def _write_sample_chart(path: Path, title: str) -> None:
+    import matplotlib
+
+    matplotlib.use("Agg")
+
+    import matplotlib.pyplot as plt
+
+    figure, axis = plt.subplots(figsize=(4, 3))
+    axis.bar(["A", "B"], [1, 2])
+    axis.set_title(title)
+    figure.savefig(path, dpi=80)
+    plt.close(figure)
 
 
 def _png_dimensions(path: Path) -> tuple[int, int]:
@@ -155,16 +184,6 @@ def _png_dimensions(path: Path) -> tuple[int, int]:
     if not header.startswith(b"\x89PNG\r\n\x1a\n"):
         raise ValueError(f"Not a PNG file: {path}")
     return struct.unpack(">II", header[16:24])
-
-
-def test_saved_model_accuracy_reads_training_metrics(tmp_path: Path):
-    training_metrics = tmp_path / "training_metrics.json"
-    training_metrics.write_text(
-        '{"saved_model": {"curated_grade_accuracy": 0.96}}',
-        encoding="utf-8",
-    )
-
-    assert _saved_model_accuracy(training_metrics) == 0.96
 
 
 def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):

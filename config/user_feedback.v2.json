@@ -74,5 +74,43 @@
     "correct_rating": "C",
     "rating_given": "D",
     "feedback_text": "We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "original_multiple_choice": {
+      "question": "A team is reviewing an AWS design and needs a solution that can record AWS API activity for auditing, governance, and operational troubleshooting. Which AWS service or feature should they choose?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "B",
+          "text": "Use CloudWatch metrics."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon Macie."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+      "source_name": "AWS Documentation: AWS CloudTrail",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "AWS Cloud trail is used to record AWS API activity for auditing. ",
+    "correct_rating": "A",
+    "rating_given": "C",
+    "feedback_text": "I entered a freeform version of the correct answer."
   }
 ]

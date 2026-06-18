@@ -11,13 +11,13 @@
 | v2.1.1  | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                                               |
 | v2.1.2  | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
 | v2.2.0  | Designs service-comparison freeform questions, expanded source sampling, and a concept coverage chart for release notes.                                       |
-| v2.2.4  | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.                              |
-
+| v2.2.4  | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.                             |
+| v2.3.0 | Release notes cleanup. |
 # Release Metrics
 
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
-|:--------|------------------:|-------------------:|----------------:|------------------:|
+| :------ | ----------------: | -----------------: | --------------: | ----------------: |
 | v1.5.0  |            68.00% |             84.62% |          68.75% |               N/A |
 | v1.5.4  |            68.00% |             84.62% |          68.75% |               N/A |
 | v2.1.1  |            68.00% |             84.62% |          68.75% |            96.80% |
@@ -39,22 +39,18 @@ For v2.2.4, the maintained release metrics table is `Release`, `Semantic Accurac
 
 `Training Accuracy` and `Saved Accuracy` have been removed from the release table because they no longer reflect the actual heuristic used in the app. `Semantic Accuracy` now requires exact `A`, `B`, `C`, `D`, or `F` agreement with the curated answer label.
 
-### Scope
-
-
-
-<img src="../release/v2.2.1_question_certification_coverage.png" alt="Certification coverage" width="720">
-
+### Current Coverage
+![Release Metrics Chart](../release/release_metrics_chart.png)
 
 <!-- release-metrics:start -->
 # Latest Release Metrics
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|------------------:|
-| v2.2.4 | 64.00% | 94.44% | 94.44% | 95.12% |
+| v2.3.0 | 61.54% | 94.74% | 94.74% | 95.12% |
 
 Saved model answer form: `long`
-Saved model calibration count: `21`
+Saved model calibration count: `22`
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `34`
 App question count: `114`
@@ -62,15 +58,10 @@ Question coverage domain count: `15`
 Question coverage concept count: `276`
 Question coverage intent count: `5`
 Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, DynamoDB, Secrets Manager`
-Semantic answer evaluation count: `25`
+Semantic answer evaluation count: `26`
 
 
 Semantic precision is the release guardrail for the `semantic_similarity` model.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
 Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.
-Precision and recall remain accepted-answer diagnostics: A/B/C/D are accepted answers and F is rejected.
-
-<img src="../release/v2.2.4_question_intent_coverage.png" alt="Question intent coverage" width="960">
-
-<img src="../release/v2.2.4_question_certification_coverage.png" alt="Certification coverage" width="720">
 <!-- release-metrics:end -->

@@ -1,13 +1,13 @@
 # Curated Grade Failure Report
 
-- Curated examples: 23
+- Curated examples: 24
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
 - Passing exact-letter predictions: 15
-- Failing exact-letter predictions: 8
-- Exact-letter accuracy: 65.22%
-- Unique failing question/answer/grade cases: 8
+- Failing exact-letter predictions: 9
+- Exact-letter accuracy: 62.50%
+- Unique failing question/answer/grade cases: 9
 - Conflicting normalized label sets: 0
-- Actual letter grades among failures: {'B': 2, 'D': 5, 'F': 1}
+- Actual letter grades among failures: {'B': 2, 'C': 1, 'D': 5, 'F': 1}
 
 ## Primary Findings
 
@@ -82,7 +82,19 @@
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 6. Expected C, received D
+### 6. Expected A, received C
+
+- Rows: `23`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
+- Expected rating: `0.95`
+- User answer: `AWS Cloud trail is used to record AWS API activity for auditing.`
+- Correct answer: AWS CloudTrail
+- Raw model score: `72.00`; runtime score: `72`
+- Runtime feedback: This answer covers the expected AWS concepts.
+- Largest feature contributions: `semantic_similarity_score` +0.720
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 7. Expected C, received D
 
 - Rows: `22`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
@@ -94,7 +106,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 7. Expected F, received D
+### 8. Expected F, received D
 
 - Rows: `13`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -106,7 +118,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 8. Expected B, received F
+### 9. Expected B, received F
 
 - Rows: `9`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.

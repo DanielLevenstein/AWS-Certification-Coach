@@ -1,9 +1,9 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 23
+- Curated examples reviewed: 24
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 3, 'B': 3, 'C': 4, 'D': 6, 'F': 7}`
-- Suggested label updates: 9
+- Current grade distribution: `{'A': 4, 'B': 3, 'C': 4, 'D': 6, 'F': 7}`
+- Suggested label updates: 10
 
 ## Suggested Answer Updates
 
@@ -77,6 +77,14 @@
 - Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
 - Reference: DynamoDB global tables
 - Semantic score: `62`
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 23: A -> C
+
+- Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
+- Answer: `AWS Cloud trail is used to record AWS API activity for auditing. `
+- Reference: AWS CloudTrail
+- Semantic score: `72`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ## Release Table Recommendation
