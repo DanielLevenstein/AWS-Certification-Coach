@@ -68,15 +68,14 @@ def _plot_curated_accuracy(frame: pd.DataFrame, output_path: Path) -> None:
         color="#2ca02c",
     )
     axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Release target (90%)")
-    axis.set_title("Curated Grade-Band Accuracy During Training")
+    axis.set_title("Curated Exact-Letter Accuracy During Training")
     axis.set_xlabel("Training epoch")
-    axis.set_ylabel("Grade-band accuracy (A/B, C/D, F)")
     axis.set_xscale("log")
     axis.set_xticks(frame.index)
     axis.set_xticklabels([str(int(epoch)) for epoch in frame.index])
     axis.set_ylim(0, 100)
     axis.grid(True, alpha=0.25)
-    axis.legend(["Curated grade-band accuracy", "Release target (90%)"])
+    axis.legend(["Curated exact-letter accuracy", "Release target (90%)"])
     for epoch, value in accuracy.items():
         axis.annotate(f"{value:.0f}%", (epoch, value), xytext=(0, 8), textcoords="offset points", ha="center")
     axis.figure.tight_layout()

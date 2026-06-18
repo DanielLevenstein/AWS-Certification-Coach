@@ -29,13 +29,14 @@ def main() -> None:
     parser.add_argument("--app-questions", default="data/questions/sample_questions.json")
     parser.add_argument("--curated-data", default="data/curated/curated_training_data.json")
     parser.add_argument(
+        "--evaluation-data",
+        action="append",
+        default=None,
+    )
+    parser.add_argument(
         "--feedback-data",
         action="append",
-        default=[
-            "data/curated/curated_training_data.json",
-            "data/curated/curated_training_data2.json",
-            "data/generated/user_feedback.v1.json",
-        ],
+        default=None,
     )
     parser.add_argument("--output", default="models/answer_regressor_model.json")
     parser.add_argument("--metrics-output", default="models/answer_regressor_model_metrics.json")
@@ -55,8 +56,19 @@ def main() -> None:
     validation_examples = load_answer_regression_examples(args.validation_data)
     app_questions = JsonQuestionRepository(args.app_questions).all()
     feedback_questions = questions + app_questions
+    feedback_data = args.feedback_data or [
+        "data/curated/curated_training_data.json",
+        "data/generated/user_feedback.v1.json",
+        "data/generated/generated_feedback.json",
+    ]
+    evaluation_data = args.evaluation_data or [
+        "data/curated/curated_training_data.json",
+        "data/generated/user_feedback.v1.json",
+        "data/generated/generated_feedback.json",
+    ]
+    evaluation_paths = [Path(path) for path in evaluation_data]
     feedback_examples = []
-    for feedback_path in args.feedback_data:
+    for feedback_path in feedback_data:
         if Path(feedback_path).exists():
             feedback_examples.extend(load_feedback_regression_examples(feedback_path, feedback_questions))
     examples.extend(_weighted_examples(feedback_examples, args.curated_weight))
@@ -95,7 +107,7 @@ def main() -> None:
         evaluation_examples=validation_examples,
         checkpoint_evaluator=lambda checkpoint_model: evaluate_curated_model(
             checkpoint_model,
-            Path(args.curated_data),
+            evaluation_paths,
             app_questions,
         ),
         model_selector=lambda checkpoint_metrics: (
@@ -107,7 +119,7 @@ def main() -> None:
     model = _with_calibrations(model, feedback_examples)
     saved_model_curated_metrics = evaluate_curated_model(
         model,
-        Path(args.curated_data),
+        evaluation_paths,
         app_questions,
     )
     metrics["selected_checkpoint"] = _selected_checkpoint(history)

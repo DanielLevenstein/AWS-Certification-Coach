@@ -21,7 +21,7 @@ from aws_certification_coach.ratings import LETTER_RATINGS, score_to_letter
 
 
 QUESTIONS_PATH = ROOT_DIR / "data" / "questions" / "sample_questions.json"
-USER_FEEDBACK_PATH = ROOT_DIR / "data" / "generated" / "user_feedback.v1.json"
+USER_FEEDBACK_PATH = ROOT_DIR / "data" / "generated" / "user_feedback.v2.json"
 SHOW_FEEDBACK_ENV = "SHOW_FEEDBACK"
 
 
@@ -86,7 +86,7 @@ def main() -> None:
         return
 
     st.caption(f"{question.certification} | {question.domain} | {question.difficulty}")
-    st.subheader(question.original_multiple_choice.question if question.original_multiple_choice else question.question)
+    st.subheader(question.question)
 
     user_answer = st.text_area("Your answer", key=f"answer_text_{session.current_index}", height=160)
     evaluate_column, next_column = st.columns([1, 1])
@@ -175,12 +175,19 @@ def _render_feedback_form(question: Question, user_answer: str, score: int) -> N
         index=LETTER_RATINGS.index(rating_given),
         key=f"feedback_rating_{question_key}",
     )
+    feedback_text = st.text_area(
+        "What should the evaluator consider?",
+        key=f"feedback_text_{question_key}",
+        height=100,
+        placeholder="Optional context about missing concepts, expected credit, or grading issues.",
+    )
     if st.button("Submit Feedback", key=f"submit_feedback_{question_key}"):
         get_feedback_repository().submit(
             question=question,
             answer_given=user_answer,
             rating_given=rating_given,
             correct_rating=correct_rating,
+            feedback_text=feedback_text,
         )
         submitted.add(question_key)
         st.success("Thanks. Your grade correction was saved for future training.")

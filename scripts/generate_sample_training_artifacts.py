@@ -49,6 +49,11 @@ SERVICE_SPECS = [
     ("AWS WAF", "Security", "Cloud Practitioner", "Easy", "protect web applications from common web exploits using rules", ["AWS WAF", "web application", "rules", "common exploits"], ["security groups only", "Amazon Inspector", "AWS Budgets"]),
 ]
 
+CERTIFICATION_EXAM_CODES = {
+    "Cloud Practitioner": "CLF-C02",
+    "Solutions Architect Associate": "SAA-C03",
+}
+
 
 VARIANTS = [
     "A team needs to choose the AWS capability that will {purpose}. Which option should they use?",
@@ -101,6 +106,7 @@ def _build_artifacts(start_index: int, count: int, question_prefix: str) -> dict
         }
         question = {
             "certification": certification,
+            "exam_code": CERTIFICATION_EXAM_CODES[certification],
             "domain": domain,
             "difficulty": difficulty,
             "question": f"Explain which AWS service or feature should be used to {purpose}.",

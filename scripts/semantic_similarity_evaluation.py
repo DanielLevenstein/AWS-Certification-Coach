@@ -26,6 +26,12 @@ from aws_certification_coach.questions.json_repository import JsonQuestionReposi
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--curated", type=Path, default=Path("data/curated/curated_training_data.json"))
+    parser.add_argument(
+        "--evaluation-data",
+        type=Path,
+        action="append",
+        default=None,
+    )
     parser.add_argument("--questions", type=Path, default=Path("data/questions/sample_questions.json"))
     parser.add_argument("--output", type=Path, default=Path("release/metrics/semantic_similarity.json"))
     parser.add_argument("--chart-output", type=Path, default=Path("release/metrics/semantic_accuracy.png"))
@@ -33,7 +39,15 @@ def main() -> None:
     args = parser.parse_args()
 
     questions = JsonQuestionRepository(args.questions).all()
-    metrics = evaluate_semantic_curated_answers(args.curated, questions)
+    metrics = evaluate_semantic_curated_answers(
+        args.evaluation_data
+        or [
+            args.curated,
+            Path("data/generated/user_feedback.v1.json"),
+            Path("data/generated/generated_feedback.json"),
+        ],
+        questions,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
     training_metrics = args.training_metrics or args.output.parent / "training_metrics.json"
@@ -58,7 +72,7 @@ def plot_semantic_accuracy(
         colors = ["#ff7f0e", *colors]
     figure, axis = plt.subplots(figsize=(8, 5))
     bars = axis.bar(values.keys(), values.values(), color=colors)
-    axis.axhline(80, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (80%)")
+    axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (80%)")
     axis.set_title("Semantic Diagnostic Accuracy")
     axis.set_ylabel("Percent")
     axis.set_ylim(0, 100)

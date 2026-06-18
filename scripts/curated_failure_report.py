@@ -12,7 +12,7 @@ import re
 from aws_certification_coach.evaluation.service import EvaluationService
 from aws_certification_coach.evaluation.trained_classifier_provider import SemanticSimilarityEvaluatorProvider
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
-from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
+from aws_certification_coach.ratings import letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 
@@ -38,9 +38,7 @@ def build_failure_report(
         raw_score = float(result.score)
         expected = str(row["correct_rating"]).strip().upper()
         actual = score_to_letter(result.score)
-        expected_band = letter_to_grade_band(expected)
-        actual_band = letter_to_grade_band(actual)
-        if actual_band == expected_band:
+        if actual == expected:
             continue
         normalized_key = _normalized_pair(row)
         failures.append(
@@ -50,8 +48,8 @@ def build_failure_report(
                 "correct_answer": correct_answer_text(question),
                 "user_answer": example.answer,
                 "expected_rating": letter_to_numeric(expected),
-                "expected_band": expected_band,
-                "actual_band": actual_band,
+                "expected_letter": expected,
+                "actual_letter": actual,
                 "score": result.score,
                 "raw_score": raw_score,
                 "feedback": result.feedback,
@@ -78,7 +76,7 @@ def _conflicting_labels(rows: list[dict]) -> dict[tuple[str, str], set[str]]:
     return {
         key: values
         for key, values in labels.items()
-        if len({letter_to_grade_band(value) for value in values}) > 1
+        if len(values) > 1
     }
 
 
@@ -139,7 +137,7 @@ def _group_failures(failures: list[dict]) -> list[dict]:
             failure["question"],
             _normalized(failure["user_answer"]),
             failure["expected_rating"],
-            failure["actual_band"],
+            failure["actual_letter"],
         )
         if key not in grouped:
             grouped[key] = {**failure, "rows": [failure["row"]], "occurrences": 1}
@@ -155,31 +153,39 @@ def _format_markdown(
     grouped: list[dict],
     conflicts: dict[tuple[str, str], set[str]],
 ) -> str:
-    actual_counts = Counter(failure["actual_band"] for failure in failures)
+    actual_counts = Counter(failure["actual_letter"] for failure in failures)
     conflict_finding = (
         "At least one normalized question/answer pair has contradictory curated grades, "
         "making perfect accuracy impossible until labels are reconciled."
         if conflicts
-        else "No cross-band duplicate-label conflicts were detected in the curated data."
+        else "No exact-letter duplicate-label conflicts were detected in the curated data."
     )
-    lines = [
-        "# Curated Grade Failure Report",
-        "",
-        f"- Curated examples: {len(rows)}",
-        "- Evaluation bands: `A/B`, `C/D`, `F`",
-        f"- Passing grade-band predictions: {len(rows) - len(failures)}",
-        f"- Failing grade-band predictions: {len(failures)}",
-        f"- Grade-band accuracy: {(len(rows) - len(failures)) / max(1, len(rows)):.2%}",
-        f"- Unique failing question/answer/grade cases: {len(grouped)}",
-        f"- Conflicting normalized label sets: {len(conflicts)}",
-        f"- Actual grade bands among failures: {dict(sorted(actual_counts.items()))}",
-        "",
-        "## Primary Findings",
-        "",
+    primary_findings = [
+        "1. The curated answer labels now align with the `semantic_similarity` exact-letter scorer for the reviewed benchmark.",
+        "2. Generated-label regression accuracy remains a training diagnostic; production answer grading is represented by semantic curated-answer metrics.",
+        "3. Full-credit prose is scored through service and concept coverage rather than only exact option text.",
+        f"4. {conflict_finding}",
+    ] if not failures else [
         "1. Generated-label training error is low; remaining app-scoring failures are now `semantic_similarity` calibration cases rather than epoch-count issues.",
         "2. The `semantic_similarity` model recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.",
         "3. Full-credit prose is scored through service and concept coverage rather than only exact option text.",
         f"4. {conflict_finding}",
+    ]
+    lines = [
+        "# Curated Grade Failure Report",
+        "",
+        f"- Curated examples: {len(rows)}",
+        "- Evaluation grades: `A`, `B`, `C`, `D`, `F`",
+        f"- Passing exact-letter predictions: {len(rows) - len(failures)}",
+        f"- Failing exact-letter predictions: {len(failures)}",
+        f"- Exact-letter accuracy: {(len(rows) - len(failures)) / max(1, len(rows)):.2%}",
+        f"- Unique failing question/answer/grade cases: {len(grouped)}",
+        f"- Conflicting normalized label sets: {len(conflicts)}",
+        f"- Actual letter grades among failures: {dict(sorted(actual_counts.items()))}",
+        "",
+        "## Primary Findings",
+        "",
+        *primary_findings,
         "",
         "## Label Conflicts",
         "",
@@ -196,7 +202,7 @@ def _format_markdown(
         )
         lines.extend(
             [
-                f"### {number}. Expected {failure['expected_band']}, received {failure['actual_band']}",
+                f"### {number}. Expected {failure['expected_letter']}, received {failure['actual_letter']}",
                 "",
                 f"- Rows: `{', '.join(str(row) for row in failure['rows'])}`; occurrences: `{failure['occurrences']}`",
                 f"- Question: {failure['question']}",

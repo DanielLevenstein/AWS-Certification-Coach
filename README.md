@@ -2,7 +2,12 @@
 
 AI study partner for AWS certification exams.
 
-## Previous Versions
+<img src="docs/images/question_certification_coverage.png" alt="Certification Exam Split" width="720">
+
+*Figure: Shows test exam breakdown for project.*
+
+## Live Demo
+
 This project was inspired by my previous AWS Documentation RAG project.
 
 - v0 GitHub:  [DanielLevenstein/AWS-Documentation-Rag](https://github.com/DanielLevenstein/AWS-Documentation-Rag)
@@ -14,7 +19,7 @@ The latest version of this project is deployed live on Render.
 
 ## Application Screenshot
 
-![AWS Certification Coach answering an AWS exam-style question](docs/images/aws-certification-coach.png)
+<img src="docs/images/aws-certification-coach.png" alt="Certification Exam Screenshot" width="720">
 
 *Figure: The coach scores a freeform Amazon Kinesis answer and displays detailed feedback alongside the source multiple-choice question.*
 
@@ -54,14 +59,15 @@ To regenerate local data:
 
 ## Releases
 
-| Release | Description |
-| ------- | ----------- |
-| v1.0.0 | Initial Streamlit/Docker release with generated AWS certification practice questions and local grading artifacts. |
-| v1.1.0 | Separated the app-facing question bank from training labels and expanded the app bank to 80 AWS-docs-grounded questions. |
-| v1.3.1 | Test framework redesign; initial curated grade-band accuracy was 44%. |
-| v1.3.4 | Swapped default app scoring to `semantic_similarity`; curated grade-band accuracy reached 80%. |
-| v1.5.3 | Updated test data to have proper train, test, validation split |
-| v1.5.4 | Made `semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
+
+| Release | Description                                                                                                                                                 |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions and local grading artifacts.                                           |
+| v1.1.0  | Separated the app-facing question bank from training labels and expanded the app bank to 80 AWS-docs-grounded questions.                                    |
+| v1.3.1  | Test framework redesign; initial curated grade-band accuracy was 44%.                                                                                       |
+| v1.3.4  | Swapped default app scoring to`semantic_similarity`; curated grade-band accuracy reached 80%.                                                               |
+| v1.5.3  | Updated test data to have proper train, test, validation split                                                                                              |
+| v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
 
 #### Scope
 
@@ -104,18 +110,18 @@ Run model-quality checks separately:
 Run the release suite and save a tagged accuracy chart:
 
 ```bash
-./release_notes_quick.sh v1.5.4
+./release_notes.sh --quick v2.2.0
 ```
 
-The release helper saves the `semantic_similarity` diagnostic chart as `release/<tag>_semantic_accuracy.png`.
+The release helper saves the `semantic_similarity` diagnostic chart as `release/<tag>_semantic_accuracy.png` and separate question coverage charts for domain, intent, and certification split.
 
 Refresh the training graph, curated failure report, semantic metrics, and detailed tagged report:
 
 ```bash
-./release_notes_full.sh v1.5.4
+./release_notes.sh --full v2.2.0
 ```
 
-The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper also publishes `release/<tag>_semantic_accuracy.png` and `release/curated_failure_report.md`.
+The legacy `release_notes_quick.sh` and `release_notes_full.sh` wrappers call the combined release helper. The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, the question coverage PNGs, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper also publishes `release/<tag>_semantic_accuracy.png`, `release/<tag>_question_domain_coverage.png`, `release/<tag>_question_intent_coverage.png`, `release/<tag>_question_certification_coverage.png`, and `release/curated_failure_report.md`.
 
 Regenerate local training, validation, test, and app sample artifacts:
 

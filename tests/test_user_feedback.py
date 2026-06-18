@@ -24,13 +24,20 @@ def test_feedback_repository_saves_letter_grades_without_numeric_values(tmp_path
     path = tmp_path / "generated" / "user_feedback.json"
     question = _question()
 
-    UserFeedbackRepository(path).submit(question, "AWS", rating_given="A", correct_rating="F")
+    UserFeedbackRepository(path).submit(
+        question,
+        "AWS",
+        rating_given="A",
+        correct_rating="F",
+        feedback_text="This only names the cloud provider.",
+    )
 
     rows = json.loads(path.read_text(encoding="utf-8"))
     assert rows == [
         {
-            "schema_version": 2,
+            "schema_version": 1,
             "question": question.question,
+            "exam_code": "",
             "reference_answer": question.reference_answer,
             "original_multiple_choice": {
                 "question": "Which AWS service manages encryption keys?",
@@ -47,6 +54,7 @@ def test_feedback_repository_saves_letter_grades_without_numeric_values(tmp_path
             "answer_given": "AWS",
             "correct_rating": "F",
             "rating_given": "A",
+            "feedback_text": "This only names the cloud provider.",
         }
     ]
 
@@ -59,17 +67,28 @@ def test_feedback_repository_appends_to_existing_v1_records(tmp_path: Path):
     UserFeedbackRepository(path).submit(_question(), "AWS KMS", rating_given="A", correct_rating="A")
 
     rows = json.loads(path.read_text(encoding="utf-8"))
-    assert rows[0]["schema_version"] == 2
+    assert rows[0]["schema_version"] == 1
     assert set(rows[0]) == {
         "schema_version",
         "question",
+        "exam_code",
         "reference_answer",
         "original_multiple_choice",
         "answer_given",
         "correct_rating",
         "rating_given",
+        "feedback_text",
     }
     assert rows[0]["original_multiple_choice"]["correct_option_ids"] == ["A"]
+
+
+def test_user_feedback_v1_filename_uses_schema_version_1(tmp_path: Path):
+    path = tmp_path / "generated" / "user_feedback.v1.json"
+
+    UserFeedbackRepository(path).submit(_question(), "AWS KMS", rating_given="A", correct_rating="A")
+
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    assert {row["schema_version"] for row in rows} == {1}
 
 
 def test_feedback_repository_exports_empty_json_when_artifact_is_missing(tmp_path: Path):
@@ -78,6 +97,17 @@ def test_feedback_repository_exports_empty_json_when_artifact_is_missing(tmp_pat
     exported = UserFeedbackRepository(path).export_json()
 
     assert exported == "[]\n"
+
+
+def test_config_feedback_schema_versions_match_file_roles():
+    project_root = Path(__file__).resolve().parents[1]
+    user_rows = json.loads((project_root / "config" / "user_feedback.v1.json").read_text(encoding="utf-8"))
+    generated_rows = json.loads((project_root / "config" / "generated_feedback.json").read_text(encoding="utf-8"))
+
+    assert user_rows
+    assert generated_rows
+    assert {row["schema_version"] for row in user_rows} == {1}
+    assert {row["schema_version"] for row in generated_rows} == {0}
 
 
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):
@@ -149,7 +179,7 @@ def test_letter_grades_map_to_three_evaluation_bands():
     assert letter_to_grade_band("F") == "F"
 
 
-def test_curated_label_conflicts_only_count_cross_band_disagreements():
+def test_curated_label_conflicts_count_exact_letter_disagreements():
     rows = [
         {"question": "Question one", "answer_given": "Answer", "correct_rating": "A"},
         {"question": "Question one", "answer_given": "Answer", "correct_rating": "B"},
@@ -159,7 +189,7 @@ def test_curated_label_conflicts_only_count_cross_band_disagreements():
 
     conflicts = _conflicting_labels(rows)
 
-    assert ("question one", "answer") not in conflicts
+    assert conflicts[("question one", "answer")] == {"A", "B"}
     assert conflicts[("question two", "answer")] == {"B", "D"}
 
 def _question() -> Question:

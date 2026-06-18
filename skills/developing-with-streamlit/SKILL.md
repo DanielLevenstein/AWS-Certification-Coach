@@ -83,7 +83,7 @@ Step 4: Check if app is running and offer to run it
 
 Use this routing table to select reference(s). **Always read the reference file** before making changes.
 
-> All file paths below are relative to this skill's directory (`streamlit/.agents/skills/developing-with-streamlit/`).
+> All file paths below are relative to this skill's directory (`skills/developing-with-streamlit/`).
 
 | User Need | Reference to Read |
 |-----------|-------------------|

@@ -24,6 +24,7 @@ class Question:
     question: str
     reference_answer: str
     key_concepts: list[str]
+    exam_code: str = ""
     original_multiple_choice: "MultipleChoiceQuestion | None" = None
 
 
