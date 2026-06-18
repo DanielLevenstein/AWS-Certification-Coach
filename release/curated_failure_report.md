@@ -1,13 +1,13 @@
 # Curated Grade Failure Report
 
-- Curated examples: 25
+- Curated examples: 23
 - Evaluation bands: `A/B`, `C/D`, `F`
-- Passing grade-band predictions: 18
-- Failing grade-band predictions: 7
-- Grade-band accuracy: 72.00%
+- Passing grade-band predictions: 17
+- Failing grade-band predictions: 6
+- Grade-band accuracy: 73.91%
 - Unique failing question/answer/grade cases: 6
 - Conflicting normalized label sets: 0
-- Actual grade bands among failures: {'C/D': 3, 'F': 4}
+- Actual grade bands among failures: {'C/D': 3, 'F': 3}
 
 ## Primary Findings
 
@@ -24,7 +24,7 @@
 
 ### 1. Expected C/D, received F
 
-- Rows: `20, 23`; occurrences: `2`
+- Rows: `21`; occurrences: `1`
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Expected rating: `0.75`
 - User answer: `AWS KMS Keys`

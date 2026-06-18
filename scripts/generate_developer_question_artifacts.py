@@ -81,13 +81,13 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
         source_id = str(source["source_id"])
         service = str(source["services"][0])
         concepts = [str(concept) for concept in source["concepts"]]
-        question_text = QUESTION_TEMPLATES[source_id]
-        reference_answer = _reference_answer(source_id, service)
+        question_text = _generated_question(source, source_id)
+        reference_answer = _reference_answer(source, source_id, service)
         options = [
-            {"option_id": "A", "text": CORRECT_OPTIONS[source_id]},
+            {"option_id": "A", "text": _correct_option(source, source_id)},
             *[
                 {"option_id": option_id, "text": text}
-                for option_id, text in zip(["B", "C", "D"], DISTRACTORS[source_id], strict=True)
+                for option_id, text in zip(["B", "C", "D"], _distractors(source, source_id), strict=True)
             ],
         ]
         row = {
@@ -119,7 +119,27 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
     return questions
 
 
-def _reference_answer(source_id: str, service: str) -> str:
+def _generated_question(source: dict[str, object], source_id: str) -> str:
+    if source.get("generated_question"):
+        return str(source["generated_question"])
+    return QUESTION_TEMPLATES[source_id]
+
+
+def _correct_option(source: dict[str, object], source_id: str) -> str:
+    if source.get("correct_option"):
+        return str(source["correct_option"])
+    return CORRECT_OPTIONS[source_id]
+
+
+def _distractors(source: dict[str, object], source_id: str) -> list[str]:
+    if source.get("distractors"):
+        return [str(distractor) for distractor in source["distractors"]]
+    return DISTRACTORS[source_id]
+
+
+def _reference_answer(source: dict[str, object], source_id: str, service: str) -> str:
+    if source.get("reference_answer"):
+        return str(source["reference_answer"])
     answers = {
         "dva-lambda-sqs-dlq": "Configure the Lambda event source mapping with an SQS dead-letter queue so failed messages can be isolated after retries.",
         "dva-api-gateway-lambda-auth": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",

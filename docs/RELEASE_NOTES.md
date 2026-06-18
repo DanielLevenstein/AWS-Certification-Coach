@@ -56,20 +56,20 @@ For v2.2.0 design planning, comparison-style freeform questions should ask learn
 
 | Release | Saved Model Accuracy | Training Accuracy | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
 |:--------|---------------------:|------------------:|------------------:|-------------------:|----------------:|------------------:|
-| v2.2.1 | 96.15% | 61.54% | 73.08% | 88.24% | 78.95% | 96.00% |
+| v2.2.2 | 96.00% | 60.00% | 76.00% | 88.24% | 83.33% | 95.12% |
 
 Saved model answer form: `long`
 Saved model calibration count: `21`
 Question fidelity model: `question_fidelity_heuristic_v1`
-Question fidelity sample count: `12`
-Developer source question count: `12`
-Developer generated question count: `12`
-App question count: `92`
+Question fidelity sample count: `34`
+Developer source question count: `34`
+Developer generated question count: `34`
+App question count: `114`
 Question coverage domain count: `15`
-Question coverage concept count: `192`
+Question coverage concept count: `276`
 Question coverage intent count: `5`
-Top covered concepts: `Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, rules, AWS Organizations, SCPs, DynamoDB, Secrets Manager`
-Semantic answer evaluation count: `26`
+Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, DynamoDB, Secrets Manager`
+Semantic answer evaluation count: `25`
 
 Training curve: `training_performance.png`
 Curated grade-band accuracy (A/B, C/D, F): `curated_grade_accuracy.png`
@@ -83,7 +83,7 @@ Question fidelity is the release guardrail for generated-question concept and ex
 Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.
 Precision and recall treat A/B and C/D as accepted answers and F as rejected.
 
-<img src="../release/v2.2.1_question_intent_coverage.png" alt="Question intent coverage" width="960">
+<img src="../release/v2.2.2_question_intent_coverage.png" alt="Question intent coverage" width="960">
 
-<img src="../release/v2.2.1_question_certification_coverage.png" alt="Certification coverage" width="720">
+<img src="../release/v2.2.2_question_certification_coverage.png" alt="Certification coverage" width="720">
 <!-- release-metrics:end -->
