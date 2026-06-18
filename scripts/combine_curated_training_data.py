@@ -30,6 +30,7 @@ def combine_curated_training_data(config_dir: Path, output: Path) -> tuple[int, 
         raise FileNotFoundError(f"No curated training data found in {config_dir} matching {patterns}")
     combined_rows: list[object] = []
     seen_rows: set[str] = set()
+    seen_questions: set[str] = set()
     for path in input_paths:
         with path.open("r", encoding="utf-8") as input_file:
             rows = json.load(input_file)
@@ -38,8 +39,8 @@ def combine_curated_training_data(config_dir: Path, output: Path) -> tuple[int, 
         for index, row in enumerate(rows):
             _validate_curated_row(row, path, index)
             curated_row = json.dumps(_curated_row(row))
-            if curated_row not in seen_rows:
-                seen_rows.add(curated_row)
+            question = row['question']
+            if question not in seen_questions:
                 combined_rows.append(json.loads(curated_row))
 
     output.parent.mkdir(parents=True, exist_ok=True)
