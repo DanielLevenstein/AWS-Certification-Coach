@@ -279,6 +279,45 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
 
 
+def test_semantic_similarity_uses_syntax_alias_table_for_service_names():
+    cloudtrail_question = Question(
+        certification="Cloud Practitioner",
+        domain="Governance",
+        difficulty="Easy",
+        question="Which service records AWS API activity for auditing?",
+        reference_answer="Use AWS CloudTrail to record AWS API activity.",
+        key_concepts=["AWS CloudTrail", "API activity", "auditing"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service records AWS API activity?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS CloudTrail."),
+                MultipleChoiceOption("B", "Use Amazon CloudWatch."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+    codebuild_question = Question(
+        certification="AWS Certified Developer",
+        domain="Deployment",
+        difficulty="Medium",
+        question="Where should a developer define repeatable build commands?",
+        reference_answer="Use an AWS CodeBuild buildspec file.",
+        key_concepts=["CodeBuild buildspec", "build phases", "test commands"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Where should build commands be defined?",
+            options=[
+                MultipleChoiceOption("A", "Use a CodeBuild buildspec file."),
+                MultipleChoiceOption("B", "Use a CodeDeploy AppSpec file."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    assert semantic_similarity_score(cloudtrail_question, "AWS Cloud trail records API activity for auditing.") >= 90
+    assert semantic_similarity_score(cloudtrail_question, "Use AWS CloudTrail.") >= 90
+    assert semantic_similarity_score(codebuild_question, "AWS Code Build") >= 80
+
+
 def test_semantic_accuracy_uses_grade_bands_and_reports_exact_letter_match(tmp_path: Path):
     question = Question(
         certification="Cloud Practitioner",

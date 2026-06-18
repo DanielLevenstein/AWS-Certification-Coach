@@ -248,7 +248,7 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Configure SNS subscription filter policies that match message attributes so each subscriber receives only the relevant fanout messages.",
     "answer_given": "SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. ",
-    "correct_rating": "C",
+    "correct_rating": "B",
     "rating_given": "B",
     "correct_answer_text": "Configure SNS subscription filter policies.",
     "feedback_text": ""

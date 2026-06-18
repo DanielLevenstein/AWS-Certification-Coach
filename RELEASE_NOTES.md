@@ -16,7 +16,7 @@
 | v2.3.1  | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.                               |
 | v2.3.2  | Created new column for Exact Letter Accuracy and updated release notes                                                                                         |
 | v2.3.3  | Retraining model and prevent model from training on a future release by checking schema version in training data                                               | 
-
+| v2.3.4  | Added a syntax alias list to improve model accuracy                                                                                                            |
 # Release Metrics
 
 
@@ -30,6 +30,8 @@
 | v2.3.1  |            86.21% |             95.45% |          95.45% |                55.17% |            95.12% |
 | v2.3.2  |            86.21% |             95.45% |          95.45% |                55.17% |            95.12% |
 | v2.3.3  |            88.46% |             94.74% |          94.74% |                61.54% |            94.95% |
+| v2.3.4  | 82.35% | 96.00% | 88.89% | 55.88% | 94.95% |
+
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
@@ -59,10 +61,10 @@ For v2.3.2 the strict-grading parameter was deprecated and a new column added fo
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|------------------:|
-| v2.3.3 | 88.46% | 94.74% | 94.74% | 61.54% | 94.95% |
+| v2.3.3 | 82.35% | 96.00% | 88.89% | 55.88% | 94.95% |
 
 Saved model answer form: `long`
-Saved model calibration count: `22`
+Saved model calibration count: `27`
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `38`
 App question count: `118`
@@ -70,7 +72,7 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic answer evaluation count: `26`
+Semantic answer evaluation count: `34`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Semantic precision has a 90% release guardrail for the `semantic_similarity` model.
