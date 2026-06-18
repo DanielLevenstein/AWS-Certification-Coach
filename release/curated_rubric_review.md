@@ -1,9 +1,9 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 27
+- Curated examples reviewed: 24
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 5, 'B': 3, 'C': 6, 'D': 6, 'F': 7}`
-- Suggested label updates: 13
+- Current grade distribution: `{'A': 4, 'B': 3, 'C': 4, 'D': 6, 'F': 7}`
+- Suggested label updates: 10
 
 ## Suggested Answer Updates
 
@@ -63,39 +63,15 @@
 - Semantic score: `88`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 20: C -> D
-
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Answer: `AWS KMS Keys`
-- Reference: AWS Secrets Manager
-- Semantic score: `65`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
 ### Row 21: C -> D
 
-- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
-- Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
-- Reference: DynamoDB global tables
-- Semantic score: `62`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 22: A -> C
-
-- Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
-- Answer: `AWS Cloud trail is used to record AWS API activity for auditing. `
-- Reference: AWS CloudTrail
-- Semantic score: `72`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 24: C -> D
-
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Answer: `AWS KMS Keys`
 - Reference: AWS Secrets Manager
 - Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 25: C -> D
+### Row 22: C -> D
 
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
 - Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
@@ -103,7 +79,7 @@
 - Semantic score: `62`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 26: A -> C
+### Row 23: A -> C
 
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
 - Answer: `AWS Cloud trail is used to record AWS API activity for auditing. `

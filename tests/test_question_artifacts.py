@@ -55,6 +55,7 @@ def test_sample_question_artifact_includes_answer_rubric_contract():
         "service_selection",
         "service_comparison",
         "architecture_tradeoff",
+        "artifact_review",
     }
     rubric_fields = {
         "required_concepts",

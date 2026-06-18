@@ -1,13 +1,13 @@
 # Curated Grade Failure Report
 
-- Curated examples: 27
+- Curated examples: 24
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
 - Passing exact-letter predictions: 15
-- Failing exact-letter predictions: 12
-- Exact-letter accuracy: 55.56%
+- Failing exact-letter predictions: 9
+- Exact-letter accuracy: 62.50%
 - Unique failing question/answer/grade cases: 9
 - Conflicting normalized label sets: 0
-- Actual letter grades among failures: {'B': 2, 'C': 2, 'D': 7, 'F': 1}
+- Actual letter grades among failures: {'B': 2, 'C': 1, 'D': 5, 'F': 1}
 
 ## Primary Findings
 
@@ -24,7 +24,7 @@
 
 ### 1. Expected C, received D
 
-- Rows: `20, 24`; occurrences: `2`
+- Rows: `21`; occurrences: `1`
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Expected rating: `0.75`
 - User answer: `AWS KMS Keys`
@@ -84,7 +84,7 @@
 
 ### 6. Expected A, received C
 
-- Rows: `22, 26`; occurrences: `2`
+- Rows: `23`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
 - Expected rating: `0.95`
 - User answer: `AWS Cloud trail is used to record AWS API activity for auditing.`
@@ -96,7 +96,7 @@
 
 ### 7. Expected C, received D
 
-- Rows: `21, 25`; occurrences: `2`
+- Rows: `22`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
 - Expected rating: `0.75`
 - User answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`

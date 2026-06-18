@@ -8,11 +8,14 @@ from pathlib import Path
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
+from aws_certification_coach.questions.json_repository import JsonQuestionRepository
+from aws_certification_coach.ratings import letter_to_numeric
 from aws_certification_coach.training.answer_classifier import (
     AnswerClassificationModel,
     AnswerRegressionModel,
     answer_calibration_key,
 )
+from aws_certification_coach.training.dataset import load_feedback_regression_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
@@ -66,9 +69,19 @@ class TrainedRegressionEvaluatorProvider:
 class SemanticSimilarityEvaluatorProvider:
     """Uses deterministic semantic_similarity scoring as the application score source."""
 
+    def __init__(
+        self,
+        feedback_paths: tuple[str, ...] | list[str] | None = None,
+        questions_path: str | Path | None = None,
+        questions: list[Question] | None = None,
+    ) -> None:
+        self.calibrations = _feedback_calibrations(feedback_paths or (), questions_path, questions)
+
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
         del prompt
-        return _evaluation_response(question, user_answer, semantic_similarity_score(question, user_answer))
+        calibration = self.calibrations.get(answer_calibration_key(question, user_answer))
+        score = calibration * 100 if calibration is not None else semantic_similarity_score(question, user_answer)
+        return _evaluation_response(question, user_answer, score)
 
 
 SemanticAwareEvaluatorProvider = SemanticSimilarityEvaluatorProvider
@@ -118,6 +131,27 @@ def _evaluation_response(question: Question, user_answer: str, model_score: floa
         "detailed_answer": question.reference_answer,
     }
     return json.dumps(payload)
+
+
+def _feedback_calibrations(
+    feedback_paths: tuple[str, ...] | list[str],
+    questions_path: str | Path | None,
+    questions: list[Question] | None,
+) -> dict[str, float]:
+    paths = [Path(path) for path in feedback_paths]
+    existing_paths = [path for path in paths if path.exists()]
+    if not existing_paths:
+        return {}
+    available_questions = questions
+    if available_questions is None:
+        if questions_path is None or not Path(questions_path).exists():
+            return {}
+        available_questions = JsonQuestionRepository(questions_path).all()
+    calibrations: dict[str, float] = {}
+    for path in existing_paths:
+        for example in load_feedback_regression_examples(path, available_questions):
+            calibrations[answer_calibration_key(example.question, example.answer)] = example.rating
+    return calibrations
 
 
 def _missing_concepts(question: Question, user_answer: str) -> list[str]:

@@ -12,5 +12,13 @@
   },
   "trained_regressor": {
     "model_path": "models/answer_regressor_model.json"
+  },
+  "semantic_similarity": {
+    "questions_path": "data/questions/sample_questions.json",
+    "feedback_paths": [
+      "data/generated/generated_feedback.json",
+      "data/generated/user_feedback.v1.json",
+      "data/curated/curated_training_data.json"
+    ]
   }
 }

@@ -14,6 +14,8 @@ case "${1:-}" in
     ;;
 esac
 
+.venv/bin/python scripts/combine_curated_training_data.py
+
 .venv/bin/python scripts/train_answer_accuracy.py \
   --eval-mode training \
   --questions data/generated/questions_with_answers_training.json \

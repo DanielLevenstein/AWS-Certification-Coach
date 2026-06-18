@@ -22,7 +22,10 @@ def build_evaluation_service(config: EvaluatorConfig | None = None) -> Evaluatio
     elif provider_name == "trained_classifier":
         provider = TrainedClassifierEvaluatorProvider(evaluator_config.trained_classifier_model_path)
     elif provider_name in {"semantic_similarity", "semantic_aware"}:
-        provider = SemanticSimilarityEvaluatorProvider()
+        provider = SemanticSimilarityEvaluatorProvider(
+            feedback_paths=evaluator_config.semantic_feedback_paths,
+            questions_path=evaluator_config.semantic_questions_path,
+        )
     elif provider_name == "trained_regressor":
         provider = TrainedRegressionEvaluatorProvider(evaluator_config.trained_regressor_model_path)
     else:

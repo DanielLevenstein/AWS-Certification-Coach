@@ -91,6 +91,15 @@ def test_user_feedback_v1_filename_uses_schema_version_1(tmp_path: Path):
     assert {row["schema_version"] for row in rows} == {1}
 
 
+def test_user_feedback_major_minor_filename_uses_major_minor_schema_version(tmp_path: Path):
+    path = tmp_path / "generated" / "user_feedback.v2.3.json"
+
+    UserFeedbackRepository(path).submit(_question(), "AWS KMS", rating_given="A", correct_rating="A")
+
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    assert {row["schema_version"] for row in rows} == {2.3}
+
+
 def test_feedback_repository_exports_empty_json_when_artifact_is_missing(tmp_path: Path):
     path = tmp_path / "generated" / "user_feedback.v1.json"
 
@@ -135,6 +144,52 @@ def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: P
     assert regression[0].rating == 0.25
     assert classification[0].label == 0
     assert regression[0].question == _question()
+
+
+def test_feedback_loader_rejects_newer_schema_when_max_schema_is_set(tmp_path: Path):
+    path = tmp_path / "feedback.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "schema_version": 2.4,
+                    "question": _question().question,
+                    "reference_answer": "Use AWS KMS",
+                    "answer_given": "AWS",
+                    "correct_rating": "F",
+                    "rating_given": "A",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="newer than supported schema 2.3"):
+        load_feedback_regression_examples(path, [_question()], max_schema_version="2.3")
+
+
+def test_feedback_loader_accepts_legacy_schema_when_max_schema_is_set(tmp_path: Path):
+    path = tmp_path / "feedback.json"
+    path.write_text(
+        json.dumps(
+            [
+                {
+                    "schema_version": schema_version,
+                    "question": _question().question,
+                    "reference_answer": "Use AWS KMS",
+                    "answer_given": "AWS",
+                    "correct_rating": "F",
+                    "rating_given": "A",
+                }
+                for schema_version in [0, 1, 2, 2.3]
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    examples = load_feedback_regression_examples(path, [_question()], max_schema_version="2.3")
+
+    assert len(examples) == 4
 
 
 def test_feedback_loader_can_match_using_original_multiple_choice_question(tmp_path: Path):
