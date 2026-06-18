@@ -44,7 +44,7 @@ def render_release_metrics(
     exact_letter_accuracy = float(semantic.get("semantic_exact_letter_accuracy", semantic["semantic_grade_accuracy"]))
     return "\n".join(
         [
-            "# Latest Release Metrics",
+            "## Generated Release Metrics",
             "",
             "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |",
             "|:--------|------------------:|-------------------:|----------------:|----------------------:|------------------:|",

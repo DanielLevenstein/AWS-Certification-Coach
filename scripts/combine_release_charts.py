@@ -18,6 +18,11 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 
 
+CHART_FONT_SIZES = {
+    "title": 20,
+    "suptitle": 28,
+}
+
 DEFAULT_CHARTS = (
     ("Semantic Accuracy", Path("release/semantic_accuracy.png")),
     ("Certification Split", Path("release/question_certification_coverage.png")),
@@ -34,10 +39,14 @@ def combine_release_charts(charts: list[tuple[str, Path]], output: Path) -> None
     figure, axes = plt.subplots(2, 2, figsize=(18, 14), constrained_layout=True)
     for axis, (title, path) in zip(axes.flat, charts):
         axis.imshow(mpimg.imread(path))
-        axis.set_title(title, fontsize=15, fontweight="bold", pad=10)
+        axis.set_title(title, fontsize=CHART_FONT_SIZES["title"], fontweight="bold", pad=12)
         axis.axis("off")
 
-    figure.suptitle("AWS Certification Coach Release Metrics", fontsize=22, fontweight="bold")
+    figure.suptitle(
+        "AWS Certification Coach Release Metrics",
+        fontsize=CHART_FONT_SIZES["suptitle"],
+        fontweight="bold",
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output, dpi=180, bbox_inches="tight")
     plt.close(figure)

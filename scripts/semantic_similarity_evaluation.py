@@ -23,6 +23,15 @@ from aws_certification_coach.model_evaluation.semantic_similarity import (
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 
 
+CHART_FONT_SIZES = {
+    "title": 20,
+    "axis": 15,
+    "tick": 16,
+    "legend": 13,
+    "annotation": 14,
+}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--curated", type=Path, default=Path("data/curated/curated_training_data.json"))
@@ -67,15 +76,16 @@ def plot_semantic_accuracy(
         "Exact Letter Accuracy": exact_letter_accuracy * 100,
     }
     colors = ["#2ca02c", "#1f77b4", "#9467bd", "#ff7f0e"]
-    figure, axis = plt.subplots(figsize=(9, 5))
+    figure, axis = plt.subplots(figsize=(10, 6))
     bars = axis.bar(values.keys(), values.values(), color=colors)
     axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (90%)")
-    axis.set_title("Semantic Diagnostic Accuracy")
-    axis.set_ylabel("Percent")
+    axis.set_title("Semantic Diagnostic Accuracy", fontsize=CHART_FONT_SIZES["title"], pad=14)
+    axis.set_ylabel("Percent", fontsize=CHART_FONT_SIZES["axis"])
     axis.set_ylim(0, 100)
     axis.grid(axis="y", alpha=0.25)
-    axis.legend()
-    axis.tick_params(axis="x", labelrotation=12)
+    axis.legend(fontsize=CHART_FONT_SIZES["legend"])
+    axis.tick_params(axis="x", labelrotation=12, labelsize=CHART_FONT_SIZES["tick"])
+    axis.tick_params(axis="y", labelsize=CHART_FONT_SIZES["tick"])
     for bar in bars:
         height = bar.get_height()
         axis.annotate(
@@ -84,6 +94,7 @@ def plot_semantic_accuracy(
             xytext=(0, 6),
             textcoords="offset points",
             ha="center",
+            fontsize=CHART_FONT_SIZES["annotation"],
         )
     figure.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)

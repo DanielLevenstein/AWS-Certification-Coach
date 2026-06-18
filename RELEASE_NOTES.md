@@ -52,11 +52,11 @@ For v2.3.2 the strict-grading parameter was deprecated and a new column added fo
 ![Release Metrics Chart](release/release_metrics_chart.png)
 
 <!-- release-metrics:start -->
-# Latest Release Metrics
+## Generated Release Metrics
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|------------------:|
-| v2.3.2 | 86.21% | 95.45% | 95.45% | 55.17% | 95.12% |
+| v2.3.2.1 | 86.21% | 95.45% | 95.45% | 55.17% | 95.12% |
 
 Saved model answer form: `long`
 Saved model calibration count: `22`
