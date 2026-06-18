@@ -92,6 +92,7 @@ def evaluate_semantic_curated_answers(
                 "expected_letter": expected,
                 "actual_letter": actual,
                 "score": score,
+                "feedback_text": str(row.get("feedback_text", "")),
             }
         )
     total = len(rows_and_examples)

@@ -116,6 +116,7 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
                 "reasoning_pattern": source["reasoning_pattern"],
             },
         }
+        row.update(_artifact_metadata(source))
         row["question_fidelity"] = model.score(source, row).__dict__
         questions.append(row)
     return questions
@@ -175,6 +176,18 @@ def _reference_answer(source: dict[str, object], source_id: str, service: str) -
         "dva-eventbridge-schedule-lambda": "Create an EventBridge scheduled rule with the Lambda function as the target for recurring serverless execution.",
     }
     return answers[source_id] if source_id in answers else f"Use {service} for this developer workflow."
+
+
+def _artifact_metadata(source: dict[str, object]) -> dict[str, object]:
+    if source.get("question_type") != "artifact_review":
+        return {}
+    return {
+        "artifact_type": str(source.get("artifact_type", "")),
+        "artifact_language": str(source.get("artifact_language", "")),
+        "artifact_body": str(source.get("artifact_body", "")),
+        "artifact_context": str(source.get("artifact_context", "")),
+        "expected_issue": str(source.get("expected_issue", "")),
+    }
 
 
 if __name__ == "__main__":

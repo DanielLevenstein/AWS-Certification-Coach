@@ -2,7 +2,7 @@
 
 ## Release Target
 
-Target release: `v2.4.0`
+Target release: `v2.4.1`
 
 Phase 2 extends AWS Certification Coach from concept-only freeform questions into artifact-based review questions. Learners should inspect short IAM policies, Lambda handlers, SDK usage snippets, and CloudFormation/SAM fragments, then explain the problem, best fix, or expected behavior.
 
@@ -31,7 +31,7 @@ Use the same distinction throughout this phase:
 
 - Do not add runtime code behavior in this phase before the design and Codex skills are committed.
 - Do not ingest exam dumps, paid practice-bank questions, or restricted Skill Builder text.
-- Do not build a full static analyzer, policy simulator, CloudFormation linter, or Lambda execution sandbox for `v2.4.0`.
+- Do not build a full static analyzer, policy simulator, CloudFormation linter, or Lambda execution sandbox for `v2.4.1`.
 - Do not grade learners by executing their code.
 - Do not mix question-fidelity review with learner-answer grading.
 
@@ -238,7 +238,7 @@ Add Phase 2 metrics when implementation begins:
 - Hard rejection counts by reason.
 - Artifact source-safety rejection count.
 
-Release notes for `v2.4.0` should state whether the release includes design only, generated artifact questions, runtime filtering, or learner-facing UI changes.
+Release notes for `v2.4.1` should state whether the release includes design only, generated artifact questions, runtime filtering, or learner-facing UI changes.
 
 ## Implementation Sequence
 
@@ -257,4 +257,3 @@ Release notes for `v2.4.0` should state whether the release includes design only
 - The artifact-review contract keeps learner-answer grading separate from question-fidelity review.
 - The source policy prevents restricted text, real secrets, and real customer artifacts.
 - Future code changes have an implementation sequence and release metrics to follow.
-

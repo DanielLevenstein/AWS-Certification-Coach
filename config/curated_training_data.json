@@ -161,12 +161,108 @@
   },
   {
     "schema_version": 2,
+    "question": "A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
+    "answer_given": "AWS KMS Keys",
+    "correct_rating": "C",
+    "rating_given": "F",
+    "feedback_text": "We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "exam_code": "SAA-C03",
+    "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
+    "answer_given": "RDS read replicas can be used for low-latency data synchronization across multiple availability zones.",
+    "correct_rating": "C",
+    "rating_given": "D",
+    "feedback_text": "We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "answer_given": "AWS Cloud trail is used to record AWS API activity for auditing. ",
+    "correct_rating": "A",
+    "rating_given": "C",
+    "feedback_text": "I entered a freeform version of the correct answer."
+  },
+  {
+    "schema_version": 2,
     "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
     "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
     "answer_given": "Which API Gateway feature should be used to run token validation on requests? ",
     "correct_rating": "D",
     "rating_given": "B",
     "correct_answer_text": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
+    "answer_given": "AWS Cloud trail is used to record AWS API activity for auditing. ",
+    "correct_rating": "A",
+    "rating_given": "C",
+    "correct_answer_text": "Use AWS CloudTrail.",
+    "feedback_text": "I entered a freeform version of the correct answer."
+  },
+  {
+    "schema_version": 2,
+    "question": "A session table in DynamoDB stores an expiration time for each item and should remove old sessions without a scheduled cleanup job. Which feature should the developer enable?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Enable DynamoDB TTL on the expiration timestamp attribute so DynamoDB automatically deletes expired table items.",
+    "answer_given": "DynamoDB Time to Live can be used to remove old DynamoDB sections with a scheduled cleanup job. ",
+    "correct_rating": "A",
+    "rating_given": "B",
+    "correct_answer_text": "Enable DynamoDB Time to Live.",
+    "feedback_text": "This is a full answer it's just worded slightly differently"
+  },
+  {
+    "schema_version": 2,
+    "question": "A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Define the install, build, and test command phases in an AWS CodeBuild buildspec file for the managed build project.",
+    "answer_given": "AWS Code Build",
+    "correct_rating": "A",
+    "rating_given": "F",
+    "correct_answer_text": "Use a CodeBuild buildspec file.",
+    "feedback_text": "Again my answer is correct. Are you sure you are using the semantic evaluation logic?"
+  },
+  {
+    "schema_version": 2,
+    "question": "An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Adjust the SQS visibility timeout so a message remains hidden from other consumers while the current worker processes it.",
+    "answer_given": "SQS FILO queue",
+    "correct_rating": "C",
+    "rating_given": "B",
+    "correct_answer_text": "Adjust the SQS visibility timeout.",
+    "feedback_text": "My answer had nothing to do with the cannon answer but might still be partially right."
+  },
+  {
+    "schema_version": 2,
+    "question": "An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Configure SNS subscription filter policies that match message attributes so each subscriber receives only the relevant fanout messages.",
+    "answer_given": "SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. ",
+    "correct_rating": "C",
+    "rating_given": "B",
+    "correct_answer_text": "Configure SNS subscription filter policies.",
+    "feedback_text": ""
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.",
+    "exam_code": "SAA-C03",
+    "reference_answer": "Use Amazon Kinesis Data Streams to ingest and process real-time streaming data at scale.",
+    "answer_given": "AWS Kenesis",
+    "correct_rating": "A",
+    "rating_given": "D",
+    "correct_answer_text": "Use Amazon Kinesis Data Streams.",
+    "feedback_text": "This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one."
   },
   {
     "schema_version": 2,
@@ -189,16 +285,5 @@
     "rating_given": "D",
     "correct_answer_text": "Use DynamoDB global tables.",
     "feedback_text": "We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C"
-  },
-  {
-    "schema_version": 2,
-    "question": "Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.",
-    "exam_code": "CLF-C02",
-    "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
-    "answer_given": "AWS Cloud trail is used to record AWS API activity for auditing. ",
-    "correct_rating": "A",
-    "rating_given": "C",
-    "correct_answer_text": "Use AWS CloudTrail.",
-    "feedback_text": "I entered a freeform version of the correct answer."
   }
 ]

@@ -63,6 +63,7 @@ def _curated_row(row: dict) -> dict:
         "answer_given",
         "correct_rating",
         "rating_given",
+        "correct_answer_text",
         "feedback_text",
     }
     curated = {key: value for key, value in row.items() if key in allowed_fields}

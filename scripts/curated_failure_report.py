@@ -53,6 +53,7 @@ def build_failure_report(
                 "score": result.score,
                 "raw_score": raw_score,
                 "feedback": result.feedback,
+                "reviewer_feedback": str(row.get("feedback_text", "")).strip(),
                 "contributions": [("semantic_similarity_score", raw_score / 100)],
                 "reason": _suspected_reason(
                     expected,
@@ -211,6 +212,7 @@ def _format_markdown(
                 f"- Correct answer: {failure['correct_answer']}",
                 f"- Raw model score: `{failure['raw_score']:.2f}`; runtime score: `{failure['score']}`",
                 f"- Runtime feedback: {failure['feedback']}",
+                *([f"- Reviewer feedback: {failure['reviewer_feedback']}"] if failure.get("reviewer_feedback") else []),
                 f"- Largest feature contributions: {contribution_text}",
                 f"- Suspected cause: {failure['reason']}",
                 "",
