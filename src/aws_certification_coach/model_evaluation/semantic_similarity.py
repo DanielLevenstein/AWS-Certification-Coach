@@ -8,7 +8,7 @@ from pathlib import Path
 from collections.abc import Iterable
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.ratings import letter_to_numeric, score_to_letter
+from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples
 from aws_certification_coach.training.features import correct_answer_text
 
@@ -57,7 +57,8 @@ def evaluate_semantic_curated_answers(
     curated_path: Path | Iterable[Path],
     questions: list[Question],
 ) -> dict[str, object]:
-    matches = 0
+    grade_band_matches = 0
+    exact_letter_matches = 0
     true_positive = false_positive = true_negative = false_negative = 0
     mismatches = []
     rows_and_examples = _feedback_rows_and_examples(curated_path, questions)
@@ -72,8 +73,12 @@ def evaluate_semantic_curated_answers(
         false_positive += int(not expected_accept and actual_accept)
         true_negative += int(not expected_accept and not actual_accept)
         false_negative += int(expected_accept and not actual_accept)
+        expected_grade_band = letter_to_grade_band(expected)
+        actual_grade_band = letter_to_grade_band(actual)
+        if actual_grade_band == expected_grade_band:
+            grade_band_matches += 1
         if actual == expected:
-            matches += 1
+            exact_letter_matches += 1
             continue
         mismatches.append(
             {
@@ -91,10 +96,12 @@ def evaluate_semantic_curated_answers(
         )
     total = len(rows_and_examples)
     return {
-        "semantic_grade_accuracy": matches / max(1, total),
+        "semantic_grade_accuracy": grade_band_matches / max(1, total),
+        "semantic_exact_letter_accuracy": exact_letter_matches / max(1, total),
         "semantic_precision": true_positive / max(1, true_positive + false_positive),
         "semantic_recall": true_positive / max(1, true_positive + false_negative),
-        "semantic_matching_letter_grades": matches,
+        "semantic_matching_grade_bands": grade_band_matches,
+        "semantic_matching_letter_grades": exact_letter_matches,
         "semantic_example_count": total,
         "semantic_grade_scale": ["A", "B", "C", "D", "F"],
         "semantic_true_positive": true_positive,

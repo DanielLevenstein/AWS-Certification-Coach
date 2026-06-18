@@ -41,15 +41,16 @@ def render_release_metrics(
     saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
     answer_form = saved_model.get("answer_form", training_metrics.get("answer_form", "unknown") if training_metrics else "unknown")
     calibration_count = saved_model.get("calibration_count", 0)
-    release_file_stem = _release_file_stem(release_label)
+    exact_letter_accuracy = float(semantic.get("semantic_exact_letter_accuracy", semantic["semantic_grade_accuracy"]))
     return "\n".join(
         [
             "# Latest Release Metrics",
             "",
-            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |",
-            "|:--------|------------------:|-------------------:|----------------:|------------------:|",
+            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |",
+            "|:--------|------------------:|-------------------:|----------------:|----------------------:|------------------:|",
             f"| {release_label} | {semantic['semantic_grade_accuracy']:.2%} | "
-            f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | {_question_fidelity_cell(question_fidelity)} |",
+            f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | "
+            f"{exact_letter_accuracy:.2%} | {_question_fidelity_cell(question_fidelity)} |",
             "",
             f"Saved model answer form: `{answer_form}`",
             f"Saved model calibration count: `{calibration_count}`",
@@ -61,18 +62,10 @@ def render_release_metrics(
             f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
             f"Top covered concepts: `{_coverage_names(question_coverage, 'top_concepts', limit=12)}`",
             f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
-            f"Strict grading: `{_strict_grading_label(strict_grading)}`",
-            "",
-            # "Training curve: `training_performance.png`",
-            # "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`",
-            # "Question intent coverage chart: `question_intent_coverage.png`",
-            # "Certification coverage chart: `question_certification_coverage.png`",
-            # "Curated failure analysis: `curated_failure_report.md`",
-            # "Curated rubric review: `curated_rubric_review.md`",
-            "",
-            "Semantic precision is the release guardrail for the `semantic_similarity` model.",
+            "Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).",
+            "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",
+            "Semantic precision has a 90% release guardrail for the `semantic_similarity` model.",
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
-            _answer_metric_note(strict_grading),
         ]
     ) + "\n"
 

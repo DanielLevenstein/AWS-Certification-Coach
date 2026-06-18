@@ -57,6 +57,7 @@ def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
             "semantic_grade_accuracy": 0.8,
             "semantic_precision": 0.9,
             "semantic_recall": 0.75,
+            "semantic_exact_letter_accuracy": 0.64,
         },
         output,
     )
@@ -72,6 +73,7 @@ def test_semantic_accuracy_chart_uses_only_semantic_metrics(tmp_path: Path):
             "semantic_grade_accuracy": 0.8,
             "semantic_precision": 0.9,
             "semantic_recall": 0.75,
+            "semantic_exact_letter_accuracy": 0.64,
         },
         output,
     )
@@ -198,7 +200,8 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "semantic_similarity.json").write_text(
-        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, "semantic_example_count": 25}',
+        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, '
+        '"semantic_exact_letter_accuracy": 0.64, "semantic_example_count": 25}',
         encoding="utf-8",
     )
     (metrics_dir / "question_fidelity.json").write_text(
@@ -216,8 +219,11 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
 
     markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
 
-    assert "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |" in markdown
-    assert "Strict grading: `standard`" in markdown
+    assert (
+        "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | "
+        "Exact Letter Accuracy | Question Fidelity |"
+    ) in markdown
+    assert "| v1.5 Schema | 80.00% | 90.00% | 75.00% | 64.00% | 88.40% |" in markdown
     assert "Saved model grade-band accuracy" not in markdown
     assert "Training accuracy" not in markdown
 
@@ -226,14 +232,14 @@ def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"
     metrics_dir.mkdir()
     (metrics_dir / "semantic_similarity.json").write_text(
-        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, "semantic_example_count": 25}',
+        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, '
+        '"semantic_exact_letter_accuracy": 0.64, "semantic_example_count": 25}',
         encoding="utf-8",
     )
 
     markdown = render_release_metrics(metrics_dir, release_label="v2.3.1", strict_grading=True)
 
-    assert "Strict grading: `exact-letter`" in markdown
-    assert "requires exact `A`, `B`, `C`, `D`, or `F` agreement" in markdown
+    assert "Exact Letter Accuracy" in markdown
 
 
 def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):
@@ -273,7 +279,7 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
 
 
-def test_semantic_accuracy_requires_exact_letter_match(tmp_path: Path):
+def test_semantic_accuracy_uses_grade_bands_and_reports_exact_letter_match(tmp_path: Path):
     question = Question(
         certification="Cloud Practitioner",
         domain="Security",
@@ -303,7 +309,9 @@ def test_semantic_accuracy_requires_exact_letter_match(tmp_path: Path):
 
     metrics = evaluate_semantic_curated_answers(curated, [question])
 
-    assert metrics["semantic_grade_accuracy"] == 0
+    assert metrics["semantic_grade_accuracy"] == 1
+    assert metrics["semantic_matching_grade_bands"] == 1
+    assert metrics["semantic_exact_letter_accuracy"] == 0
     assert metrics["semantic_matching_letter_grades"] == 0
     assert metrics["semantic_mismatches"][0]["expected_letter"] == "A"
     assert metrics["semantic_mismatches"][0]["actual_letter"] == "B"

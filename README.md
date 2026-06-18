@@ -64,6 +64,7 @@ To regenerate local data:
 | v1.3.4  | Swapped default app scoring to`semantic_similarity`; curated grade-band accuracy reached 80%.                                                               |
 | v1.5.3  | Updated test data to have proper train, test, validation split                                                                                              |
 | v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
+| v2.3.3  | Restored the release guardrail to 90% semantic precision and added exact-letter accuracy to the semantic diagnostic chart.                                  |
 
 #### Scope
 

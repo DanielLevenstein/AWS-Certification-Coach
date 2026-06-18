@@ -52,13 +52,13 @@ METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
 if [ "$STRICT_GRADING" = "1" ]; then
   .venv/bin/python test_suites.py release \
     --release-label "$RELEASE_TAG" \
-    --release-notes docs/RELEASE_NOTES.md \
+    --release-notes RELEASE_NOTES.md \
     --metrics-dir "$METRICS_DIR" \
     --strict-grading
 else
   .venv/bin/python test_suites.py release \
     --release-label "$RELEASE_TAG" \
-    --release-notes docs/RELEASE_NOTES.md \
+    --release-notes RELEASE_NOTES.md \
     --metrics-dir "$METRICS_DIR"
 fi
 

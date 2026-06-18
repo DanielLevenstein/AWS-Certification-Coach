@@ -24,7 +24,7 @@ def main() -> None:
     )
     parser.add_argument("--output", type=Path, default=Path("release/metrics/model_evaluation.json"))
     parser.add_argument("--epochs", type=int, default=500)
-    parser.add_argument("--min-semantic-precision", type=float, default=0.80)
+    parser.add_argument("--min-semantic-precision", type=float, default=0.90)
     args = parser.parse_args()
 
     report = run_model_evaluation(

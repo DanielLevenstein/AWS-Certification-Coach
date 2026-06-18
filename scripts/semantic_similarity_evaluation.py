@@ -59,15 +59,17 @@ def plot_semantic_accuracy(
     metrics: dict[str, object],
     output_path: Path,
 ) -> None:
+    exact_letter_accuracy = float(metrics.get("semantic_exact_letter_accuracy", metrics["semantic_grade_accuracy"]))
     values = {
         "Semantic Accuracy": float(metrics["semantic_grade_accuracy"]) * 100,
         "Semantic Precision": float(metrics["semantic_precision"]) * 100,
         "Semantic Recall": float(metrics["semantic_recall"]) * 100,
+        "Exact Letter Accuracy": exact_letter_accuracy * 100,
     }
-    colors = ["#2ca02c", "#1f77b4", "#9467bd"]
-    figure, axis = plt.subplots(figsize=(8, 5))
+    colors = ["#2ca02c", "#1f77b4", "#9467bd", "#ff7f0e"]
+    figure, axis = plt.subplots(figsize=(9, 5))
     bars = axis.bar(values.keys(), values.values(), color=colors)
-    axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (80%)")
+    axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (90%)")
     axis.set_title("Semantic Diagnostic Accuracy")
     axis.set_ylabel("Percent")
     axis.set_ylim(0, 100)
