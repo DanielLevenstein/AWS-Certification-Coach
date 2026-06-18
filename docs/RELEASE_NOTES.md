@@ -23,6 +23,7 @@
 | v2.1.1  |            68.00% |             84.62% |          68.75% |            96.80% |
 | v2.1.2  |            83.33% |             90.00% |          90.00% |            96.00% |
 | v2.2.4  |            64.00% |             94.44% |          94.44% |            95.12% |
+| v2.2.5 | 47.06% | 96.00% | 88.89% | 94.95% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -51,26 +52,23 @@ For v2.2.4, the maintained release metrics table is `Release`, `Semantic Accurac
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|------------------:|
-| v2.2.4 | 64.00% | 94.44% | 94.44% | 95.12% |
+| v2.2.5 | 47.06% | 96.00% | 88.89% | 94.95% |
 
 Saved model answer form: `long`
-Saved model calibration count: `21`
+Saved model calibration count: `27`
 Question fidelity model: `question_fidelity_heuristic_v1`
-Developer source question count: `34`
-App question count: `114`
+Question fidelity sample count: `38`
+Developer source question count: `38`
+Developer generated question count: `38`
+App question count: `118`
 Question coverage domain count: `15`
-Question coverage concept count: `276`
+Question coverage concept count: `288`
 Question coverage intent count: `5`
-Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, DynamoDB, Secrets Manager`
-Semantic answer evaluation count: `25`
+Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
+Semantic answer evaluation count: `34`
 
 
 Semantic precision is the release guardrail for the `semantic_similarity` model.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
 Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.
-Precision and recall remain accepted-answer diagnostics: A/B/C/D are accepted answers and F is rejected.
-
-<img src="../release/v2.2.4_question_intent_coverage.png" alt="Question intent coverage" width="960">
-
-<img src="../release/v2.2.4_question_certification_coverage.png" alt="Certification coverage" width="720">
 <!-- release-metrics:end -->

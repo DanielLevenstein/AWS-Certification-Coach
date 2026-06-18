@@ -1,13 +1,13 @@
 # Curated Grade Failure Report
 
-- Curated examples: 23
+- Curated examples: 32
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
 - Passing exact-letter predictions: 15
-- Failing exact-letter predictions: 8
-- Exact-letter accuracy: 65.22%
-- Unique failing question/answer/grade cases: 8
+- Failing exact-letter predictions: 17
+- Exact-letter accuracy: 46.88%
+- Unique failing question/answer/grade cases: 14
 - Conflicting normalized label sets: 0
-- Actual letter grades among failures: {'B': 2, 'D': 5, 'F': 1}
+- Actual letter grades among failures: {'B': 5, 'C': 2, 'D': 8, 'F': 2}
 
 ## Primary Findings
 
@@ -22,9 +22,21 @@
 
 ## Failing Cases
 
-### 1. Expected C, received D
+### 1. Expected A, received F
 
-- Rows: `21`; occurrences: `1`
+- Rows: `26`; occurrences: `1`
+- Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
+- Expected rating: `0.95`
+- User answer: `AWS Code Build`
+- Correct answer: a CodeBuild buildspec file
+- Raw model score: `25.00`; runtime score: `25`
+- Runtime feedback: This answer needs more AWS-specific detail.
+- Largest feature contributions: `semantic_similarity_score` +0.250
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 2. Expected C, received D
+
+- Rows: `20, 30`; occurrences: `2`
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Expected rating: `0.75`
 - User answer: `AWS KMS Keys`
@@ -34,7 +46,43 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 2. Expected A, received B
+### 3. Expected A, received B
+
+- Rows: `25`; occurrences: `1`
+- Question: A session table in DynamoDB stores an expiration time for each item and should remove old sessions without a scheduled cleanup job. Which feature should the developer enable?
+- Expected rating: `0.95`
+- User answer: `DynamoDB Time to Live can be used to remove old DynamoDB sections with a scheduled cleanup job.`
+- Correct answer: Enable DynamoDB Time to Live
+- Raw model score: `84.00`; runtime score: `84`
+- Runtime feedback: This answer covers the expected AWS concepts.
+- Largest feature contributions: `semantic_similarity_score` +0.840
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 4. Expected C, received B
+
+- Rows: `28`; occurrences: `1`
+- Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
+- Expected rating: `0.75`
+- User answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know.`
+- Correct answer: Configure SNS subscription filter policies
+- Raw model score: `84.00`; runtime score: `84`
+- Runtime feedback: This answer covers the expected AWS concepts.
+- Largest feature contributions: `semantic_similarity_score` +0.840
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
+
+### 5. Expected C, received B
+
+- Rows: `27`; occurrences: `1`
+- Question: An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?
+- Expected rating: `0.75`
+- User answer: `SQS FILO queue`
+- Correct answer: Adjust the SQS visibility timeout
+- Raw model score: `84.00`; runtime score: `84`
+- Runtime feedback: This answer covers the expected AWS concepts.
+- Largest feature contributions: `semantic_similarity_score` +0.840
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
+
+### 6. Expected A, received B
 
 - Rows: `17`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -46,7 +94,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.880
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 3. Expected A, received B
+### 7. Expected A, received B
 
 - Rows: `18`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -58,7 +106,19 @@
 - Largest feature contributions: `semantic_similarity_score` +0.880
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 4. Expected C, received D
+### 8. Expected A, received D
+
+- Rows: `29`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
+- Expected rating: `0.95`
+- User answer: `AWS Kenesis`
+- Correct answer: Amazon Kinesis Data Streams
+- Raw model score: `65.00`; runtime score: `65`
+- Runtime feedback: The AWS service name appears to be misspelled.
+- Largest feature contributions: `semantic_similarity_score` +0.650
+- Suspected cause: Runtime spelling guard assigned a fixed D-range score; the expected grade disagrees with that policy.
+
+### 9. Expected C, received D
 
 - Rows: `10`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
@@ -70,7 +130,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 5. Expected C, received D
+### 10. Expected C, received D
 
 - Rows: `11`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
@@ -82,9 +142,21 @@
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 6. Expected C, received D
+### 11. Expected A, received C
 
-- Rows: `22`; occurrences: `1`
+- Rows: `22, 24`; occurrences: `2`
+- Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
+- Expected rating: `0.95`
+- User answer: `AWS Cloud trail is used to record AWS API activity for auditing.`
+- Correct answer: AWS CloudTrail
+- Raw model score: `72.00`; runtime score: `72`
+- Runtime feedback: This answer covers the expected AWS concepts.
+- Largest feature contributions: `semantic_similarity_score` +0.720
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 12. Expected C, received D
+
+- Rows: `21, 31`; occurrences: `2`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
 - Expected rating: `0.75`
 - User answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
@@ -94,7 +166,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 7. Expected F, received D
+### 13. Expected F, received D
 
 - Rows: `13`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -106,7 +178,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 8. Expected B, received F
+### 14. Expected B, received F
 
 - Rows: `9`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
