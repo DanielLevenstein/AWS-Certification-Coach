@@ -41,14 +41,6 @@ Each generated question keeps its source-style multiple-choice item in the same 
 
 Training and verification data are generated separately:
 
-- `data/generated/questions_with_answers_training.json`: generated training artifact used by diagnostic regression training.
-- `data/generated/questions_with_answers_validation.json`: generated validation artifact used for training-time validation and checkpoint selection.
-- `data/generated/questions_with_answers_test.json`: generated test artifact reserved for final model checks.
-- `data/generated/user_feedback.v1.json`: learner-submitted grade corrections created by the app using the self-contained v1 schema.
-- `data/curated/curated_training_data.json`: reviewed feedback examples containing full question text. Curated rows intentionally omit question IDs so training cannot learn numbering conventions.
-- `data/curated/user_feedback.v1.json`: optional reviewed learner submissions included in diagnostic model training when present.
-- `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
-
 Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C/D`, and `F`. Precision and recall treat `A/B` and `C/D` as accepted answers and `F` as rejected.
 
 To regenerate local data:
@@ -68,6 +60,7 @@ To regenerate local data:
 | v1.3.4  | Swapped default app scoring to`semantic_similarity`; curated grade-band accuracy reached 80%.                                                               |
 | v1.5.3  | Updated test data to have proper train, test, validation split                                                                                              |
 | v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
+| v2.2.4 | Added questions from AWS Developer exam certification |
 
 #### Scope
 
@@ -75,6 +68,7 @@ Certifications:
 
 - Cloud Practitioner
 - Solutions Architect Associate
+- AWS Developer Exam 
 
 Difficulty:
 
