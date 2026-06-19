@@ -288,6 +288,17 @@
   },
   {
     "schema_version": 2,
+    "question": "An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Configure SNS subscription filter policies that match message attributes so each subscriber receives only the relevant fanout messages.",
+    "answer_given": "SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. ",
+    "correct_rating": "C",
+    "rating_given": "B",
+    "correct_answer_text": "Configure SNS subscription filter policies.",
+    "feedback_text": ""
+  },
+  {
+    "schema_version": 2,
     "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
     "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
     "answer_given": "Which API Gateway feature should be used to run token validation on requests? ",

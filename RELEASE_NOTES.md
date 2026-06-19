@@ -19,6 +19,9 @@
 | v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                                            |
 | v2.3.6   | Reimplemented training algorithm so that additional training increases final score more, and added new within 1 letter metric                                  |
 | v2.3.6.3 | Regenerated test data validated model performance is still stable                                                                                              |
+| v2.4.1  | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review. |
+| v2.4.2  | Improved question bank with data from prod app | 
+
 # Release Metrics
 
 
@@ -38,6 +41,8 @@
 | v2.3.6.1 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
 | v2.3.6.2 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
 | v2.3.6.3 |            91.18% |            100.00% |          92.59% |                67.65% |          97.12% |            95.12% |
+| v2.4.2  | 76.47% | 96.00% | 88.89% | 47.06% | 94.95% |
+
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
@@ -47,7 +52,7 @@ For v2.1.1 - v2.1.2,
 I noticed a huge update to Semantic Accuracy and Semantic Recall after the latest update, but Training Accuracy is still in the 60s.
 Also, I am worried about why Saved Accuracy is so much higher than Semantic Accuracy.
 
-For v2.2.0 design planning, comparison-style freeform questions should ask learners to explain why the best service or feature beats the strongest near-miss distractor. The design is documented in [V2_2_ENHANCED_SERVICES_COMPARISON_DESIGN.md](docs/V2_ENHANCED_SERVICES_COMPARISON_DESIGN.md). The release metrics run now generates domain, intent, and certification question coverage charts for the release notes.
+For v2.2.0 design planning, comparison-style freeform questions should ask learners to explain why the best service or feature beats the strongest near-miss distractor. The design is documented in [V2_2_ENHANCED_SERVICES_COMPARISON_DESIGN.md](docs/PHASE_1_ENHANCED_SERVICES_COMPARISON_DESIGN.md). The release metrics run now generates domain, intent, and certification question coverage charts for the release notes.
 
 For v2.2.4 and later, the maintained release metrics table is `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, `Within 1 Letter`, and `Question Fidelity`.
 
@@ -59,6 +64,8 @@ The held-out exact-letter grade dataset is generated from the test split for rub
 For v2.3.2 the strict-grading parameter was deprecated and a new column added for `Exact Letter Accuracy`. Exact-letter accuracy is below the 90% precision guardrail because several curated A/B/C boundary cases are intentionally counted as strict calibration misses.
 
 For v2.3.6, `Within 1 Letter` comes from `scripts/evaluate_answer_model.py` and reports the generated answer model test split. It accepts adjacent `A/B/C/D/F` predictions while `Exact Letter Accuracy` still requires the exact expected letter.
+
+For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` questions for IAM policy review, Lambda code review, SDK pagination review, and SAM template permission review. The app now preserves artifact metadata and renders self-authored code/configuration snippets in the learner question flow.
 
 ## Current Coverage
 
@@ -72,14 +79,14 @@ For v2.3.6, `Within 1 Letter` comes from `scripts/evaluate_answer_model.py` and 
 | v2.3.6.3 | 91.18% | 100.00% | 92.59% | 67.65% | 97.12% | 95.12% |
 
 Saved model answer form: `long`
-Saved model calibration count: `24`
+Saved model calibration count: `27`
 Question fidelity model: `question_fidelity_heuristic_v1`
-Developer source question count: `34`
-App question count: `114`
+Developer source question count: `38`
+App question count: `118`
 Question coverage domain count: `15`
-Question coverage concept count: `276`
+Question coverage concept count: `288`
 Question coverage intent count: `5`
-Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, DynamoDB, Secrets Manager`
+Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
 Semantic answer evaluation count: `34`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.

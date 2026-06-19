@@ -57,3 +57,15 @@ def test_developer_question_artifact_preserves_source_examples(tmp_path: Path):
     assert row["source_examples"] == [sources[0]["source_id"]]
     assert row["question_fidelity"]["question_fidelity_score"] >= 80
     assert row["original_multiple_choice"]["source_url"].startswith("https://docs.aws.amazon.com/")
+
+
+def test_artifact_review_generation_preserves_artifact_contract():
+    source = next(row for row in SOURCE_ROWS if row["source_id"] == "dva-artifact-sdk-pagination")
+    row = build_questions([source])[0]
+
+    assert row["question_type"] == "artifact_review"
+    assert row["artifact_type"] == "sdk_usage"
+    assert row["artifact_language"] == "python"
+    assert "list_objects_v2" in row["artifact_body"]
+    assert row["expected_issue"]
+    assert row["question_fidelity"]["question_fidelity_score"] >= 80

@@ -87,6 +87,7 @@ def main() -> None:
 
     st.caption(f"{question.certification} | {question.domain} | {question.difficulty}")
     st.subheader(question.question)
+    _render_artifact(question)
 
     user_answer = st.text_area("Your answer", key=f"answer_text_{session.current_index}", height=160)
     evaluate_column, next_column = st.columns([1, 1])
@@ -226,6 +227,32 @@ def _render_source_documentation(original: MultipleChoiceQuestion | None) -> Non
         return
     st.write("Source documentation")
     st.markdown(f"[{original.source_name or 'AWS Documentation'}]({original.source_url})")
+
+
+def _render_artifact(question: Question) -> None:
+    if question.question_type != "artifact_review" or not question.artifact_body:
+        return
+    if question.artifact_context:
+        st.write(question.artifact_context)
+    caption_parts = [part for part in [question.artifact_type, question.artifact_language] if part]
+    if caption_parts:
+        st.caption(" | ".join(caption_parts))
+    st.code(question.artifact_body, language=_streamlit_code_language(question.artifact_language))
+
+
+def _streamlit_code_language(artifact_language: str) -> str | None:
+    language = artifact_language.strip().lower()
+    aliases = {
+        "cloudformation": "yaml",
+        "sam": "yaml",
+        "iam-json": "json",
+        "json": "json",
+        "python": "python",
+        "javascript": "javascript",
+        "typescript": "typescript",
+        "yaml": "yaml",
+    }
+    return aliases.get(language)
 
 
 def _render_original_multiple_choice(original: MultipleChoiceQuestion | None) -> None:

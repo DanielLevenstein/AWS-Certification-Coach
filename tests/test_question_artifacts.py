@@ -90,6 +90,33 @@ def test_existing_question_rows_load_without_rubric_metadata():
     assert question.acceptable_answers == []
 
 
+def test_artifact_review_question_rows_load_artifact_metadata():
+    question = question_from_json(
+        {
+            "certification": "AWS Certified Developer",
+            "exam_code": "DVA-C02",
+            "domain": "Security",
+            "difficulty": "Medium",
+            "question_type": "artifact_review",
+            "question": "Review this policy.",
+            "artifact_type": "iam_policy",
+            "artifact_language": "json",
+            "artifact_body": "{\"Statement\": []}",
+            "artifact_context": "A Lambda role needs narrow S3 read access.",
+            "expected_issue": "The policy is too broad.",
+            "reference_answer": "Scope the policy to the required S3 object ARN.",
+            "key_concepts": ["IAM policy", "least privilege"],
+        }
+    )
+
+    assert question.question_type == "artifact_review"
+    assert question.artifact_type == "iam_policy"
+    assert question.artifact_language == "json"
+    assert question.artifact_body == "{\"Statement\": []}"
+    assert question.artifact_context == "A Lambda role needs narrow S3 read access."
+    assert question.expected_issue == "The policy is too broad."
+
+
 def test_sample_question_artifact_includes_developer_question_fidelity_metadata():
     rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
     developer_rows = [row for row in rows if row.get("exam_code") == "DVA-C02"]
@@ -98,6 +125,24 @@ def test_sample_question_artifact_includes_developer_question_fidelity_metadata(
     assert {row.get("certification") for row in developer_rows} == {"AWS Certified Developer"}
     assert all(row.get("source_examples") for row in developer_rows)
     assert all(row.get("question_fidelity", {}).get("question_fidelity_score", 0) >= 80 for row in developer_rows)
+
+
+def test_sample_question_artifact_includes_phase_2_artifact_review_questions():
+    rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
+    artifact_rows = [row for row in rows if row.get("question_type") == "artifact_review"]
+
+    assert {row.get("artifact_type") for row in artifact_rows} >= {
+        "iam_policy",
+        "lambda_code",
+        "sdk_usage",
+        "sam_template",
+    }
+    for row in artifact_rows:
+        assert row["artifact_body"]
+        assert row["artifact_context"]
+        assert row["expected_issue"]
+        assert row["question_fidelity"]["question_fidelity_score"] >= 80
+        assert row["original_multiple_choice"]["source_url"].startswith(("https://docs.aws.amazon.com/", "https://boto3.amazonaws.com/"))
 
 
 def test_developer_questions_do_not_include_multiple_choice_instructions():
