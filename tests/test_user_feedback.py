@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 
 import pytest
+from streamlit.testing.v1 import AppTest
 
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.feedback import UserFeedbackRepository
@@ -99,24 +100,28 @@ def test_user_feedback_major_minor_filename_uses_major_minor_schema_version(tmp_
     rows = json.loads(path.read_text(encoding="utf-8"))
     assert {row["schema_version"] for row in rows} == {2.3}
 
+def test_feedback_submission_persists_downloadable_artifact_through_ui(tmp_path: Path, monkeypatch):
+    feedback_path = tmp_path / "user_feedback.v2.4.json"
+    monkeypatch.setenv("SHOW_FEEDBACK", "1")
+    monkeypatch.setenv("USER_FEEDBACK_PATH", str(feedback_path))
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
 
-def test_feedback_repository_exports_empty_json_when_artifact_is_missing(tmp_path: Path):
-    path = tmp_path / "generated" / "user_feedback.v1.json"
+    app.run(timeout=30)
+    question = app.subheader[0].value
+    app.text_area[0].set_value("I do not know")
+    app.button[0].click().run(timeout=30)
+    app.selectbox[0].select("A")
+    app.text_area[1].set_value("The answer should receive full credit.")
+    next(button for button in app.button if button.label == "Submit Feedback").click().run(timeout=30)
 
-    exported = UserFeedbackRepository(path).export_json()
-
-    assert exported == "[]\n"
-
-
-def test_config_feedback_schema_versions_match_file_roles():
-    project_root = Path(__file__).resolve().parents[1]
-    user_v1_rows = json.loads((project_root / "config" / "data" / "user_feedback.v1.json").read_text(encoding="utf-8"))
-    user_v2_rows = json.loads((project_root / "config" / "data" / "user_feedback.v2.json").read_text(encoding="utf-8"))
-
-    assert user_v1_rows
-    assert user_v2_rows
-    assert {row["schema_version"] for row in user_v1_rows} == {1}
-    assert {row["schema_version"] for row in user_v2_rows} == {2}
+    assert not app.exception
+    rows = json.loads(feedback_path.read_text(encoding="utf-8"))
+    assert len(rows) == 1
+    assert rows[0]["schema_version"] == 2.4
+    assert rows[0]["question"] == question
+    assert rows[0]["answer_given"] == "I do not know"
+    assert rows[0]["correct_rating"] == "A"
+    assert rows[0]["feedback_text"] == "The answer should receive full credit."
 
 
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):

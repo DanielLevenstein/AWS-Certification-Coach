@@ -132,7 +132,7 @@
     "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
     "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
     "answer_given": "AWS KMS",
-    "correct_rating": "A",
+    "correct_rating": "B",
     "rating_given": "A"
   },
   {
@@ -175,7 +175,7 @@
     "exam_code": "SAA-C03",
     "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
     "answer_given": "RDS read replicas can be used for low-latency data synchronization across multiple availability zones.",
-    "correct_rating": "C",
+    "correct_rating": "D",
     "rating_given": "D",
     "feedback_text": "We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C"
   },
@@ -281,7 +281,7 @@
     "exam_code": "SAA-C03",
     "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
     "answer_given": "RDS read replicas can be used for low-latency data synchronization across multiple availability zones.",
-    "correct_rating": "C",
+    "correct_rating": "D",
     "rating_given": "D",
     "correct_answer_text": "Use DynamoDB global tables.",
     "feedback_text": "We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C"

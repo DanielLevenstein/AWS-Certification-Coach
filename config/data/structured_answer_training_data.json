@@ -71,8 +71,7 @@
     ],
     "acceptable_answers": [
       "Use AWS Budgets.",
-      "AWS Budgets",
-      "AWS Cost Center"
+      "AWS Budgets"
     ],
     "common_misconceptions": [
       "AWS Cost Explorer only reports historical costs without budget alerts."
@@ -270,6 +269,208 @@
       {
         "answer": "SQS FILO queue",
         "rating": 0.75,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  },
+  {
+    "certification": "Cloud Practitioner",
+    "domain": "Security",
+    "difficulty": "Easy",
+    "question": "Which service manages encryption keys?",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys.",
+    "key_concepts": [
+      "AWS KMS",
+      "encryption keys",
+      "key management"
+    ],
+    "required_concepts": [
+      "AWS KMS",
+      "encryption keys",
+      "key management"
+    ],
+    "acceptable_answers": [],
+    "common_misconceptions": [
+      "Amazon S3 manages encryption keys"
+    ],
+    "original_multiple_choice": {
+      "question": "Which service manages encryption keys?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS KMS."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon S3."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "AWS KMS creates and manages encryption keys."
+    },
+    "partial_answers": [
+      {
+        "answer": "KMS manages encryption keys.",
+        "rating": 0.95,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "Use Amazon S3.",
+        "rating": 0.25,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  },
+  {
+    "certification": "Cloud Practitioner",
+    "domain": "Governance",
+    "difficulty": "Easy",
+    "question": "Which service records AWS API activity for auditing?",
+    "reference_answer": "Use AWS CloudTrail to record AWS API activity.",
+    "key_concepts": [
+      "AWS CloudTrail",
+      "API activity",
+      "auditing"
+    ],
+    "required_concepts": [
+      "AWS CloudTrail"
+    ],
+    "acceptable_answers": [
+      "Use AWS CloudTrail.",
+      "AWS Cloud trail records API activity for auditing."
+    ],
+    "common_misconceptions": [
+      "Amazon CloudWatch records all API activity"
+    ],
+    "original_multiple_choice": {
+      "question": "Which service records AWS API activity?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS CloudTrail."
+        },
+        {
+          "option_id": "B",
+          "text": "Use Amazon CloudWatch."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "AWS CloudTrail records AWS API activity for auditing."
+    },
+    "partial_answers": [
+      {
+        "answer": "AWS Cloud trail records API activity for auditing.",
+        "rating": 0.95,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "Use Amazon CloudWatch.",
+        "rating": 0.25,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  },
+  {
+    "certification": "Cloud Practitioner",
+    "domain": "Storage",
+    "difficulty": "Easy",
+    "question": "Which feature automatically transitions or expires S3 objects?",
+    "reference_answer": "Use S3 lifecycle policies.",
+    "key_concepts": [
+      "S3 Lifecycle",
+      "object expiration"
+    ],
+    "required_concepts": [
+      "S3 Lifecycle"
+    ],
+    "acceptable_answers": [
+      "Use S3 lifecycle policies."
+    ],
+    "common_misconceptions": [
+      "S3 version tracking"
+    ],
+    "original_multiple_choice": {
+      "question": "Which feature automatically transitions or expires S3 objects?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use S3 lifecycle policies."
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 bucket policies."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "S3 Lifecycle rules transition or expire objects automatically."
+    },
+    "partial_answers": [
+      {
+        "answer": "Use S3 lifecycle policies.",
+        "rating": 0.95,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "S3 version tracking",
+        "rating": 0.25,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  },
+  {
+    "certification": "AWS Certified Developer",
+    "exam_code": "DVA-C02",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
+    "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
+    "key_concepts": [
+      "API Gateway",
+      "Lambda authorizer",
+      "custom authorization",
+      "backend integration"
+    ],
+    "required_concepts": [
+      "Lambda authorizer"
+    ],
+    "acceptable_answers": [
+      "Use an API Gateway Lambda authorizer."
+    ],
+    "common_misconceptions": [
+      "EC2 security group"
+    ],
+    "original_multiple_choice": {
+      "question": "Which API Gateway feature runs custom token validation before the backend integration?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use an API Gateway Lambda authorizer."
+        },
+        {
+          "option_id": "B",
+          "text": "Attach an EC2 security group."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "A Lambda authorizer runs custom authorization logic before API Gateway invokes the backend integration."
+    },
+    "partial_answers": [
+      {
+        "answer": "Use an API Gateway Lambda authorizer.",
+        "rating": 0.95,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "Which API Gateway feature should be used to run token validation on requests?",
+        "rating": 0.25,
         "source": "structured_answer_test_case"
       }
     ]

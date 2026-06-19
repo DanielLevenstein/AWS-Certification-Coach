@@ -52,7 +52,8 @@ esac
   --evaluation-data data/generated/user_feedback.v1.json \
   --evaluation-data data/generated/generated_feedback.json \
   --output "$METRICS_DIR/semantic_similarity.json" \
-  --chart-output "$METRICS_DIR/semantic_accuracy.png"
+  --chart-output "$METRICS_DIR/semantic_accuracy.png" \
+  --answer-model-evaluation "$METRICS_DIR/answer_model_evaluation.json"
 .venv/bin/python scripts/question_fidelity_evaluation.py \
   --output "$METRICS_DIR/question_fidelity.json"
 .venv/bin/python scripts/release_metrics.py \

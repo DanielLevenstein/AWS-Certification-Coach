@@ -19,9 +19,10 @@
 | v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                                            |
 | v2.3.6   | Reimplemented training algorithm so that additional training increases final score more, and added new within 1 letter metric                                  |
 | v2.3.6.3 | Regenerated test data validated model performance is still stable                                                                                              |
-| v2.4.1  | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review. |
-| v2.4.2  | Improved question bank with data from prod app | 
-
+| v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                                                |
+| v2.4.2   | Improved question bank with data from prod app                                                                                                                 |
+| v2.4.3 | Merging code from release/v2.3                                                                                                                                 |
+| v2.4.4 | Test framework refactoring and updated curated training data                                                                                                   |
 # Release Metrics
 
 
@@ -41,7 +42,9 @@
 | v2.3.6.1 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
 | v2.3.6.2 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
 | v2.3.6.3 |            91.18% |            100.00% |          92.59% |                67.65% |          97.12% |            95.12% |
-| v2.4.2  | 76.47% | 96.00% | 88.89% | 47.06% | 94.95% |
+| v2.4.2   |            76.47% |             96.00% |          88.89% |                47.06% |         Unknown |            94.95% |
+| v2.4.3 | 90.91% | 100.00% | 92.31% | 66.67% | 97.12% | 94.95% |
+| v2.4.4 | 90.00% | 100.00% | 90.00% | 73.33% | 98.08% | 94.95% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -76,10 +79,10 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.3.6.3 | 91.18% | 100.00% | 92.59% | 67.65% | 97.12% | 95.12% |
+| v2.4.4 | 90.00% | 100.00% | 90.00% | 73.33% | 98.08% | 94.95% |
 
 Saved model answer form: `long`
-Saved model calibration count: `27`
+Saved model calibration count: `23`
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `38`
 App question count: `118`
@@ -87,7 +90,7 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic answer evaluation count: `34`
+Semantic answer evaluation count: `30`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.
@@ -98,7 +101,7 @@ Question fidelity is the release guardrail for generated-question concept and ex
 
 | Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |
 |---|---:|---:|---:|---:|---:|
-| Train | 312 | 97.1% | 68.6% | 0.0542 | 0.0049 |
-| Validation | 104 | 100.0% | 71.2% | 0.0457 | 0.0034 |
-| Test | 104 | 97.1% | 72.1% | 0.0501 | 0.0042 |
+| Train | 312 | 98.4% | 64.1% | 0.0549 | 0.0050 |
+| Validation | 104 | 100.0% | 70.2% | 0.0453 | 0.0033 |
+| Test | 104 | 98.1% | 56.7% | 0.0547 | 0.0050 |
 <!-- release-metrics:end -->
