@@ -44,7 +44,7 @@
     "question": "Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.",
     "reference_answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
     "answer_given": "route 53",
-    "correct_rating": "A",
+    "correct_rating": "D",
     "rating_given": "A"
   },
   {
@@ -92,7 +92,7 @@
     "question": "Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
     "reference_answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
     "answer_given": "Allow and deny rules",
-    "correct_rating": "C",
+    "correct_rating": "D",
     "rating_given": "A"
   },
   {
@@ -132,7 +132,7 @@
     "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
     "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
     "answer_given": "AWS KMS",
-    "correct_rating": "A",
+    "correct_rating": "B",
     "rating_given": "A"
   },
   {
@@ -175,7 +175,7 @@
     "exam_code": "SAA-C03",
     "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
     "answer_given": "RDS read replicas can be used for low-latency data synchronization across multiple availability zones.",
-    "correct_rating": "C",
+    "correct_rating": "D",
     "rating_given": "D",
     "feedback_text": "We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C"
   },
@@ -281,10 +281,21 @@
     "exam_code": "SAA-C03",
     "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
     "answer_given": "RDS read replicas can be used for low-latency data synchronization across multiple availability zones.",
-    "correct_rating": "C",
+    "correct_rating": "D",
     "rating_given": "D",
     "correct_answer_text": "Use DynamoDB global tables.",
     "feedback_text": "We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C"
+  },
+  {
+    "schema_version": 2,
+    "question": "An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Configure SNS subscription filter policies that match message attributes so each subscriber receives only the relevant fanout messages.",
+    "answer_given": "SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. ",
+    "correct_rating": "C",
+    "rating_given": "B",
+    "correct_answer_text": "Configure SNS subscription filter policies.",
+    "feedback_text": ""
   },
   {
     "schema_version": 2,

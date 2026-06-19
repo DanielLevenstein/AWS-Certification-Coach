@@ -80,6 +80,11 @@ def question_from_json(row: object) -> Question:
         must_not_claim=_string_list_from_json(row.get("must_not_claim", [])),
         exam_code=str(row.get("exam_code", "")),
         original_multiple_choice=_multiple_choice_from_json(row.get("original_multiple_choice")),
+        artifact_type=str(row.get("artifact_type", "")),
+        artifact_language=str(row.get("artifact_language", "")),
+        artifact_body=str(row.get("artifact_body", "")),
+        artifact_context=str(row.get("artifact_context", "")),
+        expected_issue=str(row.get("expected_issue", "")),
     )
 
 

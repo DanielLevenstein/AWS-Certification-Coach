@@ -32,6 +32,11 @@ class Question:
     must_not_claim: list[str] = field(default_factory=list)
     exam_code: str = ""
     original_multiple_choice: "MultipleChoiceQuestion | None" = None
+    artifact_type: str = ""
+    artifact_language: str = ""
+    artifact_body: str = ""
+    artifact_context: str = ""
+    expected_issue: str = ""
 
 
 @dataclass(frozen=True)

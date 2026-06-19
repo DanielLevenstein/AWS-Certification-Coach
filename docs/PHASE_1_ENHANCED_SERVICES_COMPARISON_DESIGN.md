@@ -63,7 +63,7 @@ A strong reference answer should include:
 
 - The best service or feature and the decisive scenario constraint.
 - The near-miss service or feature and why it does not fully satisfy the scenario.
-- At least one explicit tradeoff phrase, such as "lower operational overhead", "supports fanout", "isolates failed messages", "keeps reads close to users", or "does not provide durable storage".
+- At least one explicit tradeoff phrase, such as "lower operational overhead," "supports fanout," "isolates failed messages," "keeps reads close to users," or "does not provide durable storage."
 - Any important AWS-specific boundary condition.
 
 It should avoid:
@@ -111,19 +111,19 @@ Question fidelity remains a generated-question quality metric, not learner-answe
 
 Suggested scoring dimensions:
 
-| Dimension | Weight | Purpose |
-|:--|--:|:--|
-| Concept fidelity | 30 | The comparison preserves the source service boundary and decision point. |
-| Comparison quality | 25 | The prompt and reference answer explain the best answer versus the strongest near-miss. |
-| Exam-style fidelity | 20 | The scenario resembles permitted Developer Associate calibration patterns. |
-| Technical correctness | 15 | The answer is accurate according to AWS documentation. |
-| Source safety | 10 | The generated text is self-authored and does not copy restricted source text. |
+| Dimension             | Weight | Purpose                                                                                 |
+|:----------------------|-------:|:----------------------------------------------------------------------------------------|
+| Concept fidelity      |     30 | The comparison preserves the source service boundary and decision point.                |
+| Comparison quality    |     25 | The prompt and reference answer explain the best answer versus the strongest near-miss. |
+| Exam-style fidelity   |     20 | The scenario resembles permitted Developer Associate calibration patterns.              |
+| Technical correctness |     15 | The answer is accurate according to AWS documentation.                                  |
+| Source safety         |     10 | The generated text is self-authored and does not copy restricted source text.           |
 
 Hard rejection rules:
 
 - The generated prompt copies restricted source wording.
 - The best answer or near-miss points to the wrong AWS service or feature.
-- The near-miss is not actually plausible.
+- The near-miss is not plausible.
 - The comparison tests a different certification domain than the source target.
 - The prompt is AWS-valid but lacks applied exam-style reasoning.
 - The reference answer makes multiple services appear equally correct without explaining the deciding constraint.
@@ -134,7 +134,6 @@ Human reviewers should answer:
 - Is the near-miss plausible enough to teach a real tradeoff?
 - Does the prompt ask the learner to compare reasoning rather than recall a service name?
 - Does the reference answer explain both why the best answer wins and why the near-miss loses?
-- Is the generated text clearly self-authored?
 
 ## Release Metrics
 

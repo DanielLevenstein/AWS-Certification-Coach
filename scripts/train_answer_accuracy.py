@@ -25,7 +25,7 @@ from aws_certification_coach.training.dataset import (
 )
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
-CURRENT_FEEDBACK_SCHEMA_VERSION = "2.3"
+CURRENT_FEEDBACK_SCHEMA_VERSION = "2"
 DEFAULT_GENERATED_TRAINING_DATA = "data/generated/questions_with_answers_training.json"
 DEFAULT_GENERATED_VALIDATION_DATA = "data/generated/questions_with_answers_validation.json"
 DEFAULT_CURATED_FEEDBACK_DATA = ("data/curated/curated_training_data.json",)

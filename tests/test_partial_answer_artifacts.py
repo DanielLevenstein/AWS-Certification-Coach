@@ -71,6 +71,7 @@ def test_structured_answer_training_data_uses_partial_answer_schema():
     assert {example.rating for example in numeric_examples} >= {0.25, 0.85, 0.95}
 
 
+# What is this even testing?
 def test_curated_question_artifact_synthesizes_official_answer_examples(tmp_path: Path):
     curated = tmp_path / "developer_question_expansion.json"
     curated.write_text(

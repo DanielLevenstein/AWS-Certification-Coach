@@ -38,6 +38,7 @@ def build_review(curated_path: Path, questions_path: Path) -> str:
                 "current_rating": expected,
                 "suggested_rating": suggested,
                 "score": score,
+                "reviewer_feedback": str(row.get("feedback_text", "")).strip(),
                 "reason": _suggestion_reason(expected, suggested, example.answer),
             }
         )
@@ -65,6 +66,7 @@ def build_review(curated_path: Path, questions_path: Path) -> str:
                 f"- Answer: `{suggestion['answer']}`",
                 f"- Reference: {suggestion['correct_answer']}",
                 f"- Semantic score: `{suggestion['score']}`",
+                *([f"- Reviewer feedback: {suggestion['reviewer_feedback']}"] if suggestion.get("reviewer_feedback") else []),
                 f"- Rationale: {suggestion['reason']}",
                 "",
             ]

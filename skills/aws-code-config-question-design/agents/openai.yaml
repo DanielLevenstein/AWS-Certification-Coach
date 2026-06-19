@@ -1,0 +1,4 @@
+interface:
+  display_name: "AWS Code Config Question Design"
+  short_description: "Design AWS artifact-review questions"
+  default_prompt: "Use $aws-code-config-question-design to design Phase 2 AWS code and configuration review questions."

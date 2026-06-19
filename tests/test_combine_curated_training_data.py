@@ -43,7 +43,7 @@ def test_combiner_keeps_only_supported_curated_fields(tmp_path):
     ]
 
 
-def test_combiner_preserves_feedback_text_and_manual_correct_answer_text(tmp_path):
+def test_combiner_preserves_feedback_text_and_correct_answer_text(tmp_path):
     config_dir = tmp_path / "config"
     config_dir.mkdir()
     (config_dir / "curated_training_extra.json").write_text(

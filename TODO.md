@@ -78,6 +78,7 @@ Exit criteria:
 - Release notes include schema and metric results.
 
 # Phase 2 Code & Configuration Review
+Release Target v2.4.0
 IAM policy questions.
 Lambda code questions.
 SDK usage questions.

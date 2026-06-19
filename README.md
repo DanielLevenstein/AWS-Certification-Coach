@@ -56,6 +56,7 @@ To regenerate local data:
 | v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
 | v2.3.3  | Restored the release guardrail to 90% semantic precision and added exact-letter accuracy to the semantic diagnostic chart.                                  |
 | v2.3.6 | Improved answer evalutaion model and added within one letter grade metric to release notes |
+| v2.4.4 | Added configuration and code sample questions |
 #### Scope
 
 Certifications:
@@ -167,17 +168,4 @@ The image includes generated sample questions and local scoring code. The defaul
 
 ## Evaluator Configuration
 
-V1 defaults to the local `semantic_similarity` model. The scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap. The legacy `semantic_aware` and `trained_regressor` provider names are still accepted by configuration for compatibility, but the app-facing score is produced by `semantic_similarity`.
-
-The OpenAI provider code remains available for explicit experiments, but it is not part of the default app or release flow.
-
-## Question Transformation
-
-Source multiple-choice artifacts may live in `data/questions/source_multiple_choice_*.json`. Transformed and generated app artifacts preserve the original MCQ under `original_multiple_choice`. The generated training, validation, and test files keep each freeform question and its answer examples together in one combined JSON row.
-
-```bash
-.venv/bin/python scripts/transform_questions.py \
-  --input data/questions/source_multiple_choice_sample.json \
-  --output /tmp/transformed_freeform_sample.json \
-  --provider heuristic
-```
+The `semantic_similarity` scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap. 

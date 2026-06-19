@@ -13,7 +13,8 @@ PYTHON_BIN=".venv/bin/python"
 "$PYTHON_BIN" scripts/generate_developer_question_artifacts.py --app-output data/questions/sample_questions.json
 mkdir -p data/generated data/curated
 cp -p config/data/structured_answer_training_data.json data/curated/structured_answer_training_data.json
-cp -p config/data/user_feedback.v1.json data/curated/user_feedback.v1.json
-cp -p config/data/user_feedback.v2.json data/curated/user_feedback.v2.json
+if [ ! -f data/generated/user_feedback.v2.json ]; then
+  printf '[]\n' > data/generated/user_feedback.v2.json
+fi
 
 "$PYTHON_BIN" scripts/combine_curated_training_data.py

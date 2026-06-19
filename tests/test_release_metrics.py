@@ -12,11 +12,23 @@ from aws_certification_coach.model_evaluation.semantic_similarity import (
     evaluate_semantic_curated_answers,
     semantic_similarity_score,
 )
+from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics, update_release_notes
 from scripts.semantic_similarity_evaluation import plot_semantic_accuracy
 from scripts.combine_release_charts import combine_release_charts
+
+
+STRUCTURED_QUESTIONS = JsonQuestionRepository(
+    Path(__file__).resolve().parents[1] / "config" / "data" / "structured_answer_training_data.json"
+).all()
+
+
+def _structured_question(fragment: str) -> Question:
+    matches = [question for question in STRUCTURED_QUESTIONS if fragment.casefold() in question.question.casefold()]
+    assert len(matches) == 1, f"Expected one structured question matching {fragment!r}, found {len(matches)}"
+    return matches[0]
 
 
 def test_complexity_reports_branching_functions(tmp_path: Path):
@@ -65,7 +77,7 @@ def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_semantic_accuracy_chart_uses_only_semantic_metrics(tmp_path: Path):
+def test_semantic_accuracy_chart_includes_answer_model_within_one_letter_metric(tmp_path: Path):
     output = tmp_path / "semantic_accuracy.png"
 
     plot_semantic_accuracy(
@@ -76,6 +88,7 @@ def test_semantic_accuracy_chart_uses_only_semantic_metrics(tmp_path: Path):
             "semantic_exact_letter_accuracy": 0.64,
         },
         output,
+        {"splits": {"test": {"within_one_letter_accuracy": 0.92}}},
     )
 
     assert output.read_bytes().startswith(b"\x89PNG")
@@ -247,7 +260,6 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     assert "Saved model grade-band accuracy" not in markdown
     assert "Training accuracy" not in markdown
 
-
 def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"
     metrics_dir.mkdir()
@@ -261,7 +273,6 @@ def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
 
     assert "Exact Letter Accuracy" in markdown
     assert "Within 1 Letter" in markdown
-
 
 def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):
     release_notes = tmp_path / "RELEASE_NOTES.md"
@@ -277,153 +288,37 @@ def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):
     assert "97.00%" in content
     assert "96.00%" not in content
 
-
 def test_semantic_similarity_recognizes_aliases_and_concepts():
-    question = Question(
-        certification="Cloud Practitioner",
-        domain="Security",
-        difficulty="Easy",
-        question="Which service manages encryption keys?",
-        reference_answer="Use AWS KMS to create and manage encryption keys.",
-        key_concepts=["AWS KMS", "encryption keys", "key management"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service manages encryption keys?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS KMS."),
-                MultipleChoiceOption("B", "Use Amazon S3."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("manages encryption keys")
 
     assert semantic_similarity_score(question, "KMS manages encryption keys.") >= 80
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
 
-
 def test_semantic_similarity_uses_syntax_alias_table_for_service_names():
-    cloudtrail_question = Question(
-        certification="Cloud Practitioner",
-        domain="Governance",
-        difficulty="Easy",
-        question="Which service records AWS API activity for auditing?",
-        reference_answer="Use AWS CloudTrail to record AWS API activity.",
-        key_concepts=["AWS CloudTrail", "API activity", "auditing"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service records AWS API activity?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS CloudTrail."),
-                MultipleChoiceOption("B", "Use Amazon CloudWatch."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
-    codebuild_question = Question(
-        certification="AWS Certified Developer",
-        domain="Deployment",
-        difficulty="Medium",
-        question="Where should a developer define repeatable build commands?",
-        reference_answer="Use an AWS CodeBuild buildspec file.",
-        key_concepts=["CodeBuild buildspec", "build phases", "test commands"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Where should build commands be defined?",
-            options=[
-                MultipleChoiceOption("A", "Use a CodeBuild buildspec file."),
-                MultipleChoiceOption("B", "Use a CodeDeploy AppSpec file."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    cloudtrail_question = _structured_question("records AWS API activity")
+    codebuild_question = _structured_question("managed build project")
 
     assert semantic_similarity_score(cloudtrail_question, "AWS Cloud trail records API activity for auditing.") >= 90
     assert semantic_similarity_score(cloudtrail_question, "Use AWS CloudTrail.") >= 90
     assert semantic_similarity_score(codebuild_question, "AWS Code Build") >= 80
 
-
 def test_semantic_similarity_uses_acceptable_answers_as_correct_evidence():
-    question = Question(
-        certification="AWS Certified Developer",
-        domain="Deployment",
-        difficulty="Medium",
-        question="Where should a developer define repeatable build commands?",
-        reference_answer="Use an AWS CodeBuild buildspec file.",
-        key_concepts=["CodeBuild buildspec", "build phases", "test commands"],
-        acceptable_answers=["AWS Code Build"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Where should build commands be defined?",
-            options=[
-                MultipleChoiceOption("A", "Use a CodeBuild buildspec file."),
-                MultipleChoiceOption("B", "Use a CodeDeploy AppSpec file."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("managed build project")
 
     assert semantic_similarity_score(question, "AWS Code Build") >= 90
 
-
 def test_semantic_similarity_recognizes_budget_cost_center_alias():
-    question = Question(
-        certification="Cloud Practitioner",
-        domain="Billing",
-        difficulty="Easy",
-        question="Which service tracks cost or usage thresholds and sends alerts?",
-        reference_answer="Use AWS Budgets to track cost or usage thresholds and send alerts.",
-        key_concepts=["AWS Budgets", "cost thresholds", "alerts"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service tracks cost or usage thresholds and sends alerts?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS Budgets."),
-                MultipleChoiceOption("B", "Use AWS Cost Explorer."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("track cost or usage thresholds")
 
     assert 80 <= semantic_similarity_score(question, "AWS Cost Center") < 90
 
-
 def test_semantic_similarity_does_not_treat_long_acceptable_answer_words_as_service_aliases():
-    question = Question(
-        certification="Cloud Practitioner",
-        domain="Governance",
-        difficulty="Easy",
-        question="Which service tracks resource configuration history and compliance rules?",
-        reference_answer="Use AWS Config to track resource configuration history and evaluate compliance.",
-        key_concepts=["AWS Config", "configuration history", "compliance rules"],
-        acceptable_answers=[
-            "Use AWS Config.",
-            "Use AWS Config to track resource configuration history and evaluate compliance.",
-        ],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service tracks resource configuration history and compliance rules?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS Config."),
-                MultipleChoiceOption("B", "Use AWS Audit Manager."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("track resource configuration history")
 
     assert semantic_similarity_score(question, "AWS Compliance Manager") < 60
 
-
 def test_semantic_accuracy_uses_grade_bands_and_reports_exact_letter_match(tmp_path: Path):
-    question = Question(
-        certification="Cloud Practitioner",
-        domain="Security",
-        difficulty="Easy",
-        question="Which service manages encryption keys?",
-        reference_answer="Use AWS KMS to create and manage encryption keys.",
-        key_concepts=["AWS KMS", "encryption keys", "key management"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service manages encryption keys?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS KMS."),
-                MultipleChoiceOption("B", "Use Amazon S3."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("manages encryption keys")
     curated = tmp_path / "curated.json"
     curated.write_text(
         (
@@ -444,24 +339,8 @@ def test_semantic_accuracy_uses_grade_bands_and_reports_exact_letter_match(tmp_p
     assert metrics["semantic_mismatches"][0]["expected_letter"] == "A"
     assert metrics["semantic_mismatches"][0]["actual_letter"] == "B"
 
-
 def test_semantic_accuracy_skips_conflicting_duplicate_feedback(tmp_path: Path):
-    question = Question(
-        certification="Cloud Practitioner",
-        domain="Security",
-        difficulty="Easy",
-        question="Which service manages encryption keys?",
-        reference_answer="Use AWS KMS to create and manage encryption keys.",
-        key_concepts=["AWS KMS", "encryption keys", "key management"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service manages encryption keys?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS KMS."),
-                MultipleChoiceOption("B", "Use Amazon S3."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("manages encryption keys")
     curated = tmp_path / "curated.json"
     curated.write_text(
         """
@@ -491,79 +370,21 @@ def test_semantic_accuracy_skips_conflicting_duplicate_feedback(tmp_path: Path):
     assert metrics["semantic_skipped_conflicting_examples"] == 2
     assert metrics["semantic_conflicting_feedback_groups"][0]["labels"] == ["C", "F"]
 
-
 def test_semantic_similarity_awards_adjacent_partial_credit_without_family_token_false_positive():
-    secrets_question = Question(
-        certification="AWS Certified Developer",
-        domain="Security",
-        difficulty="Medium",
-        question="Which service should store database passwords and rotate them?",
-        reference_answer="Use AWS Secrets Manager to store database credentials and configure scheduled rotation.",
-        key_concepts=["Secrets Manager", "secret rotation", "database credentials", "scheduled rotation"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service should store database passwords and rotate them?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS Secrets Manager."),
-                MultipleChoiceOption("B", "Use AWS KMS keys alone."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
-    s3_question = Question(
-        certification="Cloud Practitioner",
-        domain="Storage",
-        difficulty="Easy",
-        question="Which feature automatically transitions or expires S3 objects?",
-        reference_answer="Use S3 lifecycle policies.",
-        key_concepts=["S3 Lifecycle", "object expiration"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which feature automatically transitions or expires S3 objects?",
-            options=[
-                MultipleChoiceOption("A", "Use S3 lifecycle policies."),
-                MultipleChoiceOption("B", "Use S3 bucket policies."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    secrets_question = _structured_question("database passwords")
+    s3_question = _structured_question("transitions or expires S3 objects")
 
     assert semantic_similarity_score(secrets_question, "AWS KMS Keys") < 60
     assert semantic_similarity_score(s3_question, "S3 version tracking") < 60
 
-
 def test_semantic_similarity_caps_question_rephrases_without_answer_detail():
-    question = Question(
-        certification="AWS Certified Developer",
-        exam_code="DVA-C02",
-        domain="Security",
-        difficulty="Medium",
-        question=(
-            "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach "
-            "the backend function. Which API Gateway feature should the developer configure?"
-        ),
-        reference_answer=(
-            "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend "
-            "Lambda integration."
-        ),
-        key_concepts=["API Gateway", "Lambda authorizer", "custom authorization", "backend integration"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question=(
-                "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach "
-                "the backend function. Which API Gateway feature should the developer configure?"
-            ),
-            options=[
-                MultipleChoiceOption("A", "Use an API Gateway Lambda authorizer."),
-                MultipleChoiceOption("B", "Attach an EC2 security group."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("custom token validation")
 
     assert semantic_similarity_score(
         question,
         "Which API Gateway feature should be used to run token validation on requests?",
     ) < 80
     assert semantic_similarity_score(question, "Use an API Gateway Lambda authorizer.") >= 80
-
 
 def test_correct_answer_text_uses_multiple_choice_value_without_answer_cue():
     question = Question(
@@ -585,24 +406,8 @@ def test_correct_answer_text_uses_multiple_choice_value_without_answer_cue():
 
     assert correct_answer_text(question) == "AWS KMS"
 
-
 def test_answer_feature_extractor_defaults_to_long_form_answer():
-    question = Question(
-        certification="Cloud Practitioner",
-        domain="Security",
-        difficulty="Easy",
-        question="Which service manages encryption keys?",
-        reference_answer="Use AWS KMS to create and manage encryption keys.",
-        key_concepts=["AWS KMS"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service manages encryption keys?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS KMS."),
-                MultipleChoiceOption("B", "Use Amazon S3."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("manages encryption keys")
     extractor = AnswerFeatureExtractor()
 
     features = dict(zip(extractor.feature_names, extractor.extract(question, "AWS KMS")))
@@ -610,24 +415,8 @@ def test_answer_feature_extractor_defaults_to_long_form_answer():
     assert features["reference_jaccard"] > 0
     assert features["short_answer_jaccard"] == 0
 
-
 def test_answer_feature_extractor_can_enable_short_form_answer():
-    question = Question(
-        certification="Cloud Practitioner",
-        domain="Security",
-        difficulty="Easy",
-        question="Which service manages encryption keys?",
-        reference_answer="Use AWS KMS to create and manage encryption keys.",
-        key_concepts=["AWS KMS"],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Which service manages encryption keys?",
-            options=[
-                MultipleChoiceOption("A", "Use AWS KMS."),
-                MultipleChoiceOption("B", "Use Amazon S3."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("manages encryption keys")
     extractor = AnswerFeatureExtractor(answer_form="short")
 
     features = dict(zip(extractor.feature_names, extractor.extract(question, "AWS KMS")))
@@ -637,25 +426,7 @@ def test_answer_feature_extractor_can_enable_short_form_answer():
 
 
 def test_answer_feature_extractor_uses_official_alias_and_distractor_evidence():
-    question = Question(
-        certification="AWS Certified Developer",
-        domain="Deployment",
-        difficulty="Medium",
-        question="Where should a developer define repeatable build commands?",
-        reference_answer="Use an AWS CodeBuild buildspec file.",
-        key_concepts=["CodeBuild buildspec", "build phases", "test commands"],
-        acceptable_answers=["AWS Code Build"],
-        common_misconceptions=["CodeDeploy AppSpec"],
-        must_not_claim=["CodeDeploy AppSpec is the build command file."],
-        original_multiple_choice=MultipleChoiceQuestion(
-            question="Where should build commands be defined?",
-            options=[
-                MultipleChoiceOption("A", "Use a CodeBuild buildspec file."),
-                MultipleChoiceOption("B", "Use a CodeDeploy AppSpec file."),
-            ],
-            correct_option_ids=["A"],
-        ),
-    )
+    question = _structured_question("managed build project")
     extractor = AnswerFeatureExtractor(answer_form="both")
 
     correct_features = dict(zip(extractor.feature_names, extractor.extract(question, "AWS Code Build")))
