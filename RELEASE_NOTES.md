@@ -21,8 +21,10 @@
 | v2.3.6.3 | Regenerated test data validated model performance is still stable                                                                                              |
 | v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                                                |
 | v2.4.2   | Improved question bank with data from prod app                                                                                                                 |
-| v2.4.3 | Merging code from release/v2.3                                                                                                                                 |
-| v2.4.4 | Test framework refactoring and updated curated training data                                                                                                   |
+| v2.4.3   | Merging code from release/v2.3                                                                                                                                 |
+| v2.4.4   | Test framework refactoring and updated curated training data                                                                                                   |
+| v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                                             |
+
 # Release Metrics
 
 
@@ -43,8 +45,9 @@
 | v2.3.6.2 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
 | v2.3.6.3 |            91.18% |            100.00% |          92.59% |                67.65% |          97.12% |            95.12% |
 | v2.4.2   |            76.47% |             96.00% |          88.89% |                47.06% |         Unknown |            94.95% |
-| v2.4.3 | 90.91% | 100.00% | 92.31% | 66.67% | 97.12% | 94.95% |
-| v2.4.4 | 90.00% | 100.00% | 90.00% | 73.33% | 98.08% | 94.95% |
+| v2.4.3   |            90.91% |            100.00% |          92.31% |                66.67% |          97.12% |            94.95% |
+| v2.4.4   |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
+| v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -79,7 +82,7 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.4.4 | 90.00% | 100.00% | 90.00% | 73.33% | 98.08% | 94.95% |
+| v2.4.4.1 | 90.00% | 100.00% | 90.00% | 73.33% | 98.08% | 94.95% |
 
 Saved model answer form: `long`
 Saved model calibration count: `23`

@@ -31,7 +31,7 @@ def test_training_defaults_only_use_generated_training_split_from_generated_dir(
         "data/generated/questions_with_answers_validation.json",
     ]
     assert all(path.endswith(("questions_with_answers_training.json", "questions_with_answers_validation.json")) for path in generated_defaults)
-    assert all(not path.endswith(("generated_feedback.json", "user_feedback.v1.json")) for path in generated_defaults)
+    assert all(not path.endswith(("generated_feedback.json", "user_feedback.v2.json")) for path in generated_defaults)
     assert train_answer_accuracy.DEFAULT_CURATED_FEEDBACK_DATA == ("data/curated/curated_training_data.json",)
     assert train_answer_accuracy.DEFAULT_CURATED_TRAINING_DIR == "data/curated"
     assert all(path.startswith("data/curated/") for path in train_answer_accuracy.DEFAULT_CURATED_FEEDBACK_DATA)

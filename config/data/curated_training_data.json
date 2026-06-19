@@ -44,7 +44,7 @@
     "question": "Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.",
     "reference_answer": "Use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules.",
     "answer_given": "route 53",
-    "correct_rating": "A",
+    "correct_rating": "D",
     "rating_given": "A"
   },
   {
@@ -92,7 +92,7 @@
     "question": "Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
     "reference_answer": "Use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.",
     "answer_given": "Allow and deny rules",
-    "correct_rating": "C",
+    "correct_rating": "D",
     "rating_given": "A"
   },
   {

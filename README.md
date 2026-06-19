@@ -40,9 +40,9 @@ Training and verification data are generated separately:
 - `data/generated/questions_with_answers_training.json`: generated training artifact used by diagnostic regression training.
 - `data/generated/questions_with_answers_validation.json`: generated validation artifact used for training-time validation and checkpoint selection.
 - `data/generated/questions_with_answers_test.json`: generated test artifact reserved for final model checks.
-- `data/generated/user_feedback.v1.json`: learner-submitted grade corrections created by the app using the self-contained v1 schema.
+- `data/generated/user_feedback.v2.json`: learner-submitted grade corrections created by the app using the stable integer v2 schema.
 - `data/curated/curated_training_data.json`: reviewed feedback examples containing full question text. Curated rows intentionally omit question IDs so training cannot learn numbering conventions.
-- `data/curated/user_feedback.v1.json`: optional reviewed learner submissions included in diagnostic model training when present.
+- Reviewed learner submissions are consolidated into `data/curated/curated_training_data.json` for diagnostic model training.
 - `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
 
 Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C/D`, and `F`. Precision and recall treat `A/B` and `C/D` as accepted answers and `F` as rejected.

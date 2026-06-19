@@ -24,7 +24,7 @@ QUESTIONS_PATH = ROOT_DIR / "data" / "questions" / "sample_questions.json"
 USER_FEEDBACK_PATH = Path(
     os.environ.get(
         "USER_FEEDBACK_PATH",
-        ROOT_DIR / "data" / "generated" / "user_feedback.v2.4.json",
+        ROOT_DIR / "data" / "generated" / "user_feedback.v2.json",
     )
 )
 SHOW_FEEDBACK_ENV = "SHOW_FEEDBACK"
