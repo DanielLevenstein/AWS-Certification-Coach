@@ -6,11 +6,10 @@ AI study partner for AWS certification exams.
 
 *Figure: Shows test exam breakdown for project.*
 
+  
 ## Live Demo
 
-This project was inspired by my previous AWS Documentation RAG project.
-
-- v0 GitHub:  [DanielLevenstein/AWS-Documentation-Rag](https://github.com/DanielLevenstein/AWS-Documentation-Rag)
+The latest version of this project is deployed live on Render.
 - v1 Deployment: [AWS Certification Coach](https://aws-certification-coach-latest.onrender.com/)
 
 ## Application Screenshot
@@ -37,14 +36,6 @@ Each generated question keeps its source-style multiple-choice item in the same 
 
 Training and verification data are generated separately:
 
-- `data/generated/questions_with_answers_training.json`: generated training artifact used by diagnostic regression training.
-- `data/generated/questions_with_answers_validation.json`: generated validation artifact used for training-time validation and checkpoint selection.
-- `data/generated/questions_with_answers_test.json`: generated test artifact reserved for final model checks.
-- `data/generated/user_feedback.v2.json`: learner-submitted grade corrections created by the app using the stable integer v2 schema.
-- `data/curated/curated_training_data.json`: reviewed feedback examples containing full question text. Curated rows intentionally omit question IDs so training cannot learn numbering conventions.
-- Reviewed learner submissions are consolidated into `data/curated/curated_training_data.json` for diagnostic model training.
-- `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
-
 Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C/D`, and `F`. Precision and recall treat `A/B` and `C/D` as accepted answers and `F` as rejected.
 
 To regenerate local data:
@@ -55,7 +46,6 @@ To regenerate local data:
 
 ## Releases
 
-
 | Release | Description                                                                                                                                                 |
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions and local grading artifacts.                                           |
@@ -65,18 +55,27 @@ To regenerate local data:
 | v1.5.3  | Updated test data to have proper train, test, validation split                                                                                              |
 | v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
 | v2.3.3  | Restored the release guardrail to 90% semantic precision and added exact-letter accuracy to the semantic diagnostic chart.                                  |
-
+| v2.3.6 | Improved answer evalutaion model and added within one letter grade metric to release notes |
+| v2.4.4 | Added configuration and code sample questions |
 #### Scope
 
 Certifications:
 
 - Cloud Practitioner
 - Solutions Architect Associate
+- AWS Developer Exam 
 
 Difficulty:
 
 - Easy
 - Medium
+
+## Previous Application
+
+This project was inspired by my previous AWS Documentation RAG project.
+
+- v0 GitHub:  [DanielLevenstein/AWS-Documentation-Rag](https://github.com/DanielLevenstein/AWS-Documentation-Rag)
+
 
 ## Setup
 
@@ -169,17 +168,4 @@ The image includes generated sample questions and local scoring code. The defaul
 
 ## Evaluator Configuration
 
-V1 defaults to the local `semantic_similarity` model. The scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap. The legacy `semantic_aware` and `trained_regressor` provider names are still accepted by configuration for compatibility, but the app-facing score is produced by `semantic_similarity`.
-
-The OpenAI provider code remains available for explicit experiments, but it is not part of the default app or release flow.
-
-## Question Transformation
-
-Source multiple-choice artifacts may live in `data/questions/source_multiple_choice_*.json`. Transformed and generated app artifacts preserve the original MCQ under `original_multiple_choice`. The generated training, validation, and test files keep each freeform question and its answer examples together in one combined JSON row.
-
-```bash
-.venv/bin/python scripts/transform_questions.py \
-  --input data/questions/source_multiple_choice_sample.json \
-  --output /tmp/transformed_freeform_sample.json \
-  --provider heuristic
-```
+The `semantic_similarity` scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap. 
