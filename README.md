@@ -11,6 +11,10 @@ AI study partner for AWS certification exams.
 This project was inspired by my previous AWS Documentation RAG project.
 
 - v0 GitHub:  [DanielLevenstein/AWS-Documentation-Rag](https://github.com/DanielLevenstein/AWS-Documentation-Rag)
+  
+## Live Demo
+
+The latest version of this project is deployed live on Render.
 - v1 Deployment: [AWS Certification Coach](https://aws-certification-coach-latest.onrender.com/)
 
 ## Application Screenshot
@@ -37,14 +41,6 @@ Each generated question keeps its source-style multiple-choice item in the same 
 
 Training and verification data are generated separately:
 
-- `data/generated/questions_with_answers_training.json`: generated training artifact used by diagnostic regression training.
-- `data/generated/questions_with_answers_validation.json`: generated validation artifact used for training-time validation and checkpoint selection.
-- `data/generated/questions_with_answers_test.json`: generated test artifact reserved for final model checks.
-- `data/generated/user_feedback.v1.json`: learner-submitted grade corrections created by the app using the self-contained v1 schema.
-- `data/curated/curated_training_data.json`: reviewed feedback examples containing full question text. Curated rows intentionally omit question IDs so training cannot learn numbering conventions.
-- `data/curated/user_feedback.v1.json`: optional reviewed learner submissions included in diagnostic model training when present.
-- `data/questions/sample_questions.json`: app-facing question bank generated independently of training labels and grounded with AWS documentation source URLs.
-
 Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C/D`, and `F`. Precision and recall treat `A/B` and `C/D` as accepted answers and `F` as rejected.
 
 To regenerate local data:
@@ -65,13 +61,14 @@ To regenerate local data:
 | v1.5.3  | Updated test data to have proper train, test, validation split                                                                                              |
 | v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
 | v2.3.3  | Restored the release guardrail to 90% semantic precision and added exact-letter accuracy to the semantic diagnostic chart.                                  |
-
+| v2.3.6 | Improved answer evalutaion model and added within one letter grade metric to release notes |
 #### Scope
 
 Certifications:
 
 - Cloud Practitioner
 - Solutions Architect Associate
+- AWS Developer Exam 
 
 Difficulty:
 
