@@ -6,11 +6,6 @@ AI study partner for AWS certification exams.
 
 *Figure: Shows test exam breakdown for project.*
 
-## Live Demo
-
-This project was inspired by my previous AWS Documentation RAG project.
-
-- v0 GitHub:  [DanielLevenstein/AWS-Documentation-Rag](https://github.com/DanielLevenstein/AWS-Documentation-Rag)
   
 ## Live Demo
 
@@ -51,7 +46,6 @@ To regenerate local data:
 
 ## Releases
 
-
 | Release | Description                                                                                                                                                 |
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions and local grading artifacts.                                           |
@@ -74,6 +68,13 @@ Difficulty:
 
 - Easy
 - Medium
+
+## Previous Application
+
+This project was inspired by my previous AWS Documentation RAG project.
+
+- v0 GitHub:  [DanielLevenstein/AWS-Documentation-Rag](https://github.com/DanielLevenstein/AWS-Documentation-Rag)
+
 
 ## Setup
 
