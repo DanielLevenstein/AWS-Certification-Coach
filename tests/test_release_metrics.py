@@ -15,7 +15,8 @@ from aws_certification_coach.model_evaluation.semantic_similarity import (
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics, update_release_notes
-from scripts.semantic_similarity_evaluation import _saved_model_accuracy, plot_semantic_accuracy
+from scripts.semantic_similarity_evaluation import plot_semantic_accuracy
+from scripts.combine_release_charts import combine_release_charts
 
 
 def test_complexity_reports_branching_functions(tmp_path: Path):
@@ -56,6 +57,7 @@ def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
             "semantic_grade_accuracy": 0.8,
             "semantic_precision": 0.9,
             "semantic_recall": 0.75,
+            "semantic_exact_letter_accuracy": 0.64,
         },
         output,
     )
@@ -63,7 +65,7 @@ def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_semantic_accuracy_chart_accepts_saved_model_accuracy(tmp_path: Path):
+def test_semantic_accuracy_chart_uses_only_semantic_metrics(tmp_path: Path):
     output = tmp_path / "semantic_accuracy.png"
 
     plot_semantic_accuracy(
@@ -71,9 +73,9 @@ def test_semantic_accuracy_chart_accepts_saved_model_accuracy(tmp_path: Path):
             "semantic_grade_accuracy": 0.8,
             "semantic_precision": 0.9,
             "semantic_recall": 0.75,
+            "semantic_exact_letter_accuracy": 0.64,
         },
         output,
-        saved_model_accuracy=0.96,
     )
 
     assert output.read_bytes().startswith(b"\x89PNG")
@@ -128,10 +130,10 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
 
 def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
     project_root = Path(__file__).resolve().parents[1]
-    tagged_outputs = [
-        project_root / "release" / "test-build_question_domain_coverage.png",
-        project_root / "release" / "test-build_question_intent_coverage.png",
-        project_root / "release" / "test-build_question_certification_coverage.png",
+    latest_outputs = [
+        project_root / "release" / "question_domain_coverage.png",
+        project_root / "release" / "question_intent_coverage.png",
+        project_root / "release" / "question_certification_coverage.png",
     ]
     result = subprocess.run(
         ["./generate_question_coverage.sh", "test-build"],
@@ -141,12 +143,41 @@ def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
         text=True,
     )
 
-    assert "release/test-build_question_domain_coverage.png" in result.stdout
-    assert "release/test-build_question_intent_coverage.png" in result.stdout
-    assert "release/test-build_question_certification_coverage.png" in result.stdout
-    for tagged_output in tagged_outputs:
-        assert tagged_output.exists()
-        tagged_output.unlink()
+    assert "release/question_domain_coverage.png" in result.stdout
+    assert "release/question_intent_coverage.png" in result.stdout
+    assert "release/question_certification_coverage.png" in result.stdout
+    for latest_output in latest_outputs:
+        assert latest_output.exists()
+
+
+def test_combine_release_charts_writes_four_panel_png(tmp_path: Path):
+    chart_paths = []
+    for index, title in enumerate(["Semantic", "Domain", "Intent", "Certification"]):
+        path = tmp_path / f"chart_{index}.png"
+        _write_sample_chart(path, title)
+        chart_paths.append((title, path))
+    output = tmp_path / "release_metrics_chart.png"
+
+    combine_release_charts(chart_paths, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+    width, height = _png_dimensions(output)
+    assert width >= 2500
+    assert height >= 1800
+
+
+def _write_sample_chart(path: Path, title: str) -> None:
+    import matplotlib
+
+    matplotlib.use("Agg")
+
+    import matplotlib.pyplot as plt
+
+    figure, axis = plt.subplots(figsize=(4, 3))
+    axis.bar(["A", "B"], [1, 2])
+    axis.set_title(title)
+    figure.savefig(path, dpi=80)
+    plt.close(figure)
 
 
 def _png_dimensions(path: Path) -> tuple[int, int]:
@@ -155,16 +186,6 @@ def _png_dimensions(path: Path) -> tuple[int, int]:
     if not header.startswith(b"\x89PNG\r\n\x1a\n"):
         raise ValueError(f"Not a PNG file: {path}")
     return struct.unpack(">II", header[16:24])
-
-
-def test_saved_model_accuracy_reads_training_metrics(tmp_path: Path):
-    training_metrics = tmp_path / "training_metrics.json"
-    training_metrics.write_text(
-        '{"saved_model": {"curated_grade_accuracy": 0.96}}',
-        encoding="utf-8",
-    )
-
-    assert _saved_model_accuracy(training_metrics) == 0.96
 
 
 def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
@@ -179,7 +200,26 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "semantic_similarity.json").write_text(
-        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, "semantic_example_count": 25}',
+        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, '
+        '"semantic_exact_letter_accuracy": 0.64, "semantic_example_count": 25}',
+        encoding="utf-8",
+    )
+    (metrics_dir / "answer_model_evaluation.json").write_text(
+        (
+            '{"splits": {'
+            '"train": {"within_one_letter_accuracy": 0.91}, '
+            '"validation": {"within_one_letter_accuracy": 0.82}, '
+            '"test": {"within_one_letter_accuracy": 0.76}'
+            "}}"
+        ),
+        encoding="utf-8",
+    )
+    (metrics_dir / "answer_model_evaluation.md").write_text(
+        (
+            "| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |\n"
+            "|---|---:|---:|---:|---:|---:|\n"
+            "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |\n"
+        ),
         encoding="utf-8",
     )
     (metrics_dir / "question_fidelity.json").write_text(
@@ -197,9 +237,30 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
 
     markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
 
-    assert "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |" in markdown
+    assert (
+        "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | "
+        "Exact Letter Accuracy | Within 1 Letter | Question Fidelity |"
+    ) in markdown
+    assert "| v1.5 Schema | 80.00% | 90.00% | 75.00% | 64.00% | 76.00% | 88.40% |" in markdown
+    assert "## Answer Model Split Evaluation" in markdown
+    assert "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |" in markdown
     assert "Saved model grade-band accuracy" not in markdown
     assert "Training accuracy" not in markdown
+
+
+def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
+    metrics_dir = tmp_path / "metrics"
+    metrics_dir.mkdir()
+    (metrics_dir / "semantic_similarity.json").write_text(
+        '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, '
+        '"semantic_exact_letter_accuracy": 0.64, "semantic_example_count": 25}',
+        encoding="utf-8",
+    )
+
+    markdown = render_release_metrics(metrics_dir, release_label="v2.3.1", strict_grading=True)
+
+    assert "Exact Letter Accuracy" in markdown
+    assert "Within 1 Letter" in markdown
 
 
 def test_release_metrics_updates_generated_release_notes_block(tmp_path: Path):
@@ -239,7 +300,114 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
 
 
-def test_semantic_accuracy_requires_exact_letter_match(tmp_path: Path):
+def test_semantic_similarity_uses_syntax_alias_table_for_service_names():
+    cloudtrail_question = Question(
+        certification="Cloud Practitioner",
+        domain="Governance",
+        difficulty="Easy",
+        question="Which service records AWS API activity for auditing?",
+        reference_answer="Use AWS CloudTrail to record AWS API activity.",
+        key_concepts=["AWS CloudTrail", "API activity", "auditing"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service records AWS API activity?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS CloudTrail."),
+                MultipleChoiceOption("B", "Use Amazon CloudWatch."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+    codebuild_question = Question(
+        certification="AWS Certified Developer",
+        domain="Deployment",
+        difficulty="Medium",
+        question="Where should a developer define repeatable build commands?",
+        reference_answer="Use an AWS CodeBuild buildspec file.",
+        key_concepts=["CodeBuild buildspec", "build phases", "test commands"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Where should build commands be defined?",
+            options=[
+                MultipleChoiceOption("A", "Use a CodeBuild buildspec file."),
+                MultipleChoiceOption("B", "Use a CodeDeploy AppSpec file."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    assert semantic_similarity_score(cloudtrail_question, "AWS Cloud trail records API activity for auditing.") >= 90
+    assert semantic_similarity_score(cloudtrail_question, "Use AWS CloudTrail.") >= 90
+    assert semantic_similarity_score(codebuild_question, "AWS Code Build") >= 80
+
+
+def test_semantic_similarity_uses_acceptable_answers_as_correct_evidence():
+    question = Question(
+        certification="AWS Certified Developer",
+        domain="Deployment",
+        difficulty="Medium",
+        question="Where should a developer define repeatable build commands?",
+        reference_answer="Use an AWS CodeBuild buildspec file.",
+        key_concepts=["CodeBuild buildspec", "build phases", "test commands"],
+        acceptable_answers=["AWS Code Build"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Where should build commands be defined?",
+            options=[
+                MultipleChoiceOption("A", "Use a CodeBuild buildspec file."),
+                MultipleChoiceOption("B", "Use a CodeDeploy AppSpec file."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    assert semantic_similarity_score(question, "AWS Code Build") >= 90
+
+
+def test_semantic_similarity_recognizes_budget_cost_center_alias():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Billing",
+        difficulty="Easy",
+        question="Which service tracks cost or usage thresholds and sends alerts?",
+        reference_answer="Use AWS Budgets to track cost or usage thresholds and send alerts.",
+        key_concepts=["AWS Budgets", "cost thresholds", "alerts"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service tracks cost or usage thresholds and sends alerts?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS Budgets."),
+                MultipleChoiceOption("B", "Use AWS Cost Explorer."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    assert 80 <= semantic_similarity_score(question, "AWS Cost Center") < 90
+
+
+def test_semantic_similarity_does_not_treat_long_acceptable_answer_words_as_service_aliases():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Governance",
+        difficulty="Easy",
+        question="Which service tracks resource configuration history and compliance rules?",
+        reference_answer="Use AWS Config to track resource configuration history and evaluate compliance.",
+        key_concepts=["AWS Config", "configuration history", "compliance rules"],
+        acceptable_answers=[
+            "Use AWS Config.",
+            "Use AWS Config to track resource configuration history and evaluate compliance.",
+        ],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service tracks resource configuration history and compliance rules?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS Config."),
+                MultipleChoiceOption("B", "Use AWS Audit Manager."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    assert semantic_similarity_score(question, "AWS Compliance Manager") < 60
+
+
+def test_semantic_accuracy_uses_grade_bands_and_reports_exact_letter_match(tmp_path: Path):
     question = Question(
         certification="Cloud Practitioner",
         domain="Security",
@@ -269,10 +437,59 @@ def test_semantic_accuracy_requires_exact_letter_match(tmp_path: Path):
 
     metrics = evaluate_semantic_curated_answers(curated, [question])
 
-    assert metrics["semantic_grade_accuracy"] == 0
+    assert metrics["semantic_grade_accuracy"] == 1
+    assert metrics["semantic_matching_grade_bands"] == 1
+    assert metrics["semantic_exact_letter_accuracy"] == 0
     assert metrics["semantic_matching_letter_grades"] == 0
     assert metrics["semantic_mismatches"][0]["expected_letter"] == "A"
     assert metrics["semantic_mismatches"][0]["actual_letter"] == "B"
+
+
+def test_semantic_accuracy_skips_conflicting_duplicate_feedback(tmp_path: Path):
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Which service manages encryption keys?",
+        reference_answer="Use AWS KMS to create and manage encryption keys.",
+        key_concepts=["AWS KMS", "encryption keys", "key management"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service manages encryption keys?",
+            options=[
+                MultipleChoiceOption("A", "Use AWS KMS."),
+                MultipleChoiceOption("B", "Use Amazon S3."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+    curated = tmp_path / "curated.json"
+    curated.write_text(
+        """
+        [
+          {
+            "question": "Which service manages encryption keys?",
+            "reference_answer": "Use AWS KMS to create and manage encryption keys.",
+            "answer_given": "Ambiguous answer",
+            "correct_rating": "C",
+            "rating_given": "F"
+          },
+          {
+            "question": "Which service manages encryption keys?",
+            "reference_answer": "Use AWS KMS to create and manage encryption keys.",
+            "answer_given": "Ambiguous answer",
+            "correct_rating": "F",
+            "rating_given": "C"
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+
+    metrics = evaluate_semantic_curated_answers(curated, [question])
+
+    assert metrics["semantic_example_count"] == 0
+    assert metrics["semantic_skipped_conflicting_examples"] == 2
+    assert metrics["semantic_conflicting_feedback_groups"][0]["labels"] == ["C", "F"]
 
 
 def test_semantic_similarity_awards_adjacent_partial_credit_without_family_token_false_positive():
@@ -309,7 +526,7 @@ def test_semantic_similarity_awards_adjacent_partial_credit_without_family_token
         ),
     )
 
-    assert 60 <= semantic_similarity_score(secrets_question, "AWS KMS Keys") < 70
+    assert semantic_similarity_score(secrets_question, "AWS KMS Keys") < 60
     assert semantic_similarity_score(s3_question, "S3 version tracking") < 60
 
 
@@ -417,3 +634,34 @@ def test_answer_feature_extractor_can_enable_short_form_answer():
 
     assert features["reference_jaccard"] == 0
     assert features["short_answer_jaccard"] > 0
+
+
+def test_answer_feature_extractor_uses_official_alias_and_distractor_evidence():
+    question = Question(
+        certification="AWS Certified Developer",
+        domain="Deployment",
+        difficulty="Medium",
+        question="Where should a developer define repeatable build commands?",
+        reference_answer="Use an AWS CodeBuild buildspec file.",
+        key_concepts=["CodeBuild buildspec", "build phases", "test commands"],
+        acceptable_answers=["AWS Code Build"],
+        common_misconceptions=["CodeDeploy AppSpec"],
+        must_not_claim=["CodeDeploy AppSpec is the build command file."],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Where should build commands be defined?",
+            options=[
+                MultipleChoiceOption("A", "Use a CodeBuild buildspec file."),
+                MultipleChoiceOption("B", "Use a CodeDeploy AppSpec file."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+    extractor = AnswerFeatureExtractor(answer_form="both")
+
+    correct_features = dict(zip(extractor.feature_names, extractor.extract(question, "AWS Code Build")))
+    distractor_features = dict(zip(extractor.feature_names, extractor.extract(question, "CodeDeploy AppSpec")))
+
+    assert correct_features["acceptable_answer_exact"] == 1.0
+    assert correct_features["acceptable_answer_jaccard"] > 0
+    assert distractor_features["incorrect_distinctive_token_coverage"] > correct_features["incorrect_distinctive_token_coverage"]
+    assert distractor_features["common_misconception_coverage"] > 0

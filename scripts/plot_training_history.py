@@ -19,6 +19,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
+CHART_FONT_SIZES = {
+    "title": 19,
+    "axis": 15,
+    "tick": 13,
+    "legend": 13,
+    "annotation": 13,
+}
+
+
 def plot_training_history(
     history_path: Path,
     output_path: Path,
@@ -38,15 +47,16 @@ def plot_training_history(
         figsize=(10, 6),
         color={"mse": "#d62728", "mae": "#1f77b4"},
     )
-    axis.set_title("Partial-Credit Model Performance During Training")
-    axis.set_xlabel("Training epoch")
-    axis.set_ylabel("Error (lower is better)")
+    axis.set_title("Partial-Credit Model Performance During Training", fontsize=CHART_FONT_SIZES["title"], pad=12)
+    axis.set_xlabel("Training epoch", fontsize=CHART_FONT_SIZES["axis"])
+    axis.set_ylabel("Error (lower is better)", fontsize=CHART_FONT_SIZES["axis"])
     axis.set_xscale("log")
     axis.set_xticks(frame.index)
     axis.set_xticklabels([str(int(epoch)) for epoch in frame.index])
+    axis.tick_params(axis="both", labelsize=CHART_FONT_SIZES["tick"])
     axis.set_ylim(bottom=0)
     axis.grid(True, alpha=0.25)
-    axis.legend(["Mean squared error", "Mean absolute error"])
+    axis.legend(["Mean squared error", "Mean absolute error"], fontsize=CHART_FONT_SIZES["legend"])
     axis.figure.tight_layout()
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -68,16 +78,24 @@ def _plot_curated_accuracy(frame: pd.DataFrame, output_path: Path) -> None:
         color="#2ca02c",
     )
     axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Release target (90%)")
-    axis.set_title("Curated Exact-Letter Accuracy During Training")
-    axis.set_xlabel("Training epoch")
+    axis.set_title("Curated Exact-Letter Accuracy During Training", fontsize=CHART_FONT_SIZES["title"], pad=12)
+    axis.set_xlabel("Training epoch", fontsize=CHART_FONT_SIZES["axis"])
     axis.set_xscale("log")
     axis.set_xticks(frame.index)
     axis.set_xticklabels([str(int(epoch)) for epoch in frame.index])
+    axis.tick_params(axis="both", labelsize=CHART_FONT_SIZES["tick"])
     axis.set_ylim(0, 100)
     axis.grid(True, alpha=0.25)
-    axis.legend(["Curated exact-letter accuracy", "Release target (90%)"])
+    axis.legend(["Curated exact-letter accuracy", "Release target (90%)"], fontsize=CHART_FONT_SIZES["legend"])
     for epoch, value in accuracy.items():
-        axis.annotate(f"{value:.0f}%", (epoch, value), xytext=(0, 8), textcoords="offset points", ha="center")
+        axis.annotate(
+            f"{value:.0f}%",
+            (epoch, value),
+            xytext=(0, 8),
+            textcoords="offset points",
+            ha="center",
+            fontsize=CHART_FONT_SIZES["annotation"],
+        )
     axis.figure.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     axis.figure.savefig(output_path, dpi=160)

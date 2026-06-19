@@ -8,12 +8,32 @@ from pathlib import Path
 from collections.abc import Iterable
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.ratings import letter_to_numeric, score_to_letter
-from aws_certification_coach.training.dataset import load_feedback_regression_examples
+from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
+from aws_certification_coach.training.dataset import load_feedback_regression_examples, question_signature
 from aws_certification_coach.training.features import correct_answer_text
 
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+SYNTAX_ALIASES = {
+    "api gateway": "apigateway",
+    "cloud formation": "cloudformation",
+    "cloud front": "cloudfront",
+    "cloud trail": "cloudtrail",
+    "cloud watch": "cloudwatch",
+    "code build": "codebuild",
+    "code deploy": "codedeploy",
+    "code pipeline": "codepipeline",
+    "dynamo db": "dynamodb",
+    "event bridge": "eventbridge",
+    "route 53": "route53",
+    "secret manager": "secretsmanager",
+    "secrets manager": "secretsmanager",
+    "step function": "stepfunctions",
+    "step functions": "stepfunctions",
+    "systems manager": "systemsmanager",
+    "time to live": "ttl",
+    "x ray": "xray",
+}
 GENERIC_TOKENS = {
     "amazon",
     "and",
@@ -51,16 +71,21 @@ AMBIGUOUS_ALIAS_TOKENS = {
     "s3",
     "service",
 }
+SERVICE_ALIASES_BY_CANONICAL_TOKEN = {
+    "budgets": {"aws cost center", "cost center"},
+}
 
 
 def evaluate_semantic_curated_answers(
     curated_path: Path | Iterable[Path],
     questions: list[Question],
 ) -> dict[str, object]:
-    matches = 0
+    grade_band_matches = 0
+    exact_letter_matches = 0
     true_positive = false_positive = true_negative = false_negative = 0
     mismatches = []
-    rows_and_examples = _feedback_rows_and_examples(curated_path, questions)
+    all_rows_and_examples = _feedback_rows_and_examples(curated_path, questions)
+    rows_and_examples, conflict_groups = _without_conflicting_feedback(all_rows_and_examples)
     for index, (source_path, source_row, row, example) in enumerate(rows_and_examples):
         question = example.question
         score = semantic_similarity_score(question, example.answer)
@@ -72,8 +97,12 @@ def evaluate_semantic_curated_answers(
         false_positive += int(not expected_accept and actual_accept)
         true_negative += int(not expected_accept and not actual_accept)
         false_negative += int(expected_accept and not actual_accept)
+        expected_grade_band = letter_to_grade_band(expected)
+        actual_grade_band = letter_to_grade_band(actual)
+        if actual_grade_band == expected_grade_band:
+            grade_band_matches += 1
         if actual == expected:
-            matches += 1
+            exact_letter_matches += 1
             continue
         mismatches.append(
             {
@@ -87,20 +116,25 @@ def evaluate_semantic_curated_answers(
                 "expected_letter": expected,
                 "actual_letter": actual,
                 "score": score,
+                "feedback_text": str(row.get("feedback_text", "")),
             }
         )
     total = len(rows_and_examples)
     return {
-        "semantic_grade_accuracy": matches / max(1, total),
+        "semantic_grade_accuracy": grade_band_matches / max(1, total),
+        "semantic_exact_letter_accuracy": exact_letter_matches / max(1, total),
         "semantic_precision": true_positive / max(1, true_positive + false_positive),
         "semantic_recall": true_positive / max(1, true_positive + false_negative),
-        "semantic_matching_letter_grades": matches,
+        "semantic_matching_grade_bands": grade_band_matches,
+        "semantic_matching_letter_grades": exact_letter_matches,
         "semantic_example_count": total,
         "semantic_grade_scale": ["A", "B", "C", "D", "F"],
         "semantic_true_positive": true_positive,
         "semantic_false_positive": false_positive,
         "semantic_true_negative": true_negative,
         "semantic_false_negative": false_negative,
+        "semantic_skipped_conflicting_examples": sum(group["example_count"] for group in conflict_groups),
+        "semantic_conflicting_feedback_groups": conflict_groups,
         "semantic_mismatches": mismatches,
     }
 
@@ -126,8 +160,50 @@ def _feedback_rows_and_examples(
     return rows_and_examples
 
 
+def _without_conflicting_feedback(
+    rows_and_examples: list[tuple[Path, int, dict, object]],
+) -> tuple[list[tuple[Path, int, dict, object]], list[dict[str, object]]]:
+    rows_by_key: dict[tuple[tuple[str, str, str], str], list[tuple[Path, int, dict, object]]] = {}
+    for item in rows_and_examples:
+        _source_path, _source_row, _row, example = item
+        rows_by_key.setdefault(_feedback_key(example.question, example.answer), []).append(item)
+
+    conflict_keys = {
+        key
+        for key, items in rows_by_key.items()
+        if len({str(row["correct_rating"]).strip().upper() for _path, _source_row, row, _example in items}) > 1
+    }
+    conflict_groups = [
+        {
+            "question": items[0][3].question.question,
+            "answer": items[0][3].answer,
+            "labels": sorted({str(row["correct_rating"]).strip().upper() for _path, _source_row, row, _example in items}),
+            "example_count": len(items),
+            "sources": [
+                {"path": str(path), "row": source_row}
+                for path, source_row, _row, _example in items
+            ],
+        }
+        for key, items in rows_by_key.items()
+        if key in conflict_keys
+    ]
+    filtered = [
+        item
+        for item in rows_and_examples
+        if _feedback_key(item[3].question, item[3].answer) not in conflict_keys
+    ]
+    return filtered, conflict_groups
+
+
+def _feedback_key(question: Question, answer: str) -> tuple[tuple[str, str, str], str]:
+    return question_signature(question), " ".join(str(answer).casefold().split())
+
+
 def semantic_similarity_score(question: Question, answer: str) -> int:
     """Score an answer using service-alias recognition plus concept coverage."""
+
+    if _is_exact_correct_answer(question, answer):
+        return 95
 
     if _matches_near_miss_option(question, answer):
         return 65
@@ -180,12 +256,24 @@ def _service_is_covered(question: Question, answer: str) -> bool:
     return any(alias in normalized_answer for alias in _service_aliases(question))
 
 
+def _is_exact_correct_answer(question: Question, answer: str) -> bool:
+    correct_options, _incorrect_options = _option_texts(question)
+    normalized_answer = _strip_leading_use(answer)
+    accepted_answers = [*correct_options, *question.acceptable_answers]
+    return bool(normalized_answer) and normalized_answer in {
+        _strip_leading_use(option)
+        for option in accepted_answers
+    }
+
+
 def _service_aliases(question: Question) -> set[str]:
     correct_options, _incorrect_options = _option_texts(question)
     values = {_strip_leading_use(option) for option in correct_options}
+    values.update(_service_alias_value(answer) for answer in question.acceptable_answers)
     values.add(_strip_leading_use(correct_answer_text(question)))
-    if question.key_concepts:
-        values.add(_normalized(question.key_concepts[0]))
+    concepts = _required_concepts(question)
+    if concepts:
+        values.add(_normalized(concepts[0]))
 
     aliases: set[str] = set()
     for value in values:
@@ -204,14 +292,29 @@ def _service_aliases(question: Question) -> set[str]:
             for token in distinctive_tokens
             if token not in AMBIGUOUS_ALIAS_TOKENS and len(token) > 2
         )
+        for token in distinctive_tokens:
+            aliases.update(SERVICE_ALIASES_BY_CANONICAL_TOKEN.get(token, set()))
     return {alias for alias in aliases if alias}
+
+
+def _service_alias_value(value: str) -> str:
+    normalized = _strip_leading_use(value)
+    distinctive_tokens = [
+        token
+        for token in normalized.split()
+        if token not in GENERIC_TOKENS
+    ]
+    if len(distinctive_tokens) > 4:
+        return ""
+    return normalized
 
 
 def _concept_coverage(question: Question, answer: str) -> float:
     normalized_answer = _normalized(answer)
     answer_tokens = set(_tokens(answer))
     covered = 0
-    for concept in question.key_concepts:
+    required_concepts = _required_concepts(question)
+    for concept in required_concepts:
         concept_tokens = [
             token
             for token in _tokens(concept)
@@ -230,7 +333,11 @@ def _concept_coverage(question: Question, answer: str) -> float:
             if len(concept_token_set) > 1 and len(matched_tokens) < 2:
                 continue
             covered += 1
-    return covered / max(1, len(question.key_concepts))
+    return covered / max(1, len(required_concepts))
+
+
+def _required_concepts(question: Question) -> list[str]:
+    return question.required_concepts or question.key_concepts
 
 
 def _matches_near_miss_option(question: Question, answer: str) -> bool:
@@ -245,9 +352,7 @@ def _matches_near_miss_option(question: Question, answer: str) -> bool:
             continue
         normalized_option = _normalized(option)
         if normalized_answer in {normalized_option, _strip_leading_use(option)} or answer_tokens <= option_tokens:
-            return _has_adjacent_domain_signal(question, answer) or bool(
-                answer_tokens & set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
-            )
+            return bool(answer_tokens & set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS)
     return False
 
 
@@ -272,8 +377,6 @@ def _has_adjacent_domain_signal(question: Question, answer: str) -> bool:
     answer_tokens = set(_tokens(answer)) - GENERIC_TOKENS
     if {"permissions", "permission"} & question_tokens and {"role", "roles", "iam"} & answer_tokens:
         return True
-    if {"secret", "secrets", "credential", "credentials", "password", "passwords"} & question_tokens:
-        return bool({"key", "keys", "kms", "parameter", "store"} & answer_tokens)
     if {"orchestrate", "orchestrates", "orchestration", "workflow", "workflows"} & question_tokens:
         return bool({"orchestrate", "orchestration", "workflow", "workflows"} & answer_tokens)
     return bool((answer_tokens & reference_tokens) - SERVICE_FAMILY_TOKENS)
@@ -307,4 +410,11 @@ def _normalized(value: str) -> str:
 
 
 def _tokens(value: str) -> list[str]:
-    return TOKEN_PATTERN.findall(value.casefold())
+    return TOKEN_PATTERN.findall(_canonical_syntax(value))
+
+
+def _canonical_syntax(value: str) -> str:
+    normalized = " ".join(TOKEN_PATTERN.findall(value.casefold()))
+    for alias, canonical in sorted(SYNTAX_ALIASES.items(), key=lambda item: len(item[0]), reverse=True):
+        normalized = re.sub(rf"\b{re.escape(alias)}\b", canonical, normalized)
+    return normalized

@@ -40,9 +40,15 @@ Output schema:
   "certification": string,
   "domain": string,
   "difficulty": string,
+  "question_type": "multiple_choice" | "scenario_multiple_choice" | "multi_select_source" | "service_selection" | "service_comparison" | "architecture_tradeoff",
   "question": string,
   "reference_answer": string,
   "key_concepts": [string],
+  "required_concepts": [string],
+  "bonus_concepts": [string],
+  "common_misconceptions": [string],
+  "acceptable_answers": [string],
+  "must_not_claim": [string],
   "original_multiple_choice": object
 }}
 
@@ -116,13 +122,25 @@ class HeuristicTransformationProvider:
             if option.get("option_id") in correct_ids
         ]
         reference_answer = original.get("explanation") or " ".join(correct_options)
+        key_concepts = source_item.get("key_concepts", correct_options)
+        incorrect_options = [
+            option["text"]
+            for option in original.get("options", [])
+            if option.get("option_id") not in correct_ids
+        ]
         transformed = {
             "certification": source_item["certification"],
             "domain": source_item["domain"],
             "difficulty": source_item["difficulty"],
+            "question_type": "service_selection",
             "question": _freeform_question(original["question"]),
             "reference_answer": reference_answer,
-            "key_concepts": source_item.get("key_concepts", correct_options),
+            "key_concepts": key_concepts,
+            "required_concepts": key_concepts,
+            "bonus_concepts": [],
+            "common_misconceptions": [f"{option} is the best answer." for option in incorrect_options],
+            "acceptable_answers": [*correct_options, reference_answer],
+            "must_not_claim": [f"{option} is the best answer." for option in incorrect_options],
             "original_multiple_choice": original,
         }
         return json.dumps(transformed)

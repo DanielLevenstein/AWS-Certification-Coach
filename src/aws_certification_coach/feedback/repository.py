@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import re
 import threading
 from typing import Any
 
@@ -70,7 +71,7 @@ def build_feedback_record(
     rating_given: str,
     correct_rating: str,
     feedback_text: str = "",
-    schema_version: int = 1,
+    schema_version: int | float = 1,
 ) -> dict[str, Any]:
     return {
         "schema_version": schema_version,
@@ -85,10 +86,12 @@ def build_feedback_record(
     }
 
 
-def _schema_version_from_path(path: Path) -> int:
+def _schema_version_from_path(path: Path) -> int | float:
     name = path.name
-    if ".v2." in name:
-        return 2
+    match = re.search(r"\.v(\d+(?:\.\d+)?)\.", name)
+    if match:
+        version = match.group(1)
+        return float(version) if "." in version else int(version)
     if name.startswith("generated_feedback"):
         return 0
     return 1

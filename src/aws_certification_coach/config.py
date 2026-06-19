@@ -26,6 +26,10 @@ class EvaluatorConfig:
     provider: str = "heuristic"
     openai: OpenAIModelConfig = field(default_factory=OpenAIModelConfig)
     trained_regressor_model_path: str = "models/answer_regressor_model.json"
+    semantic_feedback_paths: tuple[str, ...] = (
+        "data/curated/curated_training_data.json",
+    )
+    semantic_questions_path: str = "data/questions/sample_questions.json"
 
 
 def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:
@@ -41,6 +45,15 @@ def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:
                 raw.get("trained_regressor", {}).get("model_path", "models/answer_regressor_model.json")
                 if isinstance(raw.get("trained_regressor", {}), dict)
                 else "models/answer_regressor_model.json",
+            )
+        ),
+        semantic_feedback_paths=_semantic_feedback_paths(raw),
+        semantic_questions_path=str(
+            os.getenv(
+                "AWS_COACH_SEMANTIC_QUESTIONS_PATH",
+                raw.get("semantic_similarity", {}).get("questions_path", "data/questions/sample_questions.json")
+                if isinstance(raw.get("semantic_similarity", {}), dict)
+                else "data/questions/sample_questions.json",
             )
         ),
     )
@@ -80,3 +93,13 @@ def _optional_str_env(name: str, default: object) -> str | None:
     if value in (None, "", "none", "None"):
         return None
     return str(value)
+
+
+def _semantic_feedback_paths(raw: dict[str, Any]) -> tuple[str, ...]:
+    env_value = os.getenv("AWS_COACH_SEMANTIC_FEEDBACK_PATHS")
+    if env_value is not None:
+        return tuple(path.strip() for path in env_value.split(":") if path.strip())
+    semantic = raw.get("semantic_similarity", {})
+    if isinstance(semantic, dict) and isinstance(semantic.get("feedback_paths"), list):
+        return tuple(str(path) for path in semantic["feedback_paths"])
+    return EvaluatorConfig.semantic_feedback_paths

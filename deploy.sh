@@ -15,7 +15,7 @@ TAG_ID="$1"
 IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-daniellevenstein/aws-certification-coach}"
 TAG_IMAGE="${IMAGE_REPOSITORY}:${TAG_ID}"
 LATEST_IMAGE="${IMAGE_REPOSITORY}:latest"
-RELEASE_NOTES="docs/RELEASE_NOTES.md"
+RELEASE_NOTES="RELEASE_NOTES.md"
 
 if [ -n "$(git status --porcelain)" ]; then
   echo "Deploy aborted: commit or stash local changes before deploying." >&2

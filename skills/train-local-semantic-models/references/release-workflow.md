@@ -9,7 +9,7 @@ Run commands through the project virtual environment or existing shell wrappers:
 ./setup.sh
 ./run_unit_tests.sh
 ./run_model_tests.sh
-./release_notes_full.sh <release-tag>
+./release_notes.sh --full <release-tag>
 ```
 
 Use `./release_notes_full.sh` before any code commit. It writes metrics under ignored directories and updates release artifacts.

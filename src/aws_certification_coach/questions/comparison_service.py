@@ -79,6 +79,7 @@ class ServiceComparisonQuestionService:
             f"Scenario: {scenario}"
         )
         reference_answer = _comparison_reference_answer(source, candidate)
+        rubric_metadata = _rubric_metadata(concepts, candidate, reference_answer)
         return {
             "certification": source.get("certification", ""),
             "exam_code": source.get("exam_code", ""),
@@ -88,6 +89,7 @@ class ServiceComparisonQuestionService:
             "question": comparison_prompt,
             "reference_answer": reference_answer,
             "key_concepts": concepts,
+            **rubric_metadata,
             "compared_services": [candidate.best_choice, candidate.near_miss_choice],
             "best_choice": candidate.best_choice,
             "near_miss_choice": candidate.near_miss_choice,
@@ -203,3 +205,19 @@ def _comparison_rationale(source: dict[str, object], candidate: ComparisonCandid
         f"The expected answer should explain why {candidate.best_choice} satisfies the scenario more directly "
         f"than {candidate.near_miss_choice}."
     )
+
+
+def _rubric_metadata(
+    concepts: list[str],
+    candidate: ComparisonCandidate,
+    reference_answer: str,
+) -> dict[str, list[str]]:
+    return {
+        "required_concepts": concepts,
+        "bonus_concepts": ["service boundary", "scenario constraint tradeoff"],
+        "common_misconceptions": [
+            f"{candidate.near_miss_choice} satisfies the scenario as directly as {candidate.best_choice}."
+        ],
+        "acceptable_answers": [candidate.best_choice, reference_answer],
+        "must_not_claim": [f"{candidate.near_miss_choice} is the better fit than {candidate.best_choice}."],
+    }

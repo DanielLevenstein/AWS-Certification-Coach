@@ -209,6 +209,8 @@ tempCodeRunnerFile.py
 /scripts/data/
 /metrics/
 /release/metrics/
+/release/*.png
+!/release/release_metrics_chart.png
 
 # Ruff stuff:
 .ruff_cache/

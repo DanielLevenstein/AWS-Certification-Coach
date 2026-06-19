@@ -19,7 +19,7 @@ The latest version of this project is deployed live on Render.
 
 ## Application Screenshot
 
-<img src="docs/images/aws-certification-coach.png" alt="Certification Exam Screenshot" width="720">
+<img src="docs/images/aws-certification-coach2.png" alt="Certification Exam Screenshot" width="720">
 
 *Figure: The coach scores a freeform Amazon Kinesis answer and displays detailed feedback alongside the source multiple-choice question.*
 
@@ -60,8 +60,8 @@ To regenerate local data:
 | v1.3.4  | Swapped default app scoring to`semantic_similarity`; curated grade-band accuracy reached 80%.                                                               |
 | v1.5.3  | Updated test data to have proper train, test, validation split                                                                                              |
 | v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
-| v2.2.4 | Added questions from AWS Developer exam certification |
-
+| v2.3.3  | Restored the release guardrail to 90% semantic precision and added exact-letter accuracy to the semantic diagnostic chart.                                  |
+| v2.3.6 | Improved answer evalutaion model and added within one letter grade metric to release notes |
 #### Scope
 
 Certifications:
@@ -101,13 +101,13 @@ Run model-quality checks separately:
 ./run_model_tests.sh
 ```
 
-Run the release suite and save a tagged accuracy chart:
+Run the release suite and save the latest release chart artifacts:
 
 ```bash
 ./release_notes.sh --quick v2.2.0
 ```
 
-The release helper saves the `semantic_similarity` diagnostic chart as `release/<tag>_semantic_accuracy.png` and separate question coverage charts for domain, intent, and certification split.
+The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, and a combined four-panel chart as latest-only files in `release/`.
 
 Refresh the training graph, curated failure report, semantic metrics, and detailed tagged report:
 
@@ -115,7 +115,7 @@ Refresh the training graph, curated failure report, semantic metrics, and detail
 ./release_notes.sh --full v2.2.0
 ```
 
-The legacy `release_notes_quick.sh` and `release_notes_full.sh` wrappers call the combined release helper. The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, the question coverage PNGs, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper also publishes `release/<tag>_semantic_accuracy.png`, `release/<tag>_question_domain_coverage.png`, `release/<tag>_question_intent_coverage.png`, `release/<tag>_question_certification_coverage.png`, and `release/curated_failure_report.md`.
+The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, the question coverage PNGs, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper publishes latest-only individual chart files at `release/semantic_accuracy.png`, `release/question_domain_coverage.png`, `release/question_intent_coverage.png`, and `release/question_certification_coverage.png`. The only versioned chart artifact is the combined `release/release_metrics_chart.png`, plus the markdown reports in `release/`.
 
 Regenerate local training, validation, test, and app sample artifacts:
 

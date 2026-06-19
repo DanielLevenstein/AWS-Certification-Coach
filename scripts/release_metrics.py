@@ -14,9 +14,14 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("release/metrics/summary.md"))
     parser.add_argument("--release-label", default="Current")
     parser.add_argument("--release-notes", type=Path, default=None)
+    parser.add_argument("--strict-grading", action="store_true")
     args = parser.parse_args()
 
-    markdown = render_release_metrics(args.metrics_dir, release_label=args.release_label)
+    markdown = render_release_metrics(
+        args.metrics_dir,
+        release_label=args.release_label,
+        strict_grading=args.strict_grading,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(markdown, encoding="utf-8")
     if args.release_notes is not None:
@@ -24,47 +29,51 @@ def main() -> None:
     print(markdown, end="")
 
 
-def render_release_metrics(metrics_dir: Path, release_label: str = "Current") -> str:
+def render_release_metrics(
+    metrics_dir: Path,
+    release_label: str = "Current",
+    strict_grading: bool = False,
+) -> str:
     training_metrics = _optional_read(metrics_dir / "training_metrics.json")
     semantic = _read(metrics_dir / "semantic_similarity.json")
+    answer_model_evaluation = _optional_read(metrics_dir / "answer_model_evaluation.json")
+    answer_model_markdown = _optional_read_text(metrics_dir / "answer_model_evaluation.md")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
     question_coverage = _optional_read(metrics_dir / "question_coverage.json")
     saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
     answer_form = saved_model.get("answer_form", training_metrics.get("answer_form", "unknown") if training_metrics else "unknown")
     calibration_count = saved_model.get("calibration_count", 0)
-    release_file_stem = _release_file_stem(release_label)
+    exact_letter_accuracy = float(semantic.get("semantic_exact_letter_accuracy", semantic["semantic_grade_accuracy"]))
     return "\n".join(
         [
-            "# Latest Release Metrics",
+            "## Generated Release Metrics",
             "",
-            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Question Fidelity |",
-            "|:--------|------------------:|-------------------:|----------------:|------------------:|",
+            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
+            "|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|",
             f"| {release_label} | {semantic['semantic_grade_accuracy']:.2%} | "
-            f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | {_question_fidelity_cell(question_fidelity)} |",
+            f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | "
+            f"{exact_letter_accuracy:.2%} | {_answer_within_one_letter_cell(answer_model_evaluation)} | "
+            f"{_question_fidelity_cell(question_fidelity)} |",
             "",
             f"Saved model answer form: `{answer_form}`",
             f"Saved model calibration count: `{calibration_count}`",
             f"Question fidelity model: `{question_fidelity.get('model_name', 'not-run')}`",
-            f"Question fidelity sample count: `{question_fidelity.get('sample_count', 0)}`",
             f"Developer source question count: `{question_fidelity.get('source_count', 0)}`",
-            f"Developer generated question count: `{question_fidelity.get('generated_question_count', question_fidelity.get('sample_count', 0))}`",
             f"App question count: `{question_coverage.get('question_count', 0)}`",
             f"Question coverage domain count: `{question_coverage.get('domain_count', 0)}`",
             f"Question coverage concept count: `{question_coverage.get('concept_count', 0)}`",
             f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
             f"Top covered concepts: `{_coverage_names(question_coverage, 'top_concepts', limit=12)}`",
             f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
-            "",
-            # "Training curve: `training_performance.png`",
-            # "`semantic_similarity` diagnostic chart: `semantic_accuracy.png`",
-            # "Question intent coverage chart: `question_intent_coverage.png`",
-            # "Certification coverage chart: `question_certification_coverage.png`",
-            # "Curated failure analysis: `curated_failure_report.md`",
-            # "Curated rubric review: `curated_rubric_review.md`",
-            "",
-            "Semantic precision is the release guardrail for the `semantic_similarity` model.",
+            "Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).",
+            "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",
+            "Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.",
+            "Semantic precision has a 90% release guardrail for the `semantic_similarity` model.",
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
-            "Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity.",
+            "",
+            "## Answer Model Split Evaluation",
+            "",
+            answer_model_markdown or "Not run.",
         ]
     ) + "\n"
 
@@ -82,10 +91,26 @@ def _optional_read(path: Path) -> dict[str, object]:
     return _read(path)
 
 
+def _optional_read_text(path: Path) -> str:
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8").strip()
+
+
 def _question_fidelity_cell(question_fidelity: dict[str, object]) -> str:
     if "question_fidelity" not in question_fidelity:
         return "N/A"
     return f"{float(question_fidelity['question_fidelity']):.2f}%"
+
+
+def _answer_within_one_letter_cell(answer_model_evaluation: dict[str, object]) -> str:
+    splits = answer_model_evaluation.get("splits", {})
+    if not isinstance(splits, dict):
+        return "N/A"
+    test_split = splits.get("test", {})
+    if not isinstance(test_split, dict) or "within_one_letter_accuracy" not in test_split:
+        return "N/A"
+    return f"{float(test_split['within_one_letter_accuracy']):.2%}"
 
 
 def _coverage_names(question_coverage: dict[str, object], key: str, limit: int | None = None) -> str:
@@ -98,6 +123,16 @@ def _coverage_names(question_coverage: dict[str, object], key: str, limit: int |
         if isinstance(row, dict) and str(row.get("name", "")).strip()
     ]
     return ", ".join(names) if names else "not-run"
+
+
+def _strict_grading_label(strict_grading: bool) -> str:
+    return "exact-letter" if strict_grading else "standard"
+
+
+def _answer_metric_note(strict_grading: bool) -> str:
+    if strict_grading:
+        return "Answer-scoring accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement; precision and recall remain accepted-answer diagnostics."
+    return "Answer-scoring metrics come from the existing generated answer and curated answer benchmarks; question expansion quality is tracked separately by Question Fidelity."
 
 
 def _release_file_stem(release_label: str) -> str:
@@ -116,19 +151,6 @@ def update_release_notes(release_notes: Path, markdown: str) -> None:
         return
     separator = "\n" if content.endswith("\n") or not content else "\n\n"
     release_notes.write_text(content + separator + generated_block, encoding="utf-8")
-
-
-def _saved_model_accuracy(
-    saved_model: dict[str, object],
-    model_evaluation: dict[str, object],
-    final_checkpoint: dict[str, object],
-) -> float:
-    if "curated_grade_accuracy" in saved_model:
-        return float(saved_model["curated_grade_accuracy"])
-    rubric = model_evaluation.get("rubric_adherence", {}) if model_evaluation else {}
-    if isinstance(rubric, dict) and "grade_accuracy" in rubric:
-        return float(rubric["grade_accuracy"])
-    return float(final_checkpoint["curated_grade_accuracy"])
 
 
 if __name__ == "__main__":

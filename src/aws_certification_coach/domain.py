@@ -24,6 +24,12 @@ class Question:
     question: str
     reference_answer: str
     key_concepts: list[str]
+    question_type: str = "service_selection"
+    required_concepts: list[str] = field(default_factory=list)
+    bonus_concepts: list[str] = field(default_factory=list)
+    common_misconceptions: list[str] = field(default_factory=list)
+    acceptable_answers: list[str] = field(default_factory=list)
+    must_not_claim: list[str] = field(default_factory=list)
     exam_code: str = ""
     original_multiple_choice: "MultipleChoiceQuestion | None" = None
 

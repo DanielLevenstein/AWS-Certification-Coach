@@ -26,6 +26,7 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     parser.add_argument("--release-label", default="Current")
     parser.add_argument("--release-notes", default=None)
     parser.add_argument("--metrics-dir", type=Path, default=None)
+    parser.add_argument("--strict-grading", action="store_true")
     args = parser.parse_args(extra_args or [])
     metrics_dir = args.metrics_dir or timestamped_metrics_dir()
     _run(
@@ -62,6 +63,18 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             str(metrics_dir / "answer_regressor_model.json"),
             "--output",
             str(metrics_dir / "curated_failure_report.md"),
+        ]
+    )
+    _run(
+        [
+            sys.executable,
+            "scripts/evaluate_answer_model.py",
+            "--model",
+            str(metrics_dir / "answer_regressor_model.json"),
+            "--json-output",
+            str(metrics_dir / "answer_model_evaluation.json"),
+            "--table-output",
+            str(metrics_dir / "answer_model_evaluation.md"),
         ]
     )
     _run(
@@ -113,6 +126,8 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     ]
     if args.release_notes is not None:
         release_metrics_command.extend(["--release-notes", args.release_notes])
+    if args.strict_grading:
+        release_metrics_command.append("--strict-grading")
     _run(release_metrics_command)
     print(f"Release metrics directory: {metrics_dir}")
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from decimal import Decimal, InvalidOperation
 import json
 from pathlib import Path
 
@@ -43,9 +44,30 @@ def load_answer_regression_examples(path: str | Path) -> list[AnswerRegressionEx
     return examples
 
 
+def load_curated_question_regression_examples(path: str | Path) -> list[AnswerRegressionExample]:
+    rows = _load_rows(path)
+    examples: list[AnswerRegressionExample] = []
+    for row in rows:
+        if not _looks_like_question_row(row):
+            continue
+        examples.extend(_question_regression_examples_from_json(row))
+    return examples
+
+
+def load_curated_structured_regression_examples(path: str | Path) -> list[AnswerRegressionExample]:
+    rows = _load_rows(path)
+    examples: list[AnswerRegressionExample] = []
+    for row in rows:
+        if not _looks_like_question_row(row):
+            continue
+        examples.extend(_regression_examples_from_json(row))
+    return examples
+
+
 def load_feedback_classification_examples(
     path: str | Path,
     questions: list[Question],
+    max_schema_version: str | float | int | None = None,
 ) -> list[AnswerClassificationExample]:
     return [
         AnswerClassificationExample(
@@ -54,7 +76,7 @@ def load_feedback_classification_examples(
             label=letter_to_binary_label(row["correct_rating"]),
             source="user_feedback",
         )
-        for row in _load_rows(path)
+        for row in _feedback_rows(path, max_schema_version)
         if isinstance(row, dict)
     ]
 
@@ -62,6 +84,7 @@ def load_feedback_classification_examples(
 def load_feedback_regression_examples(
     path: str | Path,
     questions: list[Question],
+    max_schema_version: str | float | int | None = None,
 ) -> list[AnswerRegressionExample]:
     return [
         AnswerRegressionExample(
@@ -70,7 +93,7 @@ def load_feedback_regression_examples(
             rating=letter_to_numeric(row["correct_rating"]),
             source="user_feedback",
         )
-        for row in _load_rows(path)
+        for row in _feedback_rows(path, max_schema_version)
         if isinstance(row, dict)
     ]
 
@@ -81,6 +104,30 @@ def _load_rows(path: str | Path) -> list[object]:
     if not isinstance(rows, list):
         raise ValueError(f"Training data must be a JSON list: {path}")
     return rows
+
+
+def _feedback_rows(path: str | Path, max_schema_version: str | float | int | None) -> list[object]:
+    rows = _load_rows(path)
+    if max_schema_version is None:
+        return rows
+    maximum = _schema_decimal(max_schema_version)
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict):
+            continue
+        schema_version = row.get("schema_version", 1)
+        if _schema_decimal(schema_version) > maximum:
+            raise ValueError(
+                f"Feedback row {index} in {path} uses schema_version {schema_version}, "
+                f"which is newer than supported schema {max_schema_version}."
+            )
+    return rows
+
+
+def _schema_decimal(value: object) -> Decimal:
+    try:
+        return Decimal(str(value))
+    except (InvalidOperation, ValueError) as exc:
+        raise ValueError(f"Invalid feedback schema_version: {value!r}") from exc
 
 
 def _classification_examples_from_json(row: object) -> list[AnswerClassificationExample]:
@@ -187,6 +234,74 @@ def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]
             source=str(row.get("source", "")),
         )
     ]
+
+
+def _question_regression_examples_from_json(row: object) -> list[AnswerRegressionExample]:
+    if not isinstance(row, dict):
+        return []
+    question = question_from_json(row)
+    original = question.original_multiple_choice
+    if original is None:
+        return []
+    correct_ids = set(original.correct_option_ids)
+    correct_answers = [
+        option.text
+        for option in original.options
+        if option.option_id in correct_ids
+    ]
+    distractors = [
+        option.text
+        for option in original.options
+        if option.option_id not in correct_ids
+    ]
+    examples: list[AnswerRegressionExample] = []
+    seen: set[tuple[str, float]] = set()
+    for answer in [*correct_answers, question.reference_answer]:
+        _append_unique_regression_example(examples, seen, question, answer, 0.95, "curated_question_correct")
+    for answer in distractors:
+        _append_unique_regression_example(examples, seen, question, answer, 0.25, "curated_question_distractor")
+    return examples
+
+
+def _append_unique_regression_example(
+    examples: list[AnswerRegressionExample],
+    seen: set[tuple[str, float]],
+    question: Question,
+    answer: str,
+    rating: float,
+    source: str,
+) -> None:
+    normalized_answer = " ".join(str(answer).casefold().split())
+    if not normalized_answer:
+        return
+    key = (normalized_answer, rating)
+    if key in seen:
+        return
+    seen.add(key)
+    examples.append(
+        AnswerRegressionExample(
+            question=question,
+            answer=str(answer),
+            rating=rating,
+            source=source,
+        )
+    )
+
+
+def _looks_like_question_row(row: object) -> bool:
+    if not isinstance(row, dict):
+        return False
+    return all(
+        field in row
+        for field in (
+            "certification",
+            "domain",
+            "difficulty",
+            "question",
+            "reference_answer",
+            "key_concepts",
+        )
+    )
 
 
 def question_signature(question: Question) -> tuple[str, str, str]:

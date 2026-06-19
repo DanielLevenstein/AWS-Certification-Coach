@@ -43,11 +43,11 @@ class HeuristicEvaluatorProvider:
         normalized_answer = user_answer.lower()
         matched = [
             concept
-            for concept in question.key_concepts
+            for concept in _required_concepts(question)
             if concept.lower() in normalized_answer
         ]
-        missing = [concept for concept in question.key_concepts if concept not in matched]
-        score = round((len(matched) / max(1, len(question.key_concepts))) * 100)
+        missing = [concept for concept in _required_concepts(question) if concept not in matched]
+        score = round((len(matched) / max(1, len(_required_concepts(question)))) * 100)
         payload = {
             "score": score,
             "missing_concepts": missing,
@@ -71,3 +71,7 @@ def _detailed_answer(question: Question, missing_concepts: list[str]) -> str:
     if missing_concepts:
         concept_sentence = " Be sure to explicitly cover: " + ", ".join(missing_concepts) + "."
     return f"{question.reference_answer}{concept_sentence}"
+
+
+def _required_concepts(question: Question) -> list[str]:
+    return question.required_concepts or question.key_concepts

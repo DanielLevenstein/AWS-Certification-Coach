@@ -7,6 +7,16 @@ from pathlib import Path
 from typing import Iterable
 
 
+CHART_FONT_SIZES = {
+    "title": 20,
+    "suptitle": 24,
+    "axis": 15,
+    "tick": 18,
+    "pie": 13,
+    "footer": 12,
+}
+
+
 def measure_question_coverage(rows: Iterable[dict[str, object]]) -> dict[str, object]:
     questions = list(rows)
     domains = Counter(_text(row.get("domain"), "Unknown") for row in questions)
@@ -74,7 +84,11 @@ def plot_question_coverage(metrics: dict[str, object], output_path: Path) -> Non
     cert_axis = figure.add_subplot(grid[2, 0])
     _plot_certifications(cert_axis, certifications)
 
-    figure.suptitle("AWS Certification Coach Question Coverage", fontsize=18, fontweight="bold")
+    figure.suptitle(
+        "AWS Certification Coach Question Coverage",
+        fontsize=CHART_FONT_SIZES["suptitle"],
+        fontweight="bold",
+    )
     figure.text(
         0.01,
         0.01,
@@ -83,7 +97,7 @@ def plot_question_coverage(metrics: dict[str, object], output_path: Path) -> Non
             f"Domains: {int(metrics.get('domain_count', 0))} | "
             f"Concepts: {int(metrics.get('concept_count', 0))}"
         ),
-        fontsize=9,
+        fontsize=CHART_FONT_SIZES["footer"],
         color="#57606a",
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -237,8 +251,9 @@ def _plot_horizontal_bars(
     labels = [label for label, _ in series][::-1]
     values = [value for _, value in series][::-1]
     axis.barh(labels, values, color=color)
-    axis.set_title(title)
-    axis.set_xlabel(xlabel)
+    axis.set_title(title, fontsize=CHART_FONT_SIZES["title"], pad=12)
+    axis.set_xlabel(xlabel, fontsize=CHART_FONT_SIZES["axis"])
+    axis.tick_params(axis="both", labelsize=CHART_FONT_SIZES["tick"])
     axis.grid(axis="x", color="#e5e7eb", linewidth=0.8)
 
 
@@ -252,17 +267,18 @@ def _plot_certifications(axis: object, series: list[tuple[str, int]]) -> None:
         autopct=lambda pct: f"{pct:.0f}%" if pct >= 4 else "",
         startangle=90,
         colors=colors[: len(values)],
-        textprops={"fontsize": 9},
+        textprops={"fontsize": CHART_FONT_SIZES["pie"]},
     )
-    axis.set_title("Certification Split")
+    axis.set_title("Certification Split", fontsize=CHART_FONT_SIZES["title"], pad=12)
 
 
 def _plot_question_intents(axis: object, series: list[tuple[str, int]]) -> None:
     labels = [label.replace("_", " ").title() for label, _ in series][::-1]
     values = [value for _, value in series][::-1]
     axis.barh(labels, values, color="#5e6c84")
-    axis.set_title("Question Intent Mix")
-    axis.set_xlabel("Question count")
+    axis.set_title("Question Intent Mix", fontsize=CHART_FONT_SIZES["title"], pad=12)
+    axis.set_xlabel("Question count", fontsize=CHART_FONT_SIZES["axis"])
+    axis.tick_params(axis="both", labelsize=CHART_FONT_SIZES["tick"])
     axis.grid(axis="x", color="#e5e7eb", linewidth=0.8)
 
 
@@ -275,6 +291,6 @@ def _add_footer(figure: object, metrics: dict[str, object]) -> None:
             f"Domains: {int(metrics.get('domain_count', 0))} | "
             f"Concepts: {int(metrics.get('concept_count', 0))}"
         ),
-        fontsize=9,
+        fontsize=CHART_FONT_SIZES["footer"],
         color="#57606a",
     )

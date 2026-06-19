@@ -73,8 +73,8 @@ def build_review(curated_path: Path, questions_path: Path) -> str:
         [
             "## Release Table Recommendation",
             "",
-            "Keep `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, and `Question Fidelity` in release notes.",
-            "Calculate `Semantic Accuracy` as exact A/B/C/D/F letter-grade agreement on curated answer rows.",
+            "Keep `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, and `Question Fidelity` in release notes.",
+            "Calculate `Semantic Accuracy` as grade-band agreement and `Exact Letter Accuracy` as strict A/B/C/D/F agreement on curated answer rows.",
             "Do not publish `Training Accuracy` or `Saved Accuracy`; keep those values in generated JSON artifacts only for model-training diagnostics.",
             "",
         ]

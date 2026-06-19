@@ -41,3 +41,44 @@ def test_combiner_keeps_only_supported_curated_fields(tmp_path):
     assert json.loads(output.read_text(encoding="utf-8")) == [
         {"question": "Readable question", "answer_given": "answer"}
     ]
+
+
+def test_combiner_preserves_feedback_text_and_manual_correct_answer_text(tmp_path):
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    (config_dir / "curated_training_extra.json").write_text(
+        json.dumps(
+            [
+                {
+                    "schema_version": 2,
+                    "question": "Readable question",
+                    "exam_code": "DVA-C02",
+                    "reference_answer": "Use the exact service.",
+                    "answer_given": "Near miss",
+                    "correct_rating": "C",
+                    "rating_given": "F",
+                    "correct_answer_text": "Use the exact service.",
+                    "feedback_text": "Treat this as a partial-credit near miss.",
+                    "extra": "ignored",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    output = tmp_path / "combined.json"
+    combine_curated_training_data(config_dir, output)
+
+    assert json.loads(output.read_text(encoding="utf-8")) == [
+        {
+            "schema_version": 2,
+            "question": "Readable question",
+            "exam_code": "DVA-C02",
+            "reference_answer": "Use the exact service.",
+            "answer_given": "Near miss",
+            "correct_rating": "C",
+            "rating_given": "F",
+            "correct_answer_text": "Use the exact service.",
+            "feedback_text": "Treat this as a partial-credit near miss.",
+        }
+    ]

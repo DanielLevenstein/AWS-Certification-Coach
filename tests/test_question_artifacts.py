@@ -2,7 +2,7 @@ from pathlib import Path
 
 import json
 
-from aws_certification_coach.questions.json_repository import JsonQuestionRepository
+from aws_certification_coach.questions.json_repository import JsonQuestionRepository, question_from_json
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +44,50 @@ def test_sample_question_artifact_includes_exam_code_metadata():
     assert rows
     for row in rows:
         assert row.get("exam_code") == EXPECTED_EXAM_CODES[row["certification"]]
+
+
+def test_sample_question_artifact_includes_answer_rubric_contract():
+    rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
+    allowed_question_types = {
+        "multiple_choice",
+        "scenario_multiple_choice",
+        "multi_select_source",
+        "service_selection",
+        "service_comparison",
+        "architecture_tradeoff",
+        "artifact_review",
+    }
+    rubric_fields = {
+        "required_concepts",
+        "bonus_concepts",
+        "common_misconceptions",
+        "acceptable_answers",
+        "must_not_claim",
+    }
+
+    assert rows
+    for row in rows:
+        assert row.get("question_type") in allowed_question_types
+        assert rubric_fields <= set(row)
+        assert row["required_concepts"]
+        assert row["acceptable_answers"]
+
+
+def test_existing_question_rows_load_without_rubric_metadata():
+    question = question_from_json(
+        {
+            "certification": "Cloud Practitioner",
+            "domain": "Security",
+            "difficulty": "Easy",
+            "question": "Which service manages encryption keys?",
+            "reference_answer": "Use AWS KMS to create and manage encryption keys.",
+            "key_concepts": ["AWS KMS", "encryption keys"],
+        }
+    )
+
+    assert question.question_type == "service_selection"
+    assert question.required_concepts == ["AWS KMS", "encryption keys"]
+    assert question.acceptable_answers == []
 
 
 def test_sample_question_artifact_includes_developer_question_fidelity_metadata():
