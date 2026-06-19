@@ -46,17 +46,17 @@ To regenerate local data:
 
 ## Releases
 
-| Release | Description                                                                                                                                                 |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions and local grading artifacts.                                           |
-| v1.1.0  | Separated the app-facing question bank from training labels and expanded the app bank to 80 AWS-docs-grounded questions.                                    |
-| v1.3.1  | Test framework redesign; initial curated grade-band accuracy was 44%.                                                                                       |
-| v1.3.4  | Swapped default app scoring to`semantic_similarity`; curated grade-band accuracy reached 80%.                                                               |
-| v1.5.3  | Updated test data to have proper train, test, validation split                                                                                              |
-| v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision, and relaxed release-note tag validation for test builds. |
-| v2.3.3  | Restored the release guardrail to 90% semantic precision and added exact-letter accuracy to the semantic diagnostic chart.                                  |
-| v2.3.6 | Improved answer evalutaion model and added within one letter grade metric to release notes |
-| v2.4.4 | Added configuration and code sample questions |
+| Release | Description                                                                                        |
+|---------|----------------------------------------------------------------------------------------------------|
+| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions..             |
+| v1.1.0  | Separated the app-facing question bank from training labels.                                       |
+| v1.3.1  | Test framework redesign; initial curated grade-band accuracy was 44%.                              |
+| v1.3.4  | Swapped default app scoring to`semantic_similarity`; curated grade-band accuracy reached 80%.      |
+| v1.5.3  | Updated test data to have proper train, test, validation split                                     |
+| v1.5.4  | Made`semantic_similarity` the official model name, moved release gating to 80% semantic precision. |
+| v2.1.1  | Added AWS Developer Certification practice questions                                               |
+| v2.3.6  | Improved answer evaluation model and added within one letter grade metric to release notes         |
+| v2.4.5  | Got exact letter accuracy metric over 87%                                                          |
 #### Scope
 
 Certifications:

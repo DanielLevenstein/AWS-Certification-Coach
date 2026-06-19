@@ -1,0 +1,78 @@
+[
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+    "original_multiple_choice": {
+      "question": "During exam preparation, explain which AWS service or feature is best suited to cache and deliver content from edge locations to reduce latency for users.",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon CloudFront."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Transit Gateway."
+        },
+        {
+          "option_id": "C",
+          "text": "Use NAT gateway."
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon FSx."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+      "source_name": "AWS Documentation: Amazon CloudFront",
+      "source_url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "Amazon CloudFront is used to deliver content from edge locations to reduce latency for users.",
+    "correct_rating": "A",
+    "rating_given": "B",
+    "feedback_text": "Full sentence answers should receive full credit if correct service is selected."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.",
+    "exam_code": "SAA-C03",
+    "reference_answer": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+    "original_multiple_choice": {
+      "question": "A team is reviewing an AWS design and needs a solution that can add user sign-up, sign-in, and identity management to applications. Which AWS service or feature should they choose?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon Cognito."
+        },
+        {
+          "option_id": "B",
+          "text": "Use IAM role for EC2."
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS KMS."
+        },
+        {
+          "option_id": "D",
+          "text": "Use CloudTrail."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+      "source_name": "AWS Documentation: Amazon Cognito",
+      "source_url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "AWS Cognito is used to manage identity management to app. ",
+    "correct_rating": "A",
+    "rating_given": "B",
+    "feedback_text": "Full sentence questions should receive full marks."
+  }
+]

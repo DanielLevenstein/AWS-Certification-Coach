@@ -1,13 +1,13 @@
 # Curated Grade Failure Report
 
-- Curated examples: 37
+- Curated examples: 39
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
-- Passing exact-letter predictions: 26
-- Failing exact-letter predictions: 11
-- Exact-letter accuracy: 70.27%
-- Unique failing question/answer/grade cases: 11
+- Passing exact-letter predictions: 31
+- Failing exact-letter predictions: 8
+- Exact-letter accuracy: 79.49%
+- Unique failing question/answer/grade cases: 8
 - Conflicting normalized label sets: 3
-- Actual letter grades among failures: {'A': 1, 'B': 6, 'D': 2, 'F': 2}
+- Actual letter grades among failures: {'A': 3, 'B': 2, 'D': 1, 'F': 2}
 
 ## Primary Findings
 
@@ -24,29 +24,28 @@
 
 ## Failing Cases
 
-### 1. Expected A, received B
-
-- Rows: `25`; occurrences: `1`
-- Question: A session table in DynamoDB stores an expiration time for each item and should remove old sessions without a scheduled cleanup job. Which feature should the developer enable?
-- Expected rating: `0.95`
-- User answer: `DynamoDB Time to Live can be used to remove old DynamoDB sections with a scheduled cleanup job.`
-- Correct answer: Enable DynamoDB Time to Live
-- Raw model score: `84.00`; runtime score: `84`
-- Runtime feedback: This answer covers the expected AWS concepts.
-- Reviewer feedback: This is a full answer it's just worded slightly differently
-- Largest feature contributions: `semantic_similarity_score` +0.840
-- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
-
-### 2. Expected C, received B
+### 1. Expected C, received A
 
 - Rows: `32`; occurrences: `1`
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
 - Expected rating: `0.75`
 - User answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know.`
 - Correct answer: Configure SNS subscription filter policies
-- Raw model score: `84.00`; runtime score: `84`
+- Raw model score: `90.00`; runtime score: `90`
 - Runtime feedback: This answer covers the expected AWS concepts.
-- Largest feature contributions: `semantic_similarity_score` +0.840
+- Largest feature contributions: `semantic_similarity_score` +0.900
+- Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
+
+### 2. Expected B, received A
+
+- Rows: `28`; occurrences: `1`
+- Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
+- Expected rating: `0.85`
+- User answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know.`
+- Correct answer: Configure SNS subscription filter policies
+- Raw model score: `90.00`; runtime score: `90`
+- Runtime feedback: This answer covers the expected AWS concepts.
+- Largest feature contributions: `semantic_similarity_score` +0.900
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
 ### 3. Expected C, received B
@@ -76,30 +75,6 @@
 
 ### 5. Expected A, received B
 
-- Rows: `17`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
-- Expected rating: `0.95`
-- User answer: `AWS KMS creates and manages encryption keys that protect data.`
-- Correct answer: AWS KMS
-- Raw model score: `88.00`; runtime score: `88`
-- Runtime feedback: This answer covers the expected AWS concepts.
-- Largest feature contributions: `semantic_similarity_score` +0.880
-- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
-
-### 6. Expected A, received B
-
-- Rows: `18`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
-- Expected rating: `0.95`
-- User answer: `AWS KMS manages encryption keys.`
-- Correct answer: AWS KMS
-- Raw model score: `88.00`; runtime score: `88`
-- Runtime feedback: This answer covers the expected AWS concepts.
-- Largest feature contributions: `semantic_similarity_score` +0.880
-- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
-
-### 7. Expected A, received B
-
 - Rows: `29`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
 - Expected rating: `0.95`
@@ -111,19 +86,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.800
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 8. Expected C, received D
-
-- Rows: `11`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
-- Expected rating: `0.75`
-- User answer: `Allow and deny rules`
-- Correct answer: network ACLs
-- Raw model score: `62.00`; runtime score: `62`
-- Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.620
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 9. Expected C, received D
+### 6. Expected C, received D
 
 - Rows: `35`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
@@ -136,19 +99,19 @@
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 10. Expected A, received F
+### 7. Expected D, received F
 
 - Rows: `5`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
-- Expected rating: `0.95`
+- Expected rating: `0.65`
 - User answer: `route 53`
 - Correct answer: Amazon EventBridge
 - Raw model score: `25.00`; runtime score: `25`
 - Runtime feedback: This answer needs more AWS-specific detail.
 - Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 11. Expected D, received F
+### 8. Expected D, received F
 
 - Rows: `2`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.

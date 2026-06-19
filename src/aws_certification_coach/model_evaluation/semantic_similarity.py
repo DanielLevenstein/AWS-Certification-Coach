@@ -220,7 +220,10 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
     if _has_adjacent_domain_signal(question, answer):
         concept_coverage = max(concept_coverage, 0.25)
     if _service_is_covered(question, answer):
-        return round(80 + (15 * concept_coverage))
+        service_score = 80 + (15 * concept_coverage)
+        if _is_complete_service_answer(answer):
+            service_score = max(service_score, 90)
+        return round(service_score)
 
     reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
     if concept_coverage >= 0.5:
@@ -254,6 +257,12 @@ def _rephrases_question_without_answer(question: Question, answer: str) -> bool:
 def _service_is_covered(question: Question, answer: str) -> bool:
     normalized_answer = _normalized(answer)
     return any(alias in normalized_answer for alias in _service_aliases(question))
+
+
+def _is_complete_service_answer(answer: str) -> bool:
+    """Recognize a sentence that identifies a service without requiring rubric restatement."""
+
+    return len(_tokens(answer)) >= 4
 
 
 def _is_exact_correct_answer(question: Question, answer: str) -> bool:

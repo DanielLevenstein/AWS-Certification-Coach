@@ -89,6 +89,8 @@ cp -p "$LATEST_RUBRIC_REVIEW" "$RUBRIC_REVIEW_OUTPUT"
   --certification-coverage "$CERTIFICATION_COVERAGE_OUTPUT" \
   --output "$COMBINED_CHART_OUTPUT"
 cp -p "$COMBINED_CHART_OUTPUT" "release/${RELEASE_TAG}"_release_metrics_chart.png
+rm "$COMBINED_CHART_OUTPUT"
+rm "$ACCURACY_OUTPUT"
 
 echo "Saved latest accuracy chart: $ACCURACY_OUTPUT"
 echo "Saved latest domain coverage chart: $DOMAIN_COVERAGE_OUTPUT"
