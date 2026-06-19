@@ -36,6 +36,8 @@ def render_release_metrics(
 ) -> str:
     training_metrics = _optional_read(metrics_dir / "training_metrics.json")
     semantic = _read(metrics_dir / "semantic_similarity.json")
+    answer_model_evaluation = _optional_read(metrics_dir / "answer_model_evaluation.json")
+    answer_model_markdown = _optional_read_text(metrics_dir / "answer_model_evaluation.md")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
     question_coverage = _optional_read(metrics_dir / "question_coverage.json")
     saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
@@ -46,11 +48,12 @@ def render_release_metrics(
         [
             "## Generated Release Metrics",
             "",
-            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |",
-            "|:--------|------------------:|-------------------:|----------------:|----------------------:|------------------:|",
+            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
+            "|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|",
             f"| {release_label} | {semantic['semantic_grade_accuracy']:.2%} | "
             f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | "
-            f"{exact_letter_accuracy:.2%} | {_question_fidelity_cell(question_fidelity)} |",
+            f"{exact_letter_accuracy:.2%} | {_answer_within_one_letter_cell(answer_model_evaluation)} | "
+            f"{_question_fidelity_cell(question_fidelity)} |",
             "",
             f"Saved model answer form: `{answer_form}`",
             f"Saved model calibration count: `{calibration_count}`",
@@ -64,8 +67,13 @@ def render_release_metrics(
             f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
             "Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).",
             "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",
+            "Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.",
             "Semantic precision has a 90% release guardrail for the `semantic_similarity` model.",
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
+            "",
+            "## Answer Model Split Evaluation",
+            "",
+            answer_model_markdown or "Not run.",
         ]
     ) + "\n"
 
@@ -83,10 +91,26 @@ def _optional_read(path: Path) -> dict[str, object]:
     return _read(path)
 
 
+def _optional_read_text(path: Path) -> str:
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8").strip()
+
+
 def _question_fidelity_cell(question_fidelity: dict[str, object]) -> str:
     if "question_fidelity" not in question_fidelity:
         return "N/A"
     return f"{float(question_fidelity['question_fidelity']):.2f}%"
+
+
+def _answer_within_one_letter_cell(answer_model_evaluation: dict[str, object]) -> str:
+    splits = answer_model_evaluation.get("splits", {})
+    if not isinstance(splits, dict):
+        return "N/A"
+    test_split = splits.get("test", {})
+    if not isinstance(test_split, dict) or "within_one_letter_accuracy" not in test_split:
+        return "N/A"
+    return f"{float(test_split['within_one_letter_accuracy']):.2%}"
 
 
 def _coverage_names(question_coverage: dict[str, object], key: str, limit: int | None = None) -> str:

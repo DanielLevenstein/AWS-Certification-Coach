@@ -2,12 +2,12 @@
 
 - Curated examples: 40
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
-- Passing exact-letter predictions: 22
-- Failing exact-letter predictions: 18
-- Exact-letter accuracy: 55.00%
-- Unique failing question/answer/grade cases: 13
+- Passing exact-letter predictions: 27
+- Failing exact-letter predictions: 13
+- Exact-letter accuracy: 67.50%
+- Unique failing question/answer/grade cases: 10
 - Conflicting normalized label sets: 2
-- Actual letter grades among failures: {'B': 6, 'D': 10, 'F': 2}
+- Actual letter grades among failures: {'B': 5, 'D': 5, 'F': 3}
 
 ## Primary Findings
 
@@ -23,43 +23,19 @@
 
 ## Failing Cases
 
-### 1. Expected A, received B
-
-- Rows: `26`; occurrences: `1`
-- Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
-- Expected rating: `0.95`
-- User answer: `AWS Code Build`
-- Correct answer: a CodeBuild buildspec file
-- Raw model score: `80.00`; runtime score: `80`
-- Runtime feedback: This answer covers the expected AWS concepts.
-- Largest feature contributions: `semantic_similarity_score` +0.800
-- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
-
-### 2. Expected F, received D
-
-- Rows: `20, 30, 33`; occurrences: `3`
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Expected rating: `0.25`
-- User answer: `AWS KMS Keys`
-- Correct answer: AWS Secrets Manager
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
-
-### 3. Expected C, received D
+### 1. Expected C, received F
 
 - Rows: `37`; occurrences: `1`
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Expected rating: `0.75`
 - User answer: `AWS KMS Keys`
 - Correct answer: AWS Secrets Manager
-- Raw model score: `65.00`; runtime score: `65`
+- Raw model score: `35.00`; runtime score: `35`
 - Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.650
+- Largest feature contributions: `semantic_similarity_score` +0.350
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 4. Expected A, received B
+### 2. Expected A, received B
 
 - Rows: `25`; occurrences: `1`
 - Question: A session table in DynamoDB stores an expiration time for each item and should remove old sessions without a scheduled cleanup job. Which feature should the developer enable?
@@ -71,7 +47,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.840
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 5. Expected C, received B
+### 3. Expected C, received B
 
 - Rows: `27`; occurrences: `1`
 - Question: An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?
@@ -83,7 +59,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.840
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 6. Expected A, received B
+### 4. Expected A, received B
 
 - Rows: `17`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -95,7 +71,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.880
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 7. Expected A, received B
+### 5. Expected A, received B
 
 - Rows: `18`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -107,7 +83,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.880
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 8. Expected A, received B
+### 6. Expected A, received B
 
 - Rows: `29`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
@@ -119,7 +95,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.800
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 9. Expected C, received D
+### 7. Expected C, received D
 
 - Rows: `11`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
@@ -131,7 +107,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 10. Expected C, received D
+### 8. Expected C, received D
 
 - Rows: `21, 31, 34, 38`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
@@ -143,7 +119,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 11. Expected A, received F
+### 9. Expected A, received F
 
 - Rows: `5`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
@@ -155,25 +131,13 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 12. Expected F, received D
+### 10. Expected D, received F
 
-- Rows: `13`; occurrences: `1`
+- Rows: `2`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
-- Expected rating: `0.25`
-- User answer: `Parameter Store`
+- Expected rating: `0.65`
+- User answer: `AWS Key Store`
 - Correct answer: AWS Secrets Manager
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: This answer needs more AWS-specific detail.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 13. Expected B, received F
-
-- Rows: `9`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
-- Expected rating: `0.85`
-- User answer: `AWS Cost Center`
-- Correct answer: AWS Budgets
 - Raw model score: `25.00`; runtime score: `25`
 - Runtime feedback: This answer needs more AWS-specific detail.
 - Largest feature contributions: `semantic_similarity_score` +0.250

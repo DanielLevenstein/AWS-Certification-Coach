@@ -17,22 +17,25 @@
 | v2.3.2  | Created new column for Exact Letter Accuracy and updated release notes                                                                                         |
 | v2.3.3  | Retraining model and prevent model from training on a future release by checking schema version in training data                                               | 
 | v2.3.4  | Added a syntax alias list to improve model accuracy                                                                                                            |
+| v2.3.6  | Reimplemented training algorithm so that additional training increases final score more, and added new within 1 letter metric                                  |
 # Release Metrics
 
 
-| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |
-|:--------|------------------:|-------------------:|----------------:|----------------------:|------------------:|
-| v1.5.0  |            68.00% |             84.62% |          68.75% |               Unknown |           Unknown |
-| v1.5.4  |            68.00% |             84.62% |          68.75% |               Unknown |           Unknown |
-| v2.1.1  |            68.00% |             84.62% |          68.75% |               Unknown |            96.80% |
-| v2.1.2  |            83.33% |             90.00% |          90.00% |               Unknown |            96.00% |
-| v2.2.4  |           Unknown |             94.44% |          94.44% |                64.00% |            95.12% |
-| v2.3.1  |            86.21% |             95.45% |          95.45% |                55.17% |            95.12% |
-| v2.3.2  |            86.21% |             95.45% |          95.45% |                55.17% |            95.12% |
-| v2.3.3  |            88.46% |             94.74% |          94.74% |                61.54% |            94.95% |
-| v2.3.4  |            82.35% |             96.00% |          88.89% |                55.88% |            94.95% |
-| v2.3.5  |            86.84% |             96.55% |          90.32% |                57.89% |            94.95% |
-
+| Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+|:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
+| v1.5.0   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
+| v1.5.4   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
+| v2.1.1   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |            96.80% |
+| v2.1.2   |            83.33% |             90.00% |          90.00% |               Unknown |         Unknown |            96.00% |
+| v2.2.4   |           Unknown |             94.44% |          94.44% |                64.00% |         Unknown |            95.12% |
+| v2.3.1   |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
+| v2.3.2   |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
+| v2.3.3   |            88.46% |             94.74% |          94.74% |                61.54% |         Unknown |            94.95% |
+| v2.3.4   |            82.35% |             96.00% |          88.89% |                55.88% |         Unknown |            94.95% |
+| v2.3.5   |            86.84% |             96.55% |          90.32% |                57.89% |         Unknown |            94.95% |
+| v2.3.6   |            83.33% |             88.24% |          93.75% |                57.14% |          94.23% |            95.12% |
+| v2.3.6.1 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
+| v2.3.6.2 | 91.18% | 100.00% | 92.59% | 67.65% | 99.04% | 95.12% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -45,7 +48,7 @@ Also, I am worried about why Saved Accuracy is so much higher than Semantic Accu
 
 For v2.2.0 design planning, comparison-style freeform questions should ask learners to explain why the best service or feature beats the strongest near-miss distractor. The design is documented in [V2_2_ENHANCED_SERVICES_COMPARISON_DESIGN.md](docs/V2_ENHANCED_SERVICES_COMPARISON_DESIGN.md). The release metrics run now generates domain, intent, and certification question coverage charts for the release notes.
 
-For v2.2.4, the maintained release metrics table is `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, and `Question Fidelity`.
+For v2.2.4 and later, the maintained release metrics table is `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, `Within 1 Letter`, and `Question Fidelity`.
 
 `Training Accuracy` and `Saved Accuracy` have been removed from the release table because they no longer reflect the actual heuristic used in the app. `Semantic Accuracy` uses grade-band agreement, while `Exact Letter Accuracy` reports strict A/B/C/D/F agreement.
 
@@ -54,6 +57,8 @@ The held-out exact-letter grade dataset is generated from the test split for rub
 
 For v2.3.2 the strict-grading parameter was deprecated and a new column added for `Exact Letter Accuracy`. Exact-letter accuracy is below the 90% precision guardrail because several curated A/B/C boundary cases are intentionally counted as strict calibration misses.
 
+For v2.3.6, `Within 1 Letter` comes from `scripts/evaluate_answer_model.py` and reports the generated answer model test split. It accepts adjacent `A/B/C/D/F` predictions while `Exact Letter Accuracy` still requires the exact expected letter.
+
 ## Current Coverage
 
 ![Release Metrics Chart](release/release_metrics_chart.png)
@@ -61,12 +66,12 @@ For v2.3.2 the strict-grading parameter was deprecated and a new column added fo
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
-| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |
-|:--------|------------------:|-------------------:|----------------:|----------------------:|------------------:|
-| v2.3.6 | 83.33% | 88.24% | 93.75% | 57.14% | 95.12% |
+| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
+| v2.3.6.2 | 91.18% | 100.00% | 92.59% | 67.65% | 99.04% | 95.12% |
 
 Saved model answer form: `long`
-Saved model calibration count: `26`
+Saved model calibration count: `24`
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `34`
 App question count: `114`
@@ -74,9 +79,18 @@ Question coverage domain count: `15`
 Question coverage concept count: `276`
 Question coverage intent count: `5`
 Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, DynamoDB, Secrets Manager`
-Semantic answer evaluation count: `42`
+Semantic answer evaluation count: `34`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
+Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.
 Semantic precision has a 90% release guardrail for the `semantic_similarity` model.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
+
+## Answer Model Split Evaluation
+
+| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |
+|---|---:|---:|---:|---:|---:|
+| Train | 312 | 98.7% | 70.5% | 0.0544 | 0.0043 |
+| Validation | 104 | 100.0% | 76.0% | 0.0470 | 0.0031 |
+| Test | 104 | 99.0% | 62.5% | 0.0558 | 0.0044 |
 <!-- release-metrics:end -->

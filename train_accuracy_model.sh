@@ -41,6 +41,10 @@ esac
 .venv/bin/python scripts/curated_failure_report.py \
   --model "$METRICS_DIR/answer_regressor_model.json" \
   --output "$METRICS_DIR/curated_failure_report.md"
+.venv/bin/python scripts/evaluate_answer_model.py \
+  --model "$METRICS_DIR/answer_regressor_model.json" \
+  --json-output "$METRICS_DIR/answer_model_evaluation.json" \
+  --table-output "$METRICS_DIR/answer_model_evaluation.md"
 .venv/bin/python scripts/curated_rubric_review.py \
   --output "$METRICS_DIR/curated_rubric_review.md"
 .venv/bin/python scripts/semantic_similarity_evaluation.py \

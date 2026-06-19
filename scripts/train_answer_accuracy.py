@@ -16,20 +16,42 @@ from aws_certification_coach.training.answer_classifier import (
     evaluate_regression_leave_one_question_out,
     evaluate_regression_model,
 )
-from aws_certification_coach.training.dataset import load_answer_regression_examples, load_feedback_regression_examples
+from aws_certification_coach.training.dataset import (
+    load_answer_regression_examples,
+    load_curated_question_regression_examples,
+    load_curated_structured_regression_examples,
+    load_feedback_regression_examples,
+    question_signature,
+)
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 CURRENT_FEEDBACK_SCHEMA_VERSION = "2.3"
+DEFAULT_GENERATED_TRAINING_DATA = "data/generated/questions_with_answers_training.json"
+DEFAULT_GENERATED_VALIDATION_DATA = "data/generated/questions_with_answers_validation.json"
+DEFAULT_CURATED_FEEDBACK_DATA = ("data/curated/curated_training_data.json",)
+DEFAULT_CURATED_TRAINING_DIR = "data/curated"
+DEFAULT_STRUCTURED_TRAINING_DATA = ()
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--questions", default="data/generated/questions_with_answers_training.json")
-    parser.add_argument("--training-data", default="data/generated/questions_with_answers_training.json")
-    parser.add_argument("--validation-questions", default="data/generated/questions_with_answers_validation.json")
-    parser.add_argument("--validation-data", default="data/generated/questions_with_answers_validation.json")
+    parser.add_argument("--questions", default=DEFAULT_GENERATED_TRAINING_DATA)
+    parser.add_argument("--training-data", default=DEFAULT_GENERATED_TRAINING_DATA)
+    parser.add_argument("--validation-questions", default=DEFAULT_GENERATED_VALIDATION_DATA)
+    parser.add_argument("--validation-data", default=DEFAULT_GENERATED_VALIDATION_DATA)
     parser.add_argument("--app-questions", default="data/questions/sample_questions.json")
     parser.add_argument("--curated-data", default="data/curated/curated_training_data.json")
+    parser.add_argument(
+        "--structured-training-data",
+        action="append",
+        default=None,
+    )
+    parser.add_argument("--curated-training-dir", default=DEFAULT_CURATED_TRAINING_DIR)
+    parser.add_argument(
+        "--curated-question-data",
+        action="append",
+        default=None,
+    )
     parser.add_argument(
         "--evaluation-data",
         action="append",
@@ -55,20 +77,34 @@ def main() -> None:
 
     questions = JsonQuestionRepository(args.questions).all()
     examples = load_answer_regression_examples(args.training_data)
+    structured_training_data = args.structured_training_data or list(DEFAULT_STRUCTURED_TRAINING_DATA)
+    structured_examples = []
+    for structured_path in structured_training_data:
+        if Path(structured_path).exists():
+            structured_examples.extend(load_answer_regression_examples(structured_path))
+    examples.extend(structured_examples)
+    curated_question_paths = args.curated_question_data or _curated_question_data_paths(args.curated_training_dir)
+    curated_question_examples = []
+    curated_structured_examples = []
+    used_curated_question_paths = []
+    skipped_curated_question_paths = []
+    for curated_question_path in curated_question_paths:
+        path_structured_examples = load_curated_structured_regression_examples(curated_question_path)
+        path_examples = load_curated_question_regression_examples(curated_question_path)
+        if path_structured_examples or path_examples:
+            used_curated_question_paths.append(curated_question_path)
+            curated_structured_examples.extend(path_structured_examples)
+            curated_question_examples.extend(path_examples)
+        else:
+            skipped_curated_question_paths.append(curated_question_path)
+    examples.extend(curated_structured_examples)
+    examples.extend(curated_question_examples)
     validation_questions = JsonQuestionRepository(args.validation_questions).all()
     validation_examples = load_answer_regression_examples(args.validation_data)
     app_questions = JsonQuestionRepository(args.app_questions).all()
-    feedback_questions = questions + app_questions
-    feedback_data = args.feedback_data or [
-        "data/curated/curated_training_data.json",
-        "data/generated/user_feedback.v1.json",
-        "data/generated/generated_feedback.json",
-    ]
-    evaluation_data = args.evaluation_data or [
-        "data/curated/curated_training_data.json",
-        "data/generated/user_feedback.v1.json",
-        "data/generated/generated_feedback.json",
-    ]
+    feedback_questions = _unique_questions([*questions, *app_questions, *(example.question for example in curated_question_examples)])
+    feedback_data = args.feedback_data or list(DEFAULT_CURATED_FEEDBACK_DATA)
+    evaluation_data = args.evaluation_data or list(DEFAULT_CURATED_FEEDBACK_DATA)
     evaluation_paths = [Path(path) for path in evaluation_data]
     feedback_examples = []
     for feedback_path in feedback_data:
@@ -105,6 +141,13 @@ def main() -> None:
     metrics["curated_weight"] = args.curated_weight
     metrics["answer_form"] = args.answer_form
     metrics["validation_data"] = args.validation_data
+    metrics["structured_training_example_count"] = len(structured_examples) + len(curated_structured_examples)
+    metrics["explicit_structured_training_example_count"] = len(structured_examples)
+    metrics["curated_structured_training_example_count"] = len(curated_structured_examples)
+    metrics["curated_question_training_example_count"] = len(curated_question_examples)
+    metrics["curated_question_data"] = [str(path) for path in used_curated_question_paths]
+    metrics["skipped_curated_question_data"] = [str(path) for path in skipped_curated_question_paths]
+    metrics["feedback_data"] = feedback_data
 
     if metrics["mse"] > args.max_mse:
         _write_metrics(args.metrics_output, metrics)
@@ -148,14 +191,34 @@ def _weighted_examples(examples: list, weight: int) -> list:
     return examples * max(1, weight)
 
 
+def _curated_question_data_paths(curated_training_dir: str | Path) -> list[Path]:
+    directory = Path(curated_training_dir)
+    if not directory.exists():
+        return []
+    return sorted(path for path in directory.glob("*.json") if path.is_file())
+
+
+def _unique_questions(questions) -> list:
+    unique = {}
+    for question in questions:
+        unique.setdefault(question_signature(question), question)
+    return list(unique.values())
+
+
 def _with_calibrations(model: AnswerRegressionModel, examples: list) -> AnswerRegressionModel:
-    calibrations = dict(model.calibrations)
+    calibration_values: dict[str, set[float]] = {}
     for example in examples:
-        calibrations[answer_calibration_key(example.question, example.answer)] = example.rating
+        key = answer_calibration_key(example.question, example.answer)
+        calibration_values.setdefault(key, set()).add(example.rating)
+    calibrations = {
+        key: next(iter(values))
+        for key, values in calibration_values.items()
+        if len(values) == 1
+    }
     return AnswerRegressionModel(
         feature_names=model.feature_names,
         weights=model.weights,
-        calibrations=calibrations,
+        calibrations={**model.calibrations, **calibrations},
         answer_form=model.answer_form,
     )
 

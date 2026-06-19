@@ -34,8 +34,6 @@ def main() -> None:
         args.evaluation_data
         or [
             args.curated_data,
-            Path("data/generated/user_feedback.v1.json"),
-            Path("data/generated/generated_feedback.json"),
         ],
         epochs=args.epochs,
     )

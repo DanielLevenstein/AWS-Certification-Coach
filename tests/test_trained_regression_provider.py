@@ -72,6 +72,38 @@ def test_semantic_similarity_provider_applies_feedback_calibration(tmp_path):
     assert result.score == 75
 
 
+def test_semantic_similarity_provider_ignores_conflicting_feedback_calibration(tmp_path):
+    question = _question()
+    feedback_path = tmp_path / "curated_training_data.json"
+    feedback_path.write_text(
+        """
+        [
+          {
+            "question": "Explain which service manages encryption keys.",
+            "reference_answer": "Use AWS KMS to create and manage encryption keys.",
+            "answer_given": "Near miss answer",
+            "correct_rating": "C",
+            "rating_given": "F"
+          },
+          {
+            "question": "Explain which service manages encryption keys.",
+            "reference_answer": "Use AWS KMS to create and manage encryption keys.",
+            "answer_given": "Near miss answer",
+            "correct_rating": "F",
+            "rating_given": "C"
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+    provider = SemanticSimilarityEvaluatorProvider(
+        feedback_paths=[str(feedback_path)],
+        questions=[question],
+    )
+
+    assert provider.calibrations == {}
+
+
 def test_semantic_similarity_config_uses_feedback_paths(tmp_path):
     question = _question()
     questions_path = tmp_path / "questions.json"

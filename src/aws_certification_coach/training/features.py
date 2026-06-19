@@ -35,6 +35,14 @@ class AnswerFeatureExtractor:
         "correct_distinctive_token_coverage",
         "has_correct_distinctive_token",
         "incorrect_distinctive_token_coverage",
+        "acceptable_answer_exact",
+        "acceptable_answer_jaccard",
+        "acceptable_answer_containment",
+        "answer_acceptable_answer_containment",
+        "required_concept_coverage",
+        "common_misconception_coverage",
+        "must_not_claim_coverage",
+        "distractor_margin",
     ]
 
     def __init__(self, answer_form: str = "long") -> None:
@@ -61,6 +69,12 @@ class AnswerFeatureExtractor:
         )
         explanation = question.original_multiple_choice.explanation if question.original_multiple_choice else ""
         explanation_tokens = _tokens(explanation)
+        acceptable_answer_tokens = [_tokens(text) for text in question.acceptable_answers]
+        acceptable_answer_exact = any(
+            _normalized_answer(answer) == _normalized_answer(text)
+            for text in question.acceptable_answers
+        )
+        required_concepts = question.required_concepts or question.key_concepts
         return [
             1.0,
             _jaccard(answer_tokens, reference_tokens) if use_long else 0.0,
@@ -81,6 +95,14 @@ class AnswerFeatureExtractor:
             _containment(correct_distinctive_tokens, answer_tokens) if use_short else 0.0,
             1.0 if use_short and correct_distinctive_tokens & answer_tokens else 0.0,
             incorrect_distinctive_coverage,
+            1.0 if acceptable_answer_exact else 0.0,
+            max((_jaccard(answer_tokens, tokens) for tokens in acceptable_answer_tokens), default=0.0),
+            max((_containment(tokens, answer_tokens) for tokens in acceptable_answer_tokens), default=0.0),
+            max((_containment(answer_tokens, tokens) for tokens in acceptable_answer_tokens), default=0.0),
+            _concept_list_coverage(required_concepts, answer_tokens),
+            _concept_list_coverage(question.common_misconceptions, answer_tokens),
+            _concept_list_coverage(question.must_not_claim, answer_tokens),
+            max(0.0, correct_containment - incorrect_containment),
         ]
 
 
@@ -115,6 +137,17 @@ def _tokens(value: str) -> set[str]:
 
 def _distinctive_tokens(value: str) -> set[str]:
     return _tokens(value) - GENERIC_TOKENS - AMBIGUOUS_TOKENS
+
+
+def _concept_list_coverage(concepts: list[str], answer_tokens: set[str]) -> float:
+    if not concepts:
+        return 0.0
+    covered = 0
+    for concept in concepts:
+        concept_tokens = _distinctive_tokens(concept)
+        if concept_tokens and _containment(concept_tokens, answer_tokens) >= 0.5:
+            covered += 1
+    return covered / len(concepts)
 
 
 def _jaccard(left: set[str], right: set[str]) -> float:

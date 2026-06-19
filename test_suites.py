@@ -68,6 +68,18 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     _run(
         [
             sys.executable,
+            "scripts/evaluate_answer_model.py",
+            "--model",
+            str(metrics_dir / "answer_regressor_model.json"),
+            "--json-output",
+            str(metrics_dir / "answer_model_evaluation.json"),
+            "--table-output",
+            str(metrics_dir / "answer_model_evaluation.md"),
+        ]
+    )
+    _run(
+        [
+            sys.executable,
             "scripts/curated_rubric_review.py",
             "--output",
             str(metrics_dir / "curated_rubric_review.md"),

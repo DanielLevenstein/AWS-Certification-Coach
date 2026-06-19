@@ -27,8 +27,6 @@ class EvaluatorConfig:
     openai: OpenAIModelConfig = field(default_factory=OpenAIModelConfig)
     trained_regressor_model_path: str = "models/answer_regressor_model.json"
     semantic_feedback_paths: tuple[str, ...] = (
-        "data/generated/generated_feedback.json",
-        "data/generated/user_feedback.v1.json",
         "data/curated/curated_training_data.json",
     )
     semantic_questions_path: str = "data/questions/sample_questions.json"

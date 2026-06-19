@@ -44,6 +44,26 @@ def load_answer_regression_examples(path: str | Path) -> list[AnswerRegressionEx
     return examples
 
 
+def load_curated_question_regression_examples(path: str | Path) -> list[AnswerRegressionExample]:
+    rows = _load_rows(path)
+    examples: list[AnswerRegressionExample] = []
+    for row in rows:
+        if not _looks_like_question_row(row):
+            continue
+        examples.extend(_question_regression_examples_from_json(row))
+    return examples
+
+
+def load_curated_structured_regression_examples(path: str | Path) -> list[AnswerRegressionExample]:
+    rows = _load_rows(path)
+    examples: list[AnswerRegressionExample] = []
+    for row in rows:
+        if not _looks_like_question_row(row):
+            continue
+        examples.extend(_regression_examples_from_json(row))
+    return examples
+
+
 def load_feedback_classification_examples(
     path: str | Path,
     questions: list[Question],
@@ -214,6 +234,74 @@ def _regression_examples_from_json(row: object) -> list[AnswerRegressionExample]
             source=str(row.get("source", "")),
         )
     ]
+
+
+def _question_regression_examples_from_json(row: object) -> list[AnswerRegressionExample]:
+    if not isinstance(row, dict):
+        return []
+    question = question_from_json(row)
+    original = question.original_multiple_choice
+    if original is None:
+        return []
+    correct_ids = set(original.correct_option_ids)
+    correct_answers = [
+        option.text
+        for option in original.options
+        if option.option_id in correct_ids
+    ]
+    distractors = [
+        option.text
+        for option in original.options
+        if option.option_id not in correct_ids
+    ]
+    examples: list[AnswerRegressionExample] = []
+    seen: set[tuple[str, float]] = set()
+    for answer in [*correct_answers, question.reference_answer]:
+        _append_unique_regression_example(examples, seen, question, answer, 0.95, "curated_question_correct")
+    for answer in distractors:
+        _append_unique_regression_example(examples, seen, question, answer, 0.25, "curated_question_distractor")
+    return examples
+
+
+def _append_unique_regression_example(
+    examples: list[AnswerRegressionExample],
+    seen: set[tuple[str, float]],
+    question: Question,
+    answer: str,
+    rating: float,
+    source: str,
+) -> None:
+    normalized_answer = " ".join(str(answer).casefold().split())
+    if not normalized_answer:
+        return
+    key = (normalized_answer, rating)
+    if key in seen:
+        return
+    seen.add(key)
+    examples.append(
+        AnswerRegressionExample(
+            question=question,
+            answer=str(answer),
+            rating=rating,
+            source=source,
+        )
+    )
+
+
+def _looks_like_question_row(row: object) -> bool:
+    if not isinstance(row, dict):
+        return False
+    return all(
+        field in row
+        for field in (
+            "certification",
+            "domain",
+            "difficulty",
+            "question",
+            "reference_answer",
+            "key_concepts",
+        )
+    )
 
 
 def question_signature(question: Question) -> tuple[str, str, str]:

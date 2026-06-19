@@ -93,7 +93,7 @@ def _curated_row(row: dict) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config-dir", type=Path, default=Path("config"))
+    parser.add_argument("--config-dir", type=Path, default=Path("config/data"))
     parser.add_argument(
         "--output",
         type=Path,

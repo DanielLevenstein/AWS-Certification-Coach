@@ -12,7 +12,8 @@ PYTHON_BIN=".venv/bin/python"
 "$PYTHON_BIN" scripts/generate_app_question_artifacts.py --count 80
 "$PYTHON_BIN" scripts/generate_developer_question_artifacts.py --app-output data/questions/sample_questions.json
 mkdir -p data/generated data/curated
-cp -p config/user_feedback.v1.json data/generated/user_feedback.v1.json
-cp -p config/generated_feedback.json data/generated/generated_feedback.json
-cp -p config/curated_training_data.json data/curated/curated_training_data.json
+cp -p config/data/structured_answer_training_data.json data/curated/structured_answer_training_data.json
+cp -p config/data/user_feedback.v1.json data/curated/user_feedback.v1.json
+cp -p config/data/user_feedback.v2.json data/curated/user_feedback.v2.json
+
 "$PYTHON_BIN" scripts/combine_curated_training_data.py

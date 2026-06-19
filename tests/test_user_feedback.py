@@ -110,13 +110,13 @@ def test_feedback_repository_exports_empty_json_when_artifact_is_missing(tmp_pat
 
 def test_config_feedback_schema_versions_match_file_roles():
     project_root = Path(__file__).resolve().parents[1]
-    user_rows = json.loads((project_root / "config" / "user_feedback.v1.json").read_text(encoding="utf-8"))
-    generated_rows = json.loads((project_root / "config" / "generated_feedback.json").read_text(encoding="utf-8"))
+    user_v1_rows = json.loads((project_root / "config" / "data" / "user_feedback.v1.json").read_text(encoding="utf-8"))
+    user_v2_rows = json.loads((project_root / "config" / "data" / "user_feedback.v2.json").read_text(encoding="utf-8"))
 
-    assert user_rows
-    assert generated_rows
-    assert {row["schema_version"] for row in user_rows} == {1}
-    assert {row["schema_version"] for row in generated_rows} == {0}
+    assert user_v1_rows
+    assert user_v2_rows
+    assert {row["schema_version"] for row in user_v1_rows} == {1}
+    assert {row["schema_version"] for row in user_v2_rows} == {2}
 
 
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):

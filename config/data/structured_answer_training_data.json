@@ -1,0 +1,277 @@
+[
+  {
+    "certification": "AWS Certified Developer",
+    "exam_code": "DVA-C02",
+    "domain": "Deployment",
+    "difficulty": "Medium",
+    "question": "A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?",
+    "reference_answer": "Define the install, build, and test command phases in an AWS CodeBuild buildspec file for the managed build project.",
+    "key_concepts": [
+      "CodeBuild buildspec",
+      "build phases",
+      "test commands"
+    ],
+    "required_concepts": [
+      "CodeBuild buildspec"
+    ],
+    "acceptable_answers": [
+      "Use a CodeBuild buildspec file.",
+      "AWS Code Build"
+    ],
+    "common_misconceptions": [
+      "CodeDeploy AppSpec"
+    ],
+    "must_not_claim": [
+      "CodeDeploy AppSpec is the build command file."
+    ],
+    "original_multiple_choice": {
+      "question": "Where should a developer define repeatable build commands?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use a CodeBuild buildspec file."
+        },
+        {
+          "option_id": "B",
+          "text": "Use a CodeDeploy AppSpec file."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Define the install, build, and test command phases in an AWS CodeBuild buildspec file."
+    },
+    "partial_answers": [
+      {
+        "answer": "AWS Code Build",
+        "rating": 0.85,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "CodeDeploy AppSpec",
+        "rating": 0.25,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  },
+  {
+    "certification": "Cloud Practitioner",
+    "domain": "Billing",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "reference_answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+    "key_concepts": [
+      "AWS Budgets",
+      "cost thresholds",
+      "alerts"
+    ],
+    "required_concepts": [
+      "AWS Budgets",
+      "cost thresholds"
+    ],
+    "acceptable_answers": [
+      "Use AWS Budgets.",
+      "AWS Budgets",
+      "AWS Cost Center"
+    ],
+    "common_misconceptions": [
+      "AWS Cost Explorer only reports historical costs without budget alerts."
+    ],
+    "original_multiple_choice": {
+      "question": "Which service tracks cost or usage thresholds and sends alerts?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Budgets."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Cost Explorer."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Budgets to track cost or usage thresholds and send alerts."
+    },
+    "partial_answers": [
+      {
+        "answer": "AWS Cost Center",
+        "rating": 0.85,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "AWS Cost Explorer",
+        "rating": 0.65,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  },
+  {
+    "certification": "Cloud Practitioner",
+    "domain": "Governance",
+    "difficulty": "Easy",
+    "question": "Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.",
+    "reference_answer": "Use AWS Config to track resource configuration history and evaluate compliance against rules.",
+    "key_concepts": [
+      "AWS Config",
+      "configuration history",
+      "compliance rules"
+    ],
+    "required_concepts": [
+      "AWS Config",
+      "configuration history"
+    ],
+    "acceptable_answers": [
+      "Use AWS Config.",
+      "AWS Config"
+    ],
+    "common_misconceptions": [
+      "AWS Compliance Manager"
+    ],
+    "original_multiple_choice": {
+      "question": "Which service tracks resource configuration history and evaluates compliance against rules?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Config."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS Compliance Manager."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Config to track resource configuration history and evaluate compliance against rules."
+    },
+    "partial_answers": [
+      {
+        "answer": "AWS Config tracks configuration history.",
+        "rating": 0.95,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "AWS Compliance Manager",
+        "rating": 0.25,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  },
+  {
+    "certification": "AWS Certified Developer",
+    "exam_code": "DVA-C02",
+    "domain": "Security",
+    "difficulty": "Medium",
+    "question": "A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?",
+    "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
+    "key_concepts": [
+      "Secrets Manager",
+      "database credentials",
+      "scheduled rotation"
+    ],
+    "required_concepts": [
+      "Secrets Manager",
+      "scheduled rotation"
+    ],
+    "acceptable_answers": [
+      "Use AWS Secrets Manager.",
+      "AWS Secrets Manager"
+    ],
+    "common_misconceptions": [
+      "AWS KMS keys alone",
+      "Parameter Store without rotation"
+    ],
+    "original_multiple_choice": {
+      "question": "Which AWS service should manage database credential lifecycle and rotation?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use AWS Secrets Manager."
+        },
+        {
+          "option_id": "B",
+          "text": "Use AWS KMS keys alone."
+        },
+        {
+          "option_id": "C",
+          "text": "Use Systems Manager Parameter Store without rotation."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation."
+    },
+    "partial_answers": [
+      {
+        "answer": "AWS Secrets Manager rotates database credentials.",
+        "rating": 0.95,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "AWS KMS Keys",
+        "rating": 0.25,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "Parameter Store",
+        "rating": 0.25,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  },
+  {
+    "certification": "AWS Certified Developer",
+    "exam_code": "DVA-C02",
+    "domain": "Application Integration",
+    "difficulty": "Medium",
+    "question": "An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?",
+    "reference_answer": "Adjust the SQS visibility timeout so a message remains hidden from other consumers while the current worker processes it.",
+    "key_concepts": [
+      "SQS visibility timeout",
+      "hide message from other consumers",
+      "processing window"
+    ],
+    "required_concepts": [
+      "SQS visibility timeout"
+    ],
+    "acceptable_answers": [
+      "Adjust the SQS visibility timeout.",
+      "SQS visibility timeout"
+    ],
+    "common_misconceptions": [
+      "SQS FIFO queue"
+    ],
+    "original_multiple_choice": {
+      "question": "Which SQS setting prevents another consumer from receiving a message during processing?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Adjust the SQS visibility timeout."
+        },
+        {
+          "option_id": "B",
+          "text": "Use an SQS FIFO queue."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Adjust the SQS visibility timeout so the message remains hidden while processing."
+    },
+    "partial_answers": [
+      {
+        "answer": "SQS visibility timeout",
+        "rating": 0.95,
+        "source": "structured_answer_test_case"
+      },
+      {
+        "answer": "SQS FILO queue",
+        "rating": 0.75,
+        "source": "structured_answer_test_case"
+      }
+    ]
+  }
+]

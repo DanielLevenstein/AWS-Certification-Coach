@@ -147,11 +147,16 @@ def _feedback_calibrations(
         if questions_path is None or not Path(questions_path).exists():
             return {}
         available_questions = JsonQuestionRepository(questions_path).all()
-    calibrations: dict[str, float] = {}
+    calibration_values: dict[str, set[float]] = {}
     for path in existing_paths:
         for example in load_feedback_regression_examples(path, available_questions):
-            calibrations[answer_calibration_key(example.question, example.answer)] = example.rating
-    return calibrations
+            key = answer_calibration_key(example.question, example.answer)
+            calibration_values.setdefault(key, set()).add(example.rating)
+    return {
+        key: next(iter(values))
+        for key, values in calibration_values.items()
+        if len(values) == 1
+    }
 
 
 def _missing_concepts(question: Question, user_answer: str) -> list[str]:

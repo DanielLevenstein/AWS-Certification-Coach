@@ -3,23 +3,23 @@
 - Curated examples reviewed: 40
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
 - Current grade distribution: `{'A': 11, 'B': 4, 'C': 7, 'D': 8, 'F': 10}`
-- Suggested label updates: 18
+- Suggested label updates: 13
 
 ## Suggested Answer Updates
+
+### Row 2: D -> F
+
+- Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
+- Answer: `AWS Key Store`
+- Reference: AWS Secrets Manager
+- Semantic score: `25`
+- Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
 ### Row 5: A -> F
 
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
 - Answer: `route 53`
 - Reference: Amazon EventBridge
-- Semantic score: `25`
-- Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
-
-### Row 9: B -> F
-
-- Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
-- Answer: `AWS Cost Center`
-- Reference: AWS Budgets
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
@@ -30,14 +30,6 @@
 - Reference: network ACLs
 - Semantic score: `62`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 13: F -> D
-
-- Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
-- Answer: `Parameter Store`
-- Reference: AWS Secrets Manager
-- Semantic score: `65`
-- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
 
 ### Row 17: A -> B
 
@@ -55,14 +47,6 @@
 - Semantic score: `88`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 20: F -> D
-
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Answer: `AWS KMS Keys`
-- Reference: AWS Secrets Manager
-- Semantic score: `65`
-- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
-
 ### Row 21: C -> D
 
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
@@ -77,14 +61,6 @@
 - Answer: `DynamoDB Time to Live can be used to remove old DynamoDB sections with a scheduled cleanup job. `
 - Reference: Enable DynamoDB Time to Live
 - Semantic score: `84`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 26: A -> B
-
-- Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
-- Answer: `AWS Code Build`
-- Reference: a CodeBuild buildspec file
-- Semantic score: `80`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ### Row 27: C -> B
@@ -103,14 +79,6 @@
 - Semantic score: `80`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 30: F -> D
-
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Answer: `AWS KMS Keys`
-- Reference: AWS Secrets Manager
-- Semantic score: `65`
-- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
-
 ### Row 31: C -> D
 
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
@@ -118,14 +86,6 @@
 - Reference: DynamoDB global tables
 - Semantic score: `62`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 33: F -> D
-
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Answer: `AWS KMS Keys`
-- Reference: AWS Secrets Manager
-- Semantic score: `65`
-- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
 
 ### Row 34: C -> D
 
@@ -135,13 +95,13 @@
 - Semantic score: `62`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 37: C -> D
+### Row 37: C -> F
 
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
 - Answer: `AWS KMS Keys`
 - Reference: AWS Secrets Manager
-- Semantic score: `65`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+- Semantic score: `35`
+- Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
 ### Row 38: C -> D
 
