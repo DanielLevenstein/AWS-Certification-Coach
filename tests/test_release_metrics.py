@@ -294,6 +294,14 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
     assert semantic_similarity_score(question, "KMS manages encryption keys.") >= 80
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
 
+
+def test_semantic_similarity_awards_a_for_complete_sentence_naming_correct_service():
+    question = _structured_question("manages encryption keys")
+
+    assert semantic_similarity_score(question, "The correct service is AWS KMS.") >= 90
+    assert semantic_similarity_score(question, "KMS") < 90
+
+
 def test_semantic_similarity_uses_syntax_alias_table_for_service_names():
     cloudtrail_question = _structured_question("records AWS API activity")
     codebuild_question = _structured_question("managed build project")

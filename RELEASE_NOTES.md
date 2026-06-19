@@ -24,6 +24,7 @@
 | v2.4.3   | Merging code from release/v2.3                                                                                                                                 |
 | v2.4.4   | Test framework refactoring and updated curated training data                                                                                                   |
 | v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                                             |
+| v2.4.5 | Ensure that full sentence answers which reference the correct service receive grade A                                                                                |
 
 # Release Metrics
 
@@ -48,6 +49,7 @@
 | v2.4.3   |            90.91% |            100.00% |          92.31% |                66.67% |          97.12% |            94.95% |
 | v2.4.4   |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
+| v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -82,10 +84,10 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.4.4.1 | 90.00% | 100.00% | 90.00% | 73.33% | 98.08% | 94.95% |
+| v2.4.5 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
 
 Saved model answer form: `long`
-Saved model calibration count: `23`
+Saved model calibration count: `25`
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `38`
 App question count: `118`
@@ -93,7 +95,7 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic answer evaluation count: `30`
+Semantic answer evaluation count: `32`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.
@@ -104,7 +106,7 @@ Question fidelity is the release guardrail for generated-question concept and ex
 
 | Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |
 |---|---:|---:|---:|---:|---:|
-| Train | 312 | 98.4% | 64.1% | 0.0549 | 0.0050 |
-| Validation | 104 | 100.0% | 70.2% | 0.0453 | 0.0033 |
-| Test | 104 | 98.1% | 56.7% | 0.0547 | 0.0050 |
+| Train | 312 | 98.4% | 63.8% | 0.0569 | 0.0052 |
+| Validation | 104 | 100.0% | 73.1% | 0.0470 | 0.0034 |
+| Test | 104 | 98.1% | 58.7% | 0.0572 | 0.0053 |
 <!-- release-metrics:end -->
