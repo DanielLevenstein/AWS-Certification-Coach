@@ -1,23 +1,24 @@
 # Release Notes
 
 
-| Release | Description                                                                                                                                                    |
-|:--------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions.                                                                          |
-| v1.1.0  | Expands the question bank to 80 AWS-docs-grounded questions, and adds stricter wrong-service answer rejection.                                                 |
-| v1.3.4  | Swaps app scoring from trained regression to`semantic_similarity`.                                                                                             |
-| v1.4.4  | Switch back to long form answers in training data                                                                                                              |
-| v1.5.5  | Created automated deployment script                                                                                                                            |
-| v2.1.1  | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                                               |
-| v2.1.2  | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
-| v2.2.0  | Designs service-comparison freeform questions, expanded source sampling, and a concept coverage chart for release notes.                                       |
-| v2.2.4  | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.                             |
-| v2.3.0  | Release notes cleanup.                                                                                                                                         |
-| v2.3.1  | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.                               |
-| v2.3.2  | Created new column for Exact Letter Accuracy and updated release notes                                                                                         |
-| v2.3.3  | Retraining model and prevent model from training on a future release by checking schema version in training data                                               | 
-| v2.3.4  | Added a syntax alias list to improve model accuracy                                                                                                            |
-| v2.3.6  | Reimplemented training algorithm so that additional training increases final score more, and added new within 1 letter metric                                  |
+| Release  | Description                                                                                                                                                    |
+|:---------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v1.0.0   | Initial Streamlit/Docker release with generated AWS certification practice questions.                                                                          |
+| v1.1.0   | Expands the question bank to 80 AWS-docs-grounded questions, and adds stricter wrong-service answer rejection.                                                 |
+| v1.3.4   | Swaps app scoring from trained regression to`semantic_similarity`.                                                                                             |
+| v1.4.4   | Switch back to long form answers in training data                                                                                                              |
+| v1.5.5   | Created automated deployment script                                                                                                                            |
+| v2.1.1   | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                                               |
+| v2.1.2   | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
+| v2.2.0   | Designs service-comparison freeform questions, expanded source sampling, and a concept coverage chart for release notes.                                       |
+| v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.                             |
+| v2.3.0   | Release notes cleanup.                                                                                                                                         |
+| v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.                               |
+| v2.3.2   | Created new column for Exact Letter Accuracy and updated release notes                                                                                         |
+| v2.3.3   | Retraining model and prevent model from training on a future release by checking schema version in training data                                               | 
+| v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                                            |
+| v2.3.6   | Reimplemented training algorithm so that additional training increases final score more, and added new within 1 letter metric                                  |
+| v2.3.6.3 | Regenerated test data validated model performance is still stable                                                                                              |
 # Release Metrics
 
 
@@ -35,8 +36,8 @@
 | v2.3.5   |            86.84% |             96.55% |          90.32% |                57.89% |         Unknown |            94.95% |
 | v2.3.6   |            83.33% |             88.24% |          93.75% |                57.14% |          94.23% |            95.12% |
 | v2.3.6.1 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
-| v2.3.6.2 | 91.18% | 100.00% | 92.59% | 67.65% | 99.04% | 95.12% |
-
+| v2.3.6.2 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
+| v2.3.6.3 |            91.18% |            100.00% |          92.59% |                67.65% |          97.12% |            95.12% |
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
@@ -68,7 +69,7 @@ For v2.3.6, `Within 1 Letter` comes from `scripts/evaluate_answer_model.py` and 
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.3.6.2 | 91.18% | 100.00% | 92.59% | 67.65% | 99.04% | 95.12% |
+| v2.3.6.3 | 91.18% | 100.00% | 92.59% | 67.65% | 97.12% | 95.12% |
 
 Saved model answer form: `long`
 Saved model calibration count: `24`
@@ -90,7 +91,7 @@ Question fidelity is the release guardrail for generated-question concept and ex
 
 | Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |
 |---|---:|---:|---:|---:|---:|
-| Train | 312 | 98.7% | 70.5% | 0.0544 | 0.0043 |
-| Validation | 104 | 100.0% | 76.0% | 0.0470 | 0.0031 |
-| Test | 104 | 99.0% | 62.5% | 0.0558 | 0.0044 |
+| Train | 312 | 97.1% | 68.6% | 0.0542 | 0.0049 |
+| Validation | 104 | 100.0% | 71.2% | 0.0457 | 0.0034 |
+| Test | 104 | 97.1% | 72.1% | 0.0501 | 0.0042 |
 <!-- release-metrics:end -->
