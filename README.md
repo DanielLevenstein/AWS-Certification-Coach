@@ -10,7 +10,7 @@ AI study partner for AWS certification exams.
 ## Live Demo
 
 The latest version of this project is deployed live on Render.
-- v1 Deployment: [AWS Certification Coach](https://aws-certification-coach-latest.onrender.com/)
+- Render Deployment: [AWS Certification Coach](https://aws-certification-coach-latest.onrender.com/)
 
 ## Application Screenshot
 
