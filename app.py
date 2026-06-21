@@ -28,19 +28,21 @@ USER_FEEDBACK_PATH = Path(
     )
 )
 SHOW_FEEDBACK_ENV = "SHOW_FEEDBACK"
+author = "Daniel Levenstein"
+linked_in_url = "https://www.linkedin.com/in/daniel-aaron-levenstein/"
+github_url="https://github.com/DanielLevenstein/AWS-Certification-Coach"
 
-
-@st.cache_resource
+@st.cache_data
 def get_question_repository() -> JsonQuestionRepository:
     return JsonQuestionRepository(QUESTIONS_PATH)
 
 
-@st.cache_resource
+@st.cache_data
 def get_evaluation_service() -> EvaluationService:
     return build_evaluation_service(load_evaluator_config())
 
 
-@st.cache_resource
+@st.cache_data
 def get_feedback_repository() -> UserFeedbackRepository:
     return UserFeedbackRepository(USER_FEEDBACK_PATH)
 
@@ -63,8 +65,7 @@ def _reset_session(questions) -> None:
 
 
 def main() -> None:
-    st.title("AWS Certification Coach")
-
+    st.title("🎓 AWS Certification Coach")
     repository = get_question_repository()
     filters = _selected_filter(repository)
     questions = repository.filter_questions(filters)
@@ -112,6 +113,7 @@ def main() -> None:
         st.session_state.last_result = None
         st.rerun()
 
+    _render_contact_info_link()
     result = st.session_state.get("last_result")
     if result:
         feedback_column, source_column = st.columns([3, 2])
@@ -165,6 +167,8 @@ def _render_feedback_link(question: Question, user_answer: str, score: int) -> N
     with st.expander("Submit feedback", expanded=False):
         _render_feedback_form(question, user_answer, score)
 
+def _render_contact_info_link() -> None:
+    st.markdown(f"Author: [{author}]({linked_in_url}) — GitHub: [AWS-Certification-Coach]({github_url})")
 
 def _render_feedback_form(question: Question, user_answer: str, score: int) -> None:
     submitted = st.session_state.setdefault("feedback_submitted", set())

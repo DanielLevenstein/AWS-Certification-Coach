@@ -25,7 +25,7 @@
 | v2.4.4   | Test framework refactoring and updated curated training data                                                                                                   |
 | v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                                             |
 | v2.4.5 | Ensure that full sentence answers which reference the correct service receive grade A                                                                                |
-
+| v2.4.5.2 | Added contact info to app |
 # Release Metrics
 
 
