@@ -32,17 +32,18 @@ author = "Daniel Levenstein"
 linked_in_url = "https://www.linkedin.com/in/daniel-aaron-levenstein/"
 github_url="https://github.com/DanielLevenstein/AWS-Certification-Coach"
 
-@st.cache_data
+
+@st.cache_resource
 def get_question_repository() -> JsonQuestionRepository:
     return JsonQuestionRepository(QUESTIONS_PATH)
 
 
-@st.cache_data
+@st.cache_resource
 def get_evaluation_service() -> EvaluationService:
     return build_evaluation_service(load_evaluator_config())
 
 
-@st.cache_data
+@st.cache_resource
 def get_feedback_repository() -> UserFeedbackRepository:
     return UserFeedbackRepository(USER_FEEDBACK_PATH)
 
