@@ -91,8 +91,8 @@ def evaluate_semantic_curated_answers(
         score = semantic_similarity_score(question, example.answer)
         actual = score_to_letter(score)
         expected = str(row["correct_rating"]).strip().upper()
-        expected_accept = expected != "F"
-        actual_accept = actual != "F"
+        expected_accept = expected != "F" and expected != "D"
+        actual_accept = actual != "F" and expected != "D"
         true_positive += int(expected_accept and actual_accept)
         false_positive += int(not expected_accept and actual_accept)
         true_negative += int(not expected_accept and not actual_accept)
