@@ -41,7 +41,7 @@ def main() -> None:
     classifier = SemanticGradeClassifier.load(args.classifier)
     candidate = classifier.predict(features)
     payload = {
-        "metrics_schema_version": 3,
+        "metrics_schema_version": 4,
         "benchmark": {
             "name": "v3_migration_benchmark",
             "path": str(args.benchmark),

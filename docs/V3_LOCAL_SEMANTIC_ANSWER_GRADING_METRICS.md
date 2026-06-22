@@ -37,10 +37,10 @@ Legacy semantic grade bands:
 | C, D | C/D |
 | F | F |
 
-Legacy accepted-answer diagnostic:
+Accepted-answer diagnostic:
 
-- Positive or accepted: `A`, `B`, `C`, or `D`.
-- Negative or rejected: `F`.
+- Positive or accepted: `A`, `B`, or `C`.
+- Negative or failing: `D` or `F`.
 
 These legacy groupings are retained only for migration continuity. They do not replace exact-letter grading.
 
@@ -65,25 +65,25 @@ The historical column name `Semantic Accuracy` remains in the v3 migration table
 
 ### Semantic Precision
 
-Definition: precision of the legacy accepted-answer class, where A through D are positive and F is negative.
+Definition: precision of the accepted-answer class, where A through C are positive and D/F are failing.
 
 ```text
 semantic_precision = accepted_true_positive / (accepted_true_positive + accepted_false_positive)
 ```
 
-An accepted false positive occurs when the expected grade is F but the model predicts A, B, C, or D.
+An accepted false positive occurs when the expected grade is D or F but the model predicts A, B, or C.
 
 This metric measures how trustworthy an accepted result is. It does not distinguish A from D.
 
 ### Semantic Recall
 
-Definition: recall of the legacy accepted-answer class.
+Definition: recall of the accepted-answer class.
 
 ```text
 semantic_recall = accepted_true_positive / (accepted_true_positive + accepted_false_negative)
 ```
 
-An accepted false negative occurs when the expected grade is A, B, C, or D but the model predicts F.
+An accepted false negative occurs when the expected grade is A, B, or C but the model predicts D or F.
 
 This metric measures how often the model avoids rejecting answers that deserve some credit. It does not distinguish A from D.
 
@@ -285,7 +285,7 @@ The final evaluator writes stable keys:
 
 ```json
 {
-  "metrics_schema_version": 3,
+  "metrics_schema_version": 4,
   "evaluator": {
     "name": "semantic_grade_classifier_v1",
     "feature_version": "semantic-relations-v2",

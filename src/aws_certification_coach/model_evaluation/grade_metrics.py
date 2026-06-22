@@ -6,6 +6,7 @@ from __future__ import annotations
 GRADES = ("A", "B", "C", "D", "F")
 GRADE_INDEX = {grade: index for index, grade in enumerate(GRADES)}
 GRADE_BAND = {"A": "A/B", "B": "A/B", "C": "C/D", "D": "C/D", "F": "F"}
+ACCEPTED_GRADES = frozenset({"A", "B", "C"})
 
 DEFAULT_RELEASE_GATES = {
     "within_one_letter_accuracy": ("minimum_exclusive", 0.90),
@@ -31,8 +32,8 @@ def evaluate_letter_predictions(expected: list[str], predicted: list[str]) -> di
         within_one += int(distance <= 1)
         severe += int(distance >= 2)
         ordinal_error += distance
-        expected_accepted = truth != "F"
-        predicted_accepted = prediction != "F"
+        expected_accepted = truth in ACCEPTED_GRADES
+        predicted_accepted = prediction in ACCEPTED_GRADES
         accepted_tp += int(expected_accepted and predicted_accepted)
         accepted_fp += int(not expected_accepted and predicted_accepted)
         accepted_fn += int(expected_accepted and not predicted_accepted)

@@ -48,7 +48,7 @@ def main() -> None:
     results = evaluate_classifier(classifier, features, labels)
     gates = evaluate_release_gates(results)
     metrics = {
-        "metrics_schema_version": 3,
+        "metrics_schema_version": 4,
         "evaluator": {
             "name": "semantic_grade_classifier_v1",
             "feature_version": classifier.feature_version,

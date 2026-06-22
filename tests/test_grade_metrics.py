@@ -6,7 +6,7 @@ from aws_certification_coach.model_evaluation.grade_metrics import (
 )
 
 
-def test_legacy_compatible_grade_metrics_keep_original_definitions():
+def test_semantic_metrics_treat_a_through_c_as_accepted():
     metrics = evaluate_letter_predictions(
         ["A", "B", "C", "D", "F"],
         ["B", "C", "D", "F", "A"],
@@ -14,8 +14,8 @@ def test_legacy_compatible_grade_metrics_keep_original_definitions():
 
     assert metrics["grade_band_accuracy"] == pytest.approx(2 / 5)
     assert metrics["semantic_accuracy"] == metrics["grade_band_accuracy"]
-    assert metrics["semantic_precision"] == pytest.approx(3 / 4)
-    assert metrics["semantic_recall"] == pytest.approx(3 / 4)
+    assert metrics["semantic_precision"] == pytest.approx(2 / 3)
+    assert metrics["semantic_recall"] == pytest.approx(2 / 3)
     assert metrics["exact_letter_accuracy"] == 0
     assert metrics["within_one_letter_accuracy"] == pytest.approx(4 / 5)
 

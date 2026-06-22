@@ -209,6 +209,6 @@ Use this rubric consistently across question types, but allow each question to d
 
 Release accuracy should be calculated against the exact expected letter grade (`A`, `B`, `C`, `D`, or `F`), not broad grade bands such as `A/B` or `C/D`. A predicted `B` for an expected `A` is a calibration miss even though both are accepted answers.
 
-Precision and recall may still be reported as accepted-answer diagnostics, where `A`, `B`, `C`, and `D` are accepted and `F` is rejected. Those diagnostics should not replace exact-letter semantic accuracy.
+Precision and recall may still be reported as accepted-answer diagnostics, where `A`, `B`, and `C` are accepted while `D` and `F` are failing. Those diagnostics should not replace exact-letter semantic accuracy.
 
 Do not tune grading thresholds against final verification data. Use curated examples and human review to calibrate borderline B/C and C/D cases.

@@ -8,6 +8,7 @@ from pathlib import Path
 from collections.abc import Iterable
 
 from aws_certification_coach.domain import Question
+from aws_certification_coach.model_evaluation.grade_metrics import ACCEPTED_GRADES
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.answer_classifier import answer_calibration_key
 from aws_certification_coach.training.dataset import load_feedback_regression_examples, question_signature
@@ -102,8 +103,8 @@ def evaluate_semantic_curated_answers(
         actual = score_to_letter(score)
         expected = str(row["correct_rating"]).strip().upper()
         raw_actual = score_to_letter(raw_score)
-        expected_accept = expected != "F"
-        actual_accept = actual != "F"
+        expected_accept = expected in ACCEPTED_GRADES
+        actual_accept = actual in ACCEPTED_GRADES
         true_positive += int(expected_accept and actual_accept)
         false_positive += int(not expected_accept and actual_accept)
         true_negative += int(not expected_accept and not actual_accept)

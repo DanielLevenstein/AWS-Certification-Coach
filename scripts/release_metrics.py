@@ -83,6 +83,7 @@ def render_release_metrics(
             "Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).",
             "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",
             "Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.",
+            "Semantic Precision and Recall treat `A`–`C` as accepted and `D`/`F` as failing.",
             "Legacy and candidate migration rows must use the same frozen benchmark.",
             release_gate_note,
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
