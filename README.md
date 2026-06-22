@@ -20,9 +20,15 @@ The latest version of this project is deployed live on Render.
 
 ## Goal
 
-AWS Certification Coach is a lightweight study app for AWS certification practice. It presents pre-generated freeform questions, evaluates learner answers with the local `semantic_similarity` model by default, and returns structured coaching feedback.
+AWS Certification Coach is a lightweight study app for AWS certification practice. It presents pre-generated freeform questions, evaluates learner answers with a local SentenceTransformer encoder and supervised A/B/C/D/F classifier, and returns structured coaching feedback.
 
-This version intentionally removes the runtime RAG stack from the earlier prototype. There is no document ingestion, FAISS index, vector database, or embedding model in the deployed app. Certification content is generated and reviewed offline, then served from a simple question repository.
+Version 3 has no runtime RAG stack, document ingestion, FAISS index, vector database, or hosted grading API. Certification content is generated and reviewed offline. A pinned local embedding model normalizes learner answers before a small supervised classifier assigns the grade.
+
+The v3 contracts are documented in:
+
+- `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_DESIGN.md`
+- `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_ARCHITECTURE.md`
+- `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_METRICS.md`
 
 ## Training Data Generation
 
@@ -34,9 +40,9 @@ Each generated question keeps its source-style multiple-choice item in the same 
 
 - `generated_answers`: complete, partial, weak, and incorrect answers labeled with human-readable grades `A`, `B`, `C`, `D`, and `F`, plus `intended_coverage` metadata.
 
-Training and verification data are generated separately:
+Training, validation, and final-test data are generated separately. `config/data/structured_answer_training_data.json` may augment training only. Final-test rows are never used for fitting, feature selection, thresholds, or runtime calibration.
 
-Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C/D`, and `F`. Precision and recall treat `A/B` and `C/D` as accepted answers and `F` as rejected.
+Artifacts keep letter grades for readability. Migration metrics preserve the historical grade bands `A/B`, `C/D`, and `F`; exact-letter accuracy remains the primary v3 release metric.
 
 To regenerate local data:
 
@@ -85,6 +91,13 @@ Create the virtual environment, install dependencies, and generate local data:
 ./setup.sh
 ```
 
+Download the pinned local encoder and train the classifier candidate:
+
+```bash
+.venv/bin/python scripts/download_answer_embedding_model.py
+./train_accuracy_model.sh
+```
+
 Then run the app:
 
 ```bash
@@ -117,15 +130,15 @@ Run the release suite and save the latest release chart artifacts:
 ./release_notes.sh --quick v2.2.0
 ```
 
-The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, and a combined four-panel chart as latest-only files in `release/`.
+The release helper saves answer-classifier metrics, the legacy migration comparison, question-fidelity results, question-coverage charts, and a combined release report under `metrics/<timestamp>/`.
 
-Refresh curated calibrations, the failure report, semantic metrics, and the detailed tagged report:
+Run the complete tagged release report:
 
 ```bash
 ./release_notes.sh --full v2.2.0
 ```
 
-The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, the question coverage PNGs, `semantic_similarity.json`, `summary.md`, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper publishes latest-only individual chart files at `release/semantic_accuracy.png`, `release/question_domain_coverage.png`, `release/question_intent_coverage.png`, and `release/question_certification_coverage.png`. The only versioned chart artifact is the combined `release/release_metrics_chart.png`, plus the markdown reports in `release/`.
+Generated metrics and charts are written under `metrics/<timestamp>/` and are not committed. Release notes retain historical values and add a versioned v3 migration table produced by running the legacy and candidate evaluators against the same frozen benchmark.
 
 Regenerate local training, validation, test, and app sample artifacts:
 
@@ -134,13 +147,13 @@ Regenerate local training, validation, test, and app sample artifacts:
 .venv/bin/python scripts/generate_app_question_artifacts.py --count 80
 ```
 
-Refresh production scoring calibrations and metrics without training model weights:
+Train the semantic classifier, validate it, and produce final-test diagnostics:
 
 ```bash
 ./train_accuracy_model.sh
 ```
 
-The compatibility script name is retained, but it now combines curated feedback and evaluates the same calibrated `semantic_similarity` path used by the app. Its JSON also reports uncalibrated heuristic accuracy separately.
+The script fits only against training plus approved structured examples, selects against validation, and evaluates the frozen final test only for release reporting. It does not create runtime question-and-answer calibration lookups.
 
 Print a single release-note-friendly model performance summary:
 
@@ -164,16 +177,17 @@ Run the app on port 8501:
 docker run --rm -p 8501:8501 aws-certification-coach:latest
 ```
 
-The image includes generated sample questions and local scoring code. The default app path is fully local.
+The image includes reviewed questions, the pinned local encoder, the versioned classifier artifact, and local scoring code. Runtime grading is fully local and requires no network access.
 
 ## Render Deployment
 
 - Runtime: Docker
 - Port: use Render's `PORT` environment variable; the container defaults to `8501` for local runs.
 - Health check path: `/_stcore/health`
-- Default evaluator: local `semantic_similarity` scoring
+- Default evaluator: local SentenceTransformer semantic classifier
 - API key requirement: none for the default local path.
+- Device: CPU-only in the production Docker image.
 
 ## Evaluator Configuration
 
-The `semantic_similarity` scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap. 
+The v3 evaluator converts learner answers and rubric evidence into normalized semantic relationship features, then predicts A/B/C/D/F with a supervised classifier. The legacy `semantic_similarity` evaluator remains available only for migration comparison and rollback testing.

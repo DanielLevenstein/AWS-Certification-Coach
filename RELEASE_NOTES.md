@@ -26,6 +26,8 @@
 | v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                                             |
 | v2.4.5 | Ensure that full sentence answers which reference the correct service receive grade A                                                                                |
 | v2.4.5.2 | Added contact info to app |
+| v3.prototype.0 | Defines the proposed local SentenceTransformer answer-grading design and architecture for the v3 migration. |
+| v3.prototype.1 | Audits existing documentation against the v3 design, data boundaries, deployment behavior, and release workflow. |
 
 # Release Metrics
 
@@ -89,12 +91,13 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
-| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
-|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.4.5 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
+| Release | Local Classifier Exact | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |
+|:--------|-----------------------:|------------------:|-------------------:|----------------:|----------------------:|------------------:|
+| v3.prototype.1 | N/A | 100.00% | 100.00% | 100.00% | 100.00% | 94.95% |
 
-Saved model answer form: `long`
-Saved model calibration count: `25`
+Production calibration hits: `36`
+Local Classifier Exact is measured only on the untouched generated test split.
+Base heuristic exact-letter accuracy: `83.33%`
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `38`
 App question count: `118`
@@ -102,18 +105,11 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic answer evaluation count: `32`
+Semantic answer evaluation count: `36`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
-Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.
-Semantic precision has a 90% release guardrail for the `semantic_similarity` model.
+Semantic metrics exercise the same curated calibration path as the production app.
+Base heuristic accuracy is retained as a diagnostic and does not include curated calibration lookups.
+Semantic precision has a 90% release guardrail for the production `semantic_similarity` scorer.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
-
-## Answer Model Split Evaluation
-
-| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |
-|---|---:|---:|---:|---:|---:|
-| Train | 312 | 98.4% | 63.8% | 0.0569 | 0.0052 |
-| Validation | 104 | 100.0% | 73.1% | 0.0470 | 0.0034 |
-| Test | 104 | 98.1% | 58.7% | 0.0572 | 0.0053 |
 <!-- release-metrics:end -->

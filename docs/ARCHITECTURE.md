@@ -1,5 +1,7 @@
 # AWS Certification Coach Architecture
 
+The v3 learner-answer implementation is governed by `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_DESIGN.md`, `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_ARCHITECTURE.md`, and `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_METRICS.md`. This document remains the system-level boundary description.
+
 ## System Overview
 
 AWS Certification Coach is a Streamlit study application backed by local question artifacts, answer evaluation modules, feedback formatting, and release-quality checks.
@@ -95,12 +97,15 @@ Responsibilities:
 
 - Load evaluator configuration.
 - Use the configured local or external answer evaluator through a narrow interface.
+- For v3 production, use the pinned local SentenceTransformer encoder and supervised A/B/C/D/F classifier.
 - Apply the shared answer rubric from `docs/ANSWER_RUBRIC.md`.
 - Return structured evidence such as covered concepts, missing concepts, misconceptions, and improvement suggestions.
 - Preserve deterministic behavior where possible so release metrics are reproducible.
 - Return controlled errors or fallback feedback when evaluation fails.
 
 The learner-facing grade scale is A/B/C/D/F. Numeric model internals or diagnostic scores may exist for implementation and release analysis, but they should not replace the shared grade language in learner feedback.
+
+Structured answer examples augment offline training only. Production grading does not load exact question-and-answer calibration records. Legacy regressors and deterministic semantic scoring may be retained temporarily for migration comparison but are outside the v3 production path.
 
 ### Feedback Formatter
 
@@ -163,6 +168,7 @@ The project should keep these data categories separate:
 - App-facing question artifacts used by the Streamlit app.
 - Source and calibration artifacts under `data/original_questions/`.
 - Training examples used to tune or evaluate answer grading.
+- Versioned structured examples under `config/data/structured_answer_training_data.json`, used only for training.
 - Final verification data that must not be used for training or threshold tuning.
 - Release metrics and generated reports.
 
@@ -176,7 +182,7 @@ Before a milestone is considered ready:
 - Confirm learner-answer grading remains separate from question-fidelity scoring.
 - Confirm answer-training rows and final verification rows remain separate.
 - Run unit tests with `./run_unit_tests.sh`.
-- Run release metrics and update `docs/RELEASE_NOTES.md`.
+- Run release metrics and update root `RELEASE_NOTES.md`.
 - Confirm generated data and metrics artifacts are not staged.
 
 Release gates and metric names should live in release tooling and release notes. Roadmap milestones may have target versions, but architecture should describe durable boundaries rather than fixed release sequencing.

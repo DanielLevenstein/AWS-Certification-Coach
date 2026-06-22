@@ -35,7 +35,7 @@ Use A/B/C/D/F only for learner-answer grades. Use 0-100 percentages or accept/re
 ## Non-Goals
 
 - Do not ingest real exam dumps, paid practice-test content, or restricted AWS Skill Builder material.
-- Do not replace the existing `semantic_similarity` answer evaluator.
+- Do not couple question-fidelity scoring to whichever learner-answer evaluator is active.
 - Do not link question-fidelity model weights to answer-grading model weights.
 - Do not push Docker images or create GitHub tags before human review.
 

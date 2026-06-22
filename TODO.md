@@ -13,15 +13,18 @@ The previous TODO was backed up to `docs/TODO_COPY.md` before this roadmap was c
 - Do not push Docker images or create GitHub tags until a human reviews the changes.
 
 # Phase 1 Model Stabilization
-## v3.0.0 Switch model to sentence-transformers
+## v3.prototype.0 Design switch to sentence-transformers architecture
 Add documentation for new model architecture and lock downgrading metrics
-## v3.0.1 Audit existing documentation
+## v3.prototype.1 Audit existing documentation
 Audit existing documentation to ensure it matches to design.
-## v3.0.2 Initial implementation
+## v3.prototype.2 Initial implementation
 SentenceTransformer semantic normalization plus a supervised A–F classifier
+## v3.prototype.3 Lock down training metrics.
+Lock down training metrics so they are comparable with an old model.
+
 
 # Phase 2 Code & Configuration Review
-Release Target v2.4.0
+
 IAM policy questions.
 Lambda code questions.
 SDK usage questions.
