@@ -6,17 +6,17 @@ AI study partner for AWS certification exams.
 
 *Figure: Shows test exam breakdown for project.*
 
-  
 ## Live Demo
 
 The latest version of this project is deployed live on Render.
+
 - v1 Deployment: [AWS Certification Coach](https://aws-certification-coach-latest.onrender.com/)
 
 ## Application Screenshot
 
-<img src="docs/images/aws-certification-coach2.png" alt="Certification Exam Screenshot" width="720">
+<img src="docs/images/aws-certification-coach3.png" alt="Certification Exam Screenshot" width="720">
 
-*Figure: The coach scores a freeform Amazon Kinesis answer and displays detailed feedback alongside the source multiple-choice question.*
+*Figure: The coach scores a freeform Amazon answer and displays detailed feedback alongside the source multiple-choice question.*
 
 ## Goal
 
@@ -46,8 +46,9 @@ To regenerate local data:
 
 ## Releases
 
+
 | Release | Description                                                                                        |
-|---------|----------------------------------------------------------------------------------------------------|
+| ------- | -------------------------------------------------------------------------------------------------- |
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions..             |
 | v1.1.0  | Separated the app-facing question bank from training labels.                                       |
 | v1.3.1  | Test framework redesign; initial curated grade-band accuracy was 44%.                              |
@@ -57,13 +58,14 @@ To regenerate local data:
 | v2.1.1  | Added AWS Developer Certification practice questions                                               |
 | v2.3.6  | Improved answer evaluation model and added within one letter grade metric to release notes         |
 | v2.4.5  | Got exact letter accuracy metric over 87%                                                          |
+
 #### Scope
 
 Certifications:
 
 - Cloud Practitioner
 - Solutions Architect Associate
-- AWS Developer Exam 
+- AWS Developer Exam
 
 Difficulty:
 
@@ -75,7 +77,6 @@ Difficulty:
 This project was inspired by my previous AWS Documentation RAG project.
 
 - v0 GitHub:  [DanielLevenstein/AWS-Documentation-Rag](https://github.com/DanielLevenstein/AWS-Documentation-Rag)
-
 
 ## Setup
 
@@ -168,4 +169,4 @@ The image includes generated sample questions and local scoring code. The defaul
 
 ## Evaluator Configuration
 
-The `semantic_similarity` scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap. 
+The `semantic_similarity` scorer recognizes canonical service aliases, concept coverage, incorrect answer choices, and simple answer/reference overlap.
