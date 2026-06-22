@@ -1,31 +1,32 @@
 # Release Notes
 
 
-| Release  | Description                                                                                                                                                    |
-|:---------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| v1.0.0   | Initial Streamlit/Docker release with generated AWS certification practice questions.                                                                          |
-| v1.1.0   | Expands the question bank to 80 AWS-docs-grounded questions, and adds stricter wrong-service answer rejection.                                                 |
-| v1.3.4   | Swaps app scoring from trained regression to`semantic_similarity`.                                                                                             |
-| v1.4.4   | Switch back to long form answers in training data                                                                                                              |
-| v1.5.5   | Created automated deployment script                                                                                                                            |
-| v2.1.1   | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                                               |
-| v2.1.2   | Cleans Developer Associate question prompts, expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture. |
-| v2.2.0   | Designs service-comparison freeform questions, expanded source sampling, and a concept coverage chart for release notes.                                       |
-| v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.                             |
-| v2.3.0   | Release notes cleanup.                                                                                                                                         |
-| v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.                               |
-| v2.3.2   | Created new column for Exact Letter Accuracy and updated release notes                                                                                         |
-| v2.3.3   | Retraining model and prevent model from training on a future release by checking schema version in training data                                               | 
-| v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                                            |
-| v2.3.6   | Reimplemented training algorithm so that additional training increases final score more, and added new within 1 letter metric                                  |
-| v2.3.6.3 | Regenerated test data validated model performance is still stable                                                                                              |
-| v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                                                |
-| v2.4.2   | Improved question bank with data from prod app                                                                                                                 |
-| v2.4.3   | Merging code from release/v2.3                                                                                                                                 |
-| v2.4.4   | Test framework refactoring and updated curated training data                                                                                                   |
-| v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                                             |
-| v2.4.5 | Ensure that full sentence answers which reference the correct service receive grade A                                                                                |
-
+| Release  | Description                                                                                                                        |
+|:---------|:-----------------------------------------------------------------------------------------------------------------------------------|
+| v1.0.0   | Initial Streamlit/Docker release with generated AWS certification practice questions.                                              |
+| v1.1.0   | Expands the question bank to 80 AWS-docs-grounded questions, and adds stricter wrong-service answer rejection.                     |
+| v1.3.4   | Swaps app scoring from trained regression to`semantic_similarity`.                                                                 |
+| v1.4.4   | Switch back to long form answers in training data                                                                                  |
+| v1.5.5   | Created automated deployment script                                                                                                |
+| v2.1.1   | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                   |
+| v2.1.2   | Expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture.                  |
+| v2.2.0   | Designs service-comparison freeform questions, expanded source sampling, and a concept coverage chart for release notes.           |
+| v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table. |
+| v2.3.0   | Release notes cleanup.                                                                                                             |
+| v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.   |
+| v2.3.2   | Created new column for Exact Letter Accuracy and updated release notes                                                             |
+| v2.3.3   | Retraining model and prevent model from training on a future release by checking schema version in training data                   | 
+| v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                |
+| v2.3.6   | Reimplemented training algorithm so that additional training increases final score more, and added new within 1 letter metric      |
+| v2.3.6.3 | Regenerated test data validated model performance is still stable                                                                  |
+| v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                    |
+| v2.4.2   | Improved question bank with data from prod app                                                                                     |
+| v2.4.3   | Merging code from release/v2.3                                                                                                     |
+| v2.4.4   | Test framework refactoring and updated curated training data                                                                       |
+| v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                 |
+| v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
+| v2.4.5.2 | Added contact info to app                                                                                                          |
+| v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
 # Release Metrics
 
 
