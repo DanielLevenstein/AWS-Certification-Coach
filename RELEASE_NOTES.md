@@ -32,6 +32,7 @@
 | v3.prototype.3 | Freezes legacy-compatible metric definitions and uses honest within-one-letter accuracy above 90% as the v3 release gate.                                      |
 | v3.prototype.4 | Added Per Grade Precision chart and separated question coverage metrics from the release metrics chart.                                                        |
 | v3.prototype.5 | Defined A-C as correct answer in semantic precision and recall metrics                                                                                         |
+| v3.prototype.6 | Remove question fidelity from manual release notes table for simpler updating                                                                                  |
 # Release Metrics
 
 Metric Definitions:
@@ -42,29 +43,29 @@ Metric Definitions:
 - Exact Letter required the identical A/B/C/D/F class.
 - Within one Letter used the ordered scale A → B → C → D → F.
 
-| Release        | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
-|:---------------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v1.5.0         |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
-| v1.5.4         |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
-| v2.1.1         |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |            96.80% |
-| v2.1.2         |            83.33% |             90.00% |          90.00% |               Unknown |         Unknown |            96.00% |
-| v2.2.4         |           Unknown |             94.44% |          94.44% |                64.00% |         Unknown |            95.12% |
-| v2.3.1         |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
-| v2.3.2         |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
-| v2.3.3         |            88.46% |             94.74% |          94.74% |                61.54% |         Unknown |            94.95% |
-| v2.3.4         |            82.35% |             96.00% |          88.89% |                55.88% |         Unknown |            94.95% |
-| v2.3.5         |            86.84% |             96.55% |          90.32% |                57.89% |         Unknown |            94.95% |
-| v2.3.6         |            83.33% |             88.24% |          93.75% |                57.14% |          94.23% |            95.12% |
-| v2.3.6.1       |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
-| v2.3.6.2       |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
-| v2.3.6.3       |            91.18% |            100.00% |          92.59% |                67.65% |          97.12% |            95.12% |
-| v2.4.2         |            76.47% |             96.00% |          88.89% |                47.06% |         Unknown |            94.95% |
-| v2.4.3         |            90.91% |            100.00% |          92.31% |                66.67% |          97.12% |            94.95% |
-| v2.4.4         |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
-| v2.4.4.1       |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
-| v2.4.5         |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
-| v3.prototype   |            89.42% |            100.00% |         100.00% |                86.54% |          93.27% |            94.95% |
-| v3.prototype.5 |            89.42% |             92.42% |          95.31% |                86.54% |          93.27% |            94.95% |
+| Release        | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter |
+|:---------------|------------------:|-------------------:|----------------:|----------------------:|----------------:|
+| v1.5.0         |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |
+| v1.5.4         |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |
+| v2.1.1         |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |
+| v2.1.2         |            83.33% |             90.00% |          90.00% |               Unknown |         Unknown |
+| v2.2.4         |           Unknown |             94.44% |          94.44% |                64.00% |         Unknown |
+| v2.3.1         |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |
+| v2.3.2         |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |
+| v2.3.3         |            88.46% |             94.74% |          94.74% |                61.54% |         Unknown |
+| v2.3.4         |            82.35% |             96.00% |          88.89% |                55.88% |         Unknown |
+| v2.3.5         |            86.84% |             96.55% |          90.32% |                57.89% |         Unknown |
+| v2.3.6         |            83.33% |             88.24% |          93.75% |                57.14% |          94.23% |
+| v2.3.6.1       |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |
+| v2.3.6.2       |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |
+| v2.3.6.3       |            91.18% |            100.00% |          92.59% |                67.65% |          97.12% |
+| v2.4.2         |            76.47% |             96.00% |          88.89% |                47.06% |         Unknown |
+| v2.4.3         |            90.91% |            100.00% |          92.31% |                66.67% |          97.12% |
+| v2.4.4         |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |
+| v2.4.4.1       |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |
+| v2.4.5         |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |
+| v3.prototype   |            89.42% |            100.00% |         100.00% |                86.54% |          93.27% |
+| v3.prototype.5 |            89.42% |             92.42% |          95.31% |                86.54% |          93.27% |
 
 
 ## Per Grade Precision
@@ -83,7 +84,7 @@ Also, I am worried about why Saved Accuracy is so much higher than Semantic Accu
 
 For v2.2.0 design planning, comparison-style freeform questions should ask learners to explain why the best service or feature beats the strongest near-miss distractor. The design is documented in [V2_2_ENHANCED_SERVICES_COMPARISON_DESIGN.md](docs/PHASE_1_ENHANCED_SERVICES_COMPARISON_DESIGN.md). The release metrics run now generates domain, intent, and certification question coverage charts for the release notes.
 
-For v2.2.4 and later, the maintained release metrics table is `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, `Within 1 Letter`, and `Question Fidelity`.
+The maintained manual release metrics table is `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, and `Within 1 Letter`. Question Fidelity remains in the autogenerated release table.
 
 `Training Accuracy` and `Saved Accuracy` have been removed from the release table because they no longer reflect the actual heuristic used in the app. `Semantic Accuracy` uses grade-band agreement, while `Exact Letter Accuracy` reports strict A/B/C/D/F agreement.
 
