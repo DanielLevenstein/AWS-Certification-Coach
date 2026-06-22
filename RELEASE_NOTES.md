@@ -96,7 +96,7 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.4.5 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
+| v2.4.5 | 90.62% | 100.00% | 100.00% | 87.50% | 98.08% | 94.95% |
 
 Saved model answer form: `long`
 Saved model calibration count: `25`
@@ -107,11 +107,11 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic answer evaluation count: `32`
+Semantic evaluation count: `32`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
-Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.
-Semantic precision has a 90% release guardrail for the `semantic_similarity` model.
+Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
+Semantic Precision and Recall treat `A`–`C` as accepted and `D`/`F` as failing.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
 
 ## Answer Model Split Evaluation
