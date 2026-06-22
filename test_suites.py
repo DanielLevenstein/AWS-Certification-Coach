@@ -32,49 +32,9 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     _run(
         [
             sys.executable,
-            "scripts/train_answer_accuracy.py",
-            "--eval-mode",
-            "training",
-            "--output",
-            str(metrics_dir / "answer_regressor_model.json"),
-            "--metrics-output",
-            str(metrics_dir / "training_metrics.json"),
-            "--history-output",
-            str(metrics_dir / "training_history.json"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
-            "scripts/plot_training_history.py",
-            "--history",
-            str(metrics_dir / "training_history.json"),
-            "--output",
-            str(metrics_dir / "training_performance.png"),
-            "--accuracy-output",
-            str(metrics_dir / "curated_grade_accuracy.png"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
             "scripts/curated_failure_report.py",
-            "--model",
-            str(metrics_dir / "answer_regressor_model.json"),
             "--output",
             str(metrics_dir / "curated_failure_report.md"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
-            "scripts/evaluate_answer_model.py",
-            "--model",
-            str(metrics_dir / "answer_regressor_model.json"),
-            "--json-output",
-            str(metrics_dir / "answer_model_evaluation.json"),
-            "--table-output",
-            str(metrics_dir / "answer_model_evaluation.md"),
         ]
     )
     _run(

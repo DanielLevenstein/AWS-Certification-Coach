@@ -49,6 +49,16 @@ Must not claim:
 Learner answer:
 {user_answer}
 
+Scoring scale:
+- 90-100 (A): correct service or pattern, core reasoning and constraints covered, no major misconception
+- 80-89 (B): mostly correct but missing one meaningful detail, constraint, or tradeoff
+- 70-79 (C): partially correct or plausible adjacent solution that misses the best-fit reasoning
+- 60-69 (D): minimal relevant credit but fails the main requirement or is too incomplete to trust
+- 0-59 (F): wrong service category, contradiction, severe misconception, or no meaningful answer
+
+Judge semantic meaning rather than exact wording. A concise answer can receive full credit when it
+unambiguously identifies the correct AWS service or feature and satisfies the question's requested scope.
+
 Return JSON only with:
 - score: integer from 0 to 100
 - missing_concepts: array of strings

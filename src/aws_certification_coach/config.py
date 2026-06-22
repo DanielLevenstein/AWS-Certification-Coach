@@ -22,6 +22,15 @@ class OpenAIModelConfig:
 
 
 @dataclass(frozen=True)
+class LocalSemanticModelConfig:
+    model_path: str = "models/huggingface/all-MiniLM-L6-v2"
+    classifier_path: str = "models/answer_semantic_classifier.json"
+    device: str = "auto"
+    cpu_only: bool = False
+    structured_answer_data_path: str = "config/data/structured_answer_training_data.json"
+
+
+@dataclass(frozen=True)
 class EvaluatorConfig:
     provider: str = "heuristic"
     openai: OpenAIModelConfig = field(default_factory=OpenAIModelConfig)
@@ -30,6 +39,8 @@ class EvaluatorConfig:
         "data/curated/curated_training_data.json",
     )
     semantic_questions_path: str = "data/questions/sample_questions.json"
+    structured_answer_data_path: str = "config/data/structured_answer_training_data.json"
+    local_semantic: LocalSemanticModelConfig = field(default_factory=LocalSemanticModelConfig)
 
 
 def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:
@@ -56,6 +67,18 @@ def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:
                 else "data/questions/sample_questions.json",
             )
         ),
+        structured_answer_data_path=str(
+            os.getenv(
+                "AWS_COACH_STRUCTURED_ANSWER_DATA_PATH",
+                raw.get("openai", {}).get(
+                    "structured_answer_data_path",
+                    "config/data/structured_answer_training_data.json",
+                )
+                if isinstance(raw.get("openai", {}), dict)
+                else "config/data/structured_answer_training_data.json",
+            )
+        ),
+        local_semantic=_local_semantic_config(raw.get("local_semantic", {})),
     )
 
 
@@ -80,6 +103,38 @@ def _openai_config(raw: object) -> OpenAIModelConfig:
         reasoning_effort=_optional_str_env("AWS_COACH_OPENAI_REASONING_EFFORT", values.get("reasoning_effort", "low")),
     )
 
+
+def _local_semantic_config(raw: object) -> LocalSemanticModelConfig:
+    values = raw if isinstance(raw, dict) else {}
+    return LocalSemanticModelConfig(
+        model_path=str(
+            os.getenv(
+                "AWS_COACH_LOCAL_MODEL_PATH",
+                values.get("model_path", LocalSemanticModelConfig.model_path),
+            )
+        ),
+        classifier_path=str(
+            os.getenv(
+                "AWS_COACH_LOCAL_CLASSIFIER_PATH",
+                values.get("classifier_path", LocalSemanticModelConfig.classifier_path),
+            )
+        ),
+        device=str(os.getenv("AWS_COACH_LOCAL_MODEL_DEVICE", values.get("device", "auto"))),
+        cpu_only=_bool_env(
+            "AWS_COACH_CPU_ONLY",
+            values.get("cpu_only", LocalSemanticModelConfig.cpu_only),
+        ),
+        structured_answer_data_path=str(
+            os.getenv(
+                "AWS_COACH_STRUCTURED_ANSWER_DATA_PATH",
+                values.get(
+                    "structured_answer_data_path",
+                    LocalSemanticModelConfig.structured_answer_data_path,
+                ),
+            )
+        ),
+    )
+
 def _float_env(name: str, default: object) -> float:
     return float(os.getenv(name, default))
 
@@ -93,6 +148,13 @@ def _optional_str_env(name: str, default: object) -> str | None:
     if value in (None, "", "none", "None"):
         return None
     return str(value)
+
+
+def _bool_env(name: str, default: object) -> bool:
+    value = os.getenv(name, default)
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().casefold() in {"1", "true", "yes", "on"}
 
 
 def _semantic_feedback_paths(raw: dict[str, Any]) -> tuple[str, ...]:

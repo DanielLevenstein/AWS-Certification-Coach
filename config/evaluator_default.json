@@ -1,11 +1,19 @@
 {
-  "provider": "semantic_similarity",
+  "provider": "sentence_transformer",
   "openai": {
-    "model": "gpt-5.4-mini",
+    "model": "gpt-5.4",
     "temperature": 0.0,
     "top_p": 1.0,
     "max_output_tokens": 900,
-    "reasoning_effort": "low"
+    "reasoning_effort": "low",
+    "structured_answer_data_path": "config/data/structured_answer_training_data.json"
+  },
+  "local_semantic": {
+    "model_path": "models/huggingface/all-MiniLM-L6-v2",
+    "classifier_path": "models/answer_semantic_classifier.json",
+    "device": "auto",
+    "cpu_only": false,
+    "structured_answer_data_path": "config/data/structured_answer_training_data.json"
   },
   "trained_classifier": {
     "model_path": "models/answer_classifier.json"

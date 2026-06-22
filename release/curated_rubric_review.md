@@ -1,9 +1,9 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 39
+- Curated examples reviewed: 43
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 10, 'B': 5, 'C': 3, 'D': 11, 'F': 10}`
-- Suggested label updates: 8
+- Current grade distribution: `{'A': 14, 'B': 5, 'C': 3, 'D': 11, 'F': 10}`
+- Suggested label updates: 10
 
 ## Suggested Answer Updates
 
@@ -72,6 +72,24 @@
 - Reference: DynamoDB global tables
 - Semantic score: `62`
 - Reviewer feedback: We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 37: A -> B
+
+- Question: Explain which AWS service or feature should be used to decouple application components with a managed message queue.
+- Answer: `SQS message queue`
+- Reference: Amazon SQS
+- Semantic score: `88`
+- Reviewer feedback: SQS message queue is the correct answer but a rating of B was given.
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 38: A -> B
+
+- Question: Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.
+- Answer: `AWS Cloudwatch logs`
+- Reference: Amazon CloudWatch
+- Semantic score: `88`
+- Reviewer feedback: This is the correct answer
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ## Release Table Recommendation

@@ -338,5 +338,45 @@
     "rating_given": "C",
     "correct_answer_text": "Use AWS CloudTrail.",
     "feedback_text": "I entered a freeform version of the correct answer."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to decouple application components with a managed message queue.",
+    "answer_given": "SQS message queue",
+    "correct_rating": "A",
+    "rating_given": "B",
+    "correct_answer_text": "Use Amazon SQS.",
+    "feedback_text": "SQS message queue is the correct answer but a rating of B was given. "
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "answer_given": "AWS Cloudwatch logs",
+    "correct_rating": "A",
+    "rating_given": "B",
+    "correct_answer_text": "Use Amazon CloudWatch.",
+    "feedback_text": "This is the correct answer"
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
+    "answer_given": "Amazon CloudFront is used to deliver content from edge locations to reduce latency for users.",
+    "correct_rating": "A",
+    "rating_given": "B",
+    "correct_answer_text": "Use Amazon CloudFront.",
+    "feedback_text": "Full sentence answers should receive full credit if correct service is selected."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.",
+    "exam_code": "SAA-C03",
+    "reference_answer": "Use Amazon Cognito to add user sign-up, sign-in, and identity management to applications.",
+    "answer_given": "AWS Cognito is used to manage identity management to app. ",
+    "correct_rating": "A",
+    "rating_given": "B",
+    "correct_answer_text": "Use Amazon Cognito.",
+    "feedback_text": "Full sentence questions should receive full marks."
   }
 ]

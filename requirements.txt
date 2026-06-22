@@ -3,3 +3,4 @@ openai>=1.0
 pytest>=9.0.3
 pandas>=2.0
 matplotlib>=3.8
+sentence-transformers>=5.0

@@ -6,6 +6,12 @@ if [ ! -x .venv/bin/python ]; then
 fi
 
 .venv/bin/python test_suites.py model \
-  --questions data/generated/questions_with_answers_training.json \
-  --training-data data/generated/questions_with_answers_training.json \
-  --evaluation-data data/curated/curated_training_data.json \
+  --evaluation-data data/curated/curated_training_data.json
+
+.venv/bin/python scripts/evaluate_semantic_answer_classifier.py \
+  --device cpu \
+  --output metrics/semantic_classifier_test.json
+
+.venv/bin/python scripts/compare_answer_evaluators.py \
+  --device cpu \
+  --output metrics/answer_evaluator_comparison.json

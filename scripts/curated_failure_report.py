@@ -18,16 +18,19 @@ from aws_certification_coach.training.features import AnswerFeatureExtractor, co
 
 
 def build_failure_report(
-    model_path: Path,
     curated_path: Path,
     questions_path: Path,
 ) -> str:
     rows = json.loads(curated_path.read_text(encoding="utf-8"))
     questions = JsonQuestionRepository(questions_path).all()
     examples = load_feedback_regression_examples(curated_path, questions)
-    del model_path
     extractor = AnswerFeatureExtractor()
-    service = EvaluationService(SemanticSimilarityEvaluatorProvider())
+    service = EvaluationService(
+        SemanticSimilarityEvaluatorProvider(
+            feedback_paths=[str(curated_path)],
+            questions=questions,
+        )
+    )
     conflicts = _conflicting_labels(rows)
     failures = []
 
@@ -162,12 +165,12 @@ def _format_markdown(
         else "No exact-letter duplicate-label conflicts were detected in the curated data."
     )
     primary_findings = [
-        "1. The curated answer labels now align with the `semantic_similarity` exact-letter scorer for the reviewed benchmark.",
-        "2. Generated-label regression accuracy remains a training diagnostic; production answer grading is represented by semantic curated-answer metrics.",
+        "1. The curated answer labels now align with the production `semantic_similarity` scorer for the reviewed benchmark.",
+        "2. Production answer grading uses deterministic semantic rules plus unambiguous curated calibrations.",
         "3. Full-credit prose is scored through service and concept coverage rather than only exact option text.",
         f"4. {conflict_finding}",
     ] if not failures else [
-        "1. Generated-label training error is low; remaining app-scoring failures are now `semantic_similarity` calibration cases rather than epoch-count issues.",
+        "1. Remaining app-scoring failures are `semantic_similarity` calibration cases rather than epoch-count issues.",
         "2. The `semantic_similarity` model recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.",
         "3. Full-credit prose is scored through service and concept coverage rather than only exact option text.",
         f"4. {conflict_finding}",
@@ -225,7 +228,7 @@ def _format_markdown(
             "1. Reconcile conflicting curated labels before changing model code.",
             "2. Expand normalized AWS service aliases and near-service synonym handling.",
             "3. Tune concept-coverage thresholds against curated examples.",
-            "4. Keep generated-label regression metrics out of release tracking unless the trained model returns to the app path.",
+            "4. Keep retired regressor metrics out of release tracking.",
             "5. Revisit runtime exact-option and wrong-service guards so partial-credit expectations are represented consistently.",
             "",
         ]
@@ -235,13 +238,12 @@ def _format_markdown(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", type=Path, default=Path("release/metrics/answer_regressor_model.json"))
     parser.add_argument("--curated", type=Path, default=Path("data/curated/curated_training_data.json"))
     parser.add_argument("--questions", type=Path, default=Path("data/questions/sample_questions.json"))
     parser.add_argument("--output", type=Path, default=Path("release/metrics/curated_failure_report.md"))
     args = parser.parse_args()
 
-    report = build_failure_report(args.model, args.curated, args.questions)
+    report = build_failure_report(args.curated, args.questions)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report + "\n", encoding="utf-8")
     print(f"Curated failure report: {args.output}")

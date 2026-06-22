@@ -12,39 +12,22 @@ from aws_certification_coach.evaluation.trained_classifier_provider import Train
 from aws_certification_coach.model_evaluation.semantic_similarity import evaluate_semantic_curated_answers
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_numeric, score_to_letter
-from aws_certification_coach.training.answer_classifier import (
-    AnswerRegressionModel,
-    PartialCreditRegressor,
-    evaluate_regression_leave_one_question_out,
-)
-from aws_certification_coach.training.dataset import (
-    load_answer_regression_examples,
-    load_feedback_regression_examples,
-)
+from aws_certification_coach.training.answer_classifier import AnswerRegressionModel
+from aws_certification_coach.training.dataset import load_feedback_regression_examples
 from aws_certification_coach.training.features import correct_answer_text
 
 
 def run_model_evaluation(
-    training_questions_path: Path,
     app_questions_path: Path,
-    training_path: Path,
     curated_path: Path | Iterable[Path],
-    epochs: int = 500,
-    learning_rate: float = 0.02,
 ) -> dict[str, object]:
-    training_questions = JsonQuestionRepository(training_questions_path).all()
     app_questions = JsonQuestionRepository(app_questions_path).all()
-    training_examples = load_answer_regression_examples(training_path)
-    held_out = evaluate_regression_leave_one_question_out(
-        PartialCreditRegressor(epochs=epochs, learning_rate=learning_rate, seed=0),
-        training_questions,
-        training_examples,
+    semantic = evaluate_semantic_curated_answers(
+        curated_path,
+        app_questions,
+        apply_feedback_calibrations=True,
     )
-    rubric = evaluate_curated_answers(curated_path, app_questions)
-    semantic = evaluate_semantic_curated_answers(curated_path, app_questions)
     return {
-        "held_out_performance": held_out,
-        "rubric_adherence": rubric,
         "semantic_similarity": semantic,
     }
 

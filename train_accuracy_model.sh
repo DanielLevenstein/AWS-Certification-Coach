@@ -16,35 +16,20 @@ esac
 
 .venv/bin/python scripts/combine_curated_training_data.py
 
-.venv/bin/python scripts/train_answer_accuracy.py \
-  --eval-mode training \
-  --questions data/generated/questions_with_answers_training.json \
-  --training-data data/generated/questions_with_answers_training.json \
-  --validation-questions data/generated/questions_with_answers_validation.json \
-  --validation-data data/generated/questions_with_answers_validation.json \
-  --feedback-data data/curated/curated_training_data.json \
-  --feedback-data data/generated/user_feedback.v2.json \
-  --feedback-data data/generated/generated_feedback.json \
-  --evaluation-data data/curated/curated_training_data.json \
-  --evaluation-data data/generated/user_feedback.v2.json \
-  --evaluation-data data/generated/generated_feedback.json \
-  --output "$METRICS_DIR/answer_regressor_model.json" \
-  --metrics-output "$METRICS_DIR/training_metrics.json" \
-  --history-output "$METRICS_DIR/training_history.json" \
-  "$@"
+if [ ! -f models/huggingface/all-MiniLM-L6-v2/model.safetensors ]; then
+  .venv/bin/python scripts/download_answer_embedding_model.py
+fi
 
-.venv/bin/python scripts/plot_training_history.py \
-  --history "$METRICS_DIR/training_history.json" \
-  --output "$METRICS_DIR/training_performance.png" \
-  --accuracy-output "$METRICS_DIR/curated_grade_accuracy.png"
+.venv/bin/python scripts/train_semantic_answer_classifier.py \
+  --metrics-output "$METRICS_DIR/semantic_classifier_training.json"
+.venv/bin/python scripts/evaluate_semantic_answer_classifier.py \
+  --output "$METRICS_DIR/semantic_classifier_test.json"
+.venv/bin/python scripts/compare_answer_evaluators.py \
+  --device cpu \
+  --output "$METRICS_DIR/answer_evaluator_comparison.json"
 
 .venv/bin/python scripts/curated_failure_report.py \
-  --model "$METRICS_DIR/answer_regressor_model.json" \
   --output "$METRICS_DIR/curated_failure_report.md"
-.venv/bin/python scripts/evaluate_answer_model.py \
-  --model "$METRICS_DIR/answer_regressor_model.json" \
-  --json-output "$METRICS_DIR/answer_model_evaluation.json" \
-  --table-output "$METRICS_DIR/answer_model_evaluation.md"
 .venv/bin/python scripts/curated_rubric_review.py \
   --output "$METRICS_DIR/curated_rubric_review.md"
 .venv/bin/python scripts/semantic_similarity_evaluation.py \
@@ -53,7 +38,7 @@ esac
   --evaluation-data data/generated/generated_feedback.json \
   --output "$METRICS_DIR/semantic_similarity.json" \
   --chart-output "$METRICS_DIR/semantic_accuracy.png" \
-  --answer-model-evaluation "$METRICS_DIR/answer_model_evaluation.json"
+  "$@"
 .venv/bin/python scripts/question_fidelity_evaluation.py \
   --output "$METRICS_DIR/question_fidelity.json"
 .venv/bin/python scripts/release_metrics.py \
@@ -74,6 +59,6 @@ if [ -n "$RELEASE_TAG" ]; then
   echo "Detailed release report: $RELEASE_REPORT"
 fi
 
-echo "Checkpoint data: $METRICS_DIR/training_history.json"
+echo "Production scoring calibration and evaluation completed (no regressor training)."
 echo "Failure report: $METRICS_DIR/curated_failure_report.md"
 echo "Preserved release artifacts: $METRICS_DIR"

@@ -44,8 +44,11 @@ def main() -> None:
     parser.add_argument("--questions", type=Path, default=Path("data/questions/sample_questions.json"))
     parser.add_argument("--output", type=Path, default=Path("release/metrics/semantic_similarity.json"))
     parser.add_argument("--chart-output", type=Path, default=Path("release/metrics/semantic_accuracy.png"))
-    parser.add_argument("--answer-model-evaluation", type=Path, default=None)
-    parser.add_argument("--training-metrics", type=Path, default=None)
+    parser.add_argument(
+        "--no-calibrations",
+        action="store_true",
+        help="Evaluate only the base heuristic instead of the production calibrated scorer.",
+    )
     args = parser.parse_args()
 
     questions = JsonQuestionRepository(args.questions).all()
@@ -55,15 +58,11 @@ def main() -> None:
             args.curated,
         ],
         questions,
+        apply_feedback_calibrations=not args.no_calibrations,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
-    answer_model_evaluation = (
-        json.loads(args.answer_model_evaluation.read_text(encoding="utf-8"))
-        if args.answer_model_evaluation is not None
-        else None
-    )
-    plot_semantic_accuracy(metrics, args.chart_output, answer_model_evaluation)
+    plot_semantic_accuracy(metrics, args.chart_output)
     print(json.dumps(metrics, indent=2))
     print(f"Semantic accuracy graph: {args.chart_output}")
 
@@ -71,7 +70,6 @@ def main() -> None:
 def plot_semantic_accuracy(
     metrics: dict[str, object],
     output_path: Path,
-    answer_model_evaluation: dict[str, object] | None = None,
 ) -> None:
     exact_letter_accuracy = float(metrics.get("semantic_exact_letter_accuracy", metrics["semantic_grade_accuracy"]))
     values = {
@@ -80,10 +78,8 @@ def plot_semantic_accuracy(
         "Semantic Recall": float(metrics["semantic_recall"]) * 100,
         "Exact Letter Accuracy": exact_letter_accuracy * 100,
     }
-    splits = (answer_model_evaluation or {}).get("splits", {})
-    test_split = splits.get("test") if isinstance(splits, dict) else None
-    if isinstance(test_split, dict) and "within_one_letter_accuracy" in test_split:
-        values["Within 1 Letter"] = float(test_split["within_one_letter_accuracy"]) * 100
+    if "semantic_uncalibrated_exact_letter_accuracy" in metrics:
+        values["Base Heuristic Exact"] = float(metrics["semantic_uncalibrated_exact_letter_accuracy"]) * 100
     colors = ["#2ca02c", "#1f77b4", "#9467bd", "#ff7f0e", "#17becf"]
     figure, axis = plt.subplots(figsize=(12, 6))
     bars = axis.bar(values.keys(), values.values(), color=colors)

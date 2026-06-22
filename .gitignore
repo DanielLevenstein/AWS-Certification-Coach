@@ -208,6 +208,7 @@ tempCodeRunnerFile.py
 /data/
 /scripts/data/
 /metrics/
+/models/huggingface/
 /release/metrics/
 /release/*.png
 !/release/release_metrics_chart.png

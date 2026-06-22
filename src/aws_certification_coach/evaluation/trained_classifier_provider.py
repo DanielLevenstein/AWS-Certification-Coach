@@ -7,15 +7,15 @@ import re
 from pathlib import Path
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
-from aws_certification_coach.questions.json_repository import JsonQuestionRepository
-from aws_certification_coach.ratings import letter_to_numeric
+from aws_certification_coach.model_evaluation.semantic_similarity import (
+    load_feedback_calibrations,
+    semantic_similarity_score,
+)
 from aws_certification_coach.training.answer_classifier import (
     AnswerClassificationModel,
     AnswerRegressionModel,
     answer_calibration_key,
 )
-from aws_certification_coach.training.dataset import load_feedback_regression_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
@@ -75,7 +75,7 @@ class SemanticSimilarityEvaluatorProvider:
         questions_path: str | Path | None = None,
         questions: list[Question] | None = None,
     ) -> None:
-        self.calibrations = _feedback_calibrations(feedback_paths or (), questions_path, questions)
+        self.calibrations = load_feedback_calibrations(feedback_paths or (), questions_path, questions)
 
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
         del prompt
@@ -133,30 +133,6 @@ def _evaluation_response(question: Question, user_answer: str, model_score: floa
     return json.dumps(payload)
 
 
-def _feedback_calibrations(
-    feedback_paths: tuple[str, ...] | list[str],
-    questions_path: str | Path | None,
-    questions: list[Question] | None,
-) -> dict[str, float]:
-    paths = [Path(path) for path in feedback_paths]
-    existing_paths = [path for path in paths if path.exists()]
-    if not existing_paths:
-        return {}
-    available_questions = questions
-    if available_questions is None:
-        if questions_path is None or not Path(questions_path).exists():
-            return {}
-        available_questions = JsonQuestionRepository(questions_path).all()
-    calibration_values: dict[str, set[float]] = {}
-    for path in existing_paths:
-        for example in load_feedback_regression_examples(path, available_questions):
-            key = answer_calibration_key(example.question, example.answer)
-            calibration_values.setdefault(key, set()).add(example.rating)
-    return {
-        key: next(iter(values))
-        for key, values in calibration_values.items()
-        if len(values) == 1
-    }
 
 
 def _missing_concepts(question: Question, user_answer: str) -> list[str]:

@@ -77,7 +77,7 @@ def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_semantic_accuracy_chart_includes_answer_model_within_one_letter_metric(tmp_path: Path):
+def test_semantic_accuracy_chart_includes_base_heuristic_metric(tmp_path: Path):
     output = tmp_path / "semantic_accuracy.png"
 
     plot_semantic_accuracy(
@@ -86,9 +86,9 @@ def test_semantic_accuracy_chart_includes_answer_model_within_one_letter_metric(
             "semantic_precision": 0.9,
             "semantic_recall": 0.75,
             "semantic_exact_letter_accuracy": 0.64,
+            "semantic_uncalibrated_exact_letter_accuracy": 0.52,
         },
         output,
-        {"splits": {"test": {"within_one_letter_accuracy": 0.92}}},
     )
 
     assert output.read_bytes().startswith(b"\x89PNG")
@@ -204,35 +204,27 @@ def _png_dimensions(path: Path) -> tuple[int, int]:
 def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"
     metrics_dir.mkdir()
-    (metrics_dir / "training_history.json").write_text(
-        '{"checkpoints": [{"epoch": 1, "mse": 0.1234, "mae": 0.5678, "curated_grade_accuracy": 0.44}]}',
-        encoding="utf-8",
-    )
-    (metrics_dir / "training_metrics.json").write_text(
-        '{"answer_form": "long", "saved_model": {"curated_grade_accuracy": 0.96, "calibration_count": 18}}',
-        encoding="utf-8",
-    )
     (metrics_dir / "semantic_similarity.json").write_text(
         '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, '
-        '"semantic_exact_letter_accuracy": 0.64, "semantic_example_count": 25}',
+        '"semantic_exact_letter_accuracy": 0.64, "semantic_uncalibrated_exact_letter_accuracy": 0.52, '
+        '"semantic_calibration_hits": 18, "semantic_example_count": 25}',
         encoding="utf-8",
     )
-    (metrics_dir / "answer_model_evaluation.json").write_text(
-        (
-            '{"splits": {'
-            '"train": {"within_one_letter_accuracy": 0.91}, '
-            '"validation": {"within_one_letter_accuracy": 0.82}, '
-            '"test": {"within_one_letter_accuracy": 0.76}'
-            "}}"
-        ),
+    (metrics_dir / "semantic_classifier_test.json").write_text(
+        '{"test": {"semantic_accuracy": 0.93, "semantic_precision": 0.94, "semantic_recall": 0.92, '
+        '"exact_letter_accuracy": 0.8654, "within_one_letter_accuracy": 0.97, '
+        '"macro_precision": 0.84, "macro_recall": 0.85, "macro_f1": 0.83, '
+        '"ordinal_mae": 0.16, "severe_error_rate": 0.03, "f_rejection_recall": 0.91, '
+        '"example_count": 104}}',
         encoding="utf-8",
     )
-    (metrics_dir / "answer_model_evaluation.md").write_text(
-        (
-            "| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |\n"
-            "|---|---:|---:|---:|---:|---:|\n"
-            "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |\n"
-        ),
+    (metrics_dir / "answer_evaluator_comparison.json").write_text(
+        '{"evaluators": {'
+        '"legacy_semantic_similarity": {"semantic_accuracy": 0.80, "semantic_precision": 0.90, '
+        '"semantic_recall": 0.75, "exact_letter_accuracy": 0.64, "within_one_letter_accuracy": 0.92}, '
+        '"semantic_grade_classifier_v1": {"semantic_accuracy": 0.93, "semantic_precision": 0.94, '
+        '"semantic_recall": 0.92, "exact_letter_accuracy": 0.8654, "within_one_letter_accuracy": 0.97}'
+        '}}',
         encoding="utf-8",
     )
     (metrics_dir / "question_fidelity.json").write_text(
@@ -251,14 +243,12 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
 
     assert (
-        "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | "
+        "| Release | Evaluator | Semantic Accuracy | Semantic Precision | Semantic Recall | "
         "Exact Letter Accuracy | Within 1 Letter | Question Fidelity |"
     ) in markdown
-    assert "| v1.5 Schema | 80.00% | 90.00% | 75.00% | 64.00% | 76.00% | 88.40% |" in markdown
-    assert "## Answer Model Split Evaluation" in markdown
-    assert "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |" in markdown
-    assert "Saved model grade-band accuracy" not in markdown
-    assert "Training accuracy" not in markdown
+    assert "| v1.5 Schema | semantic_grade_classifier_v1 | 93.00% | 94.00% | 92.00% | 86.54% | 97.00% | 88.40% |" in markdown
+    assert "| legacy_semantic_similarity | 80.00% | 90.00% | 75.00% | 64.00% | 92.00% |" in markdown
+    assert "| 84.00% | 85.00% | 83.00% | 0.160 | 3.00% | 91.00% |" in markdown
 
 def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"
@@ -346,6 +336,31 @@ def test_semantic_accuracy_uses_grade_bands_and_reports_exact_letter_match(tmp_p
     assert metrics["semantic_matching_letter_grades"] == 0
     assert metrics["semantic_mismatches"][0]["expected_letter"] == "A"
     assert metrics["semantic_mismatches"][0]["actual_letter"] == "B"
+
+
+def test_semantic_accuracy_can_follow_production_curated_calibrations(tmp_path: Path):
+    question = _structured_question("manages encryption keys")
+    curated = tmp_path / "curated.json"
+    curated.write_text(
+        (
+            '[{"question": "Which service manages encryption keys?", '
+            '"reference_answer": "Use AWS KMS to create and manage encryption keys.", '
+            '"answer_given": "KMS", '
+            '"correct_rating": "A", "rating_given": "B"}]'
+        ),
+        encoding="utf-8",
+    )
+
+    metrics = evaluate_semantic_curated_answers(
+        curated,
+        [question],
+        apply_feedback_calibrations=True,
+    )
+
+    assert metrics["semantic_calibration_mode"] == "production"
+    assert metrics["semantic_calibration_hits"] == 1
+    assert metrics["semantic_exact_letter_accuracy"] == 1
+    assert metrics["semantic_uncalibrated_exact_letter_accuracy"] == 0
 
 def test_semantic_accuracy_skips_conflicting_duplicate_feedback(tmp_path: Path):
     question = _structured_question("manages encryption keys")

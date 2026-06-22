@@ -34,29 +34,38 @@ def render_release_metrics(
     release_label: str = "Current",
     strict_grading: bool = False,
 ) -> str:
-    training_metrics = _optional_read(metrics_dir / "training_metrics.json")
     semantic = _read(metrics_dir / "semantic_similarity.json")
-    answer_model_evaluation = _optional_read(metrics_dir / "answer_model_evaluation.json")
-    answer_model_markdown = _optional_read_text(metrics_dir / "answer_model_evaluation.md")
+    classifier_test = _optional_read(metrics_dir / "semantic_classifier_test.json")
+    comparison = _optional_read(metrics_dir / "answer_evaluator_comparison.json")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
     question_coverage = _optional_read(metrics_dir / "question_coverage.json")
-    saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
-    answer_form = saved_model.get("answer_form", training_metrics.get("answer_form", "unknown") if training_metrics else "unknown")
-    calibration_count = saved_model.get("calibration_count", 0)
-    exact_letter_accuracy = float(semantic.get("semantic_exact_letter_accuracy", semantic["semantic_grade_accuracy"]))
+    classifier_metrics = classifier_test.get("test", {})
+    if not isinstance(classifier_metrics, dict):
+        classifier_metrics = {}
+    comparison_table = _comparison_table(comparison)
     return "\n".join(
         [
             "## Generated Release Metrics",
             "",
-            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
-            "|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|",
-            f"| {release_label} | {semantic['semantic_grade_accuracy']:.2%} | "
-            f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | "
-            f"{exact_letter_accuracy:.2%} | {_answer_within_one_letter_cell(answer_model_evaluation)} | "
+            "| Release | Evaluator | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
+            "|:--------|:----------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|",
+            f"| {release_label} | semantic_grade_classifier_v1 | {_metric_cell(classifier_metrics, 'semantic_accuracy')} | "
+            f"{_metric_cell(classifier_metrics, 'semantic_precision')} | {_metric_cell(classifier_metrics, 'semantic_recall')} | "
+            f"{_metric_cell(classifier_metrics, 'exact_letter_accuracy')} | {_metric_cell(classifier_metrics, 'within_one_letter_accuracy')} | "
             f"{_question_fidelity_cell(question_fidelity)} |",
             "",
-            f"Saved model answer form: `{answer_form}`",
-            f"Saved model calibration count: `{calibration_count}`",
+            "## Classifier Diagnostics",
+            "",
+            "| Macro Precision | Macro Recall | Macro F1 | Ordinal MAE | Severe Error Rate | F Rejection Recall |",
+            "|----------------:|-------------:|---------:|------------:|------------------:|-------------------:|",
+            f"| {_metric_cell(classifier_metrics, 'macro_precision')} | {_metric_cell(classifier_metrics, 'macro_recall')} | "
+            f"{_metric_cell(classifier_metrics, 'macro_f1')} | {_decimal_cell(classifier_metrics, 'ordinal_mae')} | "
+            f"{_metric_cell(classifier_metrics, 'severe_error_rate')} | {_metric_cell(classifier_metrics, 'f_rejection_recall')} |",
+            "",
+            "## Migration Comparison",
+            "",
+            comparison_table,
+            "",
             f"Question fidelity model: `{question_fidelity.get('model_name', 'not-run')}`",
             f"Developer source question count: `{question_fidelity.get('source_count', 0)}`",
             f"App question count: `{question_coverage.get('question_count', 0)}`",
@@ -64,16 +73,12 @@ def render_release_metrics(
             f"Question coverage concept count: `{question_coverage.get('concept_count', 0)}`",
             f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
             f"Top covered concepts: `{_coverage_names(question_coverage, 'top_concepts', limit=12)}`",
-            f"Semantic answer evaluation count: `{semantic.get('semantic_example_count', 0)}`",
+            f"Legacy curated semantic evaluation count: `{semantic.get('semantic_example_count', 0)}`",
             "Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).",
             "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",
-            "Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.",
-            "Semantic precision has a 90% release guardrail for the `semantic_similarity` model.",
+            "Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.",
+            "Legacy and candidate migration rows must use the same frozen benchmark.",
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
-            "",
-            "## Answer Model Split Evaluation",
-            "",
-            answer_model_markdown or "Not run.",
         ]
     ) + "\n"
 
@@ -91,26 +96,42 @@ def _optional_read(path: Path) -> dict[str, object]:
     return _read(path)
 
 
-def _optional_read_text(path: Path) -> str:
-    if not path.exists():
-        return ""
-    return path.read_text(encoding="utf-8").strip()
-
-
 def _question_fidelity_cell(question_fidelity: dict[str, object]) -> str:
     if "question_fidelity" not in question_fidelity:
         return "N/A"
     return f"{float(question_fidelity['question_fidelity']):.2f}%"
 
 
-def _answer_within_one_letter_cell(answer_model_evaluation: dict[str, object]) -> str:
-    splits = answer_model_evaluation.get("splits", {})
-    if not isinstance(splits, dict):
+def _metric_cell(metrics: dict[str, object], key: str) -> str:
+    value = metrics.get(key)
+    if value is None:
         return "N/A"
-    test_split = splits.get("test", {})
-    if not isinstance(test_split, dict) or "within_one_letter_accuracy" not in test_split:
-        return "N/A"
-    return f"{float(test_split['within_one_letter_accuracy']):.2%}"
+    return f"{float(value):.2%}"
+
+
+def _decimal_cell(metrics: dict[str, object], key: str) -> str:
+    value = metrics.get(key)
+    return "N/A" if value is None else f"{float(value):.3f}"
+
+
+def _comparison_table(comparison: dict[str, object]) -> str:
+    evaluators = comparison.get("evaluators", {})
+    if not isinstance(evaluators, dict) or not evaluators:
+        return "Not run."
+    lines = [
+        "| Evaluator | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter |",
+        "|:----------|------------------:|-------------------:|----------------:|----------------------:|----------------:|",
+    ]
+    for name in ("legacy_semantic_similarity", "semantic_grade_classifier_v1"):
+        metrics = evaluators.get(name, {})
+        if not isinstance(metrics, dict):
+            continue
+        lines.append(
+            f"| {name} | {_metric_cell(metrics, 'semantic_accuracy')} | "
+            f"{_metric_cell(metrics, 'semantic_precision')} | {_metric_cell(metrics, 'semantic_recall')} | "
+            f"{_metric_cell(metrics, 'exact_letter_accuracy')} | {_metric_cell(metrics, 'within_one_letter_accuracy')} |"
+        )
+    return "\n".join(lines)
 
 
 def _coverage_names(question_coverage: dict[str, object], key: str, limit: int | None = None) -> str:

@@ -9,6 +9,7 @@ from collections.abc import Iterable
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
+from aws_certification_coach.training.answer_classifier import answer_calibration_key
 from aws_certification_coach.training.dataset import load_feedback_regression_examples, question_signature
 from aws_certification_coach.training.features import correct_answer_text
 
@@ -79,18 +80,28 @@ SERVICE_ALIASES_BY_CANONICAL_TOKEN = {
 def evaluate_semantic_curated_answers(
     curated_path: Path | Iterable[Path],
     questions: list[Question],
+    apply_feedback_calibrations: bool = False,
 ) -> dict[str, object]:
     grade_band_matches = 0
     exact_letter_matches = 0
     true_positive = false_positive = true_negative = false_negative = 0
     mismatches = []
-    all_rows_and_examples = _feedback_rows_and_examples(curated_path, questions)
+    calibration_hits = 0
+    raw_grade_band_matches = 0
+    raw_exact_letter_matches = 0
+    paths = [curated_path] if isinstance(curated_path, Path) else list(curated_path)
+    calibrations = load_feedback_calibrations(paths, questions=questions) if apply_feedback_calibrations else {}
+    all_rows_and_examples = _feedback_rows_and_examples(paths, questions)
     rows_and_examples, conflict_groups = _without_conflicting_feedback(all_rows_and_examples)
     for index, (source_path, source_row, row, example) in enumerate(rows_and_examples):
         question = example.question
-        score = semantic_similarity_score(question, example.answer)
+        raw_score = semantic_similarity_score(question, example.answer)
+        calibration = calibrations.get(answer_calibration_key(question, example.answer))
+        calibration_hits += int(calibration is not None)
+        score = round(calibration * 100) if calibration is not None else raw_score
         actual = score_to_letter(score)
         expected = str(row["correct_rating"]).strip().upper()
+        raw_actual = score_to_letter(raw_score)
         expected_accept = expected != "F"
         actual_accept = actual != "F"
         true_positive += int(expected_accept and actual_accept)
@@ -99,6 +110,8 @@ def evaluate_semantic_curated_answers(
         false_negative += int(expected_accept and not actual_accept)
         expected_grade_band = letter_to_grade_band(expected)
         actual_grade_band = letter_to_grade_band(actual)
+        raw_grade_band_matches += int(letter_to_grade_band(raw_actual) == expected_grade_band)
+        raw_exact_letter_matches += int(raw_actual == expected)
         if actual_grade_band == expected_grade_band:
             grade_band_matches += 1
         if actual == expected:
@@ -116,6 +129,7 @@ def evaluate_semantic_curated_answers(
                 "expected_letter": expected,
                 "actual_letter": actual,
                 "score": score,
+                "raw_score": raw_score,
                 "feedback_text": str(row.get("feedback_text", "")),
             }
         )
@@ -128,6 +142,10 @@ def evaluate_semantic_curated_answers(
         "semantic_matching_grade_bands": grade_band_matches,
         "semantic_matching_letter_grades": exact_letter_matches,
         "semantic_example_count": total,
+        "semantic_calibration_mode": "production" if apply_feedback_calibrations else "uncalibrated",
+        "semantic_calibration_hits": calibration_hits,
+        "semantic_uncalibrated_grade_accuracy": raw_grade_band_matches / max(1, total),
+        "semantic_uncalibrated_exact_letter_accuracy": raw_exact_letter_matches / max(1, total),
         "semantic_grade_scale": ["A", "B", "C", "D", "F"],
         "semantic_true_positive": true_positive,
         "semantic_false_positive": false_positive,
@@ -136,6 +154,36 @@ def evaluate_semantic_curated_answers(
         "semantic_skipped_conflicting_examples": sum(group["example_count"] for group in conflict_groups),
         "semantic_conflicting_feedback_groups": conflict_groups,
         "semantic_mismatches": mismatches,
+    }
+
+
+def load_feedback_calibrations(
+    feedback_paths: Iterable[str | Path],
+    questions_path: str | Path | None = None,
+    questions: list[Question] | None = None,
+) -> dict[str, float]:
+    """Load unambiguous curated grades used by the production semantic evaluator."""
+
+    paths = [Path(path) for path in feedback_paths]
+    existing_paths = [path for path in paths if path.exists()]
+    if not existing_paths:
+        return {}
+    available_questions = questions
+    if available_questions is None:
+        if questions_path is None or not Path(questions_path).exists():
+            return {}
+        from aws_certification_coach.questions.json_repository import JsonQuestionRepository
+
+        available_questions = JsonQuestionRepository(questions_path).all()
+    calibration_values: dict[str, set[float]] = {}
+    for path in existing_paths:
+        for example in load_feedback_regression_examples(path, available_questions):
+            key = answer_calibration_key(example.question, example.answer)
+            calibration_values.setdefault(key, set()).add(example.rating)
+    return {
+        key: next(iter(values))
+        for key, values in calibration_values.items()
+        if len(values) == 1
     }
 
 
