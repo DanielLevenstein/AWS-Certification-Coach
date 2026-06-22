@@ -348,6 +348,15 @@
     "correct_answer_text": "Use Amazon SQS.",
     "feedback_text": "SQS message queue is the correct answer but a rating of B was given. "
   },
+    {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to decouple application components with a managed message queue.",
+    "answer_given": "SQS",
+    "correct_rating": "B",
+    "rating_given": "D",
+    "correct_answer_text": "Use Amazon SQS.",
+    "feedback_text": "SQS message queue is the correct answer but a rating of B was given. "
+  },
   {
     "schema_version": 2,
     "question": "Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",

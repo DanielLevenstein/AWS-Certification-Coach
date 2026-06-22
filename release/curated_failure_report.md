@@ -1,10 +1,10 @@
 # Curated Grade Failure Report
 
-- Curated examples: 43
+- Curated examples: 44
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
-- Passing exact-letter predictions: 38
+- Passing exact-letter predictions: 39
 - Failing exact-letter predictions: 5
-- Exact-letter accuracy: 88.37%
+- Exact-letter accuracy: 88.64%
 - Unique failing question/answer/grade cases: 5
 - Conflicting normalized label sets: 3
 - Actual letter grades among failures: {'A': 3, 'B': 1, 'D': 1}

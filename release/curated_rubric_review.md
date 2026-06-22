@@ -1,8 +1,8 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 43
+- Curated examples reviewed: 44
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 14, 'B': 5, 'C': 3, 'D': 11, 'F': 10}`
+- Current grade distribution: `{'A': 14, 'B': 6, 'C': 3, 'D': 11, 'F': 10}`
 - Suggested label updates: 10
 
 ## Suggested Answer Updates
@@ -83,7 +83,7 @@
 - Reviewer feedback: SQS message queue is the correct answer but a rating of B was given.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 38: A -> B
+### Row 39: A -> B
 
 - Question: Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.
 - Answer: `AWS Cloudwatch logs`

@@ -66,7 +66,7 @@ Metric Definitions:
 | v2.4.5         |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |
 | v3.prototype   |            89.42% |            100.00% |         100.00% |                86.54% |          93.27% |
 | v3.prototype.5 |            89.42% |             92.42% |          95.31% |                86.54% |          93.27% |
-
+| v3.prototype.8 |            89.42% |             92.42% |          95.31% |                86.54% |          93.27% |
 
 ## Per Grade Precision
 | Version      |      A |      B |      C |      D |       F | Within 1 Letter |
@@ -101,14 +101,13 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 ![Accuracy Metrics](release/accuracy_metrics_chart.png)
 
-![Question Coverage](release/question_coverage_metrics_chart.png)
 
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
 | Release | Evaluator | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|:----------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.prototype | semantic_grade_classifier_v1 | 89.42% | 92.42% | 95.31% | 86.54% | 93.27% | 94.95% |
+| v3.prototype.8 | semantic_grade_classifier_v1 | 89.42% | 92.42% | 95.31% | 86.54% | 93.27% | 94.95% |
 
 ## Classifier Diagnostics
 
@@ -136,7 +135,7 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Legacy curated semantic evaluation count: `36`
+Legacy curated semantic evaluation count: `37`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
