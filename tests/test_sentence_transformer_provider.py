@@ -1,4 +1,5 @@
 import json
+import importlib.util
 
 from aws_certification_coach.config import LocalSemanticModelConfig, load_evaluator_config
 from aws_certification_coach.domain import Question
@@ -6,6 +7,10 @@ from aws_certification_coach.evaluation.sentence_transformer_provider import (
     SentenceTransformerEvaluatorProvider,
     resolve_device,
 )
+
+
+def test_torchvision_runtime_dependency_is_installed():
+    assert importlib.util.find_spec("torchvision") is not None
 
 
 class FakeEncoder:
