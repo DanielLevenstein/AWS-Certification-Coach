@@ -43,8 +43,9 @@ def main() -> None:
     payload = {
         "metrics_schema_version": 3,
         "benchmark": {
+            "name": "v3_migration_benchmark",
             "path": str(args.benchmark),
-            "sha256": hashlib.sha256(args.benchmark.read_bytes()).hexdigest(),
+            "manifest_sha256": hashlib.sha256(args.benchmark.read_bytes()).hexdigest(),
             "example_count": len(examples),
             "question_family_count": len({question_signature(example.question) for example in examples}),
             "support_by_grade": {grade: expected.count(grade) for grade in ("A", "B", "C", "D", "F")},

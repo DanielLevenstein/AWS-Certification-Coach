@@ -28,7 +28,9 @@
 | v2.4.5.2 | Added contact info to app |
 | v3.prototype.0 | Defines the proposed local SentenceTransformer answer-grading design and architecture for the v3 migration. |
 | v3.prototype.1 | Audits existing documentation against the v3 design, data boundaries, deployment behavior, and release workflow. |
-
+| v3.prototype.2 | Implements normalized SentenceTransformer relationship features and a supervised A/B/C/D/F classifier. |
+| v3.prototype.3 | Freezes legacy-compatible metric definitions and uses honest within-one-letter accuracy above 90% as the v3 release gate. |
+| v3.prototype.4  | Added Per Grade Precision chart and separated question coverage metrics from the release metrics chart. |
 # Release Metrics
 
 Metric Definitions:
@@ -38,28 +40,34 @@ Metric Definitions:
 - Exact Letter required the identical A/B/C/D/F class.
 - Within one Letter used the ordered scale A → B → C → D → F.
 
-| Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
-|:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v1.5.0   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
-| v1.5.4   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
-| v2.1.1   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |            96.80% |
-| v2.1.2   |            83.33% |             90.00% |          90.00% |               Unknown |         Unknown |            96.00% |
-| v2.2.4   |           Unknown |             94.44% |          94.44% |                64.00% |         Unknown |            95.12% |
-| v2.3.1   |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
-| v2.3.2   |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
-| v2.3.3   |            88.46% |             94.74% |          94.74% |                61.54% |         Unknown |            94.95% |
-| v2.3.4   |            82.35% |             96.00% |          88.89% |                55.88% |         Unknown |            94.95% |
-| v2.3.5   |            86.84% |             96.55% |          90.32% |                57.89% |         Unknown |            94.95% |
-| v2.3.6   |            83.33% |             88.24% |          93.75% |                57.14% |          94.23% |            95.12% |
-| v2.3.6.1 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
-| v2.3.6.2 |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
-| v2.3.6.3 |            91.18% |            100.00% |          92.59% |                67.65% |          97.12% |            95.12% |
-| v2.4.2   |            76.47% |             96.00% |          88.89% |                47.06% |         Unknown |            94.95% |
-| v2.4.3   |            90.91% |            100.00% |          92.31% |                66.67% |          97.12% |            94.95% |
-| v2.4.4   |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
-| v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
-| v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
-| Current | 91.67% | 100.00% | 92.31% | 83.33% | 95.19% | 94.95% |
+| Release      | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+|:-------------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
+| v1.5.0       |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
+| v1.5.4       |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
+| v2.1.1       |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |            96.80% |
+| v2.1.2       |            83.33% |             90.00% |          90.00% |               Unknown |         Unknown |            96.00% |
+| v2.2.4       |           Unknown |             94.44% |          94.44% |                64.00% |         Unknown |            95.12% |
+| v2.3.1       |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
+| v2.3.2       |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
+| v2.3.3       |            88.46% |             94.74% |          94.74% |                61.54% |         Unknown |            94.95% |
+| v2.3.4       |            82.35% |             96.00% |          88.89% |                55.88% |         Unknown |            94.95% |
+| v2.3.5       |            86.84% |             96.55% |          90.32% |                57.89% |         Unknown |            94.95% |
+| v2.3.6       |            83.33% |             88.24% |          93.75% |                57.14% |          94.23% |            95.12% |
+| v2.3.6.1     |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
+| v2.3.6.2     |            91.18% |            100.00% |          92.59% |                67.65% |          99.04% |            95.12% |
+| v2.3.6.3     |            91.18% |            100.00% |          92.59% |                67.65% |          97.12% |            95.12% |
+| v2.4.2       |            76.47% |             96.00% |          88.89% |                47.06% |         Unknown |            94.95% |
+| v2.4.3       |            90.91% |            100.00% |          92.31% |                66.67% |          97.12% |            94.95% |
+| v2.4.4       |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
+| v2.4.4.1     |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
+| v2.4.5       |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
+| v3.prototype |            89.42% |            100.00% |         100.00% |                86.54% |          93.27% |            94.95% |
+
+## Per Grade Precision
+| Version      |      A |      B |      C |      D |       F | Within 1 Letter |
+|:-------------|-------:|-------:|-------:|-------:|--------:|----------------:|
+| v3.prototype | 92.00% | 84.38% | 55.56% | 78.57% | 100.00% |          93.27% |
+
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
@@ -86,18 +94,36 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 ## Current Coverage
 
-![Release Metrics Chart](release/release_metrics_chart.png)
+![Accuracy Metrics](release/accuracy_metrics_chart.png)
+
+![Question Coverage](release/question_coverage_metrics_chart.png)
 
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
-| Release | Local Classifier Exact | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Question Fidelity |
-|:--------|-----------------------:|------------------:|-------------------:|----------------:|----------------------:|------------------:|
-| v3.prototype.1 | N/A | 100.00% | 100.00% | 100.00% | 100.00% | 94.95% |
+| Release | Evaluator | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+|:--------|:----------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
+| v3.prototype | semantic_grade_classifier_v1 | 89.42% | 100.00% | 100.00% | 86.54% | 93.27% | 94.95% |
 
-Production calibration hits: `36`
-Local Classifier Exact is measured only on the untouched generated test split.
-Base heuristic exact-letter accuracy: `83.33%`
+## Classifier Diagnostics
+
+| Macro Precision | Macro Recall | Macro F1 | Ordinal MAE | Severe Error Rate | F Rejection Recall |
+|----------------:|-------------:|---------:|------------:|------------------:|-------------------:|
+| 82.10% | 82.29% | 82.08% | 0.212 | 6.73% | 100.00% |
+
+## Per Grade Metrics
+
+| Metric | A | B | C | D | F | Within 1 Letter |
+|:-------|--:|--:|--:|--:|--:|----------------:|
+| Precision | 92.00% | 84.38% | 55.56% | 78.57% | 100.00% | 93.27% |
+
+## Migration Comparison
+
+| Evaluator | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter |
+|:----------|------------------:|-------------------:|----------------:|----------------------:|----------------:|
+| legacy_semantic_similarity | 88.46% | 98.63% | 90.00% | 51.92% | 97.12% |
+| semantic_grade_classifier_v1 | 89.42% | 100.00% | 100.00% | 86.54% | 93.27% |
+
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `38`
 App question count: `118`
@@ -105,11 +131,11 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic answer evaluation count: `36`
+Legacy curated semantic evaluation count: `36`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
-Semantic metrics exercise the same curated calibration path as the production app.
-Base heuristic accuracy is retained as a diagnostic and does not include curated calibration lookups.
-Semantic precision has a 90% release guardrail for the production `semantic_similarity` scorer.
+Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
+Legacy and candidate migration rows must use the same frozen benchmark.
+Local classifier release gates: `passed`.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
 <!-- release-metrics:end -->

@@ -17,10 +17,13 @@ The previous TODO was backed up to `docs/TODO_COPY.md` before this roadmap was c
 Add documentation for new model architecture and lock downgrading metrics
 ## v3.prototype.1 Audit existing documentation
 Audit existing documentation to ensure it matches to design.
+Completed: documentation was reconciled with the v3 semantic grading design and data boundaries.
 ## v3.prototype.2 Initial implementation
 SentenceTransformer semantic normalization plus a supervised A–F classifier
+Completed: implemented as the shared A/B/C/D/F semantic relationship classifier.
 ## v3.prototype.3 Lock down training metrics.
 Lock down training metrics so they are comparable with an old model.
+Completed: metric definitions, benchmark provenance, schema-v3 output, and release gates are frozen.
 
 
 # Phase 2 Code & Configuration Review

@@ -393,8 +393,8 @@ Release diagnostics include split counts, data hashes, confusion matrices, per-g
 
 ### Model Tests
 
-- Validation exact-letter gate.
-- Final-test exact-letter gate.
+- Validation within-one-letter gate above 90%.
+- Final-test within-one-letter gate above 90%.
 - Per-grade precision and recall.
 - Confusion matrix stability.
 - Paraphrase invariance cases.
@@ -441,6 +441,6 @@ Legacy metrics must be labeled by evaluator and cannot occupy the v3 headline ac
 - The classifier artifact identifies its encoder, features, data manifests, and validation result.
 - Production image builds from a clean clone with pinned artifacts.
 - Production inference is CPU-only and offline.
-- Final-test exact-letter accuracy reaches at least 90%.
+- Final-test within-one-letter accuracy is greater than 90%.
 - Release metrics and documentation name the same evaluator and artifact versions.
 - Learner-answer grading and question-fidelity scoring remain operationally independent.

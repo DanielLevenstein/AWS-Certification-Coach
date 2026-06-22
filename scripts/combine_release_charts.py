@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Combine release chart PNGs into one release-note artifact."""
+"""Combine release chart PNGs into accuracy and question-coverage artifacts."""
 
 from __future__ import annotations
 
@@ -24,29 +24,54 @@ CHART_FONT_SIZES = {
 }
 
 DEFAULT_CHARTS = (
-    ("Semantic Accuracy", Path("release/semantic_accuracy.png")),
     ("Certification Split", Path("release/question_certification_coverage.png")),
+    ("Semantic Accuracy", Path("release/semantic_accuracy.png")),
+    ("Per-Grade Precision", Path("release/per_grade_precision.png")),
     ("Domain Coverage", Path("release/question_domain_coverage.png")),
     ("Question Intent Mix", Path("release/question_intent_coverage.png")),
 )
 
 
-def combine_release_charts(charts: list[tuple[str, Path]], output: Path) -> None:
+def combine_accuracy_charts(charts: list[tuple[str, Path]], output: Path) -> None:
+    _validate_charts(charts, {"Semantic Accuracy", "Per-Grade Precision"})
+    figure, axes = plt.subplots(1, 2, figsize=(16, 7), constrained_layout=True)
+    _render_panels(figure, list(axes), charts, "AWS Certification Coach Accuracy Metrics")
+    _save(figure, output)
+
+
+def combine_question_coverage_charts(charts: list[tuple[str, Path]], output: Path) -> None:
+    _validate_charts(charts, {"Certification Split", "Domain Coverage", "Question Intent Mix"})
+    figure, axes = plt.subplots(1, 3, figsize=(24, 8), constrained_layout=True)
+    _render_panels(figure, list(axes), charts, "AWS Certification Coach Question Coverage")
+    _save(figure, output)
+
+
+def _validate_charts(charts: list[tuple[str, Path]], required: set[str]) -> None:
     missing = [str(path) for _, path in charts if not path.exists()]
     if missing:
         raise FileNotFoundError(f"Missing release chart input(s): {', '.join(missing)}")
+    missing_titles = sorted(required - {title for title, _ in charts})
+    if missing_titles:
+        raise ValueError(f"Missing release chart panel(s): {', '.join(missing_titles)}")
 
-    figure, axes = plt.subplots(2, 2, figsize=(18, 14), constrained_layout=True)
-    for axis, (title, path) in zip(axes.flat, charts):
-        axis.imshow(mpimg.imread(path))
-        axis.set_title(title, fontsize=CHART_FONT_SIZES["title"], fontweight="bold", pad=12)
-        axis.axis("off")
 
+def _render_panels(figure: object, axes: list[object], charts: list[tuple[str, Path]], title: str) -> None:
+    for axis, (panel_title, path) in zip(axes, charts, strict=True):
+        _render_panel(axis, panel_title, path)
     figure.suptitle(
-        "AWS Certification Coach Release Metrics",
+        title,
         fontsize=CHART_FONT_SIZES["suptitle"],
         fontweight="bold",
     )
+
+
+def _render_panel(axis: object, title: str, path: Path) -> None:
+    axis.imshow(mpimg.imread(path))
+    axis.set_title(title, fontsize=CHART_FONT_SIZES["title"], fontweight="bold", pad=12)
+    axis.axis("off")
+
+
+def _save(figure: object, output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output, dpi=180, bbox_inches="tight")
     plt.close(figure)
@@ -54,23 +79,36 @@ def combine_release_charts(charts: list[tuple[str, Path]], output: Path) -> None
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--semantic-accuracy", type=Path, default=DEFAULT_CHARTS[0][1])
-    parser.add_argument("--certification-coverage", type=Path, default=DEFAULT_CHARTS[1][1])
-    parser.add_argument("--domain-coverage", type=Path, default=DEFAULT_CHARTS[2][1])
-    parser.add_argument("--intent-coverage", type=Path, default=DEFAULT_CHARTS[3][1])
-    parser.add_argument("--output", type=Path, default=Path("release/release_metrics_chart.png"))
+    parser.add_argument("--certification-coverage", type=Path, default=DEFAULT_CHARTS[0][1])
+    parser.add_argument("--semantic-accuracy", type=Path, default=DEFAULT_CHARTS[1][1])
+    parser.add_argument("--per-grade-precision", type=Path, default=DEFAULT_CHARTS[2][1])
+    parser.add_argument("--domain-coverage", type=Path, default=DEFAULT_CHARTS[3][1])
+    parser.add_argument("--intent-coverage", type=Path, default=DEFAULT_CHARTS[4][1])
+    parser.add_argument("--accuracy-output", type=Path, default=Path("release/accuracy_metrics_chart.png"))
+    parser.add_argument(
+        "--coverage-output",
+        type=Path,
+        default=Path("release/question_coverage_metrics_chart.png"),
+    )
     args = parser.parse_args()
 
-    combine_release_charts(
+    combine_accuracy_charts(
         [
             ("Semantic Accuracy", args.semantic_accuracy),
+            ("Per-Grade Precision", args.per_grade_precision),
+        ],
+        args.accuracy_output,
+    )
+    combine_question_coverage_charts(
+        [
             ("Certification Split", args.certification_coverage),
             ("Domain Coverage", args.domain_coverage),
             ("Question Intent Mix", args.intent_coverage),
         ],
-        args.output,
+        args.coverage_output,
     )
-    print(f"Combined release charts: {args.output}")
+    print(f"Accuracy metrics chart: {args.accuracy_output}")
+    print(f"Question coverage chart: {args.coverage_output}")
 
 
 if __name__ == "__main__":

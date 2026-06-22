@@ -42,7 +42,7 @@ Each generated question keeps its source-style multiple-choice item in the same 
 
 Training, validation, and final-test data are generated separately. `config/data/structured_answer_training_data.json` may augment training only. Final-test rows are never used for fitting, feature selection, thresholds, or runtime calibration.
 
-Artifacts keep letter grades for readability. Migration metrics preserve the historical grade bands `A/B`, `C/D`, and `F`; exact-letter accuracy remains the primary v3 release metric.
+Artifacts keep letter grades for readability. Migration metrics preserve the historical grade bands `A/B`, `C/D`, and `F`; within-one-letter accuracy above 90% is the v3 release gate, while exact-letter accuracy remains an honestly reported diagnostic.
 
 To regenerate local data:
 

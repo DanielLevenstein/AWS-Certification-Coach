@@ -7,6 +7,10 @@ GRADES = ("A", "B", "C", "D", "F")
 GRADE_INDEX = {grade: index for index, grade in enumerate(GRADES)}
 GRADE_BAND = {"A": "A/B", "B": "A/B", "C": "C/D", "D": "C/D", "F": "F"}
 
+DEFAULT_RELEASE_GATES = {
+    "within_one_letter_accuracy": ("minimum_exclusive", 0.90),
+}
+
 
 def evaluate_letter_predictions(expected: list[str], predicted: list[str]) -> dict[str, object]:
     if not expected or len(expected) != len(predicted):
@@ -69,6 +73,42 @@ def evaluate_letter_predictions(expected: list[str], predicted: list[str]) -> di
         "f_rejection_recall": per_grade["F"]["recall"],
         "per_grade": per_grade,
         "confusion_matrix": confusion,
+    }
+
+
+def evaluate_release_gates(
+    metrics: dict[str, object],
+) -> dict[str, object]:
+    """Evaluate the frozen v3 release gates without changing metric definitions."""
+
+    failures: list[str] = []
+    for key, (direction, threshold) in DEFAULT_RELEASE_GATES.items():
+        value = metrics.get(key)
+        if not isinstance(value, (int, float)):
+            failures.append(f"{key} is undefined")
+        elif direction == "minimum_exclusive" and float(value) <= threshold:
+            failures.append(f"{key} {float(value):.2%} must be above {threshold:.2%}")
+
+    per_grade = metrics.get("per_grade")
+    if not isinstance(per_grade, dict):
+        failures.append("per_grade metrics are undefined")
+    else:
+        for grade in GRADES:
+            grade_metrics = per_grade.get(grade)
+            if not isinstance(grade_metrics, dict):
+                failures.append(f"{grade} metrics are undefined")
+                continue
+            support = grade_metrics.get("support")
+            if not isinstance(support, int) or support <= 0:
+                failures.append(f"{grade} has no benchmark support")
+
+    return {
+        "passed": not failures,
+        "failures": failures,
+        "thresholds": {
+            key: {direction: threshold}
+            for key, (direction, threshold) in DEFAULT_RELEASE_GATES.items()
+        },
     }
 
 

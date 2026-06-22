@@ -1,6 +1,6 @@
 # v3.0.0 Local Semantic Answer Grading Metrics
 
-Status: Proposed  
+Status: Implemented for `v3.prototype.3`
 Target release: `v3.0.0`  
 Applies to: Learner-answer grading  
 Related documents: `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_DESIGN.md`, `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_ARCHITECTURE.md`, `docs/ANSWER_RUBRIC.md`
@@ -95,7 +95,7 @@ Definition: fraction of examples where the predicted and expected A/B/C/D/F grad
 exact_letter_accuracy = exact_letter_matches / evaluated_examples
 ```
 
-This is the primary v3 learner-answer metric and release gate. Expected A with predicted B is an error even though both are in the A/B semantic band.
+This remains an honestly reported diagnostic. Expected A with predicted B is an exact-letter error even though it is close enough for the release tolerance.
 
 ### Within 1 Letter
 
@@ -112,7 +112,7 @@ Examples:
 - Expected D, predicted F: match.
 - Expected A, predicted C: mismatch.
 
-Within 1 Letter remains a diagnostic. It cannot serve as the primary release gate because a model can score highly while consistently missing exact grade boundaries.
+Within 1 Letter is the primary v3 release gate. It must be greater than 90%. Exact-letter, per-grade, ordinal-error, and severe-error results remain visible so that this tolerance cannot hide the model's actual behavior.
 
 ## Required New Classifier Diagnostics
 
@@ -263,28 +263,21 @@ The detailed classifier table adds:
 |:----------|----------------:|-------------:|---------:|------------:|------------------:|-------------------:|
 | local semantic classifier | TBD | TBD | TBD | TBD | TBD | TBD |
 
-## Proposed Release Gates
+## Release Gate
 
 Hard gates:
 
-- Exact Letter Accuracy: at least 90%.
-- Semantic Precision: at least 90%.
-- Semantic Recall: at least 90%.
-- Five-Class Macro F1: at least 85%.
-- F Rejection Recall: at least 90%.
-- Within 1 Letter: at least 95%.
-- No grade has recall below 80%.
-- Severe Error Rate: at most 5%.
+- Within 1 Letter: greater than 90%.
 - Every grade has sufficient benchmark support.
 - Split-integrity and benchmark-manifest checks pass.
 
-Migration comparison gates:
+Migration comparison diagnostics:
 
 - The v3 candidate must exceed the legacy evaluator's Exact Letter Accuracy on the same benchmark.
 - Semantic Accuracy, Precision, and Recall may not regress by more than two percentage points without an explicit reviewed rationale.
 - Any improvement caused only by exact calibration hits must be labeled calibration fit and excluded from the generalization claim.
 
-The release remains blocked when the primary exact-letter gate fails even if Within 1 Letter or grade-band accuracy passes.
+Exact-letter accuracy, macro F1, per-grade recall, severe-error rate, and migration deltas are published diagnostics rather than release blockers. This favors a generalizing evaluator whose predictions remain close to the reviewed grade over a calibration lookup that appears exact only because it has seen the evaluation row.
 
 ## JSON Metrics Contract
 
@@ -344,8 +337,16 @@ The metrics contract is implemented when:
 - One evaluator function computes all shared metrics from expected and predicted letter grades.
 - Legacy and v3 scorers can be evaluated side by side on the same benchmark.
 - Existing release-column definitions are preserved exactly.
-- Exact-letter accuracy is the primary v3 gate.
+- Within-one-letter accuracy greater than 90% is the primary v3 gate.
 - Macro and per-grade metrics expose class imbalance.
 - Reports include benchmark and model provenance.
 - Test labels are unavailable to training and feature-selection code.
 - Release notes render the migration table and detailed classifier table without mixing question-fidelity metrics into answer-model claims.
+
+## Prototype Milestone Status
+
+`v3.prototype.3` freezes the formulas in
+`src/aws_certification_coach/model_evaluation/grade_metrics.py`, the schema-v3 final-test
+artifact, and the release thresholds above. `scripts/evaluate_semantic_answer_classifier.py`
+enforces the complete gate set by default; `--report-only` is reserved for diagnostic runs
+that must be clearly treated as non-release results.

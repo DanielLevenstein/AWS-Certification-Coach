@@ -23,7 +23,9 @@ fi
 .venv/bin/python scripts/train_semantic_answer_classifier.py \
   --metrics-output "$METRICS_DIR/semantic_classifier_training.json"
 .venv/bin/python scripts/evaluate_semantic_answer_classifier.py \
-  --output "$METRICS_DIR/semantic_classifier_test.json"
+  --output "$METRICS_DIR/semantic_classifier_test.json" \
+  --chart-output "$METRICS_DIR/semantic_accuracy.png" \
+  --per-grade-precision-chart-output "$METRICS_DIR/per_grade_precision.png"
 .venv/bin/python scripts/compare_answer_evaluators.py \
   --device cpu \
   --output "$METRICS_DIR/answer_evaluator_comparison.json"
@@ -37,7 +39,7 @@ fi
   --evaluation-data data/generated/user_feedback.v2.json \
   --evaluation-data data/generated/generated_feedback.json \
   --output "$METRICS_DIR/semantic_similarity.json" \
-  --chart-output "$METRICS_DIR/semantic_accuracy.png" \
+  --chart-output "$METRICS_DIR/legacy_semantic_accuracy.png" \
   "$@"
 .venv/bin/python scripts/question_fidelity_evaluation.py \
   --output "$METRICS_DIR/question_fidelity.json"

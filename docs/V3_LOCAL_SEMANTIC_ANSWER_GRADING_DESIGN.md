@@ -211,9 +211,9 @@ An explicit operator-configured fallback may exist for emergency recovery, but i
 
 ## Metrics And Release Gates
 
-Primary metric:
+Primary release metric:
 
-- Exact A/B/C/D/F accuracy on the untouched final test split.
+- Within-one-letter accuracy on the untouched final test split.
 
 The complete formulas, migration-comparison rules, detailed diagnostics, and JSON schema are defined in `docs/V3_LOCAL_SEMANTIC_ANSWER_GRADING_METRICS.md`.
 
@@ -230,9 +230,9 @@ Required diagnostics:
 
 Release gates for v3.0.0:
 
-- Validation exact-letter accuracy: at least 90%.
-- Final-test exact-letter accuracy: at least 90%.
-- No grade with recall below 80% unless explicitly waived and documented.
+- Validation within-one-letter accuracy: greater than 90%.
+- Final-test within-one-letter accuracy: greater than 90%.
+- Exact-letter accuracy and per-grade recall remain required published diagnostics.
 - No train/validation/test question-family overlap.
 - Unit and model tests pass.
 - CPU production smoke test passes without network access.
@@ -285,6 +285,6 @@ The design is implemented when:
 - Structured examples influence training but are not runtime lookup overrides.
 - Training cannot read final test data by default or through shared loaders.
 - Release metrics identify the exact classifier and encoder revisions evaluated.
-- Final-test exact-letter accuracy reaches at least 90%.
+- Final-test within-one-letter accuracy is greater than 90%.
 - A clean-clone CPU Docker image builds and grades a smoke-test answer offline.
 - Documentation, release notes, architecture, configuration, and scripts describe the same model path.

@@ -39,10 +39,12 @@ def render_release_metrics(
     comparison = _optional_read(metrics_dir / "answer_evaluator_comparison.json")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
     question_coverage = _optional_read(metrics_dir / "question_coverage.json")
-    classifier_metrics = classifier_test.get("test", {})
+    classifier_metrics = classifier_test.get("metrics", classifier_test.get("test", {}))
     if not isinstance(classifier_metrics, dict):
         classifier_metrics = {}
     comparison_table = _comparison_table(comparison)
+    per_grade_precision_table = _per_grade_precision_table(classifier_metrics)
+    release_gate_note = _release_gate_note(classifier_test)
     return "\n".join(
         [
             "## Generated Release Metrics",
@@ -62,6 +64,10 @@ def render_release_metrics(
             f"{_metric_cell(classifier_metrics, 'macro_f1')} | {_decimal_cell(classifier_metrics, 'ordinal_mae')} | "
             f"{_metric_cell(classifier_metrics, 'severe_error_rate')} | {_metric_cell(classifier_metrics, 'f_rejection_recall')} |",
             "",
+            "## Per Grade Metrics",
+            "",
+            per_grade_precision_table,
+            "",
             "## Migration Comparison",
             "",
             comparison_table,
@@ -78,6 +84,7 @@ def render_release_metrics(
             "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",
             "Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.",
             "Legacy and candidate migration rows must use the same frozen benchmark.",
+            release_gate_note,
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
         ]
     ) + "\n"
@@ -132,6 +139,42 @@ def _comparison_table(comparison: dict[str, object]) -> str:
             f"{_metric_cell(metrics, 'exact_letter_accuracy')} | {_metric_cell(metrics, 'within_one_letter_accuracy')} |"
         )
     return "\n".join(lines)
+
+
+def _per_grade_precision_table(metrics: dict[str, object]) -> str:
+    grades = ("A", "B", "C", "D", "F")
+    per_grade = metrics.get("per_grade", {})
+    if not isinstance(per_grade, dict):
+        per_grade = {}
+    cells = []
+    for grade in grades:
+        grade_metrics = per_grade.get(grade, {})
+        cells.append(
+            _metric_cell(grade_metrics, "precision")
+            if isinstance(grade_metrics, dict)
+            else "N/A"
+        )
+    cells.append(_metric_cell(metrics, "within_one_letter_accuracy"))
+    return "\n".join(
+        [
+            "| Metric | A | B | C | D | F | Within 1 Letter |",
+            "|:-------|--:|--:|--:|--:|--:|----------------:|",
+            f"| Precision | {' | '.join(cells)} |",
+        ]
+    )
+
+
+def _release_gate_note(classifier_test: dict[str, object]) -> str:
+    gates = classifier_test.get("release_gates", {})
+    if not isinstance(gates, dict) or "passed" not in gates:
+        return "Local classifier release gates: `not-run`."
+    if gates.get("passed") is True:
+        return "Local classifier release gates: `passed`."
+    failures = gates.get("failures", [])
+    if not isinstance(failures, list):
+        failures = []
+    details = "; ".join(str(failure) for failure in failures) or "threshold failure"
+    return f"Local classifier release gates: `failed` — {details}."
 
 
 def _coverage_names(question_coverage: dict[str, object], key: str, limit: int | None = None) -> str:

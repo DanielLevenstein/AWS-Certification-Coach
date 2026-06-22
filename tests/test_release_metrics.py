@@ -2,6 +2,8 @@ from pathlib import Path
 import struct
 import subprocess
 
+import test_suites
+
 from aws_certification_coach.release_metrics.complexity import measure_complexity
 from aws_certification_coach.release_metrics.question_coverage import (
     measure_question_coverage,
@@ -17,12 +19,38 @@ from aws_certification_coach.training.features import AnswerFeatureExtractor, co
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics, update_release_notes
 from scripts.semantic_similarity_evaluation import plot_semantic_accuracy
-from scripts.combine_release_charts import combine_release_charts
+from scripts.evaluate_semantic_answer_classifier import (
+    plot_classifier_metrics,
+    plot_per_grade_precision,
+)
+from scripts.combine_release_charts import (
+    combine_accuracy_charts,
+    combine_question_coverage_charts,
+)
 
 
 STRUCTURED_QUESTIONS = JsonQuestionRepository(
     Path(__file__).resolve().parents[1] / "config" / "data" / "structured_answer_training_data.json"
 ).all()
+
+
+def test_release_suite_generates_new_classifier_metrics_in_publish_directory(tmp_path, monkeypatch):
+    commands = []
+    monkeypatch.setattr(test_suites, "_run", commands.append)
+
+    test_suites.run_release_metrics(
+        ["--metrics-dir", str(tmp_path), "--release-label", "v3.prototype.3"]
+    )
+
+    evaluator = next(command for command in commands if "scripts/evaluate_semantic_answer_classifier.py" in command)
+    comparison = next(command for command in commands if "scripts/compare_answer_evaluators.py" in command)
+    publisher = next(command for command in commands if "scripts/release_metrics.py" in command)
+    assert str(tmp_path / "semantic_classifier_test.json") in evaluator
+    assert "--report-only" in evaluator
+    assert str(tmp_path / "semantic_accuracy.png") in evaluator
+    assert str(tmp_path / "per_grade_precision.png") in evaluator
+    assert str(tmp_path / "answer_evaluator_comparison.json") in comparison
+    assert str(tmp_path) in publisher
 
 
 def _structured_question(fragment: str) -> Question:
@@ -73,6 +101,42 @@ def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
         },
         output,
     )
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
+def test_classifier_release_chart_uses_schema_v3_metrics(tmp_path: Path):
+    output = tmp_path / "classifier.png"
+
+    plot_classifier_metrics(
+        {
+            "semantic_accuracy": 0.8942,
+            "semantic_precision": 1.0,
+            "semantic_recall": 1.0,
+            "exact_letter_accuracy": 0.8654,
+            "within_one_letter_accuracy": 0.9327,
+        },
+        output,
+    )
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
+def test_per_grade_precision_chart_uses_classifier_diagnostics(tmp_path: Path):
+    output = tmp_path / "per_grade.png"
+    metrics = {
+        "within_one_letter_accuracy": 0.9327,
+        "per_grade": {
+            grade: {"precision": precision}
+            for grade, precision in zip(
+                ("A", "B", "C", "D", "F"),
+                (0.92, 0.84, 0.56, 0.79, 1.0),
+                strict=True,
+            )
+        }
+    }
+
+    plot_per_grade_precision(metrics, output)
 
     assert output.read_bytes().startswith(b"\x89PNG")
 
@@ -163,20 +227,39 @@ def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
         assert latest_output.exists()
 
 
-def test_combine_release_charts_writes_four_panel_png(tmp_path: Path):
-    chart_paths = []
-    for index, title in enumerate(["Semantic", "Domain", "Intent", "Certification"]):
+def test_combined_release_charts_split_accuracy_from_question_coverage(tmp_path: Path):
+    paths = {}
+    for index, title in enumerate([
+        "Certification Split",
+        "Semantic Accuracy",
+        "Per-Grade Precision",
+        "Domain Coverage",
+        "Question Intent Mix",
+    ]):
         path = tmp_path / f"chart_{index}.png"
         _write_sample_chart(path, title)
-        chart_paths.append((title, path))
-    output = tmp_path / "release_metrics_chart.png"
+        paths[title] = path
+    accuracy_output = tmp_path / "accuracy_metrics_chart.png"
+    coverage_output = tmp_path / "question_coverage_metrics_chart.png"
 
-    combine_release_charts(chart_paths, output)
+    combine_accuracy_charts(
+        [(title, paths[title]) for title in ("Semantic Accuracy", "Per-Grade Precision")],
+        accuracy_output,
+    )
+    combine_question_coverage_charts(
+        [
+            (title, paths[title])
+            for title in ("Certification Split", "Domain Coverage", "Question Intent Mix")
+        ],
+        coverage_output,
+    )
 
-    assert output.read_bytes().startswith(b"\x89PNG")
-    width, height = _png_dimensions(output)
-    assert width >= 2500
-    assert height >= 1800
+    assert accuracy_output.read_bytes().startswith(b"\x89PNG")
+    assert coverage_output.read_bytes().startswith(b"\x89PNG")
+    accuracy_width, accuracy_height = _png_dimensions(accuracy_output)
+    coverage_width, coverage_height = _png_dimensions(coverage_output)
+    assert accuracy_width > accuracy_height
+    assert coverage_width > coverage_height
 
 
 def _write_sample_chart(path: Path, title: str) -> None:
@@ -211,11 +294,14 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "semantic_classifier_test.json").write_text(
-        '{"test": {"semantic_accuracy": 0.93, "semantic_precision": 0.94, "semantic_recall": 0.92, '
+        '{"metrics": {"semantic_accuracy": 0.93, "semantic_precision": 0.94, "semantic_recall": 0.92, '
         '"exact_letter_accuracy": 0.8654, "within_one_letter_accuracy": 0.97, '
         '"macro_precision": 0.84, "macro_recall": 0.85, "macro_f1": 0.83, '
         '"ordinal_mae": 0.16, "severe_error_rate": 0.03, "f_rejection_recall": 0.91, '
-        '"example_count": 104}}',
+        '"example_count": 104, "per_grade": {'
+        '"A": {"precision": 0.92}, "B": {"precision": 0.84375}, '
+        '"C": {"precision": 0.5556}, "D": {"precision": 0.7857}, '
+        '"F": {"precision": 1.0}}}, "release_gates": {"passed": true, "failures": []}}',
         encoding="utf-8",
     )
     (metrics_dir / "answer_evaluator_comparison.json").write_text(
@@ -249,6 +335,9 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
     assert "| v1.5 Schema | semantic_grade_classifier_v1 | 93.00% | 94.00% | 92.00% | 86.54% | 97.00% | 88.40% |" in markdown
     assert "| legacy_semantic_similarity | 80.00% | 90.00% | 75.00% | 64.00% | 92.00% |" in markdown
     assert "| 84.00% | 85.00% | 83.00% | 0.160 | 3.00% | 91.00% |" in markdown
+    assert "| Metric | A | B | C | D | F | Within 1 Letter |" in markdown
+    assert "| Precision | 92.00% | 84.38% | 55.56% | 78.57% | 100.00% | 97.00% |" in markdown
+    assert "Local classifier release gates: `passed`" in markdown
 
 def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"

@@ -32,6 +32,31 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     _run(
         [
             sys.executable,
+            "scripts/evaluate_semantic_answer_classifier.py",
+            "--device",
+            "cpu",
+            "--report-only",
+            "--output",
+            str(metrics_dir / "semantic_classifier_test.json"),
+            "--chart-output",
+            str(metrics_dir / "semantic_accuracy.png"),
+            "--per-grade-precision-chart-output",
+            str(metrics_dir / "per_grade_precision.png"),
+        ]
+    )
+    _run(
+        [
+            sys.executable,
+            "scripts/compare_answer_evaluators.py",
+            "--device",
+            "cpu",
+            "--output",
+            str(metrics_dir / "answer_evaluator_comparison.json"),
+        ]
+    )
+    _run(
+        [
+            sys.executable,
             "scripts/curated_failure_report.py",
             "--output",
             str(metrics_dir / "curated_failure_report.md"),
@@ -52,7 +77,7 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             "--output",
             str(metrics_dir / "semantic_similarity.json"),
             "--chart-output",
-            str(metrics_dir / "semantic_accuracy.png"),
+            str(metrics_dir / "legacy_semantic_accuracy.png"),
         ]
     )
     _run(

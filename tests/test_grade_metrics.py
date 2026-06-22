@@ -1,6 +1,9 @@
 import pytest
 
-from aws_certification_coach.model_evaluation.grade_metrics import evaluate_letter_predictions
+from aws_certification_coach.model_evaluation.grade_metrics import (
+    evaluate_letter_predictions,
+    evaluate_release_gates,
+)
 
 
 def test_legacy_compatible_grade_metrics_keep_original_definitions():
@@ -38,3 +41,45 @@ def test_grade_metrics_reject_empty_or_unknown_inputs():
         evaluate_letter_predictions([], [])
     with pytest.raises(ValueError):
         evaluate_letter_predictions(["A"], ["E"])
+
+
+def test_perfect_five_grade_results_pass_frozen_release_gates():
+    metrics = evaluate_letter_predictions(
+        ["A", "B", "C", "D", "F"],
+        ["A", "B", "C", "D", "F"],
+    )
+
+    gates = evaluate_release_gates(metrics)
+
+    assert gates["passed"] is True
+    assert gates["failures"] == []
+    assert gates["thresholds"]["within_one_letter_accuracy"] == {
+        "minimum_exclusive": 0.90
+    }
+
+
+def test_release_gates_require_support_and_recall_for_every_grade():
+    metrics = evaluate_letter_predictions(["A", "B", "C", "D"], ["A", "B", "C", "D"])
+
+    gates = evaluate_release_gates(metrics)
+
+    assert gates["passed"] is False
+    assert "F has no benchmark support" in gates["failures"]
+
+
+def test_release_gate_requires_more_than_ninety_percent_within_one_letter():
+    metrics = evaluate_letter_predictions(
+        ["A"] * 10,
+        ["A"] * 9 + ["C"],
+    )
+    metrics["per_grade"] = {
+        grade: {"support": 1, "recall": 1.0} for grade in ("A", "B", "C", "D", "F")
+    }
+
+    gates = evaluate_release_gates(metrics)
+
+    assert metrics["within_one_letter_accuracy"] == 0.9
+    assert gates["passed"] is False
+    assert gates["failures"] == [
+        "within_one_letter_accuracy 90.00% must be above 90.00%"
+    ]

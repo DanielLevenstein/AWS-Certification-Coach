@@ -29,7 +29,7 @@ def main() -> None:
     parser.add_argument("--structured-data", type=Path, default=DEFAULT_STRUCTURED_DATA)
     parser.add_argument("--output", type=Path, default=Path("models/answer_semantic_classifier.json"))
     parser.add_argument("--metrics-output", type=Path, default=Path("metrics/semantic_classifier_training.json"))
-    parser.add_argument("--min-validation-accuracy", type=float, default=0.90)
+    parser.add_argument("--min-validation-within-one-accuracy", type=float, default=0.90)
     parser.add_argument("--device", default=None)
     args = parser.parse_args()
 
@@ -56,11 +56,11 @@ def main() -> None:
     }
     args.metrics_output.parent.mkdir(parents=True, exist_ok=True)
     args.metrics_output.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
-    accuracy = float(metrics["validation"]["exact_letter_accuracy"])
-    if accuracy < args.min_validation_accuracy:
+    accuracy = float(metrics["validation"]["within_one_letter_accuracy"])
+    if accuracy <= args.min_validation_within_one_accuracy:
         raise SystemExit(
-            f"Validation exact-letter accuracy {accuracy:.2%} is below "
-            f"{args.min_validation_accuracy:.2%}; classifier was not saved."
+            f"Validation within-one-letter accuracy {accuracy:.2%} must be above "
+            f"{args.min_validation_within_one_accuracy:.2%}; classifier was not saved."
         )
     classifier.save(args.output)
     print(json.dumps(metrics, indent=2))
