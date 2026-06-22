@@ -1,5 +1,5 @@
 # Release Notes
-
+## Release Changelist
 
 | Release  | Description                                                                                                                        |
 |:---------|:-----------------------------------------------------------------------------------------------------------------------------------|
@@ -27,9 +27,19 @@
 | v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
 | v2.4.5.2 | Added contact info to app                                                                                                          |
 | v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
+| V2.4.5.5  | Updated RELEASE_NOTES.md to show metric definitions|
+
 # Release Metrics
 
+## Metric Definitions:
 
+- “Semantic Accuracy” was a grade-band agreement: A/B, C/D, or F.
+- Versions below v2.5 and below treat A–D as accepted and F as rejected;
+- Versions 2.5+ treat A–C as accepted and D/F as failing.
+- Exact Letter required the identical A/B/C/D/F class.
+- Within one Letter used the ordered scale A → B → C → D → F.
+
+## Semantic Accuracy
 | Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
 | v1.5.0   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
