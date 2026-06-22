@@ -12,70 +12,13 @@ The previous TODO was backed up to `docs/TODO_COPY.md` before this roadmap was c
 - Do not commit `data/`, `scripts/data/`, or `metrics/`.
 - Do not push Docker images or create GitHub tags until a human reviews the changes.
 
-# Phase 1 Planning And Rubric Stabilization
-## Rubric Stabilization
-Target Version: 2.2.3
-
-Purpose: finish the code-free design pass before changing implementation behavior.
-Documentation Changes:
-
-- Review and finalize `docs/QUESTION_EXPANSION_ARCHITECTURE.md`.
-- Review and finalize `docs/ANSWER_RUBRIC.md`.
-- Review and finalize `docs/QUESTION_EXPANSION_FEATURE.md`.
-- Confirm the shared A/B/C/D/F grade language for all learner-answer formats.
-- Confirm that question-fidelity scoring remains separate from learner-answer grading.
-- Confirm how multi-select source questions are represented when transformed into freeform prompts.
-- Decide whether multiple-choice should remain visible in the main app flow or primarily serve as source provenance.
-- Decide the minimum Developer Associate domain distribution needed before deeper manual testing resumes.
-Exit criteria:
-
-- Architecture and rubric docs are internally consistent.
-
-## Answer Grading Stabilization
-Target Version: 2.2.4
-
-Coding Changes:
-- Retrain existing questions on new rubric and determine baseline performance.
-- Determine which columns should be maintained in the RELEASE_NOTES.md table going forward.
-- Evaluate `curated_training_data.json` and suggest answer updates based on the evaluation rubric.
-- Do not add any additional question types at this stage; standardize the evaluation rubric for the existing questions.
-
-Exit criteria:
-
-- Grading fidelity on existing questions should reach over 90% for accuracy, precision, and recall.
-- Identify why Training Accuracy is lower than other metrics and consider removing it from release notes if it continues to fall behind.
-
-Publish the app to Docker and GitHub after this stabilization step to avoid getting stuck in an infinite design loop.
-Validate app in prod to ensure that new AWS Developer Certification questions display as expected. 
-
-
-## Answer Rubric Data Contract
-Target Version: 2.3.1
-
-Purpose: introduce the data shape needed for consistent answer grading without changing the learner experience too much at once.
-
-- Add a question-type field for app-facing questions.
-  - `multiple_choice`
-  - `scenario_multiple_choice`
-  - `multi_select_source`
-  - `service_selection`
-  - `service_comparison`
-  - `architecture_tradeoff`
-- Add rubric metadata fields to generated question artifacts.
-  - `required_concepts`
-  - `bonus_concepts`
-  - `common_misconceptions`
-  - `acceptable_answers`
-  - `must_not_claim`
-- Create a clean dataset with exact letter grade answer examples for testing newly implemented rubric.
-- Add a flag to release notes to allow strict grading where the exact letter grade match is required.
-
-Exit criteria:
-
-- Existing questions still load.
-- New rubric metadata is available to answer grading and feedback code.
-- Unit tests pass.
-- Release notes include schema and metric results.
+# Phase 1 Model Stabilization
+## v3.0.0 Switch model to sentence-transformers
+Add documentation for new model architecture and lock downgrading metrics
+## v3.0.1 Audit existing documentation
+Audit existing documentation to ensure it matches to design.
+## v3.0.2 Initial implementation
+SentenceTransformer semantic normalization plus a supervised A–F classifier
 
 # Phase 2 Code & Configuration Review
 Release Target v2.4.0

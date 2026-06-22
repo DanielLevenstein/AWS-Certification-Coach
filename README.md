@@ -103,6 +103,14 @@ Run model-quality checks separately:
 ./run_model_tests.sh
 ```
 
+Answer grading runs locally with `sentence-transformers/all-MiniLM-L6-v2`. Download it before starting or building the app:
+
+```bash
+.venv/bin/python scripts/download_answer_embedding_model.py
+```
+
+The default device mode is `auto`, allowing SentenceTransformers to use an available accelerator and falling back to CPU. The Docker production image sets `AWS_COACH_CPU_ONLY=1` to force CPU inference. A supervised A/B/C/D/F classification head is trained over normalized learner/reference embedding features; `config/data/structured_answer_training_data.json` augments only the training split. Run `./train_accuracy_model.sh` to train against training plus structured rows, select against validation, and report the untouched final test split.
+
 Run the release suite and save the latest release chart artifacts:
 
 ```bash
@@ -111,13 +119,13 @@ Run the release suite and save the latest release chart artifacts:
 
 The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, and a combined four-panel chart as latest-only files in `release/`.
 
-Refresh the training graph, curated failure report, semantic metrics, and detailed tagged report:
+Refresh curated calibrations, the failure report, semantic metrics, and the detailed tagged report:
 
 ```bash
 ./release_notes.sh --full v2.2.0
 ```
 
-The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, the question coverage PNGs, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper publishes latest-only individual chart files at `release/semantic_accuracy.png`, `release/question_domain_coverage.png`, `release/question_intent_coverage.png`, and `release/question_certification_coverage.png`. The only versioned chart artifact is the combined `release/release_metrics_chart.png`, plus the markdown reports in `release/`.
+The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, the question coverage PNGs, `semantic_similarity.json`, `summary.md`, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper publishes latest-only individual chart files at `release/semantic_accuracy.png`, `release/question_domain_coverage.png`, `release/question_intent_coverage.png`, and `release/question_certification_coverage.png`. The only versioned chart artifact is the combined `release/release_metrics_chart.png`, plus the markdown reports in `release/`.
 
 Regenerate local training, validation, test, and app sample artifacts:
 
@@ -126,13 +134,13 @@ Regenerate local training, validation, test, and app sample artifacts:
 .venv/bin/python scripts/generate_app_question_artifacts.py --count 80
 ```
 
-Train the diagnostic partial-credit regressor:
+Refresh production scoring calibrations and metrics without training model weights:
 
 ```bash
-.venv/bin/python scripts/train_answer_accuracy.py
+./train_accuracy_model.sh
 ```
 
-The regression metrics are retained for diagnostics, but release tracking uses `semantic_similarity` precision as the guardrail.
+The compatibility script name is retained, but it now combines curated feedback and evaluates the same calibrated `semantic_similarity` path used by the app. Its JSON also reports uncalibrated heuristic accuracy separately.
 
 Print a single release-note-friendly model performance summary:
 

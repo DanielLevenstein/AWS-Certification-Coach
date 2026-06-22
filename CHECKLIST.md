@@ -22,8 +22,8 @@ README.md has a shorter release notes section for only major releases.
 - `run_model_tests.sh`
 - `release_notes_full.sh v1.5.x`
 2) Update RELEASE_NOTES.md with a description of the release and output from `release_notes.sh`.
-3) Review `metrics/<timestamp>/training_performance.png`, `metrics/<timestamp>/curated_grade_accuracy.png`, and `metrics/<timestamp>/semantic_accuracy.png`. Run `release_notes_quick.sh v1.5.x` when only the release metrics and report need to be refreshed.
-4) Review `metrics/<timestamp>/curated_failure_report.md` and reconcile contradictory labels before tuning the model.
+3) Review `metrics/<timestamp>/semantic_accuracy.png`. Run `release_notes.sh --quick v1.5.x` when only the release metrics and report need to be refreshed.
+4) Review `metrics/<timestamp>/curated_failure_report.md` and reconcile contradictory labels before tuning semantic rules or calibrations.
 5) Deploy the Docker release after all changes are committed.
 `./deploy.sh v1.5.x`
 6) The deploy script validates a clean working tree, builds the `linux/amd64` tag, runs the Docker container load test, and pushes both the release tag and `latest`.

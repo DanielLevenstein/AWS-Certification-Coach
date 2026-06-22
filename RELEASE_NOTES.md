@@ -26,8 +26,15 @@
 | v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                                             |
 | v2.4.5 | Ensure that full sentence answers which reference the correct service receive grade A                                                                                |
 | v2.4.5.2 | Added contact info to app |
+
 # Release Metrics
 
+Metric Definitions:
+
+- “Semantic Accuracy” was a grade-band agreement: A/B, C/D, or F.
+- Precision and recall treated A – D as accepted and F as rejected.
+- Exact Letter required the identical A/B/C/D/F class.
+- Within one Letter used the ordered scale A → B → C → D → F.
 
 | Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
@@ -50,7 +57,7 @@
 | v2.4.4   |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
-
+| Current | 91.67% | 100.00% | 92.31% | 83.33% | 95.19% | 94.95% |
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
