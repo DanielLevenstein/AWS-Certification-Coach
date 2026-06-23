@@ -64,38 +64,44 @@ fi
 
 ACCURACY_SOURCE="$METRICS_DIR/semantic_accuracy.png"
 ACCURACY_OUTPUT="release/semantic_accuracy.png"
+PER_GRADE_PRECISION_SOURCE="$METRICS_DIR/per_grade_precision.png"
+PER_GRADE_PRECISION_OUTPUT="release/per_grade_precision.png"
 DOMAIN_COVERAGE_SOURCE="$METRICS_DIR/question_domain_coverage.png"
 DOMAIN_COVERAGE_OUTPUT="release/question_domain_coverage.png"
 INTENT_COVERAGE_SOURCE="$METRICS_DIR/question_intent_coverage.png"
 INTENT_COVERAGE_OUTPUT="release/question_intent_coverage.png"
 CERTIFICATION_COVERAGE_SOURCE="$METRICS_DIR/question_certification_coverage.png"
 CERTIFICATION_COVERAGE_OUTPUT="release/question_certification_coverage.png"
-COMBINED_CHART_OUTPUT="release/release_metrics_chart.png"
+ACCURACY_CHART_OUTPUT="release/accuracy_metrics_chart.png"
+QUESTION_COVERAGE_CHART_OUTPUT="release/question_coverage_metrics_chart.png"
 LATEST_REPORT="$METRICS_DIR/curated_failure_report.md"
 REPORT_OUTPUT="release/curated_failure_report.md"
 LATEST_RUBRIC_REVIEW="$METRICS_DIR/curated_rubric_review.md"
 RUBRIC_REVIEW_OUTPUT="release/curated_rubric_review.md"
 mkdir -p release
 cp -p "$ACCURACY_SOURCE" "$ACCURACY_OUTPUT"
+cp -p "$PER_GRADE_PRECISION_SOURCE" "$PER_GRADE_PRECISION_OUTPUT"
 cp -p "$DOMAIN_COVERAGE_SOURCE" "$DOMAIN_COVERAGE_OUTPUT"
 cp -p "$INTENT_COVERAGE_SOURCE" "$INTENT_COVERAGE_OUTPUT"
 cp -p "$CERTIFICATION_COVERAGE_SOURCE" "$CERTIFICATION_COVERAGE_OUTPUT"
 cp -p "$LATEST_REPORT" "$REPORT_OUTPUT"
 cp -p "$LATEST_RUBRIC_REVIEW" "$RUBRIC_REVIEW_OUTPUT"
 .venv/bin/python scripts/combine_release_charts.py \
-  --semantic-accuracy "$ACCURACY_OUTPUT" \
-  --domain-coverage "$DOMAIN_COVERAGE_OUTPUT" \
-  --intent-coverage "$INTENT_COVERAGE_OUTPUT" \
-  --certification-coverage "$CERTIFICATION_COVERAGE_OUTPUT" \
-  --output "$COMBINED_CHART_OUTPUT"
-cp -p "$COMBINED_CHART_OUTPUT" "release/${RELEASE_TAG}"_release_metrics_chart.png
-rm "$COMBINED_CHART_OUTPUT"
-rm "$ACCURACY_OUTPUT"
+  --semantic-accuracy "$ACCURACY_SOURCE" \
+  --per-grade-precision "$PER_GRADE_PRECISION_SOURCE" \
+  --domain-coverage "$DOMAIN_COVERAGE_SOURCE" \
+  --intent-coverage "$INTENT_COVERAGE_SOURCE" \
+  --certification-coverage "$CERTIFICATION_COVERAGE_SOURCE" \
+  --accuracy-output "$ACCURACY_CHART_OUTPUT" \
+  --coverage-output "$QUESTION_COVERAGE_CHART_OUTPUT"
+cp -p "$ACCURACY_CHART_OUTPUT" "release/${RELEASE_TAG}"_accuracy_metrics_chart.png
 
 echo "Saved latest accuracy chart: $ACCURACY_OUTPUT"
+echo "Saved latest per-grade precision and recall chart: $PER_GRADE_PRECISION_OUTPUT"
 echo "Saved latest domain coverage chart: $DOMAIN_COVERAGE_OUTPUT"
 echo "Saved latest question intent coverage chart: $INTENT_COVERAGE_OUTPUT"
 echo "Saved latest certification coverage chart: $CERTIFICATION_COVERAGE_OUTPUT"
-echo "Saved combined release chart artifact: $COMBINED_CHART_OUTPUT"
+echo "Saved accuracy metrics chart: $ACCURACY_CHART_OUTPUT"
+echo "Saved question coverage chart: $QUESTION_COVERAGE_CHART_OUTPUT"
 echo "Saved latest release report $REPORT_OUTPUT"
 echo "Saved latest curated rubric review $RUBRIC_REVIEW_OUTPUT"

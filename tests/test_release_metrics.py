@@ -16,8 +16,8 @@ from aws_certification_coach.questions.json_repository import JsonQuestionReposi
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics, update_release_notes
-from scripts.semantic_similarity_evaluation import plot_semantic_accuracy
-from scripts.combine_release_charts import combine_release_charts
+from scripts.semantic_similarity_evaluation import plot_per_grade_precision, plot_semantic_accuracy
+from scripts.combine_release_charts import combine_accuracy_charts, combine_question_coverage_charts
 
 
 STRUCTURED_QUESTIONS = JsonQuestionRepository(
@@ -94,6 +94,29 @@ def test_semantic_accuracy_chart_includes_answer_model_within_one_letter_metric(
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
+def test_per_grade_precision_chart_includes_recall_from_existing_answer_model(tmp_path: Path):
+    output = tmp_path / "per_grade_precision.png"
+    evaluation = {
+        "splits": {
+            "test": {
+                "per_grade": {
+                    grade: {"precision": precision, "recall": recall}
+                    for grade, precision, recall in zip(
+                        ("A", "B", "C", "D", "F"),
+                        (0.92, 0.84, 0.56, 0.79, 1.0),
+                        (0.88, 0.76, 0.64, 0.71, 0.95),
+                        strict=True,
+                    )
+                }
+            }
+        }
+    }
+
+    plot_per_grade_precision(evaluation, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
 def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
     rows = [
         {
@@ -163,20 +186,36 @@ def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
         assert latest_output.exists()
 
 
-def test_combine_release_charts_writes_four_panel_png(tmp_path: Path):
-    chart_paths = []
-    for index, title in enumerate(["Semantic", "Domain", "Intent", "Certification"]):
+def test_combined_release_charts_split_accuracy_from_question_coverage(tmp_path: Path):
+    paths = {}
+    for index, title in enumerate([
+        "Certification Split",
+        "Semantic Accuracy",
+        "Per-Grade Precision & Recall",
+        "Domain Coverage",
+        "Question Intent Mix",
+    ]):
         path = tmp_path / f"chart_{index}.png"
         _write_sample_chart(path, title)
-        chart_paths.append((title, path))
-    output = tmp_path / "release_metrics_chart.png"
+        paths[title] = path
+    accuracy_output = tmp_path / "accuracy_metrics_chart.png"
+    coverage_output = tmp_path / "question_coverage_metrics_chart.png"
 
-    combine_release_charts(chart_paths, output)
+    combine_accuracy_charts(
+        [(title, paths[title]) for title in ("Semantic Accuracy", "Per-Grade Precision & Recall")],
+        accuracy_output,
+    )
+    combine_question_coverage_charts(
+        [(title, paths[title]) for title in ("Certification Split", "Domain Coverage", "Question Intent Mix")],
+        coverage_output,
+    )
 
-    assert output.read_bytes().startswith(b"\x89PNG")
-    width, height = _png_dimensions(output)
-    assert width >= 2500
-    assert height >= 1800
+    assert accuracy_output.read_bytes().startswith(b"\x89PNG")
+    assert coverage_output.read_bytes().startswith(b"\x89PNG")
+    accuracy_width, accuracy_height = _png_dimensions(accuracy_output)
+    coverage_width, coverage_height = _png_dimensions(coverage_output)
+    assert accuracy_width > accuracy_height
+    assert coverage_width > coverage_height
 
 
 def _write_sample_chart(path: Path, title: str) -> None:
@@ -200,14 +239,9 @@ def _png_dimensions(path: Path) -> tuple[int, int]:
         raise ValueError(f"Not a PNG file: {path}")
     return struct.unpack(">II", header[16:24])
 
-
-def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
+def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"
     metrics_dir.mkdir()
-    (metrics_dir / "training_history.json").write_text(
-        '{"checkpoints": [{"epoch": 1, "mse": 0.1234, "mae": 0.5678, "curated_grade_accuracy": 0.44}]}',
-        encoding="utf-8",
-    )
     (metrics_dir / "training_metrics.json").write_text(
         '{"answer_form": "long", "saved_model": {"curated_grade_accuracy": 0.96, "calibration_count": 18}}',
         encoding="utf-8",
@@ -218,47 +252,29 @@ def test_release_metrics_tracks_curated_and_semantic_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "answer_model_evaluation.json").write_text(
-        (
-            '{"splits": {'
-            '"train": {"within_one_letter_accuracy": 0.91}, '
-            '"validation": {"within_one_letter_accuracy": 0.82}, '
-            '"test": {"within_one_letter_accuracy": 0.76}'
-            "}}"
-        ),
+        '{"splits": {"test": {"within_one_letter_accuracy": 0.76, "per_grade": {'
+        '"A": {"precision": 0.9, "recall": 0.8, "f1": 0.847, "support": 10}, '
+        '"B": {"precision": 0.8, "recall": 0.7, "f1": 0.747, "support": 9}, '
+        '"C": {"precision": 0.7, "recall": 0.6, "f1": 0.646, "support": 8}, '
+        '"D": {"precision": 0.6, "recall": 0.5, "f1": 0.545, "support": 7}, '
+        '"F": {"precision": 1.0, "recall": 0.9, "f1": 0.947, "support": 6}'
+        '}}}}',
         encoding="utf-8",
     )
     (metrics_dir / "answer_model_evaluation.md").write_text(
-        (
-            "| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |\n"
-            "|---|---:|---:|---:|---:|---:|\n"
-            "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |\n"
-        ),
-        encoding="utf-8",
-    )
-    (metrics_dir / "question_fidelity.json").write_text(
-        '{"model_name": "question_fidelity_heuristic_v1", "question_fidelity": 88.4, "sample_count": 5, "source_count": 12, "generated_question_count": 12}',
-        encoding="utf-8",
-    )
-    (metrics_dir / "question_coverage.json").write_text(
-        (
-            '{"question_count": 92, "domain_count": 15, "concept_count": 184, "question_intent_count": 4, '
-            '"covered_services": [{"name": "Lambda", "count": 3}, {"name": "SQS", "count": 2}], '
-            '"top_concepts": [{"name": "serverless", "count": 4}, {"name": "replication", "count": 3}]}'
-        ),
+        "| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |\n"
+        "|---|---:|---:|---:|---:|---:|\n"
+        "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |\n",
         encoding="utf-8",
     )
 
-    markdown = render_release_metrics(metrics_dir, release_label="v1.5 Schema")
+    markdown = render_release_metrics(metrics_dir, release_label="v2.5")
 
-    assert (
-        "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | "
-        "Exact Letter Accuracy | Within 1 Letter | Question Fidelity |"
-    ) in markdown
-    assert "| v1.5 Schema | 80.00% | 90.00% | 75.00% | 64.00% | 76.00% | 88.40% |" in markdown
-    assert "## Answer Model Split Evaluation" in markdown
+    assert "| v2.5 | 80.00% | 90.00% | 75.00% | 64.00% | 76.00% | N/A |" in markdown
+    assert "## Per Grade Metrics" in markdown
+    assert "| Precision | 90.00% | 80.00% | 70.00% | 60.00% | 100.00% |" in markdown
+    assert "| Support | 10 | 9 | 8 | 7 | 6 |" in markdown
     assert "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |" in markdown
-    assert "Saved model grade-band accuracy" not in markdown
-    assert "Training accuracy" not in markdown
 
 def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"

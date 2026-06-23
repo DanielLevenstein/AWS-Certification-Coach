@@ -44,6 +44,7 @@ def main() -> None:
     parser.add_argument("--questions", type=Path, default=Path("data/questions/sample_questions.json"))
     parser.add_argument("--output", type=Path, default=Path("release/metrics/semantic_similarity.json"))
     parser.add_argument("--chart-output", type=Path, default=Path("release/metrics/semantic_accuracy.png"))
+    parser.add_argument("--per-grade-precision-output", type=Path, default=None)
     parser.add_argument("--answer-model-evaluation", type=Path, default=None)
     parser.add_argument("--training-metrics", type=Path, default=None)
     args = parser.parse_args()
@@ -64,6 +65,8 @@ def main() -> None:
         else None
     )
     plot_semantic_accuracy(metrics, args.chart_output, answer_model_evaluation)
+    if args.per_grade_precision_output is not None:
+        plot_per_grade_precision(answer_model_evaluation or {}, args.per_grade_precision_output)
     print(json.dumps(metrics, indent=2))
     print(f"Semantic accuracy graph: {args.chart_output}")
 
@@ -105,6 +108,71 @@ def plot_semantic_accuracy(
             ha="center",
             fontsize=CHART_FONT_SIZES["annotation"],
         )
+    figure.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    figure.savefig(output_path, dpi=160)
+    plt.close(figure)
+
+
+def plot_per_grade_precision(answer_model_evaluation: dict[str, object], output_path: Path) -> None:
+    """Render final-test precision and recall for each grade."""
+
+    splits = answer_model_evaluation.get("splits", {})
+    test_split = splits.get("test", {}) if isinstance(splits, dict) else {}
+    per_grade = test_split.get("per_grade", {}) if isinstance(test_split, dict) else {}
+    if not isinstance(per_grade, dict):
+        raise ValueError("Answer model evaluation does not define per_grade metrics.")
+
+    grades = ("A", "B", "C", "D", "F")
+    precisions = []
+    recalls = []
+    precision_labels = []
+    recall_labels = []
+    for grade in grades:
+        metrics = per_grade.get(grade, {})
+        precision = metrics.get("precision") if isinstance(metrics, dict) else None
+        recall = metrics.get("recall") if isinstance(metrics, dict) else None
+        precisions.append(0.0 if precision is None else float(precision) * 100)
+        recalls.append(0.0 if recall is None else float(recall) * 100)
+        precision_labels.append("N/A" if precision is None else f"{float(precision):.0%}")
+        recall_labels.append("N/A" if recall is None else f"{float(recall):.0%}")
+
+    figure, axis = plt.subplots(figsize=(8, 5))
+    positions = list(range(len(grades)))
+    width = 0.36
+    precision_bars = axis.bar(
+        [position - width / 2 for position in positions],
+        precisions,
+        width,
+        color=["#276749", "#2b6cb0", "#6b46c1", "#c05621", "#9b2c2c"],
+        label="Precision",
+    )
+    recall_bars = axis.bar(
+        [position + width / 2 for position in positions],
+        recalls,
+        width,
+        color=["#68d391", "#90cdf4", "#b794f4", "#fbd38d", "#feb2b2"],
+        label="Recall",
+    )
+    axis.set_ylim(0, 108)
+    axis.set_xticks(positions, grades)
+    axis.set_ylabel("Percent", fontsize=CHART_FONT_SIZES["axis"])
+    axis.set_xlabel("Grade", fontsize=CHART_FONT_SIZES["axis"])
+    axis.set_title("Per-Grade Precision and Recall", fontsize=CHART_FONT_SIZES["title"], pad=14)
+    axis.grid(axis="y", alpha=0.25)
+    axis.legend(loc="lower right", fontsize=CHART_FONT_SIZES["legend"])
+    axis.bar_label(
+        precision_bars,
+        labels=precision_labels,
+        padding=3,
+        fontsize=CHART_FONT_SIZES["annotation"] - 2,
+    )
+    axis.bar_label(
+        recall_bars,
+        labels=recall_labels,
+        padding=3,
+        fontsize=CHART_FONT_SIZES["annotation"] - 2,
+    )
     figure.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=160)

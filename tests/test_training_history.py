@@ -72,6 +72,13 @@ def test_evaluate_answer_model_splits_reports_each_split(tmp_path):
     assert report["splits"]["train"]["example_count"] == 2
     assert "letter_accuracy" in report["splits"]["validation"]
     assert "letter_confusion" in report["splits"]["test"]
+    assert set(report["splits"]["test"]["per_grade"]) == {"A", "B", "C", "D", "F"}
+    assert report["splits"]["test"]["per_grade"]["A"] == {
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 2 / 3,
+        "support": 1,
+    }
 
     table = render_markdown_table(report)
 
