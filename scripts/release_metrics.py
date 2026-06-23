@@ -44,6 +44,7 @@ def render_release_metrics(
     answer_form = saved_model.get("answer_form", training_metrics.get("answer_form", "unknown") if training_metrics else "unknown")
     calibration_count = saved_model.get("calibration_count", 0)
     exact_letter_accuracy = float(semantic.get("semantic_exact_letter_accuracy", semantic["semantic_grade_accuracy"]))
+    per_grade_table = _per_grade_metrics_table(answer_model_evaluation)
     return "\n".join(
         [
             "## Generated Release Metrics",
@@ -54,6 +55,10 @@ def render_release_metrics(
             f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | "
             f"{exact_letter_accuracy:.2%} | {_answer_within_one_letter_cell(answer_model_evaluation)} | "
             f"{_question_fidelity_cell(question_fidelity)} |",
+            "",
+            "## Per Grade Metrics",
+            "",
+            per_grade_table,
             "",
             f"Saved model answer form: `{answer_form}`",
             f"Saved model calibration count: `{calibration_count}`",
@@ -111,6 +116,39 @@ def _answer_within_one_letter_cell(answer_model_evaluation: dict[str, object]) -
     if not isinstance(test_split, dict) or "within_one_letter_accuracy" not in test_split:
         return "N/A"
     return f"{float(test_split['within_one_letter_accuracy']):.2%}"
+
+
+def _per_grade_metrics_table(answer_model_evaluation: dict[str, object]) -> str:
+    splits = answer_model_evaluation.get("splits", {})
+    test_split = splits.get("test", {}) if isinstance(splits, dict) else {}
+    per_grade = test_split.get("per_grade", {}) if isinstance(test_split, dict) else {}
+    if not isinstance(per_grade, dict):
+        per_grade = {}
+    lines = [
+        "| Metric | A | B | C | D | F |",
+        "|:-------|--:|--:|--:|--:|--:|",
+    ]
+    for label, key in (("Precision", "precision"), ("Recall", "recall"), ("F1", "f1")):
+        cells = [_percentage_cell(per_grade.get(grade), key) for grade in GRADES]
+        lines.append(f"| {label} | {' | '.join(cells)} |")
+    support_cells = [_integer_cell(per_grade.get(grade), "support") for grade in GRADES]
+    lines.append(f"| Support | {' | '.join(support_cells)} |")
+    return "\n".join(lines)
+
+
+GRADES = ("A", "B", "C", "D", "F")
+
+
+def _percentage_cell(metrics: object, key: str) -> str:
+    if not isinstance(metrics, dict) or metrics.get(key) is None:
+        return "N/A"
+    return f"{float(metrics[key]):.2%}"
+
+
+def _integer_cell(metrics: object, key: str) -> str:
+    if not isinstance(metrics, dict) or metrics.get(key) is None:
+        return "0"
+    return str(int(metrics[key]))
 
 
 def _coverage_names(question_coverage: dict[str, object], key: str, limit: int | None = None) -> str:

@@ -18,6 +18,7 @@ DEFAULT_SPLITS = {
     "validation": Path("data/generated/questions_with_answers_validation.json"),
     "test": Path("data/generated/questions_with_answers_test.json"),
 }
+GRADES = ("A", "B", "C", "D", "F")
 
 
 def main() -> None:
@@ -94,22 +95,42 @@ def _grade_metrics(
     exact_matches = 0
     within_one_letter = 0
     total = len(examples)
-    confusion: dict[str, dict[str, int]] = {}
+    confusion = {grade: {prediction: 0 for prediction in GRADES} for grade in GRADES}
     for example in examples:
         predicted = score_to_letter(round(model.predict(extractor.extract(example.question, example.answer)) * 100))
         expected = score_to_letter(round(example.rating * 100))
         exact_matches += int(predicted == expected)
         within_one_letter += int(abs(_letter_index(predicted) - _letter_index(expected)) <= 1)
-        confusion.setdefault(expected, {})
-        confusion[expected][predicted] = confusion[expected].get(predicted, 0) + 1
+        confusion[expected][predicted] += 1
+    per_grade = {}
+    for grade in GRADES:
+        true_positive = confusion[grade][grade]
+        support = sum(confusion[grade].values())
+        predicted_count = sum(confusion[expected][grade] for expected in GRADES)
+        precision = _ratio(true_positive, predicted_count)
+        recall = _ratio(true_positive, support)
+        per_grade[grade] = {
+            "precision": precision,
+            "recall": recall,
+            "f1": _f1(precision, recall),
+            "support": support,
+        }
     return {
         "letter_accuracy": exact_matches / max(1, total),
         "within_one_letter_accuracy": within_one_letter / max(1, total),
-        "letter_confusion": {
-            expected: dict(sorted(predictions.items()))
-            for expected, predictions in sorted(confusion.items())
-        },
+        "per_grade": per_grade,
+        "letter_confusion": confusion,
     }
+
+
+def _ratio(numerator: int, denominator: int) -> float | None:
+    return numerator / denominator if denominator else None
+
+
+def _f1(precision: float | None, recall: float | None) -> float | None:
+    if precision is None or recall is None or precision + recall == 0:
+        return None
+    return 2 * precision * recall / (precision + recall)
 
 
 def _letter_index(letter: str) -> int:

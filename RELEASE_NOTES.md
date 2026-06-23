@@ -15,7 +15,8 @@
 | v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
 | v2.4.5.2 | Added contact info to app                                                                                                          |
 | v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
-| v2.4.6  | Clean up release notes  and documentation                                                                                          |
+| v2.4.6   | Clean up release notes  and documentation                                                                                          |
+| v2.5.1   | implemented reimplemented per-grade performance evaluation for semantic accuracy model.| 
 # Release Metrics
 
 
@@ -76,6 +77,15 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
 | v2.5.1 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
+
+## Per Grade Metrics
+
+| Metric | A | B | C | D | F |
+|:-------|--:|--:|--:|--:|--:|
+| Precision | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
+| Recall | 83.33% | 21.88% | 62.50% | 31.25% | 100.00% |
+| F1 | 59.70% | 30.43% | 45.45% | 47.62% | 92.31% |
+| Support | 24 | 32 | 8 | 16 | 24 |
 
 Saved model answer form: `long`
 Saved model calibration count: `25`
