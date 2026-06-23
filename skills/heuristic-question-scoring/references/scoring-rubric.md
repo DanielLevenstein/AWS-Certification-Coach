@@ -25,7 +25,7 @@ Reject a generated question regardless of weighted score when:
 - Its correct answer is ambiguous between multiple AWS services.
 - Its distractors are obviously unrelated or nonsensical.
 
-## Evidence To Include
+## Evidence to Include
 
 For each score, require short evidence fields:
 

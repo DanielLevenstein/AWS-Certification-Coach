@@ -40,6 +40,7 @@
 | v2.4.4   |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
+| v2.5.1 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -74,7 +75,7 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.4.5 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
+| v2.5.1 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
 
 Saved model answer form: `long`
 Saved model calibration count: `25`

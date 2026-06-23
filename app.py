@@ -266,11 +266,10 @@ def _streamlit_code_language(artifact_language: str) -> str | None:
 
 
 def _render_original_multiple_choice(original: MultipleChoiceQuestion | None) -> None:
-    st.write("Source multiple-choice question")
+    st.write("Multiple-choice Answers:")
     if original is None:
         st.write("No source multiple-choice item is attached.")
         return
-    st.caption(original.source_name or "Source item")
     correct_ids = set(original.correct_option_ids)
     for option in original.options:
         option_text = f"{option.option_id}. {option.text}"
@@ -278,6 +277,7 @@ def _render_original_multiple_choice(original: MultipleChoiceQuestion | None) ->
             st.success(option_text)
         else:
             st.write(option_text)
+    st.caption(original.source_name or "Source item")
 
 
 if __name__ == "__main__":

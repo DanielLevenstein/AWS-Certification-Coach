@@ -199,11 +199,11 @@ Each graded response should include:
 - A concise improvement suggestion.
 - A reference-quality answer or explanation.
 
-Feedback should avoid saying only "wrong" when the learner selected a plausible distractor. It should explain what the distractor got right and which requirement made it suboptimal.
+Feedback should avoid saying only "wrong" when the learner selects a plausible distractor. It should explain what the distractor got right and which requirement made it suboptimal.
 
 ## Calibration Notes
 
-Use this rubric consistently across question types, but allow each question to define its own required concepts, bonus concepts, misconceptions, and acceptable answers.
+Use this rubric consistently across question types but allow each question to define its own required concepts, bonus concepts, misconceptions, and acceptable answers.
 
 Release accuracy should be calculated against the exact expected letter grade (`A`, `B`, `C`, `D`, or `F`), not broad grade bands such as `A/B` or `C/D`. A predicted `B` for an expected `A` is a calibration miss even though both are accepted answers.
 
