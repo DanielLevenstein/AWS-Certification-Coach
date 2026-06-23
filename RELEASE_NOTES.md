@@ -79,7 +79,7 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 ## Current Coverage
 
-![Release Metrics Chart](release/v2.4.5_release_metrics_chart.png)
+![Release Metrics Chart](release/question_coverage_metrics_chart.png)
 
 <!-- release-metrics:start -->
 ## Generated Release Metrics
