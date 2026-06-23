@@ -53,6 +53,8 @@
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.4.6   | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
 | v2.5.2   | 90.62% | 100.00% | 100.00% | 87.50% | 98.08% | 94.95% |
+
+
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
