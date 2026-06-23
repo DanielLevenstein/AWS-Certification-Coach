@@ -16,10 +16,20 @@
 | v2.4.5.2 | Added contact info to app                                                                                                          |
 | v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
 | v2.4.6   | Clean up release notes  and documentation                                                                                          |
+| V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions|
+| v2.5.0   | Defined A-C as the correct answer and D-F as incorrect in metrics. |
 | v2.5.1   | implemented reimplemented per-grade performance evaluation for semantic accuracy model.| 
 # Release Metrics
 
+## Metric Definitions:
 
+- “Semantic Accuracy” was a grade-band agreement: A/B, C/D, or F.
+- Versions below v2.5 and below treat A–D as accepted and F as rejected;
+- Versions 2.5+ treat A–C as accepted and D/F as failing.
+- Exact Letter required the identical A/B/C/D/F class.
+- Within one Letter used the ordered scale A → B → C → D → F.
+
+## Semantic Accuracy
 | Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
 | v1.5.0   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
@@ -41,8 +51,8 @@
 | v2.4.4   |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
-| v2.4.6 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
-
+| v2.4.6   | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
+| v2.5.2   | 90.62% | 100.00% | 100.00% | 87.50% | 98.08% | 94.95% |
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
@@ -76,7 +86,7 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.5.1 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
+| v2.5.3 | 90.62% | 100.00% | 100.00% | 87.50% | 98.08% | 94.95% |
 
 ## Per Grade Metrics
 
@@ -96,11 +106,11 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic answer evaluation count: `32`
+Semantic evaluation count: `32`
 Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
-Within 1 Letter uses the generated answer model test split and accepts adjacent `A/B/C/D/F` predictions.
-Semantic precision has a 90% release guardrail for the `semantic_similarity` model.
+Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
+Semantic Precision and Recall treat `A`–`C` as accepted and `D`/`F` as failing.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
 
 ## Answer Model Split Evaluation
