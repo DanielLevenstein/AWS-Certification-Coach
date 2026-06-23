@@ -117,7 +117,8 @@ Refresh the training graph, curated failure report, semantic metrics, and detail
 ./release_notes.sh --full v2.2.0
 ```
 
-The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory along with `semantic_accuracy.png`, the question coverage PNGs, `semantic_similarity.json`, `summary.md`, the trained model checkpoint, and the curated failure report. Detailed failing questions, label conflicts, and suspected causes are written to `metrics/<timestamp>/curated_failure_report.md`. The release helper publishes latest-only individual chart files at `release/semantic_accuracy.png`, `release/question_domain_coverage.png`, `release/question_intent_coverage.png`, and `release/question_certification_coverage.png`. The only versioned chart artifact is the combined `release/release_metrics_chart.png`, plus the markdown reports in `release/`.
+The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory.
+Summary artifiacts are copied to the release directory and saved with `$tag_name` in front of the file name.
 
 Regenerate local training, validation, test, and app sample artifacts:
 
