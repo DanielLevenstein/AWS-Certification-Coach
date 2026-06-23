@@ -15,7 +15,7 @@
 | v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
 | v2.4.5.2 | Added contact info to app                                                                                                          |
 | v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
-| v2.5.1   | Documentation and UI cleanup.                                                                                                      |
+| v2.5.2   | Clean up release notes  and documentation                                                                                          |
 # Release Metrics
 
 
