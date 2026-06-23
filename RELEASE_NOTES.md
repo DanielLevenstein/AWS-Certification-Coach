@@ -15,10 +15,10 @@
 | v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
 | v2.4.5.2 | Added contact info to app                                                                                                          |
 | v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
-| v2.4.6   | Clean up release notes  and documentation                                                                                          |
+| v2.4.6   | Clean up release notes and documentation                                                                                           |
 | V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions                                                                                |
-| v2.5.0   | Defined A-C as the correct answer and D-F as incorrect in metrics.                                                                 |
 | v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                        | 
+| v2.5.2   | Defined A-C as the correct answer and D-F as incorrect in metrics.                                                                 |
 # Release Metrics
 
 ## Metric Definitions:
@@ -51,8 +51,8 @@
 | v2.4.4   |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
-| v2.4.6   | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
-| v2.5.2   | 90.62% | 100.00% | 100.00% | 87.50% | 98.08% | 94.95% |
+| v2.4.6   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
+| v2.5.2   |            90.62% |            100.00% |         100.00% |                87.50% |          98.08% |            94.95% |
 
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
