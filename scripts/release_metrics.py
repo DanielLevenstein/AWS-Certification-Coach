@@ -44,17 +44,22 @@ def render_release_metrics(
     answer_form = saved_model.get("answer_form", training_metrics.get("answer_form", "unknown") if training_metrics else "unknown")
     calibration_count = saved_model.get("calibration_count", 0)
     exact_letter_accuracy = float(semantic.get("semantic_exact_letter_accuracy", semantic["semantic_grade_accuracy"]))
+    grade_band_table = _grade_band_metrics_table(answer_model_evaluation)
     per_grade_table = _per_grade_metrics_table(answer_model_evaluation)
     return "\n".join(
         [
             "## Generated Release Metrics",
             "",
-            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
+            "| Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
             "|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|",
             f"| {release_label} | {semantic['semantic_grade_accuracy']:.2%} | "
             f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | "
             f"{exact_letter_accuracy:.2%} | {_answer_within_one_letter_cell(answer_model_evaluation)} | "
             f"{_question_fidelity_cell(question_fidelity)} |",
+            "",
+            "## Grade Band Metrics",
+            "",
+            grade_band_table,
             "",
             "## Per Grade Metrics",
             "",
@@ -70,7 +75,8 @@ def render_release_metrics(
             f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
             f"Top covered concepts: `{_coverage_names(question_coverage, 'top_concepts', limit=12)}`",
             f"Semantic evaluation count: `{semantic.get('semantic_example_count', 0)}`",
-            "Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).",
+            "Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.",
+            "Legacy Semantic Accuracy retains the previous `A/B`, `C/D`, or `F` definition for comparison only.",
             "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",
             "Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.",
             "Semantic Precision and Recall treat `A`–`C` as accepted and `D`/`F` as failing.",
@@ -132,6 +138,25 @@ def _per_grade_metrics_table(answer_model_evaluation: dict[str, object]) -> str:
         cells = [_percentage_cell(per_grade.get(grade), key) for grade in GRADES]
         lines.append(f"| {label} | {' | '.join(cells)} |")
     support_cells = [_integer_cell(per_grade.get(grade), "support") for grade in GRADES]
+    lines.append(f"| Support | {' | '.join(support_cells)} |")
+    return "\n".join(lines)
+
+
+def _grade_band_metrics_table(answer_model_evaluation: dict[str, object]) -> str:
+    splits = answer_model_evaluation.get("splits", {})
+    test_split = splits.get("test", {}) if isinstance(splits, dict) else {}
+    per_band = test_split.get("per_grade_band", {}) if isinstance(test_split, dict) else {}
+    if not isinstance(per_band, dict):
+        per_band = {}
+    bands = ("A", "BC", "DF")
+    lines = [
+        "| Metric | A | BC | DF |",
+        "|:-------|--:|---:|---:|",
+    ]
+    for label, key in (("Precision", "precision"), ("Recall", "recall"), ("F1", "f1")):
+        cells = [_percentage_cell(per_band.get(band), key) for band in bands]
+        lines.append(f"| {label} | {' | '.join(cells)} |")
+    support_cells = [_integer_cell(per_band.get(band), "support") for band in bands]
     lines.append(f"| Support | {' | '.join(support_cells)} |")
     return "\n".join(lines)
 

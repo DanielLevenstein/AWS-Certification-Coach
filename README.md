@@ -9,6 +9,7 @@ AI study partner for AWS certification exams.
 ## Live Demo
 
 The latest version of this project is deployed live on Render.
+
 - Render Deployment: [AWS Certification Coach](https://aws-certification-coach-latest.onrender.com/)
 
 ## Application Screenshot
@@ -35,9 +36,11 @@ Each generated question keeps its source-style multiple-choice item in the same 
 
 Training and verification data are generated separately:
 
-Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C/D`, and `F`. Precision and recall treat `A/B` and `C/D` as accepted answers and `F` as rejected.
+Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C`, and `D/F`.
 
-To regenerate local data:
+![Accuracy Metrics Chart](release/accuracy_metrics_chart.png)
+
+### To regenerate local data:
 
 ```bash
 ./setup.sh
@@ -92,6 +95,7 @@ Then run the app:
 ```
 
 ### Application Tests and Release Notes
+
 Run the fast unit and contract tests:
 
 ```bash
@@ -111,8 +115,8 @@ The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<t
 
 Summary artifiacts are copied to the release directory and saved with `$tag_name` in front of the file name.
 
-
 ### Retrain Model Locally
+
 Regenerate local training, validation, test, and app sample artifacts:
 
 ```bash

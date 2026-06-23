@@ -79,6 +79,10 @@ def test_evaluate_answer_model_splits_reports_each_split(tmp_path):
         "f1": 2 / 3,
         "support": 1,
     }
+    assert set(report["splits"]["test"]["per_grade_band"]) == {"A", "BC", "DF"}
+    assert report["splits"]["test"]["per_grade_band"]["A"]["support"] == 1
+    assert report["splits"]["test"]["per_grade_band"]["BC"]["support"] == 0
+    assert report["splits"]["test"]["per_grade_band"]["DF"]["support"] == 1
 
     table = render_markdown_table(report)
 

@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from aws_certification_coach.ratings import score_to_letter
+from aws_certification_coach.model_evaluation.band_accuracy import BandAccuracy
 from aws_certification_coach.training.answer_classifier import AnswerRegressionModel, evaluate_regression_model
 from aws_certification_coach.training.dataset import AnswerRegressionExample, load_answer_regression_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor
@@ -119,6 +120,7 @@ def _grade_metrics(
         "letter_accuracy": exact_matches / max(1, total),
         "within_one_letter_accuracy": within_one_letter / max(1, total),
         "per_grade": per_grade,
+        "per_grade_band": BandAccuracy().evaluate(confusion),
         "letter_confusion": confusion,
     }
 

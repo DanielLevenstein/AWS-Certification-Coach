@@ -211,6 +211,10 @@ tempCodeRunnerFile.py
 /release/metrics/
 /release/*.png
 !/release/release_metrics_chart.png
+!/release/per_grade_metrics.png
+!/release/grade_band_metrics.png
+!/release/letter_distance_metrics.png
+!/release/accuracy_metrics_chart.png
 
 # Ruff stuff:
 .ruff_cache/

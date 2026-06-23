@@ -16,7 +16,12 @@ from aws_certification_coach.questions.json_repository import JsonQuestionReposi
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics, update_release_notes
-from scripts.semantic_similarity_evaluation import plot_per_grade_precision, plot_semantic_accuracy
+from scripts.semantic_similarity_evaluation import (
+    plot_grade_band_metrics,
+    plot_letter_distance_metrics,
+    plot_per_grade_metrics,
+    plot_semantic_accuracy,
+)
 from scripts.combine_release_charts import combine_accuracy_charts, combine_question_coverage_charts
 
 
@@ -94,8 +99,8 @@ def test_semantic_accuracy_chart_includes_answer_model_within_one_letter_metric(
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_per_grade_precision_chart_includes_recall_from_existing_answer_model(tmp_path: Path):
-    output = tmp_path / "per_grade_precision.png"
+def test_per_grade_chart_includes_precision_and_recall_from_existing_answer_model(tmp_path: Path):
+    output = tmp_path / "per_grade_metrics.png"
     evaluation = {
         "splits": {
             "test": {
@@ -112,7 +117,42 @@ def test_per_grade_precision_chart_includes_recall_from_existing_answer_model(tm
         }
     }
 
-    plot_per_grade_precision(evaluation, output)
+    plot_per_grade_metrics(evaluation, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
+def test_grade_band_chart_uses_exclusive_a_bc_df_bands(tmp_path: Path):
+    output = tmp_path / "grade_band_metrics.png"
+    evaluation = {
+        "splits": {
+            "test": {
+                "per_grade_band": {
+                    "A": {"precision": 0.82, "recall": 0.91},
+                    "BC": {"precision": 0.56, "recall": 0.64},
+                    "DF": {"precision": 0.93, "recall": 0.88},
+                }
+            }
+        }
+    }
+
+    plot_grade_band_metrics(evaluation, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
+def test_letter_distance_chart_decomposes_within_one_letter_accuracy(tmp_path: Path):
+    output = tmp_path / "letter_distance_metrics.png"
+    evaluation = {
+        "splits": {
+            "test": {
+                "letter_accuracy": 0.59,
+                "within_one_letter_accuracy": 0.98,
+            }
+        }
+    }
+
+    plot_letter_distance_metrics(evaluation, output)
 
     assert output.read_bytes().startswith(b"\x89PNG")
 
@@ -190,8 +230,9 @@ def test_combined_release_charts_split_accuracy_from_question_coverage(tmp_path:
     paths = {}
     for index, title in enumerate([
         "Certification Split",
-        "Semantic Accuracy",
         "Per-Grade Precision & Recall",
+        "Grade Bands",
+        "Letter Distance",
         "Domain Coverage",
         "Question Intent Mix",
     ]):
@@ -202,7 +243,10 @@ def test_combined_release_charts_split_accuracy_from_question_coverage(tmp_path:
     coverage_output = tmp_path / "question_coverage_metrics_chart.png"
 
     combine_accuracy_charts(
-        [(title, paths[title]) for title in ("Semantic Accuracy", "Per-Grade Precision & Recall")],
+        [
+            (title, paths[title])
+            for title in ("Letter Distance", "Grade Bands", "Per-Grade Precision & Recall")
+        ],
         accuracy_output,
     )
     combine_question_coverage_charts(
@@ -258,6 +302,10 @@ def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
         '"C": {"precision": 0.7, "recall": 0.6, "f1": 0.646, "support": 8}, '
         '"D": {"precision": 0.6, "recall": 0.5, "f1": 0.545, "support": 7}, '
         '"F": {"precision": 1.0, "recall": 0.9, "f1": 0.947, "support": 6}'
+        '}, "per_grade_band": {'
+        '"A": {"precision": 0.85, "recall": 0.9, "f1": 0.874, "support": 10}, '
+        '"BC": {"precision": 0.7, "recall": 0.6, "f1": 0.646, "support": 17}, '
+        '"DF": {"precision": 0.92, "recall": 0.88, "f1": 0.9, "support": 13}'
         '}}}}',
         encoding="utf-8",
     )
@@ -272,6 +320,9 @@ def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
 
     assert "| v2.5 | 80.00% | 90.00% | 75.00% | 64.00% | 76.00% | N/A |" in markdown
     assert "## Per Grade Metrics" in markdown
+    assert "## Grade Band Metrics" in markdown
+    assert "| Metric | A | BC | DF |" in markdown
+    assert "| Precision | 85.00% | 70.00% | 92.00% |" in markdown
     assert "| Precision | 90.00% | 80.00% | 70.00% | 60.00% | 100.00% |" in markdown
     assert "| Support | 10 | 9 | 8 | 7 | 6 |" in markdown
     assert "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |" in markdown

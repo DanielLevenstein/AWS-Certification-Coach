@@ -95,8 +95,12 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             str(metrics_dir / "semantic_accuracy.png"),
             "--answer-model-evaluation",
             str(metrics_dir / "answer_model_evaluation.json"),
-            "--per-grade-precision-output",
-            str(metrics_dir / "per_grade_precision.png"),
+            "--per-grade-output",
+            str(metrics_dir / "per_grade_metrics.png"),
+            "--grade-band-output",
+            str(metrics_dir / "grade_band_metrics.png"),
+            "--letter-distance-output",
+            str(metrics_dir / "letter_distance_metrics.png"),
         ]
     )
     _run(
