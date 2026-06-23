@@ -16,9 +16,9 @@
 | v2.4.5.2 | Added contact info to app                                                                                                          |
 | v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
 | v2.4.6   | Clean up release notes  and documentation                                                                                          |
-| V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions|
-| v2.5.0   | Defined A-C as the correct answer and D-F as incorrect in metrics. |
-| v2.5.1   | implemented reimplemented per-grade performance evaluation for semantic accuracy model.| 
+| V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions                                                                                |
+| v2.5.0   | Defined A-C as the correct answer and D-F as incorrect in metrics.                                                                 |
+| v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                        | 
 # Release Metrics
 
 ## Metric Definitions:
