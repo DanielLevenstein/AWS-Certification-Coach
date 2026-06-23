@@ -9,6 +9,7 @@ from aws_certification_coach.release_metrics.question_coverage import (
 )
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.model_evaluation.semantic_similarity import (
+    LEGACY_ACCEPTED_GRADES,
     evaluate_semantic_curated_answers,
     semantic_similarity_score,
 )
@@ -28,6 +29,10 @@ from scripts.combine_release_charts import combine_accuracy_charts, combine_ques
 STRUCTURED_QUESTIONS = JsonQuestionRepository(
     Path(__file__).resolve().parents[1] / "config" / "data" / "structured_answer_training_data.json"
 ).all()
+
+
+def test_legacy_semantic_acceptance_definition_remains_frozen():
+    assert LEGACY_ACCEPTED_GRADES == {"A", "B", "C", "D"}
 
 
 def _structured_question(fragment: str) -> Question:

@@ -18,7 +18,7 @@
 | v2.4.6   | Clean up release notes and documentation                                                                                           |
 | V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions                                                                                |
 | v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                        | 
-| v2.5.2   | Defined A-C as the correct answer and D-F as incorrect in metrics.                                                                 |
+| v2.5.2   | Restored the legacy Semantic Precision and Recall definition.                                                                       |
 | v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                   
 | v2.5.5   | Added back exact match and off by one graph for release metrics.                                                                   |
 
@@ -27,8 +27,7 @@
 ## Metric Definitions:
 
 - “Semantic Accuracy” was a grade-band agreement: A/B, C/D, or F.
-- Versions below v2.5 and below treat A–D as accepted and F as rejected;
-- Versions 2.5+ treat A–C as accepted and D/F as failing.
+- Semantic Precision and Recall retain the legacy definition: A–D are accepted and F is rejected.
 - Exact Letter required the identical A/B/C/D/F class.
 - Within one Letter used the ordered scale A → B → C → D → F.
 
@@ -55,10 +54,10 @@
 | v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.4.6   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
-| v2.5.2   |            90.62% |            100.00% |         100.00% |                87.50% |          98.08% |            94.95% |
+| v2.5.2   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 
 ## Grade Band Precision
-| Release |      A |     BC |      DF |
+| Release |      A |    B&C |     D&F |
 |:--------|-------:|-------:|--------:|
 | v2.5.5  | 46.51% | 60.71% | 100.00% |
 
@@ -101,7 +100,7 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.5.5 | 90.62% | 100.00% | 100.00% | 87.50% | 98.08% | 94.95% |
+| v2.5.5.1 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
 
 ## Grade Band Metrics
 
@@ -132,10 +131,9 @@ Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
 Semantic evaluation count: `32`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
-Legacy Semantic Accuracy retains the previous `A/B`, `C/D`, or `F` definition for comparison only.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
-Semantic Precision and Recall treat `A`–`C` as accepted and `D`/`F` as failing.
+Legacy Semantic Precision and Recall retain the original `A`–`D` accepted and `F` rejected definition.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
 
 ## Answer Model Split Evaluation
