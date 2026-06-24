@@ -41,15 +41,13 @@ def test_model_smoke_suite_rejects_artifact_writes(monkeypatch):
         test_suites.run_model_smoke_tests()
 
 
-def test_model_training_and_deployment_have_explicit_routes(monkeypatch):
+def test_deployment_has_an_explicit_route(monkeypatch):
     commands = []
     monkeypatch.setattr(test_suites, "_run", commands.append)
 
-    test_suites.run_model_training_tests()
     test_suites.run_deployment_tests()
 
-    assert "scripts/model_evaluation.py" in commands[0]
-    assert "tests/deployment" in commands[1]
+    assert "tests/deployment" in commands[0]
 
 
 def test_full_release_runs_fast_checks_without_duplicate_model_training():
@@ -76,7 +74,7 @@ def test_quick_release_reuses_complete_metrics_without_training(tmp_path, monkey
 
     assert len(commands) == 1
     assert "scripts/release_metrics.py" in commands[0]
-    assert "scripts/train_answer_accuracy.py" not in commands[0]
+    assert "scripts/semantic_similarity_evaluation.py" not in commands[0]
 
 
 def test_quick_release_rejects_incomplete_metrics(tmp_path):
@@ -88,16 +86,7 @@ def test_all_test_modules_are_grouped_by_review_area():
     assert list((PROJECT_ROOT / "tests").glob("test_*.py")) == []
 
 
-def test_suite_main_forwards_subcommand_help(monkeypatch):
-    commands = []
-    monkeypatch.setattr(test_suites, "_run", commands.append)
-    monkeypatch.setattr(
-        test_suites.sys,
-        "argv",
-        ["test_suites.py", "model-training", "--help"],
-    )
+def test_suite_parser_no_longer_exposes_model_training():
+    help_text = test_suites._suite_parser().format_help()
 
-    test_suites.main()
-
-    assert "scripts/model_evaluation.py" in commands[0]
-    assert "--help" in commands[0]
+    assert "model-training" not in help_text

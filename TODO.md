@@ -27,16 +27,8 @@ Because the current accuracy metrics are stable, we are implementing these chang
 Implementing dedicated AWS knowledge based on a dedicated feature branch using tinyLLama for local training.
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
-1) Update model tests to separate training and smoke testing. 
-2) Add a playwrite test to the deployment guardrail which tests that the first question of the test displays and then move the deployment test into its own test suite per our test suite design. 
-3) Release metrics from train_accuracy_model.sh and release_notes.sh don't match. We need to determine which metrics should be used. We are currently using the values from the release_notes.sh script.
-
-| Release                 |      A |      B |      C |       D |      F |
-|:------------------------|-------:|-------:|-------:|--------:|-------:|
-| release_notes.sh        | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
-| train_accuracy_model.sh | 42.42% | 66.67% | 34.78% | 77.78% | 100.00% |
-
-Update release guardrail to use the exact letter match as its release metric once we get the metric above the satisfactory value.
+1) Add a common misconceptions section to the knowledge base.
+2) Update release guardrail to use the exact letter match as its release metric once we get the metric above the satisfactory value.
 This will allow us to deprecate the old metrics completely.
 
 

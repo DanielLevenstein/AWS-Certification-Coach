@@ -162,8 +162,7 @@ The project should keep these data categories separate:
 
 - App-facing question artifacts used by the Streamlit app.
 - Source and calibration artifacts under `data/original_questions/`.
-- Training examples used to tune or evaluate answer grading.
-- Final verification data that must not be used for training or threshold tuning.
+- Curated answer examples used to evaluate deterministic semantic grading.
 - Release metrics and generated reports.
 
 Do not commit `data/`, `scripts/data/`, or `metrics/`. Regenerate local artifacts with `./clean.sh` and `./setup.sh` when schema or generated-data behavior changes.
@@ -174,11 +173,10 @@ Before a milestone is considered ready:
 
 - Confirm architecture and rubric docs use the same terminology.
 - Confirm learner-answer grading remains separate from question-fidelity scoring.
-- Confirm answer-training rows and final verification rows remain separate.
+- Confirm app questions remain separate from curated answer feedback.
 - Run unit tests with `./run_unit_tests.sh`.
 - Run the read-only model sanity gate with `./run_model_smoke_tests.sh`.
-- Run `./run_model_training_tests.sh` when model behavior or training inputs change; this gate trains temporary held-out models and does not produce a candidate artifact.
-- Use `./train_accuracy_model.sh` only when a timestamped candidate model and its diagnostic artifacts are needed.
+- Run the full release metrics suite when semantic scoring, knowledge, or curated feedback changes.
 - Run the explicit deployment suite with `DOCKER_IMAGE=<candidate> ./run_deployment_tests.sh` before deploying an image.
 - Run release metrics and update `RELEASE_NOTES.md`.
 - Confirm generated data and metrics artifacts are not staged.

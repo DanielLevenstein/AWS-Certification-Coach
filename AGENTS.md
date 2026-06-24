@@ -11,11 +11,9 @@
 
 ## Project Scripts
 - clean.sh: Cleans out data and metrics dir
-- setup.sh: Generates training data for a project
+- setup.sh: Generates the local question bank and curated semantic-evaluation data.
 - release_notes.sh --quick tag: Generates release the report for code commit. 
 - run_model_smoke_tests.sh: Runs fast read-only model and knowledge contracts without training.
-- run_model_training_tests.sh: Runs the temporary held-out model-training quality gate.
-- train_accuracy_model.sh: Trains a timestamped candidate model and writes its diagnostic artifacts.
 - run_deployment_tests.sh: Runs deployment health checks against the image named by `DOCKER_IMAGE`.
 
 ## Documentation Files

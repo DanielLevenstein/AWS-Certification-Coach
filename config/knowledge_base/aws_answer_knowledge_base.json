@@ -235,6 +235,13 @@
       "description": "The SQS processing window is the time a consumer has before a received message can become visible again."
     },
     {
+      "id": "hide-message-from-other-consumers",
+      "name": "hide message from other consumers",
+      "aliases": ["hide messages from consumers", "temporarily hide a received message"],
+      "service_ids": ["sqs"],
+      "description": "After an SQS consumer receives a message, the visibility timeout temporarily hides that message from other consumers so the current consumer can finish processing it."
+    },
+    {
       "id": "aws-kms",
       "name": "AWS KMS",
       "aliases": ["kms", "key management service"],

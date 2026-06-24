@@ -52,13 +52,13 @@ if [ "$MODE" = "full" ]; then
 else
   METRICS_DIR="${RELEASE_METRICS_DIR:-}"
   if [ -z "$METRICS_DIR" ]; then
-    LATEST_TRAINING_METRICS="$(find metrics -mindepth 2 -maxdepth 2 -name training_metrics.json -print 2>/dev/null | sort | tail -n 1)"
-    if [ -z "$LATEST_TRAINING_METRICS" ]; then
+    LATEST_SEMANTIC_METRICS="$(find metrics -mindepth 2 -maxdepth 2 -name semantic_similarity.json -print 2>/dev/null | sort | tail -n 1)"
+    if [ -z "$LATEST_SEMANTIC_METRICS" ]; then
       echo "Quick release requires a previous full metrics run." >&2
       echo "Run ./release_notes.sh --full <tag> first or set RELEASE_METRICS_DIR." >&2
       exit 2
     fi
-    METRICS_DIR="$(dirname "$LATEST_TRAINING_METRICS")"
+    METRICS_DIR="$(dirname "$LATEST_SEMANTIC_METRICS")"
   fi
   RELEASE_SUITE="release-quick"
 fi

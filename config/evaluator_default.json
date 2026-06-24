@@ -10,9 +10,6 @@
   "trained_classifier": {
     "model_path": "models/answer_classifier.json"
   },
-  "trained_regressor": {
-    "model_path": "models/answer_regressor_model.json"
-  },
   "semantic_similarity": {
     "questions_path": "data/questions/sample_questions.json",
     "feedback_paths": [

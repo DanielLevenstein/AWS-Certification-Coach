@@ -9,8 +9,9 @@ from collections.abc import Iterable
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.knowledge_base import load_knowledge_base
+from aws_certification_coach.model_evaluation.band_accuracy import BandAccuracy
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
-from aws_certification_coach.training.dataset import load_feedback_regression_examples, question_signature
+from aws_certification_coach.training.dataset import load_feedback_graded_examples, question_signature
 from aws_certification_coach.training.features import correct_answer_text
 
 
@@ -45,6 +46,7 @@ AMBIGUOUS_ALIAS_TOKENS = {
     "service",
 }
 LEGACY_ACCEPTED_GRADES = frozenset({"A", "B", "C", "D"})
+GRADES = ("A", "B", "C", "D", "F")
 
 
 def evaluate_semantic_curated_answers(
@@ -54,6 +56,7 @@ def evaluate_semantic_curated_answers(
     grade_band_matches = 0
     exact_letter_matches = 0
     true_positive = false_positive = true_negative = false_negative = 0
+    confusion = {truth: {prediction: 0 for prediction in GRADES} for truth in GRADES}
     mismatches = []
     all_rows_and_examples = _feedback_rows_and_examples(curated_path, questions)
     rows_and_examples, conflict_groups = _without_conflicting_feedback(all_rows_and_examples)
@@ -62,6 +65,7 @@ def evaluate_semantic_curated_answers(
         score = semantic_similarity_score(question, example.answer)
         actual = score_to_letter(score)
         expected = str(row["correct_rating"]).strip().upper()
+        confusion[expected][actual] += 1
         expected_accept = expected in LEGACY_ACCEPTED_GRADES
         actual_accept = actual in LEGACY_ACCEPTED_GRADES
         true_positive += int(expected_accept and actual_accept)
@@ -91,9 +95,17 @@ def evaluate_semantic_curated_answers(
             }
         )
     total = len(rows_and_examples)
+    per_grade = _per_grade_metrics(confusion)
+    within_one_letter_matches = sum(
+        count
+        for truth, predictions in confusion.items()
+        for prediction, count in predictions.items()
+        if abs(GRADES.index(truth) - GRADES.index(prediction)) <= 1
+    )
     return {
         "semantic_grade_accuracy": grade_band_matches / max(1, total),
         "semantic_exact_letter_accuracy": exact_letter_matches / max(1, total),
+        "semantic_within_one_letter_accuracy": within_one_letter_matches / max(1, total),
         "semantic_precision": true_positive / max(1, true_positive + false_positive),
         "semantic_recall": true_positive / max(1, true_positive + false_negative),
         "semantic_matching_grade_bands": grade_band_matches,
@@ -106,6 +118,9 @@ def evaluate_semantic_curated_answers(
         "semantic_false_negative": false_negative,
         "semantic_skipped_conflicting_examples": sum(group["example_count"] for group in conflict_groups),
         "semantic_conflicting_feedback_groups": conflict_groups,
+        "per_grade": per_grade,
+        "per_grade_band": BandAccuracy().evaluate(confusion),
+        "confusion": confusion,
         "semantic_mismatches": mismatches,
     }
 
@@ -122,13 +137,37 @@ def _feedback_rows_and_examples(
         rows = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(rows, list):
             raise ValueError(f"Curated feedback must be a JSON list: {path}")
-        examples = load_feedback_regression_examples(path, questions)
+        examples = load_feedback_graded_examples(path, questions)
         rows_and_examples.extend(
             (path, row_index, row, example)
             for row_index, (row, example) in enumerate(zip(rows, examples, strict=True))
             if isinstance(row, dict)
         )
     return rows_and_examples
+
+
+def _per_grade_metrics(
+    confusion: dict[str, dict[str, int]],
+) -> dict[str, dict[str, float | int | None]]:
+    metrics = {}
+    for grade in GRADES:
+        true_positive = confusion[grade][grade]
+        support = sum(confusion[grade].values())
+        predicted_count = sum(predictions[grade] for predictions in confusion.values())
+        precision = true_positive / predicted_count if predicted_count else None
+        recall = true_positive / support if support else None
+        f1 = (
+            2 * precision * recall / (precision + recall)
+            if precision is not None and recall is not None and precision + recall
+            else None
+        )
+        metrics[grade] = {
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "support": support,
+        }
+    return metrics
 
 
 def _without_conflicting_feedback(

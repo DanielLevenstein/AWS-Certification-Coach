@@ -9,7 +9,6 @@ Run commands through the project virtual environment or existing shell wrappers:
 ./setup.sh
 ./run_unit_tests.sh
 ./run_model_smoke_tests.sh
-./run_model_training_tests.sh
 ./release_notes.sh --full <release-tag>
 ```
 

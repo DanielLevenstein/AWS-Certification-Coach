@@ -4,17 +4,17 @@
 
 Move reusable AWS terminology and concept relationships out of model code and artifacts into a small, versioned knowledge base. The knowledge base must support deterministic answer scoring and provide compact context to very small language models such as TinyLlama without adding a database, embedding model, or network dependency.
 
-This change also removes manual question-and-answer score overrides from the serialized answer-regression model. Human ratings remain curated training and evaluation evidence; they do not become general AWS knowledge.
+This change also retires the unused answer regressor. Human ratings remain curated semantic-evaluation evidence; they do not become general AWS knowledge.
 
 ## Current State
 
 The answer evaluation path currently mixes three different concerns:
 
-- `models/answer_regressor_model.json` stores trained weights and 18 exact question-and-answer calibration scores.
+- The retired answer-regressor artifact stored trained weights and exact question-and-answer calibration scores.
 - `semantic_similarity.py` owns syntax aliases, generic tokens, service-family tokens, and one service alias table as Python constants.
 - `structured_answer_training_data.json` contains question-specific key concepts, required concepts, accepted answers, misconceptions, and partial-credit labels.
 
-The serialized calibration keys are normalized question-and-answer fingerprints. They cause exact memorized answers to bypass model inference at runtime. This makes the model artifact partly a learned model and partly a manual lookup table, obscures what the weights can generalize, and makes calibration data difficult to audit independently.
+The production path now uses deterministic semantic scoring with the knowledge base and curated feedback. The former serialized regressor and its generated train/validation/test splits are no longer part of the architecture.
 
 The structured training artifact currently contains 9 questions and 27 distinct `key_concepts`. Those concepts are useful seeds for reusable domain knowledge, but the ratings, accepted answers, misconceptions, question wording, and reference answers must not be copied into the knowledge base.
 
@@ -38,14 +38,7 @@ It also carries a `schema_version` and a short `description`. The source file is
 
 ### Calibration Labels Are Not Knowledge
 
-Exact answer ratings must not move from the model JSON into the knowledge base. They remain in curated feedback or structured training sources and may influence learned weights during training. Runtime scoring must not perform an exact question-and-answer rating lookup.
-
-The resulting regression model contract contains only:
-
-- feature names;
-- learned weights;
-- answer form;
-- an explicit model/schema version if needed for migration.
+Exact answer ratings must not move into the knowledge base. They remain in curated feedback or structured answer sources as evaluation evidence. Runtime scoring may use explicitly configured curated feedback, but there is no serialized answer model or hidden model calibration table.
 
 This boundary prevents learner-answer labels from becoming hidden production rules and keeps the knowledge base reusable across questions and models.
 
@@ -203,27 +196,16 @@ ALIASES: visibility timeout
 
 Default limits should be configurable and conservative: at most the question's relevant concepts and their referenced service families, with no unrelated knowledge entries. The retrieval result must be deterministic, stable in order, and independently testable. TinyLlama is an optional consumer of this context, not a required runtime dependency.
 
-The existing classifier uses the same entries as structured signals:
+The deterministic evaluator uses the same entries as structured signals:
 
 - syntax aliases normalize tokens before feature extraction;
 - concept aliases contribute only to the corresponding concept coverage calculation;
 - service IDs support service-boundary and incorrect-service checks;
 - natural-language descriptions are not converted into opaque learned weights at runtime.
 
-## Calibration Migration
+## Regressor Retirement
 
-Implementation removes the `calibrations` field from `AnswerRegressionModel`, its JSON serialization, and `TrainedRegressionEvaluatorProvider` lookup behavior. The `_with_calibrations` training step and saved-model `calibration_count` metric are also retired.
-
-Curated answer ratings remain available to:
-
-- train regression weights;
-- select checkpoints using validation data;
-- report curated and held-out accuracy;
-- diagnose cases the generalized model still misses.
-
-If generalized scoring regresses after removing exact lookups, improve the knowledge-backed features or training set. Do not restore a production exact-answer override under a different name.
-
-Existing model files with a `calibrations` property may be accepted for one transition release by ignoring that property on load. Newly saved model artifacts must omit it. This provides backward-readable migration without continuing the runtime behavior.
+The answer-regression model, provider, training scripts, generated split data, and model-specific release metrics are removed. Curated answer ratings remain available to report semantic accuracy and diagnose cases the deterministic evaluator misses. If scoring regresses, improve the knowledge-backed rules or curated benchmark rather than restoring a second, unused model path.
 
 ## Implementation Phases
 
@@ -240,12 +222,12 @@ Existing model files with a `calibrations` property may be accepted for one tran
 - Add a coverage test comparing knowledge concept names with the union of structured `key_concepts`.
 - Extend deterministic concept and service matching to use the knowledge indexes.
 
-### Phase 3: Calibration Removal
+### Phase 3: Regressor Retirement
 
-- Stop attaching curated feedback calibrations to trained model artifacts.
-- Remove runtime exact-answer overrides and update model serialization.
-- Retrain and evaluate the regressor using learned features only.
-- Replace calibration-count reporting with knowledge-base and generalization metrics.
+- Remove the unused regressor runtime and training workflow.
+- Remove generated training, validation, and test splits used only by that workflow.
+- Calculate exact-letter, within-one-letter, per-grade, and grade-band metrics directly from semantic evaluation.
+- Keep knowledge-base and question-quality reporting as independent release metrics.
 
 ### Phase 4: Lightweight Context Adapter
 
@@ -261,10 +243,7 @@ Required automated checks:
 - Alias normalization parity with the current hard-coded tables.
 - Exact coverage of structured-training `key_concepts` after Phase 2.
 - No rating, grade, question text, reference answer, or partial-answer fields in the knowledge base.
-- Newly saved regression models contain no `calibrations` property.
-- Legacy model loading ignores calibrations and does not apply them.
 - Deterministic retrieval returns only relevant concepts in stable order.
-- Train, validation, and final verification inputs remain separate.
 - Existing classification and semantic-similarity tests pass with injected knowledge.
 
 Release reporting should add:
@@ -273,20 +252,20 @@ Release reporting should add:
 - knowledge file byte size;
 - syntax-alias, service-family, and concept counts;
 - loader initialization time and average deterministic lookup time;
-- classifier/regressor held-out metrics without exact-answer overrides;
+- semantic within-one-letter, per-grade, and grade-band metrics;
 - curated exact-letter accuracy and mismatch report;
 - optional lightweight-model accuracy and latency, reported separately from classifier metrics.
 
-The release gate should compare the no-override regressor against the existing baseline. A failure is a reason to improve generalized features or knowledge coverage, not to leak verification labels into the model or knowledge document.
+The release gate should compare semantic metrics against the existing baseline. A failure is a reason to improve deterministic scoring or knowledge coverage, not to leak benchmark labels into the knowledge document.
 
 ## Acceptance Criteria
 
 - A single committed JSON document contains Syntax Aliases, Service Families, and natural-language concept entries.
 - Every current structured training `key_concepts` item has an explicit service association and description.
 - Alias and service-family constants are no longer duplicated in scoring code.
-- The serialized answer regressor contains learned model state only and no manual answer-score lookup table.
+- No answer-regressor artifact or generated split workflow remains.
 - Human ratings remain in curated training/evaluation sources and do not appear in the knowledge base.
-- The existing classifier can use the knowledge base with deterministic, in-process lookups.
+- The existing evaluator can use the knowledge base with deterministic, in-process lookups.
 - TinyLlama can receive a bounded relevant excerpt without loading the entire knowledge base into its prompt.
 - Runtime operation remains local, offline, and free of new heavyweight dependencies.
 - Generated `data/` and `metrics/` artifacts are not committed.

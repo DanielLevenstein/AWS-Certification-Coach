@@ -12,10 +12,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parent
 QUICK_RELEASE_ARTIFACTS = (
-    "training_metrics.json",
     "semantic_similarity.json",
-    "answer_model_evaluation.json",
-    "answer_model_evaluation.md",
     "question_fidelity.json",
     "question_coverage.json",
     "knowledge_base.json",
@@ -53,10 +50,6 @@ def run_model_smoke_tests(extra_args: list[str] | None = None) -> None:
         raise RuntimeError(f"Model smoke tests modified generated/model artifacts: {changed}")
 
 
-def run_model_training_tests(extra_args: list[str] | None = None) -> None:
-    _run([sys.executable, "scripts/model_evaluation.py", *(extra_args or [])])
-
-
 def run_deployment_tests(extra_args: list[str] | None = None) -> None:
     _run(
         [
@@ -75,49 +68,9 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     _run(
         [
             sys.executable,
-            "scripts/train_answer_accuracy.py",
-            "--eval-mode",
-            "training",
-            "--output",
-            str(metrics_dir / "answer_regressor_model.json"),
-            "--metrics-output",
-            str(metrics_dir / "training_metrics.json"),
-            "--history-output",
-            str(metrics_dir / "training_history.json"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
-            "scripts/plot_training_history.py",
-            "--history",
-            str(metrics_dir / "training_history.json"),
-            "--output",
-            str(metrics_dir / "training_performance.png"),
-            "--accuracy-output",
-            str(metrics_dir / "curated_grade_accuracy.png"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
             "scripts/curated_failure_report.py",
-            "--model",
-            str(metrics_dir / "answer_regressor_model.json"),
             "--output",
             str(metrics_dir / "curated_failure_report.md"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
-            "scripts/evaluate_answer_model.py",
-            "--model",
-            str(metrics_dir / "answer_regressor_model.json"),
-            "--json-output",
-            str(metrics_dir / "answer_model_evaluation.json"),
-            "--table-output",
-            str(metrics_dir / "answer_model_evaluation.md"),
         ]
     )
     _run(
@@ -136,8 +89,6 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             str(metrics_dir / "semantic_similarity.json"),
             "--chart-output",
             str(metrics_dir / "semantic_accuracy.png"),
-            "--answer-model-evaluation",
-            str(metrics_dir / "answer_model_evaluation.json"),
             "--per-grade-output",
             str(metrics_dir / "per_grade_metrics.png"),
             "--grade-band-output",
@@ -244,7 +195,6 @@ def main() -> None:
     {
         "unit": run_unit_tests,
         "model-smoke": run_model_smoke_tests,
-        "model-training": run_model_training_tests,
         "release": run_release_metrics,
         "release-quick": run_quick_release_metrics,
         "deployment": run_deployment_tests,
@@ -255,7 +205,7 @@ def _suite_parser(add_help: bool = True) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=add_help)
     parser.add_argument(
         "suite",
-        choices=["unit", "model-smoke", "model-training", "release", "release-quick", "deployment"],
+        choices=["unit", "model-smoke", "release", "release-quick", "deployment"],
     )
     return parser
 

@@ -6,12 +6,14 @@ import argparse
 import json
 from pathlib import Path
 
-from generate_sample_training_artifacts import CERTIFICATION_EXAM_CODES, SERVICE_SPECS, _rubric_metadata
+from question_catalog import CERTIFICATION_EXAM_CODES, SERVICE_SPECS, rubric_metadata
 
 
 APP_VARIANTS = [
     "A team is reviewing an AWS design and needs a solution that can {purpose}. Which AWS service or feature should they choose?",
     "During exam preparation, explain which AWS service or feature is best suited to {purpose}.",
+    "An AWS workload must {purpose}. Identify the most appropriate service or feature and explain why.",
+    "Which AWS capability best meets a requirement to {purpose}? Explain the selection.",
 ]
 
 SOURCE_URLS = {
@@ -61,7 +63,7 @@ SOURCE_URLS = {
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="data/questions/sample_questions.json")
-    parser.add_argument("--count", type=int, default=80)
+    parser.add_argument("--count", type=int, default=160)
     args = parser.parse_args()
 
     questions = _build_app_questions(args.count)
@@ -92,7 +94,7 @@ def _build_app_questions(count: int) -> list[dict]:
                 "question": f"Explain which AWS service or feature should be used to {purpose}.",
                 "reference_answer": explanation,
                 "key_concepts": concepts,
-                **_rubric_metadata(service, concepts, distractors, correct_option, explanation),
+                **rubric_metadata(service, concepts, distractors, correct_option, explanation),
                 "original_multiple_choice": {
                     "question": mcq_question,
                     "options": [

@@ -51,7 +51,6 @@ Use the existing project scripts unless the task requires a narrower check:
 ./setup.sh
 ./run_unit_tests.sh
 ./run_model_smoke_tests.sh
-./run_model_training_tests.sh
 ./release_notes.sh --full <release-tag>
 ```
 

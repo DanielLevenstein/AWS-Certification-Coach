@@ -1,5 +1,7 @@
 # Next-Version Test Suite Design
 
+> Historical roadmap: the model-training suite described below was implemented for v2.knowledgeBase1.2 and retired when the unused answer regressor was removed. Current suites are unit, model-smoke, release, release-quick, and deployment.
+
 ## Implementation Status
 
 Version `v2.knowledgeBase1.2` implements the suite naming and isolation, fast read-only model smoke checks, explicit full model-training checks, single-training release orchestration, and the independent deployment suite using the existing Docker/HTTP test.

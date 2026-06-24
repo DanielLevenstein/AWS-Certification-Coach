@@ -11,7 +11,7 @@
 
 ## Primary Findings
 
-1. Generated-label training error is low; remaining app-scoring failures are now `semantic_similarity` calibration cases rather than epoch-count issues.
+1. Remaining app-scoring failures are `semantic_similarity` calibration cases.
 2. The `semantic_similarity` model recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.
 3. Full-credit prose is scored through service and concept coverage rather than only exact option text.
 4. At least one normalized question/answer pair has contradictory curated grades, making perfect accuracy impossible until labels are reconciled.
@@ -128,6 +128,5 @@
 1. Reconcile conflicting curated labels before changing model code.
 2. Expand normalized AWS service aliases and near-service synonym handling.
 3. Tune concept-coverage thresholds against curated examples.
-4. Keep generated-label regression metrics out of release tracking unless the trained model returns to the app path.
-5. Revisit runtime exact-option and wrong-service guards so partial-credit expectations are represented consistently.
+4. Revisit runtime exact-option and wrong-service guards so partial-credit expectations are represented consistently.
 

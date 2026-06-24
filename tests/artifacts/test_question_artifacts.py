@@ -171,11 +171,7 @@ def test_developer_multiple_choice_options_use_short_service_answers():
         assert len(correct_option["text"]) < len(row["reference_answer"])
 
 
-def test_combined_training_artifact_keeps_answer_sections_with_questions():
-    artifact = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_training.json"
-    rows = JsonQuestionRepository(artifact).all()
-    raw_rows = json.loads(artifact.read_text(encoding="utf-8"))
+def test_default_question_bank_is_large():
+    rows = JsonQuestionRepository(QUESTION_ARTIFACT).all()
 
-    assert len(rows) >= 24
-    assert all(row.get("generated_answers") for row in raw_rows)
-    assert all(row.get("exam_code") == EXPECTED_EXAM_CODES[row["certification"]] for row in raw_rows)
+    assert len(rows) >= 160

@@ -7,7 +7,6 @@ from aws_certification_coach.evaluation.service import EvaluationService, Heuris
 from aws_certification_coach.evaluation.trained_classifier_provider import (
     SemanticSimilarityEvaluatorProvider,
     TrainedClassifierEvaluatorProvider,
-    TrainedRegressionEvaluatorProvider,
 )
 from aws_certification_coach.llm.openai_provider import OpenAIEvaluatorProvider
 
@@ -26,8 +25,6 @@ def build_evaluation_service(config: EvaluatorConfig | None = None) -> Evaluatio
             feedback_paths=evaluator_config.semantic_feedback_paths,
             questions_path=evaluator_config.semantic_questions_path,
         )
-    elif provider_name == "trained_regressor":
-        provider = TrainedRegressionEvaluatorProvider(evaluator_config.trained_regressor_model_path)
     else:
         raise ValueError(f"Unsupported evaluator provider: {evaluator_config.provider}")
     return EvaluationService(provider)

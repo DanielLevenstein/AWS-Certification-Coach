@@ -16,7 +16,7 @@ from aws_certification_coach.ratings import (
 )
 from aws_certification_coach.training.dataset import (
     load_feedback_classification_examples,
-    load_feedback_regression_examples,
+    load_feedback_graded_examples,
 )
 from scripts.curated_failure_report import _conflicting_labels
 
@@ -144,12 +144,12 @@ def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: P
     )
     questions = [_question()]
 
-    regression = load_feedback_regression_examples(path, questions)
+    graded = load_feedback_graded_examples(path, questions)
     classification = load_feedback_classification_examples(path, questions)
 
-    assert regression[0].rating == 0.25
+    assert graded[0].rating == 0.25
     assert classification[0].label == 0
-    assert regression[0].question == _question()
+    assert graded[0].question == _question()
 
 
 def test_feedback_loader_rejects_newer_schema_when_max_schema_is_set(tmp_path: Path):
@@ -171,7 +171,7 @@ def test_feedback_loader_rejects_newer_schema_when_max_schema_is_set(tmp_path: P
     )
 
     with pytest.raises(ValueError, match="newer than supported schema 2"):
-        load_feedback_regression_examples(path, [_question()], max_schema_version="2")
+        load_feedback_graded_examples(path, [_question()], max_schema_version="2")
 
 
 def test_feedback_loader_accepts_legacy_schema_when_max_schema_is_set(tmp_path: Path):
@@ -193,7 +193,7 @@ def test_feedback_loader_accepts_legacy_schema_when_max_schema_is_set(tmp_path: 
         encoding="utf-8",
     )
 
-    examples = load_feedback_regression_examples(path, [_question()], max_schema_version="2")
+    examples = load_feedback_graded_examples(path, [_question()], max_schema_version="2")
 
     assert len(examples) == 3
 

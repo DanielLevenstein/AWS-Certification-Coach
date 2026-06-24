@@ -15,7 +15,6 @@ from aws_certification_coach.model_evaluation.semantic_similarity import (
 )
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
-from scripts.plot_training_history import plot_training_history
 from scripts.release_metrics import render_release_metrics, update_release_notes
 from scripts.semantic_similarity_evaluation import (
     plot_grade_band_metrics,
@@ -55,22 +54,6 @@ def test_complexity_reports_branching_functions(tmp_path: Path):
     assert metrics["maximum_complexity"] == 2
 
 
-def test_training_graph_writes_png_from_checkpoint_json(tmp_path: Path):
-    history = tmp_path / "history.json"
-    history.write_text(
-        '{"checkpoints": [{"epoch": 1, "mse": 0.4, "mae": 0.5, "curated_grade_accuracy": 0.4}, '
-        '{"epoch": 5, "mse": 0.2, "mae": 0.3, "curated_grade_accuracy": 0.6}]}',
-        encoding="utf-8",
-    )
-    output = tmp_path / "training.png"
-    accuracy_output = tmp_path / "accuracy.png"
-
-    plot_training_history(history, output, accuracy_output)
-
-    assert output.read_bytes().startswith(b"\x89PNG")
-    assert accuracy_output.read_bytes().startswith(b"\x89PNG")
-
-
 def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
     output = tmp_path / "semantic_accuracy.png"
 
@@ -87,7 +70,7 @@ def test_semantic_accuracy_chart_writes_png(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_semantic_accuracy_chart_includes_answer_model_within_one_letter_metric(tmp_path: Path):
+def test_semantic_accuracy_chart_includes_within_one_letter_metric(tmp_path: Path):
     output = tmp_path / "semantic_accuracy.png"
 
     plot_semantic_accuracy(
@@ -96,29 +79,25 @@ def test_semantic_accuracy_chart_includes_answer_model_within_one_letter_metric(
             "semantic_precision": 0.9,
             "semantic_recall": 0.75,
             "semantic_exact_letter_accuracy": 0.64,
+            "semantic_within_one_letter_accuracy": 0.92,
         },
         output,
-        {"splits": {"test": {"within_one_letter_accuracy": 0.92}}},
     )
 
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_per_grade_chart_includes_precision_and_recall_from_existing_answer_model(tmp_path: Path):
+def test_per_grade_chart_includes_semantic_precision_and_recall(tmp_path: Path):
     output = tmp_path / "per_grade_metrics.png"
     evaluation = {
-        "splits": {
-            "test": {
-                "per_grade": {
-                    grade: {"precision": precision, "recall": recall}
-                    for grade, precision, recall in zip(
-                        ("A", "B", "C", "D", "F"),
-                        (0.92, 0.84, 0.56, 0.79, 1.0),
-                        (0.88, 0.76, 0.64, 0.71, 0.95),
-                        strict=True,
-                    )
-                }
-            }
+        "per_grade": {
+            grade: {"precision": precision, "recall": recall}
+            for grade, precision, recall in zip(
+                ("A", "B", "C", "D", "F"),
+                (0.92, 0.84, 0.56, 0.79, 1.0),
+                (0.88, 0.76, 0.64, 0.71, 0.95),
+                strict=True,
+            )
         }
     }
 
@@ -130,14 +109,10 @@ def test_per_grade_chart_includes_precision_and_recall_from_existing_answer_mode
 def test_grade_band_chart_uses_exclusive_a_bc_df_bands(tmp_path: Path):
     output = tmp_path / "grade_band_metrics.png"
     evaluation = {
-        "splits": {
-            "test": {
-                "per_grade_band": {
-                    "A": {"precision": 0.82, "recall": 0.91},
-                    "BC": {"precision": 0.56, "recall": 0.64},
-                    "DF": {"precision": 0.93, "recall": 0.88},
-                }
-            }
+        "per_grade_band": {
+            "A": {"precision": 0.82, "recall": 0.91},
+            "BC": {"precision": 0.56, "recall": 0.64},
+            "DF": {"precision": 0.93, "recall": 0.88},
         }
     }
 
@@ -149,12 +124,8 @@ def test_grade_band_chart_uses_exclusive_a_bc_df_bands(tmp_path: Path):
 def test_letter_distance_chart_decomposes_within_one_letter_accuracy(tmp_path: Path):
     output = tmp_path / "letter_distance_metrics.png"
     evaluation = {
-        "splits": {
-            "test": {
-                "letter_accuracy": 0.59,
-                "within_one_letter_accuracy": 0.98,
-            }
-        }
+        "semantic_exact_letter_accuracy": 0.59,
+        "semantic_within_one_letter_accuracy": 0.98,
     }
 
     plot_letter_distance_metrics(evaluation, output)
@@ -291,17 +262,10 @@ def _png_dimensions(path: Path) -> tuple[int, int]:
 def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"
     metrics_dir.mkdir()
-    (metrics_dir / "training_metrics.json").write_text(
-        '{"answer_form": "long", "saved_model": {"curated_grade_accuracy": 0.96, "calibration_count": 18}}',
-        encoding="utf-8",
-    )
     (metrics_dir / "semantic_similarity.json").write_text(
         '{"semantic_grade_accuracy": 0.8, "semantic_precision": 0.9, "semantic_recall": 0.75, '
-        '"semantic_exact_letter_accuracy": 0.64, "semantic_example_count": 25}',
-        encoding="utf-8",
-    )
-    (metrics_dir / "answer_model_evaluation.json").write_text(
-        '{"splits": {"test": {"within_one_letter_accuracy": 0.76, "per_grade": {'
+        '"semantic_exact_letter_accuracy": 0.64, "semantic_within_one_letter_accuracy": 0.76, '
+        '"semantic_example_count": 25, "per_grade": {'
         '"A": {"precision": 0.9, "recall": 0.8, "f1": 0.847, "support": 10}, '
         '"B": {"precision": 0.8, "recall": 0.7, "f1": 0.747, "support": 9}, '
         '"C": {"precision": 0.7, "recall": 0.6, "f1": 0.646, "support": 8}, '
@@ -311,13 +275,7 @@ def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
         '"A": {"precision": 0.85, "recall": 0.9, "f1": 0.874, "support": 10}, '
         '"BC": {"precision": 0.7, "recall": 0.6, "f1": 0.646, "support": 17}, '
         '"DF": {"precision": 0.92, "recall": 0.88, "f1": 0.9, "support": 13}'
-        '}}}}',
-        encoding="utf-8",
-    )
-    (metrics_dir / "answer_model_evaluation.md").write_text(
-        "| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |\n"
-        "|---|---:|---:|---:|---:|---:|\n"
-        "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |\n",
+        '}}',
         encoding="utf-8",
     )
     (metrics_dir / "knowledge_base.json").write_text(
@@ -335,7 +293,7 @@ def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
     assert "| Precision | 85.00% | 70.00% | 92.00% |" in markdown
     assert "| Precision | 90.00% | 80.00% | 70.00% | 60.00% | 100.00% |" in markdown
     assert "| Support | 10 | 9 | 8 | 7 | 6 |" in markdown
-    assert "| Test | 25 | 76.0% | 64.0% | 0.1200 | 0.0300 |" in markdown
+    assert "Answer evaluator: `semantic_similarity`" in markdown
     assert "Knowledge base schema version: `1`" in markdown
     assert "Knowledge base syntax alias count: `18`" in markdown
     assert "Knowledge base service family count: `16`" in markdown

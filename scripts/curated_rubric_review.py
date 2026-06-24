@@ -11,14 +11,14 @@ from pathlib import Path
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import score_to_letter
-from aws_certification_coach.training.dataset import load_feedback_regression_examples
+from aws_certification_coach.training.dataset import load_feedback_graded_examples
 from aws_certification_coach.training.features import correct_answer_text
 
 
 def build_review(curated_path: Path, questions_path: Path) -> str:
     rows = json.loads(curated_path.read_text(encoding="utf-8"))
     questions = JsonQuestionRepository(questions_path).all()
-    examples = load_feedback_regression_examples(curated_path, questions)
+    examples = load_feedback_graded_examples(curated_path, questions)
     suggestions = []
     grade_counts: Counter[str] = Counter()
 
@@ -77,7 +77,7 @@ def build_review(curated_path: Path, questions_path: Path) -> str:
             "",
             "Keep `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, and `Question Fidelity` in release notes.",
             "Calculate `Semantic Accuracy` as grade-band agreement and `Exact Letter Accuracy` as strict A/B/C/D/F agreement on curated answer rows.",
-            "Do not publish `Training Accuracy` or `Saved Accuracy`; keep those values in generated JSON artifacts only for model-training diagnostics.",
+            "Use the semantic benchmark as the single answer-scoring release metric source.",
             "",
         ]
     )

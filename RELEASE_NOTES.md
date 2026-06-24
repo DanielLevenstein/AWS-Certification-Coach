@@ -25,6 +25,7 @@
 | v2.6.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                           |
 | v2.6.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
 | v2.6.3.1 | Fixed deployment tests |
+| v2.6.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation, and expands the default question bank to 160 questions. |
 # Release Metrics
 
 ## Metric Definitions:
@@ -65,6 +66,7 @@
 |:--------|-------:|-------:|--------:|
 | v2.5.5  | 46.51% | 60.71% | 100.00% |
 | v2.6.1  | 50.00% | 69.70% | 100.00% |
+| v2.6.4  | 90.00% | 100.00% | 100.00% |
 
 ## Grade Precision
 | Release |      A |      B |      C |       D |      F |
@@ -72,6 +74,7 @@
 | v2.5.5  | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
 | v2.6.1  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
 | v2.6.3  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
+| v2.6.4  | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -97,11 +100,11 @@ For v2.3.6, `Within 1 Letter` comes from `scripts/evaluate_answer_model.py` and 
 
 For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` questions for IAM policy review, Lambda code review, SDK pagination review, and SAM template permission review. The app now preserves artifact metadata and renders self-authored code/configuration snippets in the learner question flow.
 
-For v2.knowledgeBase1.1, answer evaluation loads a validated 13,214-byte local knowledge document containing 18 syntax aliases, 16 service families, and natural-language descriptions for all 27 concepts in the structured answer-training seed. Semantic grade-band accuracy, precision, recall, and exact-letter accuracy remain unchanged from the previous release baseline. The retrained regressor reports 96.15% test within-one-letter accuracy and 67.31% test exact-letter accuracy; exact-answer calibration removal remains deferred to a later knowledge-base iteration.
+For v2.6.1, answer evaluation loads a validated 13,214-byte local knowledge document containing 18 syntax aliases, 16 service families, and natural-language descriptions for all 27 concepts in the structured answer-training seed. Semantic grade-band accuracy, precision, recall, and exact-letter accuracy remain unchanged from the previous release baseline. The retrained regressor reports 96.15% test within-one-letter accuracy and 67.31% test exact-letter accuracy; exact-answer calibration removal remains deferred to a later knowledge-base iteration.
 
-For v2.knowledgeBase1.2, routine model smoke checks are read-only and complete without training, while full held-out model training and candidate-artifact generation have separate documented commands. Tests are grouped into review-oriented directories with no loose root-level test modules. Unit tests exclude model-smoke and deployment directories, the existing Docker/HTTP guardrail runs through its own deployment suite, and full release-note generation performs only one release-training pass. The ambiguous `run_model_tests.sh` wrapper was removed, and Playwright remains a documented later iteration. Model and release metrics are unchanged from v2.knowledgeBase1.1.
+For v2.6.2, routine model smoke checks are read-only and complete without training, while full held-out model training and candidate-artifact generation have separate documented commands. Tests are grouped into review-oriented directories with no loose root-level test modules. Unit tests exclude model-smoke and deployment directories, the existing Docker/HTTP guardrail runs through its own deployment suite, and full release-note generation performs only one release-training pass. The ambiguous `run_model_tests.sh` wrapper was removed, and Playwright remains a documented later iteration. Model and release metrics are unchanged from v2.knowledgeBase1.1.
 
-For v2.knowledgeBase1.3, `release_notes.sh --quick` validates and reuses the latest completed full metrics directory, or the directory selected through `RELEASE_METRICS_DIR`. It performs no model training, evaluation, coverage, unit, or smoke run. The verified quick refresh completed in 1.57 seconds and preserved the v2.knowledgeBase1.2 metrics.
+For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed full metrics directory, or the directory selected through `RELEASE_METRICS_DIR`. It performs no model training, evaluation, coverage, unit, or smoke run. The verified quick refresh completed in 1.57 seconds and preserved the v2.knowledgeBase1.2 metrics.
 
 ## Current Coverage
 
@@ -112,37 +115,36 @@ For v2.knowledgeBase1.3, `release_notes.sh --quick` validates and reuses the lat
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.6.3 | 90.62% | 100.00% | 90.91% | 87.50% | 96.15% | 94.95% |
+| v2.6.4 | 90.62% | 100.00% | 90.91% | 87.50% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 50.00% | 69.70% | 100.00% |
-| Recall | 70.83% | 57.50% | 92.50% |
-| F1 | 58.62% | 63.01% | 96.10% |
-| Support | 24 | 40 | 40 |
+| Precision | 90.00% | 100.00% | 100.00% |
+| Recall | 100.00% | 75.00% | 100.00% |
+| F1 | 94.74% | 85.71% | 100.00% |
+| Support | 9 | 4 | 19 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
-| Recall | 70.83% | 37.50% | 100.00% | 56.25% | 100.00% |
-| F1 | 58.62% | 48.98% | 66.67% | 72.00% | 92.31% |
-| Support | 24 | 32 | 8 | 16 | 24 |
+| Precision | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
+| Recall | 100.00% | 66.67% | 0.00% | 77.78% | 100.00% |
+| F1 | 94.74% | 66.67% | N/A | 87.50% | 90.91% |
+| Support | 9 | 3 | 1 | 9 | 10 |
 
-Saved model answer form: `long`
-Saved model calibration count: `25`
+Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `38`
-App question count: `118`
+App question count: `198`
 Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
-Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
+Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
 Knowledge base schema version: `1`
-Knowledge base file size: `13214` bytes
+Knowledge base file size: `13348` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service family count: `16`
 Knowledge base concept count: `27`
@@ -152,12 +154,4 @@ Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
 Legacy Semantic Precision and Recall retain the original `A`–`D` accepted and `F` rejected definition.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
-
-## Answer Model Split Evaluation
-
-| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |
-|---|---:|---:|---:|---:|---:|
-| Train | 312 | 96.2% | 64.7% | 0.0552 | 0.0054 |
-| Validation | 104 | 95.2% | 69.2% | 0.0473 | 0.0041 |
-| Test | 104 | 96.2% | 67.3% | 0.0526 | 0.0050 |
 <!-- release-metrics:end -->

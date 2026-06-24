@@ -1,4 +1,4 @@
-"""Evaluator providers backed by locally trained answer models."""
+"""Local classifier and deterministic semantic evaluator providers."""
 
 from __future__ import annotations
 
@@ -12,10 +12,9 @@ from aws_certification_coach.questions.json_repository import JsonQuestionReposi
 from aws_certification_coach.ratings import letter_to_numeric
 from aws_certification_coach.training.answer_classifier import (
     AnswerClassificationModel,
-    AnswerRegressionModel,
     answer_calibration_key,
 )
-from aws_certification_coach.training.dataset import load_feedback_regression_examples
+from aws_certification_coach.training.dataset import load_feedback_graded_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
@@ -40,30 +39,6 @@ class TrainedClassifierEvaluatorProvider:
         features = self.feature_extractor.extract(question, user_answer)
         probability = self.model.predict_proba(features)
         return _evaluation_response(question, user_answer, probability * 100)
-
-
-class TrainedRegressionEvaluatorProvider:
-    """Uses the partial-credit regression model as the application score source."""
-
-    def __init__(
-        self,
-        model_path: str | Path | AnswerRegressionModel,
-        feature_extractor: AnswerFeatureExtractor | None = None,
-    ) -> None:
-        self.model = (
-            model_path
-            if isinstance(model_path, AnswerRegressionModel)
-            else AnswerRegressionModel.load(model_path)
-        )
-        self.feature_extractor = feature_extractor or AnswerFeatureExtractor(answer_form=self.model.answer_form)
-
-    def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
-        del prompt
-        calibration = self.model.calibrations.get(answer_calibration_key(question, user_answer))
-        if calibration is not None:
-            return _evaluation_response(question, user_answer, calibration * 100)
-        features = self.feature_extractor.extract(question, user_answer)
-        return _evaluation_response(question, user_answer, self.model.predict(features) * 100)
 
 
 class SemanticSimilarityEvaluatorProvider:
@@ -149,7 +124,7 @@ def _feedback_calibrations(
         available_questions = JsonQuestionRepository(questions_path).all()
     calibration_values: dict[str, set[float]] = {}
     for path in existing_paths:
-        for example in load_feedback_regression_examples(path, available_questions):
+        for example in load_feedback_graded_examples(path, available_questions):
             key = answer_calibration_key(example.question, example.answer)
             calibration_values.setdefault(key, set()).add(example.rating)
     return {

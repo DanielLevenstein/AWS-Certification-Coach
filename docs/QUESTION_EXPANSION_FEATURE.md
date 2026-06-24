@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Phase 1 expands the local question bank so AWS Certification Coach better reflects the AWS Certified Developer Associate exam while preserving the project rule that app-facing questions, model-training labels, and final verification data stay separate.
+Phase 1 expands the local question bank so AWS Certification Coach better reflects the AWS Certified Developer Associate exam while preserving separation between app-facing questions and curated semantic-evaluation feedback.
 
 This design supports the roadmap in `docs/QUESTION_IMPROVEMENT_ROADMAP.md` and the rubric-stabilization work in `docs/TODO.md`. The current pass is code-free: standardize the question-quality, question-fidelity, and learner-answer language before changing implementation behavior.
 
@@ -191,7 +191,7 @@ Question fidelity should combine concept fidelity and exam-style fidelity. Relea
 - Review a sample of generated Developer Associate questions against permitted official exam-style calibration notes.
 - Reject batches where questions are AWS-valid but not exam-valid.
 - Run unit tests with `./run_unit_tests.sh`.
-- Run routine model checks with `./run_model_smoke_tests.sh` and full training checks with `./run_model_training_tests.sh` when model behavior changes.
+- Run routine model checks with `./run_model_smoke_tests.sh` and full release metrics when semantic behavior changes.
 - Run `./release_notes.sh --full <release-tag>` before commits.
 - Confirm no `/data/`, `/scripts/data/`, or `/metrics/` files are staged.
 

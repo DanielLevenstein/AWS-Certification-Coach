@@ -47,8 +47,6 @@ def main() -> None:
     parser.add_argument("--per-grade-output", type=Path, default=None)
     parser.add_argument("--grade-band-output", type=Path, default=None)
     parser.add_argument("--letter-distance-output", type=Path, default=None)
-    parser.add_argument("--answer-model-evaluation", type=Path, default=None)
-    parser.add_argument("--training-metrics", type=Path, default=None)
     args = parser.parse_args()
 
     questions = JsonQuestionRepository(args.questions).all()
@@ -61,18 +59,13 @@ def main() -> None:
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
-    answer_model_evaluation = (
-        json.loads(args.answer_model_evaluation.read_text(encoding="utf-8"))
-        if args.answer_model_evaluation is not None
-        else None
-    )
-    plot_semantic_accuracy(metrics, args.chart_output, answer_model_evaluation)
+    plot_semantic_accuracy(metrics, args.chart_output)
     if args.per_grade_output is not None:
-        plot_per_grade_metrics(answer_model_evaluation or {}, args.per_grade_output)
+        plot_per_grade_metrics(metrics, args.per_grade_output)
     if args.grade_band_output is not None:
-        plot_grade_band_metrics(answer_model_evaluation or {}, args.grade_band_output)
+        plot_grade_band_metrics(metrics, args.grade_band_output)
     if args.letter_distance_output is not None:
-        plot_letter_distance_metrics(answer_model_evaluation or {}, args.letter_distance_output)
+        plot_letter_distance_metrics(metrics, args.letter_distance_output)
     print(json.dumps(metrics, indent=2))
     print(f"Semantic accuracy graph: {args.chart_output}")
 
@@ -80,7 +73,6 @@ def main() -> None:
 def plot_semantic_accuracy(
     metrics: dict[str, object],
     output_path: Path,
-    answer_model_evaluation: dict[str, object] | None = None,
 ) -> None:
     exact_letter_accuracy = float(metrics.get("semantic_exact_letter_accuracy", metrics["semantic_grade_accuracy"]))
     values = {
@@ -89,10 +81,8 @@ def plot_semantic_accuracy(
         "Semantic Recall": float(metrics["semantic_recall"]) * 100,
         "Exact Letter Accuracy": exact_letter_accuracy * 100,
     }
-    splits = (answer_model_evaluation or {}).get("splits", {})
-    test_split = splits.get("test") if isinstance(splits, dict) else None
-    if isinstance(test_split, dict) and "within_one_letter_accuracy" in test_split:
-        values["Within 1 Letter"] = float(test_split["within_one_letter_accuracy"]) * 100
+    if "semantic_within_one_letter_accuracy" in metrics:
+        values["Within 1 Letter"] = float(metrics["semantic_within_one_letter_accuracy"]) * 100
     colors = ["#2ca02c", "#1f77b4", "#9467bd", "#ff7f0e", "#17becf"]
     figure, axis = plt.subplots(figsize=(12, 6))
     bars = axis.bar(values.keys(), values.values(), color=colors)
@@ -120,12 +110,10 @@ def plot_semantic_accuracy(
     plt.close(figure)
 
 
-def plot_per_grade_metrics(answer_model_evaluation: dict[str, object], output_path: Path) -> None:
-    """Render final-test precision and recall for each grade."""
+def plot_per_grade_metrics(metrics: dict[str, object], output_path: Path) -> None:
+    """Render semantic precision and recall for each grade."""
 
-    splits = answer_model_evaluation.get("splits", {})
-    test_split = splits.get("test", {}) if isinstance(splits, dict) else {}
-    per_grade = test_split.get("per_grade", {}) if isinstance(test_split, dict) else {}
+    per_grade = metrics.get("per_grade", {})
     if not isinstance(per_grade, dict):
         raise ValueError("Answer model evaluation does not define per_grade metrics.")
 
@@ -185,12 +173,10 @@ def plot_per_grade_metrics(answer_model_evaluation: dict[str, object], output_pa
     plt.close(figure)
 
 
-def plot_grade_band_metrics(answer_model_evaluation: dict[str, object], output_path: Path) -> None:
+def plot_grade_band_metrics(metrics: dict[str, object], output_path: Path) -> None:
     """Render precision and recall for the A, BC, and DF reporting bands."""
 
-    splits = answer_model_evaluation.get("splits", {})
-    test_split = splits.get("test", {}) if isinstance(splits, dict) else {}
-    per_band = test_split.get("per_grade_band", {}) if isinstance(test_split, dict) else {}
+    per_band = metrics.get("per_grade_band", {})
     if not isinstance(per_band, dict):
         raise ValueError("Answer model evaluation does not define per_grade_band metrics.")
 
@@ -238,17 +224,13 @@ def plot_grade_band_metrics(answer_model_evaluation: dict[str, object], output_p
     plt.close(figure)
 
 
-def plot_letter_distance_metrics(answer_model_evaluation: dict[str, object], output_path: Path) -> None:
+def plot_letter_distance_metrics(metrics: dict[str, object], output_path: Path) -> None:
     """Show how exact and adjacent predictions compose Within 1 Letter."""
 
-    splits = answer_model_evaluation.get("splits", {})
-    test_split = splits.get("test", {}) if isinstance(splits, dict) else {}
-    if not isinstance(test_split, dict):
-        raise ValueError("Answer model evaluation does not define a test split.")
-    exact = test_split.get("letter_accuracy")
-    within_one = test_split.get("within_one_letter_accuracy")
+    exact = metrics.get("semantic_exact_letter_accuracy")
+    within_one = metrics.get("semantic_within_one_letter_accuracy")
     if not isinstance(exact, (int, float)) or not isinstance(within_one, (int, float)):
-        raise ValueError("Test metrics must define letter_accuracy and within_one_letter_accuracy.")
+        raise ValueError("Semantic metrics must define exact and within-one-letter accuracy.")
 
     exact_percent = float(exact) * 100
     off_by_one_percent = max(0.0, float(within_one) - float(exact)) * 100

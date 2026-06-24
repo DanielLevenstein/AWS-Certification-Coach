@@ -1,22 +1,20 @@
 """Training package exports."""
 
-from .answer_classifier import AnswerClassificationModel, AnswerRegressionModel, PartialCreditRegressor, ReinforcementAnswerClassifier
+from .answer_classifier import AnswerClassificationModel, ReinforcementAnswerClassifier
 from .dataset import (
     AnswerClassificationExample,
-    AnswerRegressionExample,
+    GradedAnswerExample,
     load_answer_classification_examples,
-    load_answer_regression_examples,
+    load_feedback_graded_examples,
 )
 from .features import AnswerFeatureExtractor
 
 __all__ = [
     "AnswerClassificationExample",
     "AnswerClassificationModel",
-    "AnswerRegressionExample",
-    "AnswerRegressionModel",
+    "GradedAnswerExample",
     "AnswerFeatureExtractor",
-    "PartialCreditRegressor",
     "ReinforcementAnswerClassifier",
     "load_answer_classification_examples",
-    "load_answer_regression_examples",
+    "load_feedback_graded_examples",
 ]
