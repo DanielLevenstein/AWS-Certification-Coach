@@ -40,6 +40,7 @@ def render_release_metrics(
     answer_model_markdown = _optional_read_text(metrics_dir / "answer_model_evaluation.md")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
     question_coverage = _optional_read(metrics_dir / "question_coverage.json")
+    knowledge_base = _optional_read(metrics_dir / "knowledge_base.json")
     saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
     answer_form = saved_model.get("answer_form", training_metrics.get("answer_form", "unknown") if training_metrics else "unknown")
     calibration_count = saved_model.get("calibration_count", 0)
@@ -74,6 +75,11 @@ def render_release_metrics(
             f"Question coverage concept count: `{question_coverage.get('concept_count', 0)}`",
             f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
             f"Top covered concepts: `{_coverage_names(question_coverage, 'top_concepts', limit=12)}`",
+            f"Knowledge base schema version: `{knowledge_base.get('schema_version', 'not-run')}`",
+            f"Knowledge base file size: `{knowledge_base.get('file_size_bytes', 0)}` bytes",
+            f"Knowledge base syntax alias count: `{knowledge_base.get('syntax_alias_count', 0)}`",
+            f"Knowledge base service family count: `{knowledge_base.get('service_family_count', 0)}`",
+            f"Knowledge base concept count: `{knowledge_base.get('concept_count', 0)}`",
             f"Semantic evaluation count: `{semantic.get('semantic_example_count', 0)}`",
             "Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.",
             "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",

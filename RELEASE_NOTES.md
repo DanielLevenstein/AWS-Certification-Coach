@@ -21,6 +21,7 @@
 | v2.5.2   | Restored the legacy Semantic Precision and Recall definition.                                                                       |
 | v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                   
 | v2.5.5   | Added back exact match and off by one graph for release metrics.                                                                   |
+| v2.knowledgeBase1.1 | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context. |
 
 # Release Metrics
 
@@ -55,17 +56,19 @@
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.4.6   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.5.2   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
+| v2.knowledgeBase1.1 | 90.62% | 100.00% | 90.91% | 87.50% | 96.15% | 94.95% |
 
 ## Grade Band Precision
 | Release |      A |    B&C |     D&F |
 |:--------|-------:|-------:|--------:|
 | v2.5.5  | 46.51% | 60.71% | 100.00% |
+| v2.knowledgeBase1.1  | 50.00% | 69.70% | 100.00% |
 
 ## Grade Precision
 | Release |      A |      B |      C |       D |      F |
 |:--------|-------:|-------:|-------:|--------:|-------:|
 | v2.5.5  | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
-
+| v2.knowledgeBase1.1  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -91,33 +94,35 @@ For v2.3.6, `Within 1 Letter` comes from `scripts/evaluate_answer_model.py` and 
 
 For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` questions for IAM policy review, Lambda code review, SDK pagination review, and SAM template permission review. The app now preserves artifact metadata and renders self-authored code/configuration snippets in the learner question flow.
 
+For v2.knowledgeBase1.1, answer evaluation loads a validated 13,214-byte local knowledge document containing 18 syntax aliases, 16 service families, and natural-language descriptions for all 27 concepts in the structured answer-training seed. Semantic grade-band accuracy, precision, recall, and exact-letter accuracy remain unchanged from the previous release baseline. The retrained regressor reports 96.15% test within-one-letter accuracy and 67.31% test exact-letter accuracy; exact-answer calibration removal remains deferred to a later knowledge-base iteration.
+
 ## Current Coverage
 
 ![Release Metrics Chart](release/question_coverage_metrics_chart.png)
 
 <!-- release-metrics:start -->
-## Generated Release Metrics
+## Semantic Accuracy Metrics
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.5.5.1 | 90.62% | 100.00% | 90.91% | 87.50% | 98.08% | 94.95% |
+| v2.knowledgeBase1.1 | 90.62% | 100.00% | 90.91% | 87.50% | 96.15% | 94.95% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 46.51% | 60.71% | 100.00% |
-| Recall | 83.33% | 42.50% | 82.50% |
-| F1 | 59.70% | 50.00% | 90.41% |
+| Precision | 50.00% | 69.70% | 100.00% |
+| Recall | 70.83% | 57.50% | 92.50% |
+| F1 | 58.62% | 63.01% | 96.10% |
 | Support | 24 | 40 | 40 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
-| Recall | 83.33% | 21.88% | 62.50% | 31.25% | 100.00% |
-| F1 | 59.70% | 30.43% | 45.45% | 47.62% | 92.31% |
+| Precision | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
+| Recall | 70.83% | 37.50% | 100.00% | 56.25% | 100.00% |
+| F1 | 58.62% | 48.98% | 66.67% | 72.00% | 92.31% |
 | Support | 24 | 32 | 8 | 16 | 24 |
 
 Saved model answer form: `long`
@@ -129,6 +134,11 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
+Knowledge base schema version: `1`
+Knowledge base file size: `13214` bytes
+Knowledge base syntax alias count: `18`
+Knowledge base service family count: `16`
+Knowledge base concept count: `27`
 Semantic evaluation count: `32`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
@@ -140,7 +150,7 @@ Question fidelity is the release guardrail for generated-question concept and ex
 
 | Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |
 |---|---:|---:|---:|---:|---:|
-| Train | 312 | 98.4% | 63.8% | 0.0569 | 0.0052 |
-| Validation | 104 | 100.0% | 73.1% | 0.0470 | 0.0034 |
-| Test | 104 | 98.1% | 58.7% | 0.0572 | 0.0053 |
+| Train | 312 | 96.2% | 64.7% | 0.0552 | 0.0054 |
+| Validation | 104 | 95.2% | 69.2% | 0.0473 | 0.0041 |
+| Test | 104 | 96.2% | 67.3% | 0.0526 | 0.0050 |
 <!-- release-metrics:end -->

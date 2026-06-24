@@ -1,0 +1,253 @@
+"""Validated, cached access to compact AWS answer-evaluation knowledge."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from functools import lru_cache
+import json
+from pathlib import Path
+import re
+from typing import Iterable
+
+
+TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+DEFAULT_KNOWLEDGE_BASE_PATH = (
+    Path(__file__).resolve().parents[3]
+    / "config"
+    / "knowledge_base"
+    / "aws_answer_knowledge_base.json"
+)
+FORBIDDEN_CONTENT_KEYS = {
+    "answer",
+    "correct_rating",
+    "grade",
+    "partial_answers",
+    "question",
+    "rating",
+    "reference_answer",
+}
+
+
+@dataclass(frozen=True)
+class ServiceFamily:
+    id: str
+    name: str
+    tokens: tuple[str, ...]
+    aliases: tuple[str, ...]
+    description: str
+
+
+@dataclass(frozen=True)
+class Concept:
+    id: str
+    name: str
+    aliases: tuple[str, ...]
+    service_ids: tuple[str, ...]
+    description: str
+
+
+@dataclass(frozen=True)
+class KnowledgeSelection:
+    concepts: tuple[Concept, ...]
+    services: tuple[ServiceFamily, ...]
+
+    def render(self, max_characters: int = 1600) -> str:
+        """Render deterministic, bounded context suitable for a small local model."""
+
+        blocks = []
+        services_by_id = {service.id: service for service in self.services}
+        for concept in self.concepts:
+            service_names = [
+                services_by_id[service_id].name
+                for service_id in concept.service_ids
+                if service_id in services_by_id
+            ]
+            block = "\n".join(
+                (
+                    f"CONCEPT: {concept.name}",
+                    f"SERVICES: {', '.join(service_names)}",
+                    f"MEANING: {concept.description}",
+                    f"ALIASES: {', '.join(concept.aliases) if concept.aliases else 'none'}",
+                )
+            )
+            candidate = "\n\n".join((*blocks, block))
+            if len(candidate) > max_characters:
+                break
+            blocks.append(block)
+        return "\n\n".join(blocks)
+
+
+@dataclass(frozen=True)
+class KnowledgeBase:
+    schema_version: int
+    description: str
+    syntax_aliases: tuple[tuple[str, str], ...]
+    service_families: tuple[ServiceFamily, ...]
+    concepts: tuple[Concept, ...]
+
+    @property
+    def service_family_tokens(self) -> frozenset[str]:
+        return frozenset(token for service in self.service_families for token in service.tokens)
+
+    def canonicalize(self, value: str) -> str:
+        normalized = " ".join(TOKEN_PATTERN.findall(value.casefold()))
+        for alias, canonical in sorted(self.syntax_aliases, key=lambda item: len(item[0]), reverse=True):
+            normalized = re.sub(rf"\b{re.escape(alias)}\b", canonical, normalized)
+        return normalized
+
+    def aliases_for_service_token(self, token: str) -> frozenset[str]:
+        normalized_token = self.canonicalize(token)
+        aliases = set()
+        for service in self.service_families:
+            if normalized_token not in service.tokens:
+                continue
+            aliases.update(self.canonicalize(alias) for alias in service.aliases)
+        return frozenset(alias for alias in aliases if alias)
+
+    def terms_for_concept(self, name: str) -> tuple[str, ...]:
+        normalized_name = self.canonicalize(name)
+        for concept in self.concepts:
+            if self.canonicalize(concept.name) == normalized_name:
+                return tuple(dict.fromkeys((concept.name, *concept.aliases)))
+        return (name,)
+
+    def select(self, concept_names: Iterable[str], answer: str = "") -> KnowledgeSelection:
+        """Select exact requested concepts, then relevant alias matches from the answer."""
+
+        requested = {self.canonicalize(name) for name in concept_names if name.strip()}
+        normalized_answer = self.canonicalize(answer)
+        selected = []
+        for concept in self.concepts:
+            terms = (concept.name, *concept.aliases)
+            normalized_terms = {self.canonicalize(term) for term in terms}
+            requested_match = self.canonicalize(concept.name) in requested
+            answer_match = any(
+                re.search(rf"\b{re.escape(term)}\b", normalized_answer)
+                for term in normalized_terms
+                if term
+            )
+            if requested_match or answer_match:
+                selected.append(concept)
+        service_ids = {service_id for concept in selected for service_id in concept.service_ids}
+        services = tuple(service for service in self.service_families if service.id in service_ids)
+        return KnowledgeSelection(tuple(selected), services)
+
+
+def load_knowledge_base(path: str | Path = DEFAULT_KNOWLEDGE_BASE_PATH) -> KnowledgeBase:
+    """Load a knowledge document once per resolved path."""
+
+    return _load_knowledge_base(str(Path(path).resolve()))
+
+
+@lru_cache(maxsize=8)
+def _load_knowledge_base(resolved_path: str) -> KnowledgeBase:
+    source = Path(resolved_path)
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    _validate_payload(payload, source)
+    services = tuple(
+        ServiceFamily(
+            id=str(row["id"]),
+            name=str(row["name"]),
+            tokens=tuple(str(value) for value in row["tokens"]),
+            aliases=tuple(str(value) for value in row["aliases"]),
+            description=str(row["description"]),
+        )
+        for row in payload["service_families"]
+    )
+    concepts = tuple(
+        Concept(
+            id=str(row["id"]),
+            name=str(row["name"]),
+            aliases=tuple(str(value) for value in row["aliases"]),
+            service_ids=tuple(str(value) for value in row["service_ids"]),
+            description=str(row["description"]),
+        )
+        for row in payload["concepts"]
+    )
+    knowledge = KnowledgeBase(
+        schema_version=int(payload["schema_version"]),
+        description=str(payload["description"]),
+        syntax_aliases=tuple(
+            (str(row["alias"]), str(row["canonical"]))
+            for row in payload["syntax_aliases"]
+        ),
+        service_families=services,
+        concepts=concepts,
+    )
+    _validate_normalized_values(knowledge, source)
+    return knowledge
+
+
+def _validate_payload(payload: object, source: Path) -> None:
+    if not isinstance(payload, dict):
+        raise ValueError(f"Knowledge base must be a JSON object: {source}")
+    required = {"schema_version", "description", "syntax_aliases", "service_families", "concepts"}
+    missing = required - payload.keys()
+    if missing:
+        raise ValueError(f"Knowledge base is missing fields {sorted(missing)}: {source}")
+    if payload["schema_version"] != 1:
+        raise ValueError(f"Unsupported knowledge base schema version: {payload['schema_version']}")
+    forbidden = _find_forbidden_keys(payload)
+    if forbidden:
+        raise ValueError(f"Knowledge base contains answer-label fields {sorted(forbidden)}: {source}")
+    _require_rows(payload["syntax_aliases"], {"alias", "canonical"}, "syntax_aliases", source)
+    _require_rows(
+        payload["service_families"],
+        {"id", "name", "tokens", "aliases", "description"},
+        "service_families",
+        source,
+    )
+    _require_rows(
+        payload["concepts"],
+        {"id", "name", "aliases", "service_ids", "description"},
+        "concepts",
+        source,
+    )
+
+
+def _require_rows(value: object, required: set[str], section: str, source: Path) -> None:
+    if not isinstance(value, list) or not value:
+        raise ValueError(f"Knowledge base section {section!r} must be a non-empty list: {source}")
+    for index, row in enumerate(value):
+        if not isinstance(row, dict) or required - row.keys():
+            raise ValueError(f"Invalid {section} row {index}: {source}")
+
+
+def _find_forbidden_keys(value: object) -> set[str]:
+    found = set()
+    if isinstance(value, dict):
+        found.update(FORBIDDEN_CONTENT_KEYS & value.keys())
+        for nested in value.values():
+            found.update(_find_forbidden_keys(nested))
+    elif isinstance(value, list):
+        for nested in value:
+            found.update(_find_forbidden_keys(nested))
+    return found
+
+
+def _validate_normalized_values(knowledge: KnowledgeBase, source: Path) -> None:
+    service_ids = [service.id for service in knowledge.service_families]
+    concept_ids = [concept.id for concept in knowledge.concepts]
+    concept_names = [knowledge.canonicalize(concept.name) for concept in knowledge.concepts]
+    alias_names = [" ".join(TOKEN_PATTERN.findall(alias.casefold())) for alias, _canonical in knowledge.syntax_aliases]
+    if len(service_ids) != len(set(service_ids)):
+        raise ValueError(f"Duplicate service IDs in knowledge base: {source}")
+    if len(concept_ids) != len(set(concept_ids)) or len(concept_names) != len(set(concept_names)):
+        raise ValueError(f"Duplicate concept IDs or names in knowledge base: {source}")
+    if len(alias_names) != len(set(alias_names)):
+        raise ValueError(f"Duplicate syntax aliases in knowledge base: {source}")
+    known_services = set(service_ids)
+    unresolved = {
+        service_id
+        for concept in knowledge.concepts
+        for service_id in concept.service_ids
+        if service_id not in known_services
+    }
+    if unresolved:
+        raise ValueError(f"Unknown concept service IDs {sorted(unresolved)}: {source}")
+    for service in knowledge.service_families:
+        if not service.id or not service.name or not service.tokens or not service.description:
+            raise ValueError(f"Incomplete service family {service.id!r}: {source}")
+    for concept in knowledge.concepts:
+        if not concept.id or not concept.name or not concept.service_ids or not concept.description:
+            raise ValueError(f"Incomplete concept {concept.id!r}: {source}")

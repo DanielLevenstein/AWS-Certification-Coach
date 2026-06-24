@@ -8,32 +8,14 @@ from pathlib import Path
 from collections.abc import Iterable
 
 from aws_certification_coach.domain import Question
+from aws_certification_coach.knowledge_base import load_knowledge_base
 from aws_certification_coach.ratings import letter_to_grade_band, letter_to_numeric, score_to_letter
 from aws_certification_coach.training.dataset import load_feedback_regression_examples, question_signature
 from aws_certification_coach.training.features import correct_answer_text
 
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
-SYNTAX_ALIASES = {
-    "api gateway": "apigateway",
-    "cloud formation": "cloudformation",
-    "cloud front": "cloudfront",
-    "cloud trail": "cloudtrail",
-    "cloud watch": "cloudwatch",
-    "code build": "codebuild",
-    "code deploy": "codedeploy",
-    "code pipeline": "codepipeline",
-    "dynamo db": "dynamodb",
-    "event bridge": "eventbridge",
-    "route 53": "route53",
-    "secret manager": "secretsmanager",
-    "secrets manager": "secretsmanager",
-    "step function": "stepfunctions",
-    "step functions": "stepfunctions",
-    "systems manager": "systemsmanager",
-    "time to live": "ttl",
-    "x ray": "xray",
-}
+KNOWLEDGE_BASE = load_knowledge_base()
 GENERIC_TOKENS = {
     "amazon",
     "and",
@@ -49,16 +31,7 @@ GENERIC_TOKENS = {
     "to",
     "use",
 }
-SERVICE_FAMILY_TOKENS = {
-    "dynamodb",
-    "ec2",
-    "iam",
-    "kinesis",
-    "lambda",
-    "rds",
-    "s3",
-    "vpc",
-}
+SERVICE_FAMILY_TOKENS = set(KNOWLEDGE_BASE.service_family_tokens)
 AMBIGUOUS_ALIAS_TOKENS = {
     "allow",
     "amazon",
@@ -70,9 +43,6 @@ AMBIGUOUS_ALIAS_TOKENS = {
     "rules",
     "s3",
     "service",
-}
-SERVICE_ALIASES_BY_CANONICAL_TOKEN = {
-    "budgets": {"aws cost center", "cost center"},
 }
 LEGACY_ACCEPTED_GRADES = frozenset({"A", "B", "C", "D"})
 
@@ -303,7 +273,7 @@ def _service_aliases(question: Question) -> set[str]:
             if token not in AMBIGUOUS_ALIAS_TOKENS and len(token) > 2
         )
         for token in distinctive_tokens:
-            aliases.update(SERVICE_ALIASES_BY_CANONICAL_TOKEN.get(token, set()))
+            aliases.update(KNOWLEDGE_BASE.aliases_for_service_token(token))
     return {alias for alias in aliases if alias}
 
 
@@ -325,25 +295,29 @@ def _concept_coverage(question: Question, answer: str) -> float:
     covered = 0
     required_concepts = _required_concepts(question)
     for concept in required_concepts:
-        concept_tokens = [
-            token
-            for token in _tokens(concept)
-            if token not in GENERIC_TOKENS
-        ]
-        if not concept_tokens:
-            continue
-        concept_token_set = set(concept_tokens)
-        if " ".join(concept_tokens) in normalized_answer:
-            covered += 1
-            continue
-        matched_tokens = concept_token_set & answer_tokens
-        if len(matched_tokens) / len(concept_token_set) >= 0.5:
-            if matched_tokens <= SERVICE_FAMILY_TOKENS:
-                continue
-            if len(concept_token_set) > 1 and len(matched_tokens) < 2:
-                continue
+        if any(
+            _concept_term_is_covered(term, normalized_answer, answer_tokens)
+            for term in KNOWLEDGE_BASE.terms_for_concept(concept)
+        ):
             covered += 1
     return covered / max(1, len(required_concepts))
+
+
+def _concept_term_is_covered(term: str, normalized_answer: str, answer_tokens: set[str]) -> bool:
+    concept_tokens = [token for token in _tokens(term) if token not in GENERIC_TOKENS]
+    if not concept_tokens:
+        return False
+    concept_token_set = set(concept_tokens)
+    if " ".join(concept_tokens) in normalized_answer:
+        return True
+    matched_tokens = concept_token_set & answer_tokens
+    if len(matched_tokens) / len(concept_token_set) < 0.5:
+        return False
+    if matched_tokens <= SERVICE_FAMILY_TOKENS:
+        return False
+    if len(concept_token_set) > 1 and len(matched_tokens) < 2:
+        return False
+    return True
 
 
 def _required_concepts(question: Question) -> list[str]:
@@ -424,7 +398,4 @@ def _tokens(value: str) -> list[str]:
 
 
 def _canonical_syntax(value: str) -> str:
-    normalized = " ".join(TOKEN_PATTERN.findall(value.casefold()))
-    for alias, canonical in sorted(SYNTAX_ALIASES.items(), key=lambda item: len(item[0]), reverse=True):
-        normalized = re.sub(rf"\b{re.escape(alias)}\b", canonical, normalized)
-    return normalized
+    return KNOWLEDGE_BASE.canonicalize(value)

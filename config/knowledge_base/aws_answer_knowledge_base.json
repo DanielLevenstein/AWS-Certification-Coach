@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "description": "Compact AWS terminology and concept knowledge for deterministic answer evaluation and lightweight model context.",
+  "syntax_aliases": [
+    {"alias": "api gateway", "canonical": "apigateway"},
+    {"alias": "cloud formation", "canonical": "cloudformation"},
+    {"alias": "cloud front", "canonical": "cloudfront"},
+    {"alias": "cloud trail", "canonical": "cloudtrail"},
+    {"alias": "cloud watch", "canonical": "cloudwatch"},
+    {"alias": "code build", "canonical": "codebuild"},
+    {"alias": "code deploy", "canonical": "codedeploy"},
+    {"alias": "code pipeline", "canonical": "codepipeline"},
+    {"alias": "dynamo db", "canonical": "dynamodb"},
+    {"alias": "event bridge", "canonical": "eventbridge"},
+    {"alias": "route 53", "canonical": "route53"},
+    {"alias": "secret manager", "canonical": "secretsmanager"},
+    {"alias": "secrets manager", "canonical": "secretsmanager"},
+    {"alias": "step function", "canonical": "stepfunctions"},
+    {"alias": "step functions", "canonical": "stepfunctions"},
+    {"alias": "systems manager", "canonical": "systemsmanager"},
+    {"alias": "time to live", "canonical": "ttl"},
+    {"alias": "x ray", "canonical": "xray"}
+  ],
+  "service_families": [
+    {
+      "id": "apigateway",
+      "name": "Amazon API Gateway",
+      "tokens": ["apigateway"],
+      "aliases": ["api gateway"],
+      "description": "A managed service for creating and operating APIs that route requests to backend integrations."
+    },
+    {
+      "id": "budgets",
+      "name": "AWS Budgets",
+      "tokens": ["budgets"],
+      "aliases": ["aws budgets", "aws cost center", "cost center"],
+      "description": "A budgeting service that tracks cost or usage against configured thresholds and sends notifications."
+    },
+    {
+      "id": "cloudtrail",
+      "name": "AWS CloudTrail",
+      "tokens": ["cloudtrail"],
+      "aliases": ["cloud trail"],
+      "description": "A service that records AWS account activity and API events for governance and auditing."
+    },
+    {
+      "id": "codebuild",
+      "name": "AWS CodeBuild",
+      "tokens": ["codebuild"],
+      "aliases": ["code build"],
+      "description": "A managed build service that runs commands defined for a build project."
+    },
+    {
+      "id": "config",
+      "name": "AWS Config",
+      "tokens": ["config"],
+      "aliases": ["aws config"],
+      "description": "A service that records supported resource configuration state and evaluates configurations against rules."
+    },
+    {
+      "id": "dynamodb",
+      "name": "Amazon DynamoDB",
+      "tokens": ["dynamodb"],
+      "aliases": ["dynamo db"],
+      "description": "A managed NoSQL database family for key-value and document workloads."
+    },
+    {
+      "id": "ec2",
+      "name": "Amazon EC2",
+      "tokens": ["ec2"],
+      "aliases": ["elastic compute cloud"],
+      "description": "The AWS virtual compute service family for running instances and related compute resources."
+    },
+    {
+      "id": "iam",
+      "name": "AWS Identity and Access Management",
+      "tokens": ["iam"],
+      "aliases": ["identity and access management"],
+      "description": "The AWS identity and authorization family for principals, policies, roles, and permissions."
+    },
+    {
+      "id": "kinesis",
+      "name": "Amazon Kinesis",
+      "tokens": ["kinesis"],
+      "aliases": ["kinesis streams", "kinesis data streams"],
+      "description": "A family of services for ingesting and processing streaming data."
+    },
+    {
+      "id": "kms",
+      "name": "AWS Key Management Service",
+      "tokens": ["kms"],
+      "aliases": ["aws kms", "key management service"],
+      "description": "A managed service for creating and controlling encryption keys."
+    },
+    {
+      "id": "lambda",
+      "name": "AWS Lambda",
+      "tokens": ["lambda"],
+      "aliases": ["aws lambda"],
+      "description": "The AWS serverless compute family for running functions in response to requests or events."
+    },
+    {
+      "id": "rds",
+      "name": "Amazon Relational Database Service",
+      "tokens": ["rds"],
+      "aliases": ["amazon rds", "relational database service"],
+      "description": "A managed relational database family."
+    },
+    {
+      "id": "s3",
+      "name": "Amazon S3",
+      "tokens": ["s3"],
+      "aliases": ["amazon s3", "simple storage service"],
+      "description": "The AWS object storage family for buckets, objects, and their lifecycle controls."
+    },
+    {
+      "id": "secretsmanager",
+      "name": "AWS Secrets Manager",
+      "tokens": ["secretsmanager"],
+      "aliases": ["secret manager", "secrets manager", "aws secrets manager"],
+      "description": "A managed service for storing, retrieving, and rotating application secrets."
+    },
+    {
+      "id": "sqs",
+      "name": "Amazon Simple Queue Service",
+      "tokens": ["sqs"],
+      "aliases": ["amazon sqs", "simple queue service"],
+      "description": "A managed message queue service for decoupling producers and consumers."
+    },
+    {
+      "id": "vpc",
+      "name": "Amazon Virtual Private Cloud",
+      "tokens": ["vpc"],
+      "aliases": ["amazon vpc", "virtual private cloud"],
+      "description": "The AWS virtual networking family for isolated networks and network controls."
+    }
+  ],
+  "concepts": [
+    {
+      "id": "codebuild-buildspec",
+      "name": "CodeBuild buildspec",
+      "aliases": ["buildspec", "buildspec file"],
+      "service_ids": ["codebuild"],
+      "description": "A buildspec defines the install, pre-build, build, and post-build commands that CodeBuild runs."
+    },
+    {
+      "id": "build-phases",
+      "name": "build phases",
+      "aliases": ["build phase", "buildspec phases"],
+      "service_ids": ["codebuild"],
+      "description": "Build phases organize ordered install, pre-build, build, and post-build work within a CodeBuild buildspec."
+    },
+    {
+      "id": "test-commands",
+      "name": "test commands",
+      "aliases": ["test command", "testing commands"],
+      "service_ids": ["codebuild"],
+      "description": "Test commands are invocations run by CodeBuild as commands declared in a buildspec phase."
+    },
+    {
+      "id": "aws-budgets",
+      "name": "AWS Budgets",
+      "aliases": ["budgets", "aws budget"],
+      "service_ids": ["budgets"],
+      "description": "AWS Budgets tracks cost or usage against configured limits and can notify stakeholders."
+    },
+    {
+      "id": "cost-thresholds",
+      "name": "cost thresholds",
+      "aliases": ["cost threshold", "budget thresholds"],
+      "service_ids": ["budgets"],
+      "description": "Cost thresholds are actual or forecasted budget limits that can trigger AWS Budgets notifications."
+    },
+    {
+      "id": "alerts",
+      "name": "alerts",
+      "aliases": ["alert", "budget notifications"],
+      "service_ids": ["budgets"],
+      "description": "Budget alerts notify recipients when configured AWS Budgets conditions are reached."
+    },
+    {
+      "id": "aws-config",
+      "name": "AWS Config",
+      "aliases": ["config service"],
+      "service_ids": ["config"],
+      "description": "AWS Config records supported resource configuration state and evaluates resources against compliance rules."
+    },
+    {
+      "id": "configuration-history",
+      "name": "configuration history",
+      "aliases": ["resource configuration history", "configuration changes"],
+      "service_ids": ["config"],
+      "description": "Configuration history is the time-ordered record of supported resource configuration changes captured by AWS Config."
+    },
+    {
+      "id": "compliance-rules",
+      "name": "compliance rules",
+      "aliases": ["config rules", "compliance rule"],
+      "service_ids": ["config"],
+      "description": "AWS Config rules evaluate resource configurations against managed or custom compliance expectations."
+    },
+    {
+      "id": "secrets-manager",
+      "name": "Secrets Manager",
+      "aliases": ["aws secrets manager"],
+      "service_ids": ["secretsmanager"],
+      "description": "AWS Secrets Manager stores, retrieves, and rotates application secrets."
+    },
+    {
+      "id": "database-credentials",
+      "name": "database credentials",
+      "aliases": ["database password", "database passwords", "db credentials"],
+      "service_ids": ["secretsmanager"],
+      "description": "Database credentials are usernames and passwords managed as secrets instead of being embedded in application code."
+    },
+    {
+      "id": "scheduled-rotation",
+      "name": "scheduled rotation",
+      "aliases": ["automatic rotation", "secret rotation"],
+      "service_ids": ["secretsmanager"],
+      "description": "Scheduled rotation replaces a secret automatically according to a configured Secrets Manager schedule."
+    },
+    {
+      "id": "sqs-visibility-timeout",
+      "name": "SQS visibility timeout",
+      "aliases": ["visibility timeout"],
+      "service_ids": ["sqs"],
+      "description": "The SQS visibility timeout is the period in which a received message stays hidden from other consumers."
+    },
+    {
+      "id": "hide-message-from-other-consumers",
+      "name": "hide message from other consumers",
+      "aliases": ["hide messages from consumers", "message invisibility"],
+      "service_ids": ["sqs"],
+      "description": "SQS temporarily hides a received message from other consumers while its visibility timeout is active."
+    },
+    {
+      "id": "processing-window",
+      "name": "processing window",
+      "aliases": ["message processing window", "processing time"],
+      "service_ids": ["sqs"],
+      "description": "The SQS processing window is the time a consumer has before a received message can become visible again."
+    },
+    {
+      "id": "aws-kms",
+      "name": "AWS KMS",
+      "aliases": ["kms", "key management service"],
+      "service_ids": ["kms"],
+      "description": "AWS KMS is the managed service for creating and controlling encryption keys."
+    },
+    {
+      "id": "encryption-keys",
+      "name": "encryption keys",
+      "aliases": ["encryption key", "kms keys"],
+      "service_ids": ["kms"],
+      "description": "Encryption keys are cryptographic keys whose use and access can be controlled through AWS KMS."
+    },
+    {
+      "id": "key-management",
+      "name": "key management",
+      "aliases": ["manage encryption keys", "encryption key management"],
+      "service_ids": ["kms"],
+      "description": "Key management covers the lifecycle, permissions, and controlled use of encryption keys in AWS KMS."
+    },
+    {
+      "id": "aws-cloudtrail",
+      "name": "AWS CloudTrail",
+      "aliases": ["cloudtrail", "cloud trail"],
+      "service_ids": ["cloudtrail"],
+      "description": "AWS CloudTrail records AWS account activity and API events."
+    },
+    {
+      "id": "api-activity",
+      "name": "API activity",
+      "aliases": ["api events", "aws api calls"],
+      "service_ids": ["cloudtrail"],
+      "description": "API activity consists of management or data events produced by calls to AWS APIs and recorded by CloudTrail."
+    },
+    {
+      "id": "auditing",
+      "name": "auditing",
+      "aliases": ["audit", "activity audit"],
+      "service_ids": ["cloudtrail"],
+      "description": "Auditing uses CloudTrail event history to understand which actions occurred and which identities performed them."
+    },
+    {
+      "id": "s3-lifecycle",
+      "name": "S3 Lifecycle",
+      "aliases": ["s3 lifecycle policy", "s3 lifecycle policies", "lifecycle rules"],
+      "service_ids": ["s3"],
+      "description": "S3 Lifecycle rules transition or expire objects automatically based on configured criteria."
+    },
+    {
+      "id": "object-expiration",
+      "name": "object expiration",
+      "aliases": ["expire objects", "object expiry"],
+      "service_ids": ["s3"],
+      "description": "Object expiration is the automatic removal of S3 objects by a Lifecycle expiration action."
+    },
+    {
+      "id": "api-gateway",
+      "name": "API Gateway",
+      "aliases": ["amazon api gateway", "apigateway"],
+      "service_ids": ["apigateway"],
+      "description": "Amazon API Gateway is a managed API front door that routes requests to configured backend integrations."
+    },
+    {
+      "id": "lambda-authorizer",
+      "name": "Lambda authorizer",
+      "aliases": ["api gateway lambda authorizer", "custom authorizer"],
+      "service_ids": ["apigateway", "lambda"],
+      "description": "A Lambda authorizer runs custom authorization logic for an API Gateway request before the backend is invoked."
+    },
+    {
+      "id": "custom-authorization",
+      "name": "custom authorization",
+      "aliases": ["custom token validation", "authorization logic"],
+      "service_ids": ["apigateway", "lambda"],
+      "description": "Custom authorization uses application-specific logic, often in a Lambda authorizer, to allow or deny API Gateway requests."
+    },
+    {
+      "id": "backend-integration",
+      "name": "backend integration",
+      "aliases": ["api backend", "lambda integration"],
+      "service_ids": ["apigateway", "lambda"],
+      "description": "A backend integration connects an API Gateway route to a target such as an AWS Lambda function."
+    }
+  ]
+}

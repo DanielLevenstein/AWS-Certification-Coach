@@ -121,6 +121,14 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             str(metrics_dir),
         ]
     )
+    _run(
+        [
+            sys.executable,
+            "scripts/knowledge_base_metrics.py",
+            "--output",
+            str(metrics_dir / "knowledge_base.json"),
+        ]
+    )
     _run([sys.executable, "scripts/quality_metrics.py", "--output-dir", str(metrics_dir)])
     release_metrics_command = [
         sys.executable,

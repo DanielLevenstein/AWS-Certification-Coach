@@ -55,10 +55,10 @@
 - Expected rating: `0.75`
 - User answer: `SQS FILO queue`
 - Correct answer: Adjust the SQS visibility timeout
-- Raw model score: `84.00`; runtime score: `84`
+- Raw model score: `80.00`; runtime score: `80`
 - Runtime feedback: This answer covers the expected AWS concepts.
 - Reviewer feedback: My answer had nothing to do with the cannon answer but might still be partially right.
-- Largest feature contributions: `semantic_similarity_score` +0.840
+- Largest feature contributions: `semantic_similarity_score` +0.800
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
 ### 4. Expected B, received A

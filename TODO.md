@@ -12,7 +12,7 @@ The previous TODO was backed up to `docs/TODO_COPY.md` before this roadmap was c
 - Do not commit `data/`, `scripts/data/`, or `metrics/`.
 - Do not push Docker images or create GitHub tags until a human reviews the changes.
 
-# Phase 1 Planning And Rubric Stabilization
+# Phase 1 Planning and Rubric Stabilization
 ## Rubric Stabilization
 Done
 ## Answer Grading Stabilization
@@ -23,6 +23,16 @@ Done
 In Progress: 
 The current model struggles with minor rewordings of answers which probably will some significant redesign. 
 Because the current accuracy metrics are stable, we are implementing these changes on a fresh feature branch to ensure the production app remains stable.
+
+Implementing dedicated AWS knowledge based on a dedicated feature branch using tinyLLama for local training.
+My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
+
+1) Update model tests to separate training and smoke testing. 
+2) Add a playwrite test to the deployment guardrail which tests that the first question of the test displays and then move the deployment test into its own test suite per our test suite design. 
+
+Update release guardrail to use the exact letter match as its release metric once we get the metric above the satisfactory value.
+This will allow us to deprecate the old metrics completely.
+
 
 # Phase 2 Code & Configuration Review
 IAM policy questions.

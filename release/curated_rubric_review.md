@@ -36,7 +36,7 @@
 - Question: An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?
 - Answer: `SQS FILO queue`
 - Reference: Adjust the SQS visibility timeout
-- Semantic score: `84`
+- Semantic score: `80`
 - Reviewer feedback: My answer had nothing to do with the cannon answer but might still be partially right.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
