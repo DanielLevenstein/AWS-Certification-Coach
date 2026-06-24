@@ -58,7 +58,9 @@ def _container_host_port(container_id: str) -> str:
     for _ in range(20):
         host_port = subprocess.check_output(
             ["docker", "port", container_id, "8501/tcp"],
+            stderr=subprocess.PIPE,
             text=True,
+            timeout=5,
         ).strip()
         if host_port:
             return host_port.rsplit(":", 1)[-1]
@@ -67,26 +69,37 @@ def _container_host_port(container_id: str) -> str:
 
 
 def _start_container(image: str) -> str:
+    platform = os.getenv("DOCKER_PLATFORM", "linux/amd64")
     try:
-        return subprocess.check_output(
+        result = subprocess.run(
             [
                 "docker",
                 "run",
                 "--pull=never",
+                "--platform",
+                platform,
                 "--rm",
                 "-d",
                 "-p",
                 "127.0.0.1::8501",
                 image,
             ],
-            stderr=subprocess.STDOUT,
+            capture_output=True,
             text=True,
             timeout=30,
-        ).strip()
+            check=False,
+        )
     except subprocess.TimeoutExpired as exc:
-        raise AssertionError(f"Timed out starting Docker image {image!r}: {exc.output or ''}") from exc
-    except subprocess.CalledProcessError as exc:
-        raise AssertionError(f"Failed to start Docker image {image!r}: {exc.output or ''}") from exc
+        details = "".join(part or "" for part in (exc.stdout, exc.stderr))
+        raise AssertionError(f"Timed out starting Docker image {image!r}: {details}") from exc
+    if result.returncode != 0:
+        raise AssertionError(
+            f"Failed to start Docker image {image!r}: {result.stdout}{result.stderr}"
+        )
+    container_id = result.stdout.strip()
+    if not container_id or "\n" in container_id:
+        raise AssertionError(f"Docker returned an invalid container ID: {container_id!r}")
+    return container_id
 
 
 def _wait_for_http_ok(url: str, timeout_seconds: int) -> None:

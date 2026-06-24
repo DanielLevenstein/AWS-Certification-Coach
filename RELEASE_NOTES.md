@@ -24,7 +24,7 @@
 | v2.6.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.           |
 | v2.6.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                           |
 | v2.6.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
-
+| v2.6.3.1 | Fixed deployment tests |
 # Release Metrics
 
 ## Metric Definitions:

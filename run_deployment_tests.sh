@@ -9,6 +9,7 @@ case "${1:-}" in
   -h|--help)
     echo "Usage: DOCKER_IMAGE=<image> $0 [pytest-options]"
     echo "Runs deployment tests against an already-built Docker image."
+    echo "DOCKER_PLATFORM defaults to linux/amd64 for release images."
     exit 0
     ;;
 esac
