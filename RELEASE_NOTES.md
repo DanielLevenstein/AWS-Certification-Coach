@@ -72,6 +72,7 @@
 | v2.5.5                  | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
 | release_notes.sh        | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
 | train_accuracy_model.sh | 42.42% | 66.67% | 34.78% | 77.78% | 100.00% |
+| v2.knowledgeBase1.2.1   | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -112,7 +113,7 @@ For v2.knowledgeBase1.3, `release_notes.sh --quick` validates and reuses the lat
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.knowledgeBase1.2 | 90.62% | 100.00% | 90.91% | 87.50% | 96.15% | 94.95% |
+| v2.knowledgeBase1.2.1 | 90.62% | 100.00% | 90.91% | 87.50% | 96.15% | 94.95% |
 
 ## Grade Band Metrics
 

@@ -223,16 +223,9 @@
     {
       "id": "sqs-visibility-timeout",
       "name": "SQS visibility timeout",
-      "aliases": ["visibility timeout"],
+      "aliases": ["visibility timeout", "hide messages from consumers", "message visibility"],
       "service_ids": ["sqs"],
       "description": "The SQS visibility timeout is the period in which a received message stays hidden from other consumers."
-    },
-    {
-      "id": "hide-message-from-other-consumers",
-      "name": "hide message from other consumers",
-      "aliases": ["hide messages from consumers", "message invisibility"],
-      "service_ids": ["sqs"],
-      "description": "SQS temporarily hides a received message from other consumers while its visibility timeout is active."
     },
     {
       "id": "processing-window",
