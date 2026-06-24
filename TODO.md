@@ -29,6 +29,8 @@ My hope is to get the local language model to train the existing classifier to i
 
 1) Update model tests to separate training and smoke testing. 
 2) Add a playwrite test to the deployment guardrail which tests that the first question of the test displays and then move the deployment test into its own test suite per our test suite design. 
+3) Release metrics from train_accuracy_model.sh and release_notes.sh don't match. We need to determine which metrics should be used.
+
 
 Update release guardrail to use the exact letter match as its release metric once we get the metric above the satisfactory value.
 This will allow us to deprecate the old metrics completely.

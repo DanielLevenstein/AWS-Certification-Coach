@@ -50,8 +50,9 @@ Use the existing project scripts unless the task requires a narrower check:
 ./clean.sh
 ./setup.sh
 ./run_unit_tests.sh
-./run_model_tests.sh
-./release_notes_full.sh <release-tag>
+./run_model_smoke_tests.sh
+./run_model_training_tests.sh
+./release_notes.sh --full <release-tag>
 ```
 
 Do not run or start the Streamlit app unless the user asks.

@@ -176,7 +176,11 @@ Before a milestone is considered ready:
 - Confirm learner-answer grading remains separate from question-fidelity scoring.
 - Confirm answer-training rows and final verification rows remain separate.
 - Run unit tests with `./run_unit_tests.sh`.
-- Run release metrics and update `docs/RELEASE_NOTES.md`.
+- Run the read-only model sanity gate with `./run_model_smoke_tests.sh`.
+- Run `./run_model_training_tests.sh` when model behavior or training inputs change; this gate trains temporary held-out models and does not produce a candidate artifact.
+- Use `./train_accuracy_model.sh` only when a timestamped candidate model and its diagnostic artifacts are needed.
+- Run the explicit deployment suite with `DOCKER_IMAGE=<candidate> ./run_deployment_tests.sh` before deploying an image.
+- Run release metrics and update `RELEASE_NOTES.md`.
 - Confirm generated data and metrics artifacts are not staged.
 
 Release gates and metric names should live in release tooling and release notes. Roadmap milestones may have target versions, but architecture should describe durable boundaries rather than fixed release sequencing.

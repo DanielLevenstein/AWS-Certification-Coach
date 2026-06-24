@@ -17,12 +17,14 @@ RELEASE_NOTES.md should show release notes for all builds that are pushed to doc
 README.md has a shorter release notes section for only major releases.
 
 ## Major and Minor Releases
-1) Run all three test scripts prior to each release
+1) Run the appropriate independent test suites prior to each release
 - `run_unit_tests.sh`
-- `run_model_tests.sh`
-- `release_notes_full.sh v1.5.x`
+- `run_model_smoke_tests.sh`
+- `run_model_training_tests.sh` for model or training-data changes
+- `run_deployment_tests.sh` against the candidate image
+- `release_notes.sh --full v2.knowledgeBase1.x`
 2) Update RELEASE_NOTES.md with a description of the release and output from `release_notes.sh`.
-3) Review `metrics/<timestamp>/training_performance.png`, `metrics/<timestamp>/curated_grade_accuracy.png`, and `metrics/<timestamp>/semantic_accuracy.png`. Run `release_notes_quick.sh v1.5.x` when only the release metrics and report need to be refreshed.
+3) Review `metrics/<timestamp>/training_performance.png`, `metrics/<timestamp>/curated_grade_accuracy.png`, and `metrics/<timestamp>/semantic_accuracy.png`. Run `./release_notes.sh --quick <tag>` to rerender notes and charts from an existing full metrics directory without training.
 4) Review `metrics/<timestamp>/curated_failure_report.md` and reconcile contradictory labels before tuning the model.
 5) Deploy the Docker release after all changes are committed.
 `./deploy.sh v1.5.x`

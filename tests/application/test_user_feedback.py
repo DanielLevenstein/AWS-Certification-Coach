@@ -105,7 +105,7 @@ def test_feedback_submission_persists_downloadable_artifact_through_ui(tmp_path:
     feedback_path = tmp_path / "user_feedback.v2.json"
     monkeypatch.setenv("SHOW_FEEDBACK", "1")
     monkeypatch.setenv("USER_FEEDBACK_PATH", str(feedback_path))
-    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"))
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[2] / "app.py"))
 
     app.run(timeout=30)
     question = app.subheader[0].value

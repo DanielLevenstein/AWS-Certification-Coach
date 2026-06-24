@@ -9,12 +9,18 @@ import trace
 import pytest
 
 
-def measure_coverage(source_root: Path, test_path: Path) -> dict[str, object]:
+def measure_coverage(
+    source_root: Path,
+    test_path: Path,
+    ignore_paths: tuple[Path, ...] = (),
+) -> dict[str, object]:
     project_root = Path.cwd().resolve()
     if str(project_root) not in sys.path:
         sys.path.insert(0, str(project_root))
     tracer = trace.Trace(count=True, trace=False, ignoredirs=[str(Path.cwd() / ".venv")])
-    exit_code = tracer.runfunc(pytest.main, [str(test_path), "-q"])
+    pytest_args = [str(test_path), "-q"]
+    pytest_args.extend(f"--ignore={path}" for path in ignore_paths)
+    exit_code = tracer.runfunc(pytest.main, pytest_args)
     if exit_code != 0:
         raise RuntimeError(f"Unit tests failed while collecting coverage: pytest exit code {exit_code}")
 

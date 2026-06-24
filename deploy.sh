@@ -33,7 +33,7 @@ fi
 .venv/bin/python -m pip install pytest --quiet
 
 docker buildx build --platform linux/amd64 -t "$TAG_IMAGE" --load .
-RUN_DOCKER_TESTS=1 DOCKER_IMAGE="$TAG_IMAGE" .venv/bin/python -m pytest tests/test_docker_container.py
+DOCKER_IMAGE="$TAG_IMAGE" ./run_deployment_tests.sh
 
 docker buildx build --platform linux/amd64 -t "$TAG_IMAGE" -t "$LATEST_IMAGE" . --push
 

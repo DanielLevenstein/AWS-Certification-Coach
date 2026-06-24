@@ -6,7 +6,7 @@ from aws_certification_coach.training.dataset import load_answer_classification_
 from scripts import train_answer_accuracy
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 TEST_QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_test.json"
 TEST_ANSWER_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_test.json"
 

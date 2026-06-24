@@ -11,7 +11,7 @@ from aws_certification_coach.questions.json_repository import JsonQuestionReposi
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 STRUCTURED_TRAINING_DATA = PROJECT_ROOT / "config" / "data" / "structured_answer_training_data.json"
 
 

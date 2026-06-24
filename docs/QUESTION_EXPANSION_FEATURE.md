@@ -191,7 +191,7 @@ Question fidelity should combine concept fidelity and exam-style fidelity. Relea
 - Review a sample of generated Developer Associate questions against permitted official exam-style calibration notes.
 - Reject batches where questions are AWS-valid but not exam-valid.
 - Run unit tests with `./run_unit_tests.sh`.
-- Run model-quality checks with `./run_model_tests.sh`.
+- Run routine model checks with `./run_model_smoke_tests.sh` and full training checks with `./run_model_training_tests.sh` when model behavior changes.
 - Run `./release_notes.sh --full <release-tag>` before commits.
 - Confirm no `/data/`, `/scripts/data/`, or `/metrics/` files are staged.
 

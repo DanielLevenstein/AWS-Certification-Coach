@@ -8,9 +8,9 @@ fi
 case "${1:-}" in
   -h|--help)
     echo "Usage: $0 [pytest-options]"
-    echo "Runs unit tests while excluding model-smoke and deployment suites."
+    echo "Runs fast read-only model and knowledge contract tests without training."
     exit 0
     ;;
 esac
 
-.venv/bin/python test_suites.py unit "$@"
+.venv/bin/python test_suites.py model-smoke "$@"

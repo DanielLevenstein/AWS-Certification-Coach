@@ -27,7 +27,7 @@ from scripts.combine_release_charts import combine_accuracy_charts, combine_ques
 
 
 STRUCTURED_QUESTIONS = JsonQuestionRepository(
-    Path(__file__).resolve().parents[1] / "config" / "data" / "structured_answer_training_data.json"
+    Path(__file__).resolve().parents[2] / "config" / "data" / "structured_answer_training_data.json"
 ).all()
 
 
@@ -210,7 +210,7 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
 
 
 def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
-    project_root = Path(__file__).resolve().parents[1]
+    project_root = Path(__file__).resolve().parents[2]
     latest_outputs = [
         project_root / "release" / "question_domain_coverage.png",
         project_root / "release" / "question_intent_coverage.png",

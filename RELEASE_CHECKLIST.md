@@ -9,6 +9,9 @@ For each merge ensure the following.
 - Ensure test cases are using verification data, not training data.
 - Copy config/curated_training_data.json to data/curated folder.
 - Get all unit tests passing, adding comments for updated tests.
+- Run `./run_model_smoke_tests.sh` for the read-only model contract gate.
+- Run `./run_model_training_tests.sh` for model or training-data changes; use `./train_accuracy_model.sh` separately when producing a candidate artifact.
+- Run `DOCKER_IMAGE=<candidate> ./run_deployment_tests.sh` for candidate images.
 - Files ending in _COPY which do not have local copies should be used as templates to create missing files
 - Files ending in COPY should not be committed to source control.
 - For agent skill changes, follow `docs/AGENT_SKILL_RELEASE_INSTRUCTIONS.md`.

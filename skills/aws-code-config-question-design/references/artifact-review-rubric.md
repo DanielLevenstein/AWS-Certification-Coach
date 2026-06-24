@@ -33,7 +33,7 @@ Review for:
 - Resource scoping and condition keys.
 - Cross-account access and confused deputy risk.
 
-Hard reject when the answer encourages broad wildcard permissions without justification, treats users and roles as interchangeable for temporary credentials, or ignores explicit deny behavior.
+Reject when the answer encourages broad wildcard permissions without justification, treats users and roles as interchangeable for temporary credentials, or ignores explicit deny behavior.
 
 ## Lambda Code Questions
 
@@ -67,7 +67,7 @@ Required metadata:
 
 Review for:
 
-- Credentials provider chain.
+- Credential provider chain.
 - Region configuration.
 - Pagination and waiters.
 - Retries, throttling, and idempotency.
@@ -90,10 +90,10 @@ Review for:
 - Intrinsic functions, parameters, outputs, and conditions.
 - Dependencies and references.
 - Change sets, replacement behavior, rollback, and drift.
-- SAM transform behavior and policy templates.
+- SAM transforms behavior and policy templates.
 - Unsafe handling of secrets in parameters or outputs.
 
-Hard reject when the answer claims CloudFormation validates application code behavior, ignores replacement risk for replacement-required properties, or recommends outputting secrets in plaintext.
+Reject when the answer claims CloudFormation validates application code behavior, ignores replacement risk for replacement-required properties, or recommends outputting secrets in plaintext.
 
 ## Learner Grade Mapping
 

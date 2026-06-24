@@ -5,7 +5,7 @@ import json
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository, question_from_json
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 QUESTION_ARTIFACT = PROJECT_ROOT / "data" / "questions" / "sample_questions.json"
 EXPECTED_EXAM_CODES = {
     "Cloud Practitioner": "CLF-C02",

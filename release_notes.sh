@@ -45,18 +45,32 @@ fi
 RELEASE_TAG="$1"
 
 if [ "$MODE" = "full" ]; then
-  .venv/bin/python test_suites.py model
+  .venv/bin/python test_suites.py unit
+  .venv/bin/python test_suites.py model-smoke
+  METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
+  RELEASE_SUITE="release"
+else
+  METRICS_DIR="${RELEASE_METRICS_DIR:-}"
+  if [ -z "$METRICS_DIR" ]; then
+    LATEST_TRAINING_METRICS="$(find metrics -mindepth 2 -maxdepth 2 -name training_metrics.json -print 2>/dev/null | sort | tail -n 1)"
+    if [ -z "$LATEST_TRAINING_METRICS" ]; then
+      echo "Quick release requires a previous full metrics run." >&2
+      echo "Run ./release_notes.sh --full <tag> first or set RELEASE_METRICS_DIR." >&2
+      exit 2
+    fi
+    METRICS_DIR="$(dirname "$LATEST_TRAINING_METRICS")"
+  fi
+  RELEASE_SUITE="release-quick"
 fi
 
-METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
 if [ "$STRICT_GRADING" = "1" ]; then
-  .venv/bin/python test_suites.py release \
+  .venv/bin/python test_suites.py "$RELEASE_SUITE" \
     --release-label "$RELEASE_TAG" \
     --release-notes RELEASE_NOTES.md \
     --metrics-dir "$METRICS_DIR" \
     --strict-grading
 else
-  .venv/bin/python test_suites.py release \
+  .venv/bin/python test_suites.py "$RELEASE_SUITE" \
     --release-label "$RELEASE_TAG" \
     --release-notes RELEASE_NOTES.md \
     --metrics-dir "$METRICS_DIR"

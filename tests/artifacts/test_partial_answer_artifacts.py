@@ -9,7 +9,7 @@ from aws_certification_coach.training.dataset import (
 )
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 TRAINING_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_training.json"
 VALIDATION_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_validation.json"
 TEST_ARTIFACT = PROJECT_ROOT / "data" / "generated" / "questions_with_answers_test.json"

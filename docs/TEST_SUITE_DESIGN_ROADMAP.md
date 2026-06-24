@@ -1,5 +1,15 @@
 # Next-Version Test Suite Design
 
+## Implementation Status
+
+Version `v2.knowledgeBase1.2` implements the suite naming and isolation, fast read-only model smoke checks, explicit full model-training checks, single-training release orchestration, and the independent deployment suite using the existing Docker/HTTP test.
+
+All tests are grouped under review-oriented directories: `application`, `artifacts`, `deployment`, `evaluation`, `knowledge`, `model_smoke`, `question_quality`, and `release`. Root-level `tests/test_*.py` files are rejected by a suite contract test.
+
+The Playwright first-question guardrail remains planned for a later iteration. It is intentionally not a dependency or release requirement in `v2.knowledgeBase1.2`.
+
+Version `v2.knowledgeBase1.3` makes `release_notes.sh --quick` a true no-training path. It validates and reuses a completed full metrics directory, then updates release-note Markdown and chart copies without running training, evaluation, coverage, unit, or smoke suites.
+
 ## Purpose
 
 Restore clear test-suite boundaries by separating quick model sanity checks from full model training, and by moving container/browser deployment guardrails out of the unit suite.
@@ -9,7 +19,7 @@ The design covers two changes:
 1. Split model testing into fast smoke validation and full training/evaluation.
 2. Create an independent deployment suite with a Playwright check proving the first quiz question renders from the deployed container.
 
-## Current State
+## Baseline Before v2.knowledgeBase1.2
 
 - `run_unit_tests.sh` runs every file under `tests/`, including `test_docker_container.py`; the Docker test is skipped unless `RUN_DOCKER_TESTS=1`.
 - `run_model_tests.sh` calls the `model` suite, which runs `scripts/model_evaluation.py` and performs the expensive model path.
@@ -44,9 +54,23 @@ The design covers two changes:
 | `model-smoke` | `run_model_smoke_tests.sh` | Short | Load committed artifacts, score a small fixed fixture set, and validate stable output contracts without training. |
 | `model-training` | `run_model_training_tests.sh` | Long | Train, evaluate splits, enforce model gates, and write ignored diagnostic artifacts. |
 | `release` | `release_notes.sh --full <tag>` | Long | Orchestrate one full training run plus release metrics and notes. |
-| `deployment` | `run_deployment_tests.sh` | Medium | Build/run the deployable image and execute health plus Playwright render checks. |
+| `release-quick` | `release_notes.sh --quick <tag>` | Short | Reuse a complete full metrics directory and rerender notes/charts without training. |
+| `deployment` | `run_deployment_tests.sh` | Medium | Run candidate-image health checks now; add the Playwright render guardrail in a later iteration. |
 
 Do not retain `model` as an ambiguous permanent alias. A short transition alias may print a deprecation message, but automation should move to one of the two explicit model suites.
+
+## Test Directory Layout
+
+| Directory | Review scope |
+|:--|:--|
+| `tests/application/` | Streamlit-facing behavior, quiz sessions, and user feedback. |
+| `tests/artifacts/` | Generated/curated artifact schemas, repositories, and split integrity. |
+| `tests/deployment/` | Explicit candidate-image health checks; excluded from unit collection. |
+| `tests/evaluation/` | Grade conversion and learner-answer evaluator behavior. |
+| `tests/knowledge/` | Knowledge-base loading, validation, coverage, and retrieval. |
+| `tests/model_smoke/` | Fast read-only production model contracts; excluded from unit collection. |
+| `tests/question_quality/` | Question fidelity and service-comparison quality. |
+| `tests/release/` | Release metrics, charts, histories, and suite-routing contracts. |
 
 ## Model Smoke Suite
 
@@ -79,6 +103,15 @@ The full suite owns expensive model work:
 The command should clearly announce that it performs training. Generated models and metrics must go to ignored timestamped directories unless an explicit release process copies reviewed artifacts.
 
 `release_notes.sh --full` should call this training workflow once and reuse its outputs for release-note generation. It should not call a full model suite and then independently repeat the same training pipeline.
+
+### Training Gate Versus Candidate Artifact
+
+The project retains two explicit commands because they answer different questions:
+
+- `run_model_training_tests.sh` is a quality gate. It trains temporary held-out regressors through `scripts/model_evaluation.py`, measures generalization and rubric behavior, and fails when configured quality thresholds are missed. It does not promote a candidate model.
+- `train_accuracy_model.sh` is an artifact workflow. It trains one candidate regressor from the configured training and validation inputs and writes the model, metrics, charts, mismatch reports, and optional tagged detailed report under ignored/generated locations.
+
+Run the training gate to validate model behavior. Run the artifact workflow when a new candidate model and its diagnostics are needed. Producing an artifact does not replace the training gate, and the smoke suite replaces neither command.
 
 ## Deployment Suite
 

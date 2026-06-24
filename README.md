@@ -102,12 +102,50 @@ Run the fast unit and contract tests:
 ./run_unit_tests.sh
 ```
 
+Run the read-only model smoke checks during routine development:
+
+```bash
+./run_model_smoke_tests.sh
+```
+
+Run full model training and evaluation when model behavior or training inputs change:
+
+```bash
+./run_model_training_tests.sh
+```
+
+This is the generalization quality gate: it trains temporary held-out models and fails on model-quality regressions. It does not produce a candidate model for release.
+
+To train one candidate regressor and write its timestamped model, metrics, charts, and diagnostic reports, run:
+
+```bash
+./train_accuracy_model.sh
+```
+
+Candidate artifact generation and the full-training quality gate are intentionally separate; neither replaces the other.
+
+Tests are grouped by review area under `tests/application`, `tests/artifacts`, `tests/evaluation`, `tests/knowledge`, `tests/question_quality`, and `tests/release`. The explicit `tests/model_smoke` and `tests/deployment` directories are run only by their corresponding wrappers.
+
+Run deployment health checks against an already-built image:
+
+```bash
+DOCKER_IMAGE=aws-certification-coach:latest ./run_deployment_tests.sh
+```
+
 Run the release suite and save the latest release chart artifacts:
 Refresh the training graph, curated failure report, semantic metrics, and detailed tagged report:
 
 ```bash
 ./release_notes.sh --full v2.2.0
 ```
+
+Refresh release-note Markdown and chart copies from the latest completed full metrics run without training or rerunning tests:
+
+```bash
+./release_notes.sh --quick v2.knowledgeBase1.3
+```
+
+Set `RELEASE_METRICS_DIR=metrics/<timestamp>` to reuse a specific full run. Quick mode fails when the selected directory is incomplete instead of silently retraining.
 
 The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, and a combined four-panel chart as latest-only files in `release/`.
 
