@@ -27,7 +27,7 @@
 | v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
 | v3.0.3.1 | Fixed deployment tests |
 | v3.0.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation, and expands the default question bank to 160 questions. |
-| v3.1.x | Design documentation for splitting knowledge_base and question_template.json |
+| v3.1.0   | Design documentation for splitting knowledge_base and question_template.json |
 # Release Metrics
 
 ## Metric Definitions:
