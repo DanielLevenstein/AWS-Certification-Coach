@@ -6,6 +6,29 @@ Move reusable AWS terminology and concept relationships out of model code and ar
 
 This change also retires the unused answer regressor. Human ratings remain curated semantic-evaluation evidence; they do not become general AWS knowledge.
 
+## Next Iteration Goal
+
+The next design target is a two-document contract that both question generation and answer heuristics can consume without mixing AWS knowledge with generation mechanics:
+
+- `knowledge_base.json`: canonical AWS services, features, concepts, aliases, source URLs, and reusable answer-rubric defaults.
+- `question_template.json`: reusable question shapes, prompt wording patterns, distractor recipes, selection rules, and mappings that turn knowledge entries into generated question rows.
+
+The knowledge base should become the canonical source for:
+
+- normalized AWS service and feature identities;
+- source documentation URLs;
+- reusable concept definitions;
+- generated-question rubric fields: `key_concepts`, `common_misconceptions`, `acceptable_answers`, and `must_not_claim`;
+- normalized metadata attached to generated multiple-choice answer options.
+
+The question-template document should become the canonical source for:
+
+- prompt variants and scenario wording;
+- answer-option ordering and selection instructions;
+- distractor generation patterns;
+- question-type defaults, such as `service_selection`, `scenario_multiple_choice`, or artifact review;
+- rules for composing knowledge-base concepts into app-facing question schema fields.
+
 ## Current State
 
 The answer evaluation path currently mixes three different concerns:
@@ -20,21 +43,29 @@ The structured training artifact currently contains 9 questions and 27 distinct 
 
 ## Design Decisions
 
-### One Structured Knowledge Document
+### Separate Knowledge From Templates
 
-The canonical source will be:
+The canonical knowledge source will be:
 
 `config/knowledge_base/aws_answer_knowledge_base.json`
 
+The canonical question-template source should be:
+
+`config/question_templates/question_template.json`
+
 JSON is preferred over prose-only Markdown because the existing classifier can load it deterministically and a lightweight language-model adapter can render only the relevant entries. Descriptions remain natural language so the file is also understandable in review.
 
-The document has three top-level content sections:
+The knowledge document has three top-level content sections:
 
 1. `syntax_aliases`
 2. `service_families`
 3. `concepts`
 
 It also carries a `schema_version` and a short `description`. The source file is committed configuration, not generated training data, a model artifact, or a metrics artifact.
+
+For the next iteration, the knowledge document should graduate from answer-evaluation support into a shared source for generation and grading facts. The file remains curated committed configuration under `config/knowledge_base/`, but generators should read from it instead of duplicating service names, source URLs, and rubric metadata in script-local constants.
+
+The template document owns how questions are assembled from those facts. It should not define canonical service names, AWS source URLs, or answer heuristics. If a template needs AWS Lambda, it references `service_id: "lambda"` or a concept ID from the knowledge base.
 
 ### Calibration Labels Are Not Knowledge
 
@@ -50,7 +81,7 @@ No vector database, embeddings, HTTP service, or full-document prompt is require
 
 ## Knowledge Base Contract
 
-The initial schema is:
+The current schema is:
 
 ```json
 {
@@ -83,6 +114,55 @@ The initial schema is:
 }
 ```
 
+The next schema version should add source and rubric fields while preserving the existing sections:
+
+```json
+{
+  "schema_version": 2,
+  "description": "Compact AWS terminology, source metadata, and reusable rubric knowledge for AWS Certification Coach.",
+  "syntax_aliases": [
+    {
+      "alias": "code build",
+      "canonical": "codebuild"
+    }
+  ],
+  "service_families": [
+    {
+      "id": "lambda",
+      "name": "AWS Lambda",
+      "tokens": ["lambda"],
+      "aliases": ["aws lambda", "lambda function"],
+      "source": {
+        "name": "AWS Documentation: AWS Lambda",
+        "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+        "license_notes": "AWS documentation was used for topic grounding; generated question text is self-authored."
+      },
+      "description": "A serverless compute service for running event-driven code without managing servers."
+    }
+  ],
+  "concepts": [
+    {
+      "id": "lambda-event-driven",
+      "name": "event-driven Lambda",
+      "aliases": ["event-driven code", "lambda event source"],
+      "service_ids": ["lambda"],
+      "source": {
+        "name": "AWS Documentation: AWS Lambda",
+        "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+        "license_notes": "AWS documentation was used for topic grounding; generated question text is self-authored."
+      },
+      "description": "Lambda functions can be invoked by events from AWS services or application integrations.",
+      "rubric": {
+        "key_concepts": ["AWS Lambda", "serverless", "event-driven"],
+        "common_misconceptions": ["Amazon EC2 dedicated hosts are required to run event-driven application code."],
+        "acceptable_answers": ["Use AWS Lambda.", "AWS Lambda"],
+        "must_not_claim": ["AWS Lambda requires managing EC2 servers for each request."]
+      }
+    }
+  ]
+}
+```
+
 Contract rules:
 
 - IDs and canonical matching tokens are lowercase and stable.
@@ -94,6 +174,136 @@ Contract rules:
 - Concepts may reference multiple services when the relationship is genuinely cross-service.
 - Ambiguous terms are not treated as standalone aliases unless surrounding service or concept evidence disambiguates them.
 - Duplicate normalized aliases and unresolved references fail validation.
+- Every service-family entry has one canonical `source.url`.
+- Every concept entry has either its own `source.url` or inherits source metadata from its associated service when the source is unambiguous.
+- Concept `rubric` values are reusable defaults. Generated questions may select a subset or add scenario-specific entries but should not invent conflicting meanings for the same concept.
+- `acceptable_answers` can include canonical service answers and short approved aliases, but must not include learner-rating examples or benchmark labels.
+- `common_misconceptions` and `must_not_claim` describe wrong reasoning patterns, not exact copied answer text from restricted sources.
+- Source metadata must point to public AWS documentation, exam guides, permitted official calibration pages, or self-authored source records.
+
+## Shared Generation and Answer-Heuristic Contract
+
+Question generation and answer heuristics should use the same normalized identifiers.
+
+Generation uses the knowledge base to:
+
+- choose canonical services and concepts for a scenario;
+- populate `key_concepts` from concept rubric defaults;
+- populate `common_misconceptions`, `acceptable_answers`, and `must_not_claim` from selected concepts and scenario-specific distractors;
+- attach source metadata to the question and each answer option;
+- produce consistent option metadata for services, features, and distractors.
+
+Generation uses question templates to:
+
+- choose a prompt shape for the target question type and certification;
+- render scenario wording from a safe self-authored template;
+- decide how many answer options to emit and where correct options are placed;
+- transform concept rubric defaults into question-local fields;
+- add scenario-specific misconceptions, distractors, and constraints without changing canonical AWS facts.
+
+Answer heuristics use the knowledge base to:
+
+- canonicalize service names and aliases;
+- match learner answers against `acceptable_answers` and concept aliases;
+- detect `common_misconceptions` and `must_not_claim` violations;
+- enforce service-boundary checks, such as distinguishing Lambda from EC2, SNS from SQS, or KMS from Secrets Manager;
+- render bounded documentation context when feedback needs a source link.
+
+The shared contract prevents the generator from saying one thing and the answer heuristic grading against another. If an AWS concept changes, the canonical update belongs in the knowledge base first. If the way a question is phrased or assembled changes, the update belongs in the question-template document.
+
+## Question Template Contract
+
+`question_template.json` should describe generation behavior without becoming an AWS knowledge store.
+
+```json
+{
+  "schema_version": 1,
+  "description": "Reusable self-authored question templates for AWS Certification Coach generation.",
+  "templates": [
+    {
+      "id": "service-selection-freeform",
+      "question_type": "service_selection",
+      "certifications": ["Cloud Practitioner", "Solutions Architect Associate", "AWS Certified Developer"],
+      "prompt_variants": [
+        "Explain which AWS service or feature should be used to {purpose}.",
+        "Which AWS capability best meets a requirement to {purpose}? Explain the selection."
+      ],
+      "reference_answer_pattern": "Use {service_name} to {purpose}.",
+      "option_pattern": "Use {service_name}.",
+      "required_slots": ["service_id", "purpose", "concept_ids", "distractor_service_ids"],
+      "rubric_merge": {
+        "key_concepts": "selected_concept_defaults",
+        "common_misconceptions": "selected_concept_defaults_plus_distractors",
+        "acceptable_answers": "selected_concept_defaults_plus_service_name",
+        "must_not_claim": "selected_concept_defaults_plus_distractors"
+      }
+    }
+  ]
+}
+```
+
+Template contract rules:
+
+- Templates may reference `service_id`, `concept_ids`, and `distractor_service_ids`, but they do not define canonical service names or URLs.
+- Templates own wording patterns, slot names, question type, answer-option shape, and rubric merge strategy.
+- Templates must use self-authored wording and must not contain copied restricted exam text.
+- Templates must not contain learner grades, benchmark ratings, final verification labels, or source-of-truth AWS descriptions.
+- A template cannot generate a question until all referenced services and concepts are resolved in the knowledge base.
+- Template IDs are stable because generated artifacts and tests can cite them as provenance.
+
+## Generated Question Contract
+
+Generated questions should continue to include question-local fields because the app and evaluator need a self-contained artifact:
+
+```json
+{
+  "question": "Explain which AWS service or feature should be used to run event-driven code without managing servers.",
+  "reference_answer": "Use AWS Lambda to run event-driven code without managing servers.",
+  "key_concepts": ["AWS Lambda", "serverless", "event-driven"],
+  "common_misconceptions": ["Amazon EC2 dedicated hosts are required to run event-driven application code."],
+  "acceptable_answers": ["Use AWS Lambda.", "AWS Lambda"],
+  "must_not_claim": ["AWS Lambda requires managing EC2 servers for each request."],
+  "source_url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+  "original_multiple_choice": {
+    "options": [
+      {
+        "option_id": "A",
+        "text": "Use AWS Lambda.",
+        "source_url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+        "metadata": {
+          "service_id": "lambda",
+          "service_name": "AWS Lambda",
+          "source_url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+          "concept_ids": ["lambda-event-driven"]
+        }
+      }
+    ]
+  }
+}
+```
+
+Question-local fields are generated from the knowledge base so the app remains simple at runtime. They should not become a second source of truth. When generated data is refreshed, repeated references to a service must resolve to the same `service_id`, `service_name`, and `source_url`.
+
+The normalized option metadata should be required for every generated option that maps to a known AWS service or feature:
+
+- `service_id`: stable lowercase ID from `service_families`.
+- `service_name`: display name from `service_families`.
+- `source_url`: canonical service or concept documentation URL.
+- `concept_ids`: concept IDs represented by the option when known.
+- `is_known_service`: optional boolean for distractors that are AWS services but not the correct answer.
+
+Free-text `text` remains learner-facing. Metadata is for deterministic rendering, source documentation, scoring, and tests.
+
+## Source URL Rules
+
+Source URLs should be normalized at the knowledge-base layer.
+
+- A service has exactly one default documentation URL.
+- A concept may override the service URL when AWS has a more precise page for that feature, such as SQS visibility timeout or Lambda authorizers.
+- Generated question rows should include the best source URL for the correct concept.
+- Generated answer options should include the best source URL for the service or concept named by that option.
+- Duplicate URLs should be de-duplicated in UI source documentation, but the underlying generated option metadata should still carry the URL.
+- Missing URLs for known services or concepts should fail generation validation.
 
 ## Initial Content
 
@@ -209,31 +419,44 @@ The answer-regression model, provider, training scripts, generated split data, a
 
 ## Implementation Phases
 
-### Phase 1: Contract and Initial Knowledge
+### Completed Baseline: Answer-Evaluation Knowledge
 
-- Add the JSON knowledge document, typed loader, schema validation, and unit tests.
-- Populate Syntax Aliases and Service Families.
-- Inject the loader into semantic matching without changing expected alias behavior.
-- Measure load time, file size, and per-answer lookup overhead.
+- JSON knowledge document, typed loader, schema validation, and unit tests.
+- Syntax aliases, service families, and initial structured concepts.
+- Deterministic concept selection and compact rendering.
+- Semantic matching can consume the knowledge base without a heavyweight runtime dependency.
 
-### Phase 2: Concept Expansion
+### Phase 1: Shared Contract Upgrade
 
-- Add all 27 current structured-training concepts with natural-language descriptions and service references.
-- Add a coverage test comparing knowledge concept names with the union of structured `key_concepts`.
-- Extend deterministic concept and service matching to use the knowledge indexes.
+- Bump the schema to include service and concept `source` metadata.
+- Add concept-level reusable `rubric` defaults for `key_concepts`, `common_misconceptions`, `acceptable_answers`, and `must_not_claim`.
+- Add `config/question_templates/question_template.json` for generation patterns, prompt variants, answer-option shapes, and rubric merge rules.
+- Add typed domain records for normalized option metadata.
+- Preserve backward-compatible loading only long enough for migration tests; generated artifacts should target the new contract.
 
-### Phase 3: Regressor Retirement
+### Phase 2: Generator Integration
 
-- Remove the unused regressor runtime and training workflow.
-- Remove generated training, validation, and test splits used only by that workflow.
-- Calculate exact-letter, within-one-letter, per-grade, and grade-band metrics directly from semantic evaluation.
-- Keep knowledge-base and question-quality reporting as independent release metrics.
+- Replace generator-local service URL maps with knowledge-base lookups.
+- Replace generator-local rubric boilerplate with knowledge-base concept rubric defaults plus scenario-specific additions.
+- Replace generator-local prompt variants and option wording with question-template lookups.
+- Emit question-level `source_url`.
+- Emit normalized option metadata for every known AWS service or feature in generated answer choices.
+- Add generation validation that fails on missing service metadata, missing URLs, unresolved template slots, or inconsistent repeated service names.
 
-### Phase 4: Lightweight Context Adapter
+### Phase 3: Answer-Heuristic Integration
 
-- Add deterministic retrieval and compact rendering.
-- Integrate it only with evaluators that explicitly support local language-model context.
-- Keep classifier-only operation as the default low-overhead path.
+- Teach answer heuristics to use knowledge-base `acceptable_answers`, concept aliases, `common_misconceptions`, and `must_not_claim`.
+- Keep learner-rating examples and final verification labels out of the knowledge base.
+- Verify service-boundary behavior against normalized metadata, not raw answer text.
+- Preserve the current A/B/C/D/F learner-answer rubric.
+
+### Phase 4: Release and Review Metrics
+
+- Report knowledge schema version and source coverage counts.
+- Report generated-option metadata coverage.
+- Report generated-question rubric-field coverage.
+- Keep question fidelity and learner-answer grading metrics separate.
+- Confirm generated `data/`, generated `metrics/`, and any local original source downloads are not staged.
 
 ## Validation and Release Metrics
 
@@ -245,6 +468,13 @@ Required automated checks:
 - No rating, grade, question text, reference answer, or partial-answer fields in the knowledge base.
 - Deterministic retrieval returns only relevant concepts in stable order.
 - Existing classification and semantic-similarity tests pass with injected knowledge.
+- Every service-family entry has source metadata.
+- Every concept has source metadata or an unambiguous inherited service source.
+- Every concept rubric contains the four generated-question fields.
+- Every question template references only known slot names and declares a stable template ID.
+- Every generated question has `key_concepts`, `common_misconceptions`, `acceptable_answers`, `must_not_claim`, and `source_url`.
+- Every generated answer option that references a known AWS service has normalized metadata with `service_id`, `service_name`, and `source_url`.
+- Repeated mentions of the same AWS service across generated questions resolve to the same normalized metadata.
 
 Release reporting should add:
 
@@ -260,13 +490,15 @@ The release gate should compare semantic metrics against the existing baseline. 
 
 ## Acceptance Criteria
 
-- A single committed JSON document contains Syntax Aliases, Service Families, and natural-language concept entries.
-- Every current structured training `key_concepts` item has an explicit service association and description.
-- Alias and service-family constants are no longer duplicated in scoring code.
-- No answer-regressor artifact or generated split workflow remains.
+- A single committed JSON document is the source of truth for service IDs, service display names, service aliases, concept IDs, concept aliases, source URLs, and reusable rubric defaults.
+- A separate committed question-template JSON document is the source of truth for prompt variants, option patterns, question-type defaults, and rubric merge rules.
+- Question generators read service URLs and service names from the knowledge base instead of script-local URL maps.
+- Question generators read prompt and answer-option patterns from question templates instead of script-local constants.
+- Generated questions include `key_concepts`, `common_misconceptions`, `acceptable_answers`, `must_not_claim`, and `source_url` derived from knowledge-base concepts plus scenario-specific additions.
+- Generated multiple-choice options include normalized metadata for known AWS services and features.
+- Every generated option mentioning AWS Lambda uses the same `service_id`, `service_name`, and `source_url`; the same rule applies to every other known service.
+- Answer heuristics use the same knowledge-base aliases, rubric fields, and service boundaries used by generation.
 - Human ratings remain in curated training/evaluation sources and do not appear in the knowledge base.
-- The existing evaluator can use the knowledge base with deterministic, in-process lookups.
-- TinyLlama can receive a bounded relevant excerpt without loading the entire knowledge base into its prompt.
 - Runtime operation remains local, offline, and free of new heavyweight dependencies.
 - Generated `data/` and `metrics/` artifacts are not committed.
 
