@@ -21,11 +21,12 @@
 | v2.5.2   | Restored the legacy Semantic Precision and Recall definition.                                                                      |
 | v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                   |
 | v2.5.5   | Added back exact match and off by one graph for release metrics.                                                                   |
-| v2.6.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.           |
-| v2.6.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                           |
-| v2.6.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
-| v2.6.3.1 | Fixed deployment tests |
-| v2.6.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation, and expands the default question bank to 160 questions. |
+| v3.0.0   | Tag v2.6.x has been retagged as v3.0.x since it's a major schema change. |
+| v3.0.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.           |
+| v3.0.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                           |
+| v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
+| v3.0.3.1 | Fixed deployment tests |
+| v3.0.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation, and expands the default question bank to 160 questions. |
 # Release Metrics
 
 ## Metric Definitions:
@@ -59,22 +60,22 @@
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.4.6   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.5.2   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
-| v2.6.3   |            90.62% |            100.00% |          90.91% |                87.50% |          96.15% |            94.95% |
+| v3.0.3   |            90.62% |            100.00% |          90.91% |                87.50% |          96.15% |            94.95% |
 
 ## Grade Band Precision
 | Release |      A |    B&C |     D&F |
 |:--------|-------:|-------:|--------:|
 | v2.5.5  | 46.51% | 60.71% | 100.00% |
-| v2.6.1  | 50.00% | 69.70% | 100.00% |
-| v2.6.4  | 90.00% | 100.00% | 100.00% |
+| v3.0.1  | 50.00% | 69.70% | 100.00% |
+| v3.0.4  | 90.00% | 100.00% | 100.00% |
 
 ## Grade Precision
 | Release |      A |      B |      C |       D |      F |
 |:--------|-------:|-------:|-------:|--------:|-------:|
 | v2.5.5  | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
-| v2.6.1  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
-| v2.6.3  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
-| v2.6.4  | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
+| v3.0.1  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
+| v3.0.3  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
+| v3.0.4  | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -115,7 +116,7 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.6.4 | 90.62% | 100.00% | 90.91% | 87.50% | 100.00% | 94.95% |
+| v3.0.4  | 90.62% | 100.00% | 90.91% | 87.50% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 

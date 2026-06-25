@@ -30,6 +30,10 @@ My hope is to get the local language model to train the existing classifier to i
 1) Add a common misconceptions section to the knowledge base.
 2) Update release guardrail to use the exact letter match as its release metric once we get the metric above the satisfactory value.
 This will allow us to deprecate the old metrics completely.
+3) We also need to include the following flags from the question schema ["key_concepts", "common_misconceptions", "acceptable_answers", and "must_not_claim"] sections along with a source URL field.
+4) In generated questions answer selections should have meta-data listing service name and URL in a normalized format so that every answer listing AWS Lambda will have it listed the same way.
+5) I don't want to make rubric changes while we are working on architecture designs.
+6) we need to find a way of getting usable feedback to the user when they get a score.
 
 # Phase 2 Code & Configuration Review
 IAM policy questions.

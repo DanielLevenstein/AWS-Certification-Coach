@@ -2,6 +2,7 @@
 
 For each merge ensure the following.
 
+- Use `v3.1.x` for new releases from the schema redesign branch forward; leave historical v1/v2 release numbers unchanged.
 - Leave the todo.md file as is copy this file to todo.txt, which is outside source control.
 - Ensure no files in data directory are committed
 - run a clean script which deletes all files in the data directory.

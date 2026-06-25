@@ -46,6 +46,8 @@ Artifacts keep letter grades for readability. Curated release metrics compare th
 
 ## Releases
 
+The schema redesign branch starts the v3 release line. Use `v3.1.x` for new releases from this branch forward so earlier `v3.0.x` and `v3.0.0` space remains available for any future migration/backfill tags. Historical v1 and v2 release numbers are intentionally left as-is.
+
 
 | Release | Description                                                                                        |
 | ------- | -------------------------------------------------------------------------------------------------- |
@@ -118,13 +120,13 @@ Run the release suite and save the latest release chart artifacts:
 Refresh semantic metrics, curated diagnostics, knowledge metrics, and tagged charts:
 
 ```bash
-./release_notes.sh --full v2.2.0
+./release_notes.sh --full v3.1.0
 ```
 
 Refresh release-note Markdown and chart copies from the latest completed full metrics run without rerunning tests:
 
 ```bash
-./release_notes.sh --quick v2.knowledgeBase1.3
+./release_notes.sh --quick v3.1.0
 ```
 
 Set `RELEASE_METRICS_DIR=metrics/<timestamp>` to reuse a specific full run. Quick mode fails when the selected directory is incomplete instead of silently retraining.
