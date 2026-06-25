@@ -102,13 +102,17 @@ def _multiple_choice_to_json(original: MultipleChoiceQuestion | None) -> dict[st
         return None
     return {
         "question": original.question,
-        "options": [
-            {"option_id": option.option_id, "text": option.text}
-            for option in original.options
-        ],
+        "options": [_multiple_choice_option_to_json(option) for option in original.options],
         "correct_option_ids": list(original.correct_option_ids),
         "explanation": original.explanation,
         "source_name": original.source_name,
         "source_url": original.source_url,
         "source_license_notes": original.source_license_notes,
     }
+
+
+def _multiple_choice_option_to_json(option) -> dict[str, str]:
+    payload = {"option_id": option.option_id, "text": option.text}
+    if option.source_url:
+        payload["source_url"] = option.source_url
+    return payload

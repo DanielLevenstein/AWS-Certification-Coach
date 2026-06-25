@@ -53,7 +53,7 @@ Return JSON only with:
 - score: integer from 0 to 100
 - missing_concepts: array of strings
 - suggested_improvements: array of strings
-- feedback: concise learner-facing explanation
+- feedback: exactly one learner-facing sentence explaining how to improve any answer scoring below 90
 - detailed_answer: detailed correct answer that covers the reference answer and every missing concept
 """
 

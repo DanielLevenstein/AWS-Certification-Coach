@@ -8,6 +8,10 @@ import json
 from pathlib import Path
 
 from aws_certification_coach.question_fidelity.model import QuestionFidelityModel
+try:
+    from generate_app_question_artifacts import documentation_url_for_option
+except ModuleNotFoundError:  # Imported as scripts.generate_developer_question_artifacts in tests.
+    from scripts.generate_app_question_artifacts import documentation_url_for_option
 
 
 QUESTION_TEMPLATES = {
@@ -83,13 +87,11 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
         concepts = [str(concept) for concept in source["concepts"]]
         question_text = _generated_question(source, source_id)
         reference_answer = _reference_answer(source, source_id, service)
-        options = [
-            {"option_id": "A", "text": _correct_option(source, source_id)},
-            *[
-                {"option_id": option_id, "text": text}
-                for option_id, text in zip(["B", "C", "D"], _distractors(source, source_id), strict=True)
-            ],
-        ]
+        options = [_option("A", _correct_option(source, source_id), str(source["source_url"]))]
+        options.extend(
+            _option(option_id, text, documentation_url_for_option(text))
+            for option_id, text in zip(["B", "C", "D"], _distractors(source, source_id), strict=True)
+        )
         row = {
             "certification": source["certification"],
             "exam_code": source.get("exam_code", ""),
@@ -120,6 +122,13 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
         row["question_fidelity"] = model.score(source, row).__dict__
         questions.append(row)
     return questions
+
+
+def _option(option_id: str, text: str, source_url: str = "") -> dict[str, str]:
+    payload = {"option_id": option_id, "text": text}
+    if source_url:
+        payload["source_url"] = source_url
+    return payload
 
 
 def _rubric_metadata(

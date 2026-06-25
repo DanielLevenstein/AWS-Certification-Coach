@@ -5,7 +5,10 @@ from __future__ import annotations
 import json
 from typing import Protocol
 
+from dataclasses import replace
+
 from aws_certification_coach.domain import EvaluationResult, Question
+from aws_certification_coach.ratings import score_to_letter
 from aws_certification_coach.evaluation.prompting import EvaluationPromptBuilder, EvaluationResponseParser
 
 
@@ -32,7 +35,22 @@ class EvaluationService:
     def evaluate(self, question: Question, user_answer: str) -> EvaluationResult:
         prompt = self.prompt_builder.build(question, user_answer)
         response_text = self.provider.evaluate(prompt, question, user_answer)
-        return self.response_parser.parse(response_text)
+        result = self.response_parser.parse(response_text)
+        return _ensure_actionable_feedback(result, user_answer)
+
+
+def _ensure_actionable_feedback(result: EvaluationResult, user_answer: str) -> EvaluationResult:
+    """Guarantee one useful improvement sentence for every non-A answer."""
+
+    if score_to_letter(result.score) == "A":
+        return result
+    if result.score >= 80 and len(user_answer.split()) <= 4:
+        feedback = "For full credit, state your answer in a complete sentence and explain why the service fits the requirement."
+    elif result.feedback.strip():
+        feedback = result.feedback.strip()
+    else:
+        feedback = "For a higher grade, add the missing AWS-specific details shown in the detailed answer."
+    return replace(result, feedback=feedback)
 
 
 class HeuristicEvaluatorProvider:

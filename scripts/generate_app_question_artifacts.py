@@ -6,7 +6,10 @@ import argparse
 import json
 from pathlib import Path
 
-from question_catalog import CERTIFICATION_EXAM_CODES, SERVICE_SPECS, rubric_metadata
+try:
+    from question_catalog import CERTIFICATION_EXAM_CODES, SERVICE_SPECS, rubric_metadata
+except ModuleNotFoundError:  # Imported as scripts.generate_app_question_artifacts in tests.
+    from scripts.question_catalog import CERTIFICATION_EXAM_CODES, SERVICE_SPECS, rubric_metadata
 
 
 APP_VARIANTS = [
@@ -98,10 +101,10 @@ def _build_app_questions(count: int) -> list[dict]:
                 "original_multiple_choice": {
                     "question": mcq_question,
                     "options": [
-                        {"option_id": "A", "text": correct_option},
-                        {"option_id": "B", "text": f"Use {distractors[0]}."},
-                        {"option_id": "C", "text": f"Use {distractors[1]}."},
-                        {"option_id": "D", "text": f"Use {distractors[2]}."},
+                        _option("A", correct_option),
+                        _option("B", f"Use {distractors[0]}."),
+                        _option("C", f"Use {distractors[1]}."),
+                        _option("D", f"Use {distractors[2]}."),
                     ],
                     "correct_option_ids": ["A"],
                     "explanation": explanation,
@@ -112,6 +115,28 @@ def _build_app_questions(count: int) -> list[dict]:
             }
         )
     return questions
+
+
+def _option(option_id: str, text: str) -> dict[str, str]:
+    payload = {"option_id": option_id, "text": text}
+    source_url = documentation_url_for_option(text)
+    if source_url:
+        payload["source_url"] = source_url
+    return payload
+
+
+def documentation_url_for_option(text: str) -> str:
+    normalized = _normalized_option_text(text)
+    for service, source_url in SOURCE_URLS.items():
+        normalized_service = _normalized_option_text(service)
+        if normalized == normalized_service or normalized_service in normalized or normalized in normalized_service:
+            return source_url
+    return ""
+
+
+def _normalized_option_text(text: str) -> str:
+    value = " ".join(text.casefold().replace(".", "").split())
+    return value.removeprefix("use ")
 
 
 def _write_json(path: str, payload: list[dict]) -> None:

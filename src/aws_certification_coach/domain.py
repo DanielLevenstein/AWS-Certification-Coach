@@ -43,6 +43,7 @@ class Question:
 class MultipleChoiceOption:
     option_id: str
     text: str
+    source_url: str = ""
 
 
 @dataclass(frozen=True)

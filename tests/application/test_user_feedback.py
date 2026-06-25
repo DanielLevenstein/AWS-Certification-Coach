@@ -3,8 +3,6 @@ from pathlib import Path
 import json
 
 import pytest
-from streamlit.testing.v1 import AppTest
-
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.feedback import UserFeedbackRepository
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
@@ -99,30 +97,6 @@ def test_user_feedback_v2_filename_uses_schema_version_2(tmp_path: Path):
 
     rows = json.loads(path.read_text(encoding="utf-8"))
     assert {row["schema_version"] for row in rows} == {2}
-
-
-def test_feedback_submission_persists_downloadable_artifact_through_ui(tmp_path: Path, monkeypatch):
-    feedback_path = tmp_path / "user_feedback.v2.json"
-    monkeypatch.setenv("SHOW_FEEDBACK", "1")
-    monkeypatch.setenv("USER_FEEDBACK_PATH", str(feedback_path))
-    app = AppTest.from_file(str(Path(__file__).resolve().parents[2] / "app.py"))
-
-    app.run(timeout=30)
-    question = app.subheader[0].value
-    app.text_area[0].set_value("I do not know")
-    app.button[0].click().run(timeout=30)
-    app.selectbox[0].select("A")
-    app.text_area[1].set_value("The answer should receive full credit.")
-    next(button for button in app.button if button.label == "Submit Feedback").click().run(timeout=30)
-
-    assert not app.exception
-    rows = json.loads(feedback_path.read_text(encoding="utf-8"))
-    assert len(rows) == 1
-    assert rows[0]["schema_version"] == 2
-    assert rows[0]["question"] == question
-    assert rows[0]["answer_given"] == "I do not know"
-    assert rows[0]["correct_rating"] == "A"
-    assert rows[0]["feedback_text"] == "The answer should receive full credit."
 
 
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):

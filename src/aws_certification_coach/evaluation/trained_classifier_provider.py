@@ -240,10 +240,11 @@ def _is_incorrect_service_selection(question: Question, user_answer: str) -> boo
 
 
 def _feedback(model_score: float, prediction: int) -> str:
-    del model_score
+    if model_score < 90 and prediction == 1:
+        return "For full credit, explain how the selected AWS service satisfies the requirement."
     if prediction == 1:
         return "This answer covers the expected AWS concepts."
-    return "This answer needs more AWS-specific detail."
+    return "For a higher grade, add the missing AWS-specific concepts shown in the detailed answer."
 
 
 def _normalized(value: str) -> str:

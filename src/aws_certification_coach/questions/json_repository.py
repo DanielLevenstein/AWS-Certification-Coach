@@ -112,6 +112,7 @@ def _multiple_choice_from_json(value: object) -> MultipleChoiceQuestion | None:
             MultipleChoiceOption(
                 option_id=str(option.get("option_id", "")),
                 text=str(option.get("text", "")),
+                source_url=str(option.get("source_url", "")),
             )
             for option in options
             if isinstance(option, dict)

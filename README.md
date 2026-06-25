@@ -32,6 +32,8 @@ The generation flow starts with service-level scenario specs in `scripts/questio
 
 Each generated question keeps its source-style multiple-choice item in the same JSON row under `original_multiple_choice`. Curated answer feedback and the structured knowledge-base seed remain separate from the app question bank.
 
+`config/knowledge_base/aws_answer_knowledge_base.json` is committed curated configuration, not an auto-generated artifact. `./setup.sh` and the question generators read scoring and question sources but do not rewrite the knowledge base. Make manual knowledge-base changes in `config/knowledge_base/` and commit them; generated local outputs live under `data/` and release metrics under `metrics/`.
+
 Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C`, and `D/F`.
 
 ![Accuracy Metrics Chart](release/accuracy_metrics_chart.png)
