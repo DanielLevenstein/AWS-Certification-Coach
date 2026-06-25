@@ -53,7 +53,7 @@
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
 - Answer: `AWS Kinesis`
 - Reference: Amazon Kinesis Data Streams
-- Semantic score: `80`
+- Semantic score: `84`
 - Reviewer feedback: This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 

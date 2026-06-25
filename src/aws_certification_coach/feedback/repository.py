@@ -115,4 +115,6 @@ def _multiple_choice_option_to_json(option) -> dict[str, str]:
     payload = {"option_id": option.option_id, "text": option.text}
     if option.source_url:
         payload["source_url"] = option.source_url
+    if option.metadata:
+        payload["metadata"] = dict(option.metadata)
     return payload

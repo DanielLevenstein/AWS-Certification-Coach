@@ -68,6 +68,7 @@ class EvaluationResponseParser:
             missing_concepts=_string_list(payload.get("missing_concepts", [])),
             suggested_improvements=_string_list(payload.get("suggested_improvements", [])),
             feedback=str(payload.get("feedback", "")),
+            feedback_source=str(payload.get("feedback_source", "")),
             detailed_answer=str(payload.get("detailed_answer", "")),
         )
 

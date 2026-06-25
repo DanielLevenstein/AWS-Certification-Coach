@@ -98,6 +98,12 @@ def _string_list_from_json(value: object) -> list[str]:
     return [str(item) for item in value if str(item).strip()]
 
 
+def _string_dict_from_json(value: object) -> dict[str, str]:
+    if not isinstance(value, dict):
+        return {}
+    return {str(key): str(item) for key, item in value.items()}
+
+
 def _multiple_choice_from_json(value: object) -> MultipleChoiceQuestion | None:
     if value is None:
         return None
@@ -113,6 +119,7 @@ def _multiple_choice_from_json(value: object) -> MultipleChoiceQuestion | None:
                 option_id=str(option.get("option_id", "")),
                 text=str(option.get("text", "")),
                 source_url=str(option.get("source_url", "")),
+                metadata=_string_dict_from_json(option.get("metadata", {})),
             )
             for option in options
             if isinstance(option, dict)

@@ -13,6 +13,7 @@ class EvaluationResult:
     missing_concepts: list[str] = field(default_factory=list)
     suggested_improvements: list[str] = field(default_factory=list)
     feedback: str = ""
+    feedback_source: str = ""
     detailed_answer: str = ""
 
 
@@ -44,6 +45,7 @@ class MultipleChoiceOption:
     option_id: str
     text: str
     source_url: str = ""
+    metadata: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

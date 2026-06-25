@@ -71,7 +71,7 @@ def render_release_metrics(
             f"Knowledge base schema version: `{knowledge_base.get('schema_version', 'not-run')}`",
             f"Knowledge base file size: `{knowledge_base.get('file_size_bytes', 0)}` bytes",
             f"Knowledge base syntax alias count: `{knowledge_base.get('syntax_alias_count', 0)}`",
-            f"Knowledge base service family count: `{knowledge_base.get('service_family_count', 0)}`",
+            f"Knowledge base service count: `{knowledge_base.get('service_count', 0)}`",
             f"Knowledge base concept count: `{knowledge_base.get('concept_count', 0)}`",
             f"Semantic evaluation count: `{semantic.get('semantic_example_count', 0)}`",
             "Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.",

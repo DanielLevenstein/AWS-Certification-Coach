@@ -29,6 +29,8 @@
 | v3.0.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation, and expands the default question bank to 160 questions. |
 | v3.1.0  |   Design documentation for splitting knowledge_base and question_template.json                                                                                                      |
 | v3.1.1 | Split question and knowledge base schema |
+| v3.1.2 | Added documentation links for all services and displayed suggested_improvements in UI |
+
 # Release Metrics
 
 ## Metric Definitions:
@@ -63,6 +65,8 @@
 | v2.4.6   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.5.2   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v3.0.3   |            90.62% |            100.00% |          90.91% |                87.50% |          96.15% |            94.95% |
+| v3.1.1 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
+| v3.1.2 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
 
 ## Grade Band Precision
 | Release |      A |    B&C |     D&F |
@@ -78,7 +82,9 @@
 | v3.0.1  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
 | v3.0.3  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
 | v3.0.4  | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
-| v3.1.1  |  90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
+| v3.1.1  | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
+| v3.1.2  | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
+
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
@@ -118,7 +124,7 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.1.1 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
+| v3.1.2 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 
@@ -146,11 +152,11 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
-Knowledge base schema version: `1`
-Knowledge base file size: `13348` bytes
+Knowledge base schema version: `2`
+Knowledge base file size: `61306` bytes
 Knowledge base syntax alias count: `18`
-Knowledge base service family count: `16`
-Knowledge base concept count: `27`
+Knowledge base service count: `42`
+Knowledge base concept count: `161`
 Semantic evaluation count: `37`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.

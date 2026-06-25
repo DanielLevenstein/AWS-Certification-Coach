@@ -18,10 +18,11 @@ STRUCTURED_TRAINING_DATA = PROJECT_ROOT / "config" / "data" / "structured_answer
 def test_default_knowledge_base_has_expected_first_version_sections():
     knowledge = load_knowledge_base()
 
-    assert knowledge.schema_version == 1
+    assert knowledge.schema_version == 2
     assert len(knowledge.syntax_aliases) == 18
-    assert len(knowledge.service_families) == 16
-    assert len(knowledge.concepts) == 27
+    assert len(knowledge.services) == 42
+    assert len(knowledge.concepts) == 161
+    assert not hasattr(knowledge, "rubric_profiles")
 
 
 def test_knowledge_base_covers_every_structured_training_key_concept():
@@ -29,7 +30,7 @@ def test_knowledge_base_covers_every_structured_training_key_concept():
     expected = {str(concept) for row in rows for concept in row["key_concepts"]}
     knowledge = load_knowledge_base()
 
-    assert {concept.name for concept in knowledge.concepts} == expected
+    assert expected <= {concept.name for concept in knowledge.concepts}
     assert all(concept.service_ids for concept in knowledge.concepts)
     assert all(concept.description for concept in knowledge.concepts)
 
@@ -40,6 +41,8 @@ def test_knowledge_base_normalizes_syntax_and_exposes_service_aliases():
     assert knowledge.canonicalize("AWS Code Build") == "aws codebuild"
     assert knowledge.canonicalize("Cloud Trail API activity") == "cloudtrail api activity"
     assert "aws cost center" in knowledge.aliases_for_service_token("budgets")
+    assert knowledge.service_for_name("AWS Lambda").id == "lambda"
+    assert knowledge.service_for_name("AWS Lambda").source_url.startswith("https://docs.aws.amazon.com/")
 
 
 def test_knowledge_base_renders_only_relevant_bounded_context():
@@ -53,7 +56,7 @@ def test_knowledge_base_renders_only_relevant_bounded_context():
 
     assert "CONCEPT: SQS visibility timeout" in rendered
     assert "CONCEPT: processing window" in rendered
-    assert "SERVICES: Amazon Simple Queue Service" in rendered
+    assert "SERVICES: Amazon SQS" in rendered
     assert "AWS KMS" not in rendered
     assert len(rendered) <= 700
 

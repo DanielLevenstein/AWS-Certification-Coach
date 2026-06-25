@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "description": "Reusable self-authored question templates for AWS Certification Coach generation.",
   "templates": [
     {
@@ -19,6 +19,32 @@
       "question_pattern": "Explain which AWS service or feature should be used to {purpose}.",
       "reference_answer_pattern": "Use {service_name} to {purpose}.",
       "option_pattern": "Use {service_name}.",
+      "option_order": [
+        "correct",
+        "distractor",
+        "distractor",
+        "distractor"
+      ],
+      "selection_rule": {
+        "correct_option_ids": [
+          "A"
+        ],
+        "instruction": "Choose the single best AWS service or feature."
+      },
+      "distractor_recipes": [
+        {
+          "id": "adjacent-service",
+          "description": "Use a plausible but incorrect service or feature from the service scenario."
+        },
+        {
+          "id": "wrong-domain-service",
+          "description": "Use a service or feature from a different AWS problem domain."
+        },
+        {
+          "id": "unsafe-or-underfit-pattern",
+          "description": "Use an option that misses an important scenario constraint or operational requirement."
+        }
+      ],
       "required_slots": [
         "service_id",
         "service_name",
@@ -31,7 +57,818 @@
         "common_misconceptions": "distractor_best_fit_claims",
         "acceptable_answers": "correct_option_reference_answer_and_service",
         "must_not_claim": "distractor_satisfies_requirement_claims"
+      },
+      "composition_rules": {
+        "source_url": "knowledge_service_source_url",
+        "option_metadata": "knowledge_service_identity",
+        "required_concepts": "knowledge_profile_key_concepts",
+        "bonus_concepts": "empty",
+        "common_misconceptions": "knowledge_profile_distractors_with_template_pattern",
+        "acceptable_answers": "correct_option_reference_answer_and_service",
+        "must_not_claim": "knowledge_profile_distractors_with_template_pattern"
       }
+    }
+  ],
+  "service_scenarios": [
+    {
+      "id": "iam-roles",
+      "service_id": "iam-roles",
+      "domain": "Security",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "grant temporary credentials to trusted AWS resources without storing long-term access keys",
+      "key_concepts": [
+        "IAM",
+        "temporary credentials",
+        "least privilege",
+        "trusted entities"
+      ],
+      "distractors": [
+        "IAM user access keys",
+        "AWS Shield Advanced",
+        "hard-coded credentials"
+      ]
+    },
+    {
+      "id": "aws-budgets",
+      "service_id": "budgets",
+      "domain": "Billing",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "track cost or usage thresholds and send alerts for actual or forecasted spending",
+      "key_concepts": [
+        "AWS Budgets",
+        "cost thresholds",
+        "usage thresholds",
+        "alerts"
+      ],
+      "distractors": [
+        "AWS CloudTrail",
+        "AWS Artifact",
+        "Elastic Load Balancing"
+      ]
+    },
+    {
+      "id": "multiple-availability-zones",
+      "service_id": "multiple-availability-zones",
+      "domain": "Resilient Architectures",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "improve high availability and fault tolerance during an Availability Zone impairment",
+      "key_concepts": [
+        "Availability Zones",
+        "high availability",
+        "fault tolerance",
+        "load balancing"
+      ],
+      "distractors": [
+        "single Availability Zone deployment",
+        "larger instance",
+        "root volume backups"
+      ]
+    },
+    {
+      "id": "amazon-s3-versioning",
+      "service_id": "amazon-s3-versioning",
+      "domain": "Storage",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Easy",
+      "purpose": "preserve, retrieve, and restore previous versions of objects after overwrite or delete events",
+      "key_concepts": [
+        "Amazon S3",
+        "versioning",
+        "object recovery",
+        "overwrite protection"
+      ],
+      "distractors": [
+        "S3 Transfer Acceleration",
+        "Amazon EFS",
+        "S3 static website hosting"
+      ]
+    },
+    {
+      "id": "s3-lifecycle-policies",
+      "service_id": "s3-lifecycle-policies",
+      "domain": "Storage",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "automatically transition or expire objects based on age and access patterns",
+      "key_concepts": [
+        "S3 Lifecycle",
+        "storage classes",
+        "object expiration",
+        "cost optimization"
+      ],
+      "distractors": [
+        "S3 bucket policies",
+        "AWS Organizations",
+        "Amazon GuardDuty"
+      ]
+    },
+    {
+      "id": "amazon-rds-multi-az",
+      "service_id": "amazon-rds-multi-az",
+      "domain": "Database",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "provide synchronous standby replication and automatic failover for relational databases",
+      "key_concepts": [
+        "Amazon RDS",
+        "Multi-AZ",
+        "automatic failover",
+        "standby replica"
+      ],
+      "distractors": [
+        "read replica only",
+        "DynamoDB global table",
+        "manual snapshot"
+      ]
+    },
+    {
+      "id": "amazon-rds-read-replicas",
+      "service_id": "amazon-rds-read-replicas",
+      "domain": "Database",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "scale read-heavy database workloads by serving read traffic from replicated database instances",
+      "key_concepts": [
+        "Amazon RDS",
+        "read replicas",
+        "read scaling",
+        "replication"
+      ],
+      "distractors": [
+        "Multi-AZ failover",
+        "AWS Backup",
+        "vertical scaling only"
+      ]
+    },
+    {
+      "id": "amazon-dynamodb",
+      "service_id": "dynamodb",
+      "domain": "Database",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "provide a fully managed NoSQL key-value and document database with low-latency access",
+      "key_concepts": [
+        "DynamoDB",
+        "NoSQL",
+        "fully managed",
+        "low latency"
+      ],
+      "distractors": [
+        "Amazon Redshift",
+        "Amazon EFS",
+        "AWS Glue"
+      ]
+    },
+    {
+      "id": "dynamodb-global-tables",
+      "service_id": "dynamodb-global-tables",
+      "domain": "Database",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "replicate tables across Regions for low-latency multi-Region access and resilience",
+      "key_concepts": [
+        "DynamoDB global tables",
+        "multi-Region",
+        "replication",
+        "low latency"
+      ],
+      "distractors": [
+        "DynamoDB local secondary index",
+        "RDS read replica",
+        "S3 replication only"
+      ]
+    },
+    {
+      "id": "aws-lambda",
+      "service_id": "lambda",
+      "domain": "Compute",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "run event-driven code without managing servers and scale per request",
+      "key_concepts": [
+        "AWS Lambda",
+        "serverless",
+        "event-driven",
+        "automatic scaling"
+      ],
+      "distractors": [
+        "Amazon EC2 dedicated hosts",
+        "AWS Batch only",
+        "Amazon EBS"
+      ]
+    },
+    {
+      "id": "auto-scaling-groups",
+      "service_id": "auto-scaling-groups",
+      "domain": "Compute",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "adjust EC2 capacity automatically based on demand and health checks",
+      "key_concepts": [
+        "Auto Scaling",
+        "EC2",
+        "capacity",
+        "health checks"
+      ],
+      "distractors": [
+        "manual instance launch",
+        "Elastic IP",
+        "AMI copy"
+      ]
+    },
+    {
+      "id": "elastic-load-balancing",
+      "service_id": "elastic-load-balancing",
+      "domain": "Networking",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "distribute traffic across healthy targets to improve availability and scalability",
+      "key_concepts": [
+        "Elastic Load Balancing",
+        "traffic distribution",
+        "healthy targets",
+        "scalability"
+      ],
+      "distractors": [
+        "AWS Direct Connect",
+        "Amazon Route 53 only",
+        "Amazon EBS"
+      ]
+    },
+    {
+      "id": "amazon-cloudfront",
+      "service_id": "amazon-cloudfront",
+      "domain": "Networking",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "cache and deliver content from edge locations to reduce latency for users",
+      "key_concepts": [
+        "CloudFront",
+        "edge locations",
+        "caching",
+        "latency reduction"
+      ],
+      "distractors": [
+        "AWS Transit Gateway",
+        "NAT gateway",
+        "Amazon FSx"
+      ]
+    },
+    {
+      "id": "amazon-route-53",
+      "service_id": "amazon-route-53",
+      "domain": "Networking",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "provide scalable DNS routing and health-check-based routing for applications",
+      "key_concepts": [
+        "Route 53",
+        "DNS",
+        "routing",
+        "health checks"
+      ],
+      "distractors": [
+        "Amazon CloudWatch Logs",
+        "AWS Config",
+        "Amazon Inspector"
+      ]
+    },
+    {
+      "id": "vpc-security-groups",
+      "service_id": "vpc-security-groups",
+      "domain": "Networking",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Easy",
+      "purpose": "act as stateful virtual firewalls controlling inbound and outbound traffic for resources",
+      "key_concepts": [
+        "security groups",
+        "stateful",
+        "inbound rules",
+        "outbound rules"
+      ],
+      "distractors": [
+        "network ACL only",
+        "AWS WAF for subnets",
+        "IAM policy"
+      ]
+    },
+    {
+      "id": "network-acls",
+      "service_id": "network-acls",
+      "domain": "Networking",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "provide stateless subnet-level traffic filtering with explicit inbound and outbound rules",
+      "key_concepts": [
+        "network ACLs",
+        "stateless",
+        "subnet",
+        "allow and deny rules"
+      ],
+      "distractors": [
+        "security group only",
+        "AWS Shield",
+        "Route 53"
+      ]
+    },
+    {
+      "id": "aws-cloudtrail",
+      "service_id": "cloudtrail",
+      "domain": "Security",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "record AWS API activity for auditing, governance, and operational troubleshooting",
+      "key_concepts": [
+        "CloudTrail",
+        "API activity",
+        "auditing",
+        "governance"
+      ],
+      "distractors": [
+        "CloudWatch metrics",
+        "AWS Budgets",
+        "Amazon Macie"
+      ]
+    },
+    {
+      "id": "amazon-cloudwatch",
+      "service_id": "amazon-cloudwatch",
+      "domain": "Operations",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "collect metrics, logs, alarms, and dashboards for monitoring AWS resources",
+      "key_concepts": [
+        "CloudWatch",
+        "metrics",
+        "logs",
+        "alarms"
+      ],
+      "distractors": [
+        "AWS Artifact",
+        "AWS Organizations",
+        "AWS Marketplace"
+      ]
+    },
+    {
+      "id": "aws-config",
+      "service_id": "config",
+      "domain": "Security",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "track resource configuration history and evaluate compliance against rules",
+      "key_concepts": [
+        "AWS Config",
+        "configuration history",
+        "compliance rules",
+        "resource inventory"
+      ],
+      "distractors": [
+        "CloudTrail only",
+        "Trusted Advisor only",
+        "AWS Shield"
+      ]
+    },
+    {
+      "id": "aws-kms",
+      "service_id": "kms",
+      "domain": "Security",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "create and manage encryption keys used to protect data in AWS services",
+      "key_concepts": [
+        "AWS KMS",
+        "encryption keys",
+        "data protection",
+        "key management"
+      ],
+      "distractors": [
+        "AWS Secrets Manager rotation only",
+        "IAM roles",
+        "AWS WAF"
+      ]
+    },
+    {
+      "id": "aws-secrets-manager",
+      "service_id": "secretsmanager",
+      "domain": "Security",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "store, retrieve, and rotate application secrets such as database credentials",
+      "key_concepts": [
+        "Secrets Manager",
+        "secret rotation",
+        "credentials",
+        "secure retrieval"
+      ],
+      "distractors": [
+        "Parameter Store only",
+        "AWS Certificate Manager",
+        "Amazon Cognito"
+      ]
+    },
+    {
+      "id": "amazon-sqs",
+      "service_id": "sqs",
+      "domain": "Integration",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "decouple application components with a managed message queue",
+      "key_concepts": [
+        "SQS",
+        "message queue",
+        "decoupling",
+        "asynchronous processing"
+      ],
+      "distractors": [
+        "Amazon SNS only",
+        "Amazon EBS",
+        "AWS CloudFormation"
+      ]
+    },
+    {
+      "id": "amazon-sns",
+      "service_id": "amazon-sns",
+      "domain": "Integration",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "fan out messages to multiple subscribers using a managed pub/sub service",
+      "key_concepts": [
+        "SNS",
+        "pub/sub",
+        "fanout",
+        "subscribers"
+      ],
+      "distractors": [
+        "SQS queue polling only",
+        "AWS Batch",
+        "Amazon RDS"
+      ]
+    },
+    {
+      "id": "amazon-eventbridge",
+      "service_id": "amazon-eventbridge",
+      "domain": "Integration",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "route events from AWS services and applications to targets using event buses and rules",
+      "key_concepts": [
+        "EventBridge",
+        "event bus",
+        "rules",
+        "event routing"
+      ],
+      "distractors": [
+        "CloudFront",
+        "Amazon EFS",
+        "AWS Artifact"
+      ]
+    },
+    {
+      "id": "aws-step-functions",
+      "service_id": "aws-step-functions",
+      "domain": "Application Integration",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "orchestrate multi-step workflows and coordinate distributed application components",
+      "key_concepts": [
+        "Step Functions",
+        "workflow orchestration",
+        "state machine",
+        "coordination"
+      ],
+      "distractors": [
+        "Lambda alone",
+        "Amazon S3 Glacier",
+        "NAT gateway"
+      ]
+    },
+    {
+      "id": "amazon-api-gateway",
+      "service_id": "apigateway",
+      "domain": "Networking",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "create, publish, secure, monitor, and throttle APIs for backend services",
+      "key_concepts": [
+        "API Gateway",
+        "APIs",
+        "throttling",
+        "backend integration"
+      ],
+      "distractors": [
+        "CloudFront only",
+        "AWS Config",
+        "Amazon EBS"
+      ]
+    },
+    {
+      "id": "amazon-efs",
+      "service_id": "amazon-efs",
+      "domain": "Storage",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "provide shared elastic file storage that can be mounted by multiple compute resources",
+      "key_concepts": [
+        "EFS",
+        "shared file storage",
+        "elastic",
+        "multiple compute resources"
+      ],
+      "distractors": [
+        "Amazon EBS single volume",
+        "S3 object storage only",
+        "DynamoDB"
+      ]
+    },
+    {
+      "id": "amazon-ebs-snapshots",
+      "service_id": "amazon-ebs-snapshots",
+      "domain": "Storage",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "create point-in-time backups of block storage volumes for recovery or copying",
+      "key_concepts": [
+        "EBS snapshots",
+        "point-in-time backup",
+        "block storage",
+        "recovery"
+      ],
+      "distractors": [
+        "S3 lifecycle",
+        "CloudTrail event",
+        "Route 53 health check"
+      ]
+    },
+    {
+      "id": "s3-glacier-storage-classes",
+      "service_id": "s3-glacier-storage-classes",
+      "domain": "Storage",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "store rarely accessed archival data at lower cost with retrieval-time tradeoffs",
+      "key_concepts": [
+        "S3 Glacier",
+        "archive",
+        "low cost",
+        "retrieval time"
+      ],
+      "distractors": [
+        "S3 Standard only",
+        "Amazon EFS",
+        "Amazon ElastiCache"
+      ]
+    },
+    {
+      "id": "amazon-redshift",
+      "service_id": "amazon-redshift",
+      "domain": "Analytics",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "run analytical queries against a managed petabyte-scale data warehouse",
+      "key_concepts": [
+        "Redshift",
+        "data warehouse",
+        "analytics",
+        "SQL queries"
+      ],
+      "distractors": [
+        "DynamoDB",
+        "Amazon SQS",
+        "AWS Lambda"
+      ]
+    },
+    {
+      "id": "aws-glue",
+      "service_id": "aws-glue",
+      "domain": "Analytics",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "perform serverless data integration, cataloging, and ETL jobs",
+      "key_concepts": [
+        "AWS Glue",
+        "ETL",
+        "data catalog",
+        "serverless"
+      ],
+      "distractors": [
+        "AWS Config",
+        "Amazon Route 53",
+        "AWS Shield"
+      ]
+    },
+    {
+      "id": "amazon-athena",
+      "service_id": "amazon-athena",
+      "domain": "Analytics",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "query data in Amazon S3 using SQL without managing servers",
+      "key_concepts": [
+        "Athena",
+        "SQL",
+        "Amazon S3",
+        "serverless queries"
+      ],
+      "distractors": [
+        "Amazon RDS",
+        "Amazon EBS",
+        "AWS WAF"
+      ]
+    },
+    {
+      "id": "amazon-kinesis-data-streams",
+      "service_id": "amazon-kinesis-data-streams",
+      "domain": "Analytics",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "ingest and process real-time streaming data at scale",
+      "key_concepts": [
+        "Kinesis Data Streams",
+        "real-time",
+        "streaming data",
+        "shards"
+      ],
+      "distractors": [
+        "AWS Glue crawler",
+        "S3 Glacier",
+        "CloudTrail Lake only"
+      ]
+    },
+    {
+      "id": "aws-organizations",
+      "service_id": "aws-organizations",
+      "domain": "Governance",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "centrally manage multiple AWS accounts and apply service control policies",
+      "key_concepts": [
+        "AWS Organizations",
+        "multiple accounts",
+        "SCPs",
+        "central management"
+      ],
+      "distractors": [
+        "IAM groups only",
+        "AWS Budgets only",
+        "Amazon Cognito"
+      ]
+    },
+    {
+      "id": "service-control-policies",
+      "service_id": "service-control-policies",
+      "domain": "Governance",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "set maximum available permissions across accounts in an AWS Organization",
+      "key_concepts": [
+        "SCPs",
+        "permission guardrails",
+        "AWS Organizations",
+        "accounts"
+      ],
+      "distractors": [
+        "resource policies only",
+        "security groups",
+        "CloudWatch alarms"
+      ]
+    },
+    {
+      "id": "aws-trusted-advisor",
+      "service_id": "aws-trusted-advisor",
+      "domain": "Governance",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "provide recommendations for cost optimization, security, fault tolerance, performance, and service limits",
+      "key_concepts": [
+        "Trusted Advisor",
+        "recommendations",
+        "cost optimization",
+        "service limits"
+      ],
+      "distractors": [
+        "CloudTrail",
+        "AWS Glue",
+        "Amazon SQS"
+      ]
+    },
+    {
+      "id": "aws-well-architected-tool",
+      "service_id": "aws-well-architected-tool",
+      "domain": "Governance",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "review workloads against AWS best practices and identify improvement opportunities",
+      "key_concepts": [
+        "Well-Architected Tool",
+        "best practices",
+        "workload review",
+        "improvements"
+      ],
+      "distractors": [
+        "AWS Artifact",
+        "AWS Backup only",
+        "Route 53"
+      ]
+    },
+    {
+      "id": "aws-backup",
+      "service_id": "aws-backup",
+      "domain": "Storage",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "centralize and automate backup policies across supported AWS services",
+      "key_concepts": [
+        "AWS Backup",
+        "centralized backups",
+        "backup policies",
+        "automation"
+      ],
+      "distractors": [
+        "CloudFront",
+        "Amazon SNS",
+        "AWS Config only"
+      ]
+    },
+    {
+      "id": "amazon-cognito",
+      "service_id": "amazon-cognito",
+      "domain": "Security",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "add user sign-up, sign-in, and identity management to applications",
+      "key_concepts": [
+        "Cognito",
+        "user authentication",
+        "identity management",
+        "sign-in"
+      ],
+      "distractors": [
+        "IAM role for EC2",
+        "AWS KMS",
+        "CloudTrail"
+      ]
+    },
+    {
+      "id": "aws-waf",
+      "service_id": "aws-waf",
+      "domain": "Security",
+      "certification": "Cloud Practitioner",
+      "exam_code": "CLF-C02",
+      "difficulty": "Easy",
+      "purpose": "protect web applications from common web exploits using rules",
+      "key_concepts": [
+        "AWS WAF",
+        "web application",
+        "rules",
+        "common exploits"
+      ],
+      "distractors": [
+        "security groups only",
+        "Amazon Inspector",
+        "AWS Budgets"
+      ]
     }
   ]
 }

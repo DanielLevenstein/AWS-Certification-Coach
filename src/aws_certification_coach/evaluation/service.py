@@ -41,15 +41,14 @@ class EvaluationService:
 
 def _ensure_actionable_feedback(result: EvaluationResult, user_answer: str) -> EvaluationResult:
     """Guarantee one useful improvement sentence for every non-A answer."""
-
+    feedback=""
     if score_to_letter(result.score) == "A":
         return result
     if result.score >= 80 and len(user_answer.split()) <= 4:
-        feedback = "For full credit, state your answer in a complete sentence and explain why the service fits the requirement."
+        feedback = "Please write full sentence answers for full credit."
     elif result.feedback.strip():
+        # Add business logic for other types of feedback.
         feedback = result.feedback.strip()
-    else:
-        feedback = "For a higher grade, add the missing AWS-specific details shown in the detailed answer."
     return replace(result, feedback=feedback)
 
 
@@ -70,19 +69,9 @@ class HeuristicEvaluatorProvider:
             "score": score,
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
-            "feedback": _feedback(score),
             "detailed_answer": _detailed_answer(question, missing),
         }
         return json.dumps(payload)
-
-
-def _feedback(score: int) -> str:
-    if score >= 80:
-        return "This answer is close. Review the detailed answer below for exam-ready wording."
-    if score >= 50:
-        return "This answer has part of the idea, but it needs more complete AWS-specific detail."
-    return "This answer misses several expected concepts. Use the detailed answer below as the target."
-
 
 def _detailed_answer(question: Question, missing_concepts: list[str]) -> str:
     concept_sentence = ""

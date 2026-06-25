@@ -90,6 +90,37 @@ def test_existing_question_rows_load_without_rubric_metadata():
     assert question.acceptable_answers == []
 
 
+def test_original_multiple_choice_options_preserve_metadata():
+    question = question_from_json(
+        {
+            "certification": "Cloud Practitioner",
+            "domain": "Security",
+            "difficulty": "Easy",
+            "question": "Which feature manages users?",
+            "reference_answer": "Use Amazon Cognito.",
+            "key_concepts": ["Cognito"],
+            "original_multiple_choice": {
+                "question": "Which feature manages users?",
+                "options": [
+                    {
+                        "option_id": "A",
+                        "text": "Configure an Amazon Cognito user pool.",
+                        "source_url": "https://docs.aws.amazon.com/cognito/",
+                        "metadata": {
+                            "service_id": "amazon-cognito",
+                            "service_name": "Amazon Cognito",
+                            "source_url": "https://docs.aws.amazon.com/cognito/",
+                        },
+                    }
+                ],
+                "correct_option_ids": ["A"],
+            },
+        }
+    )
+
+    assert question.original_multiple_choice.options[0].metadata["service_name"] == "Amazon Cognito"
+
+
 def test_artifact_review_question_rows_load_artifact_metadata():
     question = question_from_json(
         {

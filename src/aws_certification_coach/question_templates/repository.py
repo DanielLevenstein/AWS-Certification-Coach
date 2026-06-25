@@ -39,8 +39,25 @@ class QuestionTemplate:
     question_pattern: str
     reference_answer_pattern: str
     option_pattern: str
+    option_order: tuple[str, ...]
+    selection_rule: dict[str, object]
+    distractor_recipes: tuple[dict[str, str], ...]
     required_slots: tuple[str, ...]
     rubric_merge: dict[str, str]
+    composition_rules: dict[str, str]
+
+
+@dataclass(frozen=True)
+class ServiceScenario:
+    id: str
+    service_id: str
+    domain: str
+    certification: str
+    exam_code: str
+    difficulty: str
+    purpose: str
+    key_concepts: tuple[str, ...]
+    distractors: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -48,6 +65,7 @@ class QuestionTemplateCatalog:
     schema_version: int
     description: str
     templates: tuple[QuestionTemplate, ...]
+    service_scenarios: tuple[ServiceScenario, ...]
 
     def get(self, template_id: str) -> QuestionTemplate:
         for template in self.templates:
@@ -79,10 +97,31 @@ def _load_question_templates(resolved_path: str) -> QuestionTemplateCatalog:
                 question_pattern=str(row["question_pattern"]),
                 reference_answer_pattern=str(row["reference_answer_pattern"]),
                 option_pattern=str(row["option_pattern"]),
+                option_order=tuple(str(value) for value in row["option_order"]),
+                selection_rule=dict(row["selection_rule"]),
+                distractor_recipes=tuple(
+                    {str(key): str(value) for key, value in recipe.items()}
+                    for recipe in row["distractor_recipes"]
+                ),
                 required_slots=tuple(str(value) for value in row["required_slots"]),
                 rubric_merge={str(key): str(value) for key, value in row["rubric_merge"].items()},
+                composition_rules={str(key): str(value) for key, value in row["composition_rules"].items()},
             )
             for row in payload["templates"]
+        ),
+        service_scenarios=tuple(
+            ServiceScenario(
+                id=str(row["id"]),
+                service_id=str(row["service_id"]),
+                domain=str(row["domain"]),
+                certification=str(row["certification"]),
+                exam_code=str(row["exam_code"]),
+                difficulty=str(row["difficulty"]),
+                purpose=str(row["purpose"]),
+                key_concepts=tuple(str(value) for value in row["key_concepts"]),
+                distractors=tuple(str(value) for value in row["distractors"]),
+            )
+            for row in payload["service_scenarios"]
         ),
     )
 
@@ -90,11 +129,11 @@ def _load_question_templates(resolved_path: str) -> QuestionTemplateCatalog:
 def _validate_payload(payload: object, source: Path) -> None:
     if not isinstance(payload, dict):
         raise ValueError(f"Question templates must be a JSON object: {source}")
-    required = {"schema_version", "description", "templates"}
+    required = {"schema_version", "description", "templates", "service_scenarios"}
     missing = required - payload.keys()
     if missing:
         raise ValueError(f"Question templates are missing fields {sorted(missing)}: {source}")
-    if payload["schema_version"] != 1:
+    if payload["schema_version"] != 2:
         raise ValueError(f"Unsupported question-template schema version: {payload['schema_version']}")
     forbidden = _find_forbidden_keys(payload)
     if forbidden:
@@ -108,6 +147,15 @@ def _validate_payload(payload: object, source: Path) -> None:
         template_ids.append(str(row["id"]))
     if len(template_ids) != len(set(template_ids)):
         raise ValueError(f"Duplicate question-template IDs in {source}")
+    scenarios = payload["service_scenarios"]
+    if not isinstance(scenarios, list) or not scenarios:
+        raise ValueError(f"Question-template section 'service_scenarios' must be a non-empty list: {source}")
+    scenario_ids: list[str] = []
+    for index, row in enumerate(scenarios):
+        _validate_service_scenario_row(row, index, source)
+        scenario_ids.append(str(row["id"]))
+    if len(scenario_ids) != len(set(scenario_ids)):
+        raise ValueError(f"Duplicate service-scenario IDs in {source}")
 
 
 def _validate_template_row(row: object, index: int, source: Path) -> None:
@@ -119,20 +167,52 @@ def _validate_template_row(row: object, index: int, source: Path) -> None:
         "question_pattern",
         "reference_answer_pattern",
         "option_pattern",
+        "option_order",
+        "selection_rule",
+        "distractor_recipes",
         "required_slots",
         "rubric_merge",
+        "composition_rules",
     }
     if not isinstance(row, dict) or required - row.keys():
         raise ValueError(f"Invalid question-template row {index}: {source}")
-    for list_field in ("certifications", "prompt_variants", "required_slots"):
+    for list_field in ("certifications", "prompt_variants", "option_order", "distractor_recipes", "required_slots"):
         value = row[list_field]
         if not isinstance(value, list) or not all(str(item).strip() for item in value):
             raise ValueError(f"Question-template row {index} has invalid {list_field}: {source}")
-    if not isinstance(row["rubric_merge"], dict) or not row["rubric_merge"]:
-        raise ValueError(f"Question-template row {index} has invalid rubric_merge: {source}")
+    for dict_field in ("selection_rule", "rubric_merge", "composition_rules"):
+        if not isinstance(row[dict_field], dict) or not row[dict_field]:
+            raise ValueError(f"Question-template row {index} has invalid {dict_field}: {source}")
+    if row["option_order"].count("correct") != 1 or len(row["option_order"]) < 2:
+        raise ValueError(f"Question-template row {index} has invalid option_order: {source}")
     unknown_slots = set(str(slot) for slot in row["required_slots"]) - KNOWN_TEMPLATE_SLOTS
     if unknown_slots:
         raise ValueError(f"Question-template row {index} has unknown slots {sorted(unknown_slots)}: {source}")
+
+
+def _validate_service_scenario_row(row: object, index: int, source: Path) -> None:
+    required = {
+        "id",
+        "service_id",
+        "domain",
+        "certification",
+        "exam_code",
+        "difficulty",
+        "purpose",
+        "key_concepts",
+        "distractors",
+    }
+    if not isinstance(row, dict) or required - row.keys():
+        raise ValueError(f"Invalid service-scenario row {index}: {source}")
+    for text_field in ("id", "service_id", "domain", "certification", "exam_code", "difficulty", "purpose"):
+        if not str(row[text_field]).strip():
+            raise ValueError(f"Service-scenario row {index} has invalid {text_field}: {source}")
+    for list_field in ("key_concepts", "distractors"):
+        value = row[list_field]
+        if not isinstance(value, list) or not all(str(item).strip() for item in value):
+            raise ValueError(f"Service-scenario row {index} has invalid {list_field}: {source}")
+    if len(row["distractors"]) < 3:
+        raise ValueError(f"Service-scenario row {index} needs at least three distractors: {source}")
 
 
 def _find_forbidden_keys(value: object) -> set[str]:

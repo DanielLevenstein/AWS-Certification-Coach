@@ -27,7 +27,7 @@ USER_FEEDBACK_PATH = Path(
         ROOT_DIR / "data" / "generated" / "user_feedback.v2.json",
     )
 )
-SHOW_FEEDBACK_ENV = "SHOW_FEEDBACK"
+SHOW_ANSWER_FEEDBACK_ENV = "SHOW_ANSWER_FEEDBACK"
 author = "Daniel Levenstein"
 linked_in_url = "https://www.linkedin.com/in/daniel-aaron-levenstein/"
 github_url="https://github.com/DanielLevenstein/AWS-Certification-Coach"
@@ -119,8 +119,8 @@ def main() -> None:
         feedback_column, source_column = st.columns([3, 2])
         with feedback_column:
             _render_score(result.score)
-            missing_concepts = result.missing_concepts
-            # Consider adding back missing concepts for answers with ratings below A.
+            if _env_enabled(SHOW_ANSWER_FEEDBACK_ENV):
+                _render_answer_feedback(result.score, result.feedback, result.suggested_improvements)
             st.markdown("### Detailed Answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)
@@ -167,12 +167,17 @@ def _render_feedback_link(question: Question, user_answer: str, score: int) -> N
         _render_feedback_form(question, user_answer, score)
 
 
-def _render_answer_feedback(score: int, feedback: str) -> None:
+def _render_answer_feedback(score: int, feedback: str, suggest_improvements: str) -> None:
     if score_to_letter(score) == "A":
         return
-    st.write("Feedback")
-    st.info(feedback)
-
+    if feedback:
+        st.info(feedback)
+    if suggest_improvements:
+        st.info(f"Here are some suggestions for improving your answer:")
+        output = ""
+        for suggestion in suggest_improvements:
+            output+= f"- {suggestion}\n"
+        st.write(output)
 
 def _render_contact_info_link() -> None:
     st.markdown(f"Author: [{author}]({linked_in_url}) — GitHub: [AWS-Certification-Coach]({github_url})")
@@ -289,21 +294,24 @@ def _render_multiple_choice_source_documentation(original: MultipleChoiceQuestio
     options_with_sources = [option for option in original.options if option.source_url]
     if not options_with_sources:
         if original.source_url:
-            st.markdown("### Additional Documentation")
+            st.markdown("### Documentation")
             st.markdown(f"- [{original.source_name or 'AWS Documentation'}]({original.source_url})")
         return
-    st.markdown("### Additional Documentation")
+    st.markdown("### Documentation")
     seen_urls: set[str] = set()
     documentation_links = ""
     for option in original.options:
         if not option.source_url or option.source_url in seen_urls:
             continue
         seen_urls.add(option.source_url)
-        documentation_links += f"- [{_source_label(option.text)}]({option.source_url})\n"
+        documentation_links += f"- [{_source_label(option)}]({option.source_url})\n"
     st.markdown(documentation_links )
 
-def _source_label(option_text: str) -> str:
-    return option_text.removeprefix("Use ").rstrip(".")
+def _source_label(option) -> str:
+    service_name = option.metadata.get("service_name", "").strip()
+    if service_name:
+        return service_name
+    return option.text.removeprefix("Use ").rstrip(".")
 
 
 if __name__ == "__main__":

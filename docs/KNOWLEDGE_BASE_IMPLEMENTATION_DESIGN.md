@@ -43,29 +43,35 @@ The structured training artifact currently contains 9 questions and 27 distinct 
 
 ## Design Decisions
 
-### Separate Knowledge From Templates
+### Separate Knowledge From Templates And Rubrics
 
-The canonical knowledge source will be:
+The canonical knowledge source is:
 
-`config/knowledge_base/aws_answer_knowledge_base.json`
+`config/knowledge_base/knowledge_base.json`
 
-The canonical question-template source should be:
+The canonical question-template source is:
 
 `config/question_templates/question_template.json`
+
+The canonical answer-rubric source is:
+
+`config/answer_rubric/answer_rubric.json`
 
 JSON is preferred over prose-only Markdown because the existing classifier can load it deterministically and a lightweight language-model adapter can render only the relevant entries. Descriptions remain natural language so the file is also understandable in review.
 
 The knowledge document has three top-level content sections:
 
 1. `syntax_aliases`
-2. `service_families`
+2. `services`
 3. `concepts`
 
-It also carries a `schema_version` and a short `description`. The source file is committed configuration, not generated training data, a model artifact, or a metrics artifact.
+It also carries a `schema_version` and a short `description`. The source file is a committed configuration, not generated training data, a model artifact, or a metrics artifact.
 
-For the next iteration, the knowledge document should graduate from answer-evaluation support into a shared source for generation and grading facts. The file remains curated committed configuration under `config/knowledge_base/`, but generators should read from it instead of duplicating service names, source URLs, and rubric metadata in script-local constants.
+The knowledge document has graduated from answer-evaluation support into a shared source for AWS facts. The file remains curated committed configuration under `config/knowledge_base/`, and generators read from it instead of duplicating service names, source URLs, and concepts in script-local constants.
 
-The template document owns how questions are assembled from those facts. It should not define canonical service names, AWS source URLs, or answer heuristics. If a template needs AWS Lambda, it references `service_id: "lambda"` or a concept ID from the knowledge base.
+The template document owns how questions are assembled from those facts, including reusable `service_scenarios`. It should not define canonical service names, AWS source URLs, or answer heuristics. If a template needs AWS Lambda, it references `service_id: "lambda"` or a concept ID from the knowledge base.
+
+The answer-rubric document owns reusable learner-answer grading defaults. It should not define canonical AWS services, source URLs, or prompt wording.
 
 ### Calibration Labels Are Not Knowledge
 
@@ -85,20 +91,21 @@ The current schema is:
 
 ```json
 {
-  "schema_version": 1,
-  "description": "Compact AWS terminology and concept knowledge for answer evaluation.",
+  "schema_version": 2,
+  "description": "Canonical AWS service, feature, concept, alias, source, and scenario facts shared by question generation and answer heuristics.",
   "syntax_aliases": [
     {
       "alias": "code build",
       "canonical": "codebuild"
     }
   ],
-  "service_families": [
+  "services": [
     {
       "id": "codebuild",
       "name": "AWS CodeBuild",
       "tokens": ["codebuild"],
       "aliases": ["code build"],
+      "source_url": "https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html",
       "description": "A managed build service that runs commands defined for a build project."
     }
   ],
@@ -114,7 +121,58 @@ The current schema is:
 }
 ```
 
-The next schema version should add source and rubric fields while preserving the existing sections:
+## Question Template Scenario Contract
+
+`question_template.json` stores reusable question mechanics and `service_scenarios`:
+
+```json
+{
+  "service_scenarios": [
+    {
+      "id": "aws-codebuild",
+      "service_id": "codebuild",
+      "domain": "Development with AWS Services",
+      "certification": "AWS Certified Developer",
+      "exam_code": "DVA-C02",
+      "difficulty": "Medium",
+      "purpose": "define repeatable build commands",
+      "key_concepts": ["CodeBuild buildspec", "build phases"],
+      "distractors": ["Define the phases in a CodeDeploy AppSpec file."]
+    }
+  ]
+}
+```
+
+## Answer Rubric Contract
+
+The current answer-rubric schema stores an extensible rule list. Each rule keeps the existing `answer_rubric_defaults` section shape:
+
+```json
+{
+  "schema_version": 2,
+  "description": "Reusable learner-answer rubric rules and approved feedback messages.",
+  "rules": [
+    {
+      "id": "service_selection_defaults",
+      "description": "Default learner-answer rubric composition for service-selection style questions.",
+      "question_types": ["service_selection", "scenario_multiple_choice"],
+      "answer_rubric_defaults": {
+        "common_misconception_pattern": "{distractor} is the best fit for this requirement.",
+        "acceptable_answer_sources": ["correct_option", "reference_answer", "service_name"],
+        "must_not_claim_pattern": "{distractor} satisfies the scenario better than {service_name}."
+      }
+    }
+  ],
+  "feedback_messages": [
+    {
+      "id": "full_sentence_for_full_credit",
+      "message": "Please write full sentence answers for full credit."
+    }
+  ]
+}
+```
+
+Schema v2 adds source and rubric fields while preserving deterministic loading:
 
 ```json
 {
@@ -126,7 +184,7 @@ The next schema version should add source and rubric fields while preserving the
       "canonical": "codebuild"
     }
   ],
-  "service_families": [
+  "services": [
     {
       "id": "lambda",
       "name": "AWS Lambda",
@@ -286,8 +344,8 @@ Question-local fields are generated from the knowledge base so the app remains s
 
 The normalized option metadata should be required for every generated option that maps to a known AWS service or feature:
 
-- `service_id`: stable lowercase ID from `service_families`.
-- `service_name`: display name from `service_families`.
+- `service_id`: stable lowercase ID from `services`.
+- `service_name`: display name from `services`.
 - `source_url`: canonical service or concept documentation URL.
 - `concept_ids`: concept IDs represented by the option when known.
 - `is_known_service`: optional boolean for distractors that are AWS services but not the correct answer.

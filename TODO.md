@@ -27,13 +27,14 @@ Because the current accuracy metrics are stable, we are implementing these chang
 Implementing dedicated AWS knowledge based on a dedicated feature branch using tinyLLama for local training.
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
-1) Add a common misconceptions section to the knowledge base.
-2) Update release guardrail to use the exact letter match as its release metric once we get the metric above the satisfactory value.
-This will allow us to deprecate the old metrics completely.
+I was attempting to remove the new curated answer feedback feature as it wasn't working as intended. 
+In doing so I accidentally broke the existing references to `common_misconceptions` and `must_not_claim` fields.
+>       misconception_pattern = str(defaults["common_misconception_pattern"])
+For now the rubric metadata field has been removed completely from the code. 
+
+1) Add a `common_misconception` and section and `must_not_claim` section to knowledge base. 
+2) Use detect `common_misconceptions` and `must_not_claim` violations in user feedback.
 3) We also need to include the following flags from the question schema ["key_concepts", "common_misconceptions", "acceptable_answers", and "must_not_claim"] sections along with a source URL field.
-4) In generated questions answer selections should have meta-data listing service name and URL in a normalized format so that every answer listing AWS Lambda will have it listed the same way.
-5) I don't want to make rubric changes while we are working on architecture designs.
-6) we need to find a way of getting usable feedback to the user when they get a score.
 
 # Phase 2 Code & Configuration Review
 IAM policy questions.

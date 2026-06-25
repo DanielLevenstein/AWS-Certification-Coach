@@ -32,7 +32,7 @@ GENERIC_TOKENS = {
     "to",
     "use",
 }
-SERVICE_FAMILY_TOKENS = set(KNOWLEDGE_BASE.service_family_tokens)
+SERVICE_FAMILY_TOKENS = set(KNOWLEDGE_BASE.service_tokens)
 AMBIGUOUS_ALIAS_TOKENS = {
     "allow",
     "amazon",

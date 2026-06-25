@@ -21,7 +21,7 @@ def main() -> None:
         "schema_version": knowledge.schema_version,
         "file_size_bytes": args.knowledge_base.stat().st_size,
         "syntax_alias_count": len(knowledge.syntax_aliases),
-        "service_family_count": len(knowledge.service_families),
+        "service_count": len(knowledge.services),
         "concept_count": len(knowledge.concepts),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

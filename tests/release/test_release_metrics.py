@@ -279,8 +279,8 @@ def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
         encoding="utf-8",
     )
     (metrics_dir / "knowledge_base.json").write_text(
-        '{"schema_version": 1, "file_size_bytes": 12000, "syntax_alias_count": 18, '
-        '"service_family_count": 16, "concept_count": 27}',
+        '{"schema_version": 2, "file_size_bytes": 12000, "syntax_alias_count": 18, '
+        '"service_count": 42, "concept_count": 161}',
         encoding="utf-8",
     )
 
@@ -294,10 +294,10 @@ def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
     assert "| Precision | 90.00% | 80.00% | 70.00% | 60.00% | 100.00% |" in markdown
     assert "| Support | 10 | 9 | 8 | 7 | 6 |" in markdown
     assert "Answer evaluator: `semantic_similarity`" in markdown
-    assert "Knowledge base schema version: `1`" in markdown
+    assert "Knowledge base schema version: `2`" in markdown
     assert "Knowledge base syntax alias count: `18`" in markdown
-    assert "Knowledge base service family count: `16`" in markdown
-    assert "Knowledge base concept count: `27`" in markdown
+    assert "Knowledge base service count: `42`" in markdown
+    assert "Knowledge base concept count: `161`" in markdown
 
 def test_release_metrics_can_mark_exact_letter_strict_grading(tmp_path: Path):
     metrics_dir = tmp_path / "metrics"

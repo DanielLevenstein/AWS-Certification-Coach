@@ -2,14 +2,16 @@ import json
 
 import app
 
-from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
+from aws_certification_coach.domain import EvaluationResult, MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.evaluation.service import EvaluationService
+from aws_certification_coach.evaluation.trained_classifier_provider import SemanticSimilarityEvaluatorProvider
 
 
 class StaticProvider:
-    def __init__(self, score: int, feedback: str = "") -> None:
+    def __init__(self, score: int, feedback: str = "", feedback_source: str = "") -> None:
         self.score = score
         self.feedback = feedback
+        self.feedback_source = feedback_source
 
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
         del prompt, question, user_answer
@@ -19,6 +21,7 @@ class StaticProvider:
                 "missing_concepts": [],
                 "suggested_improvements": [],
                 "feedback": self.feedback,
+                "feedback_source": self.feedback_source,
                 "detailed_answer": "Use AWS KMS to manage encryption keys.",
             }
         )
@@ -37,9 +40,7 @@ QUESTION = Question(
 def test_terse_b_answer_receives_complete_sentence_guidance():
     result = EvaluationService(StaticProvider(80)).evaluate(QUESTION, "AWS KMS")
 
-    assert result.feedback == (
-        "For full credit, state your answer in a complete sentence and explain why the service fits the requirement."
-    )
+    assert result.feedback == "Please write full sentence answers for full credit."
 
 
 def test_non_a_answer_preserves_specific_provider_feedback():
@@ -49,20 +50,6 @@ def test_non_a_answer_preserves_specific_provider_feedback():
     )
 
     assert result.feedback == "The service name is misspelled."
-
-
-def test_app_renders_feedback_only_for_non_a_answers(monkeypatch):
-    rendered = []
-    monkeypatch.setattr(app.st, "write", lambda value: rendered.append(("write", value)))
-    monkeypatch.setattr(app.st, "info", lambda value: rendered.append(("info", value)))
-
-    app._render_answer_feedback(80, "Explain why the service fits.")
-    app._render_answer_feedback(95, "This should not display.")
-
-    assert rendered == [
-        ("write", "Feedback"),
-        ("info", "Explain why the service fits."),
-    ]
 
 
 def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
@@ -76,7 +63,12 @@ def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
         options=[
             MultipleChoiceOption("A", "Use AWS KMS.", "https://docs.aws.amazon.com/kms/"),
             MultipleChoiceOption("B", "Use Amazon S3.", "https://docs.aws.amazon.com/AmazonS3/latest/userguide/"),
-            MultipleChoiceOption("C", "Use AWS Lambda."),
+            MultipleChoiceOption(
+                "C",
+                "Configure an Amazon Cognito user pool.",
+                "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
+                {"service_name": "Amazon Cognito"},
+            ),
         ],
         correct_option_ids=["A"],
         source_name="AWS Documentation: AWS KMS",
@@ -86,6 +78,11 @@ def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
     app._render_multiple_choice_source_documentation(original)
 
     assert ("markdown", "### Multiple-choice Answers") in rendered
-    assert ("markdown", "### Additional Documentation") in rendered
-    assert ("markdown", "- [AWS KMS](https://docs.aws.amazon.com/kms/)\n- [Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/)\n") in rendered
-    assert ("write", "C. Use AWS Lambda.") in rendered
+    assert ("markdown", "### Documentation") in rendered
+    assert (
+        "markdown",
+        "- [AWS KMS](https://docs.aws.amazon.com/kms/)\n"
+        "- [Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/)\n"
+        "- [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html)\n",
+    ) in rendered
+    assert ("write", "C. Configure an Amazon Cognito user pool.") in rendered

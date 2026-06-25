@@ -32,7 +32,7 @@
 - User answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know.`
 - Correct answer: Configure SNS subscription filter policies
 - Raw model score: `90.00`; runtime score: `90`
-- Runtime feedback: This answer covers the expected AWS concepts.
+- Runtime feedback: 
 - Largest feature contributions: `semantic_similarity_score` +0.900
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
@@ -44,7 +44,7 @@
 - User answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know.`
 - Correct answer: Configure SNS subscription filter policies
 - Raw model score: `90.00`; runtime score: `90`
-- Runtime feedback: This answer covers the expected AWS concepts.
+- Runtime feedback: 
 - Largest feature contributions: `semantic_similarity_score` +0.900
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
@@ -56,7 +56,7 @@
 - User answer: `SQS FILO queue`
 - Correct answer: Adjust the SQS visibility timeout
 - Raw model score: `80.00`; runtime score: `80`
-- Runtime feedback: For full credit, state your answer in a complete sentence and explain why the service fits the requirement.
+- Runtime feedback: Please write full sentence answers for full credit.
 - Reviewer feedback: My answer had nothing to do with the cannon answer but might still be partially right.
 - Largest feature contributions: `semantic_similarity_score` +0.800
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
@@ -69,7 +69,7 @@
 - User answer: `AWS KMS`
 - Correct answer: AWS KMS
 - Raw model score: `95.00`; runtime score: `95`
-- Runtime feedback: This answer covers the expected AWS concepts.
+- Runtime feedback: 
 - Largest feature contributions: `semantic_similarity_score` +0.950
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
@@ -93,10 +93,10 @@
 - Expected rating: `0.95`
 - User answer: `AWS Kinesis`
 - Correct answer: Amazon Kinesis Data Streams
-- Raw model score: `80.00`; runtime score: `80`
-- Runtime feedback: For full credit, state your answer in a complete sentence and explain why the service fits the requirement.
+- Raw model score: `84.00`; runtime score: `84`
+- Runtime feedback: Please write full sentence answers for full credit.
 - Reviewer feedback: This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one.
-- Largest feature contributions: `semantic_similarity_score` +0.800
+- Largest feature contributions: `semantic_similarity_score` +0.840
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
 ### 7. Expected C, received D
@@ -107,7 +107,7 @@
 - User answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
 - Correct answer: DynamoDB global tables
 - Raw model score: `62.00`; runtime score: `62`
-- Runtime feedback: For a higher grade, add the missing AWS-specific concepts shown in the detailed answer.
+- Runtime feedback: 
 - Reviewer feedback: We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C
 - Largest feature contributions: `semantic_similarity_score` +0.620
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
@@ -120,7 +120,7 @@
 - User answer: `route 53`
 - Correct answer: Amazon EventBridge
 - Raw model score: `25.00`; runtime score: `25`
-- Runtime feedback: For a higher grade, add the missing AWS-specific concepts shown in the detailed answer.
+- Runtime feedback: 
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
@@ -132,7 +132,7 @@
 - User answer: `AWS Key Store`
 - Correct answer: AWS Secrets Manager
 - Raw model score: `25.00`; runtime score: `25`
-- Runtime feedback: For a higher grade, add the missing AWS-specific concepts shown in the detailed answer.
+- Runtime feedback: 
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
