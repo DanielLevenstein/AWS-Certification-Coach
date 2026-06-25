@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "description": "Reusable self-authored question templates for AWS Certification Coach generation.",
+  "templates": [
+    {
+      "id": "service-selection-freeform",
+      "question_type": "service_selection",
+      "certifications": [
+        "Cloud Practitioner",
+        "Solutions Architect Associate",
+        "AWS Certified Developer"
+      ],
+      "prompt_variants": [
+        "A team is reviewing an AWS design and needs a solution that can {purpose}. Which AWS service or feature should they choose?",
+        "During exam preparation, explain which AWS service or feature is best suited to {purpose}.",
+        "An AWS workload must {purpose}. Identify the most appropriate service or feature and explain why.",
+        "Which AWS capability best meets a requirement to {purpose}? Explain the selection."
+      ],
+      "question_pattern": "Explain which AWS service or feature should be used to {purpose}.",
+      "reference_answer_pattern": "Use {service_name} to {purpose}.",
+      "option_pattern": "Use {service_name}.",
+      "required_slots": [
+        "service_id",
+        "service_name",
+        "purpose",
+        "concepts",
+        "distractors"
+      ],
+      "rubric_merge": {
+        "key_concepts": "scenario_concepts",
+        "common_misconceptions": "distractor_best_fit_claims",
+        "acceptable_answers": "correct_option_reference_answer_and_service",
+        "must_not_claim": "distractor_satisfies_requirement_claims"
+      }
+    }
+  ]
+}

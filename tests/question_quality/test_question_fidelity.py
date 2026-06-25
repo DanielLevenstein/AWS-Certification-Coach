@@ -59,6 +59,22 @@ def test_developer_question_artifact_preserves_source_examples(tmp_path: Path):
     assert row["original_multiple_choice"]["source_url"].startswith("https://docs.aws.amazon.com/")
 
 
+def test_developer_question_options_include_normalized_known_service_metadata():
+    source = next(row for row in SOURCE_ROWS if row["source_id"] == "dva-secrets-manager-rotation")
+    row = build_questions([source])[0]
+    correct_option = next(
+        option
+        for option in row["original_multiple_choice"]["options"]
+        if option["option_id"] in row["original_multiple_choice"]["correct_option_ids"]
+    )
+
+    assert correct_option["metadata"] == {
+        "service_id": "secretsmanager",
+        "service_name": "AWS Secrets Manager",
+        "source_url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html",
+    }
+
+
 def test_artifact_review_generation_preserves_artifact_contract():
     source = next(row for row in SOURCE_ROWS if row["source_id"] == "dva-artifact-sdk-pagination")
     row = build_questions([source])[0]

@@ -9,9 +9,9 @@ from pathlib import Path
 
 from aws_certification_coach.question_fidelity.model import QuestionFidelityModel
 try:
-    from generate_app_question_artifacts import documentation_url_for_option
+    from generate_app_question_artifacts import documentation_url_for_option, service_metadata_for_option
 except ModuleNotFoundError:  # Imported as scripts.generate_developer_question_artifacts in tests.
-    from scripts.generate_app_question_artifacts import documentation_url_for_option
+    from scripts.generate_app_question_artifacts import documentation_url_for_option, service_metadata_for_option
 
 
 QUESTION_TEMPLATES = {
@@ -128,6 +128,9 @@ def _option(option_id: str, text: str, source_url: str = "") -> dict[str, str]:
     payload = {"option_id": option_id, "text": text}
     if source_url:
         payload["source_url"] = source_url
+        metadata = service_metadata_for_option(text, source_url)
+        if metadata:
+            payload["metadata"] = metadata
     return payload
 
 

@@ -1,33 +1,34 @@
 # Release Notes
 
 
-| Release  | Description                                                                                                                        |
-|:---------|:-----------------------------------------------------------------------------------------------------------------------------------|
-| v1.0.0   | Initial Streamlit/Docker release with generated AWS certification practice questions.                                              |
-| v1.3.4   | Swaps app scoring from trained regression to`semantic_similarity`.                                                                 |
-| v2.1.1   | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                   |
-| v2.1.2   | Expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture.                  |
-| v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table. |
-| v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.   |
-| v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                |
-| v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                    |
-| v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                 |
-| v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
-| v2.4.5.2 | Added contact info to app                                                                                                          |
-| v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
-| v2.4.6   | Clean up release notes and documentation                                                                                           |
-| V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions                                                                                |
-| v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                        | 
-| v2.5.2   | Restored the legacy Semantic Precision and Recall definition.                                                                      |
-| v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                   |
-| v2.5.5   | Added back exact match and off by one graph for release metrics.                                                                   |
-| v3.0.0   | Tag v2.6.x has been retagged as v3.0.x since it's a major schema change. |
-| v3.0.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.           |
-| v3.0.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                           |
-| v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
-| v3.0.3.1 | Fixed deployment tests |
+| Release  | Description                                                                                                                                                                         |
+|:---------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v1.0.0   | Initial Streamlit/Docker release with generated AWS certification practice questions.                                                                                               |
+| v1.3.4   | Swaps app scoring from trained regression to`semantic_similarity`.                                                                                                                  |
+| v2.1.1   | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                                                                    |
+| v2.1.2   | Expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture.                                                                   |
+| v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.                                                  |
+| v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.                                                    |
+| v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                                                                 |
+| v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                                                                     |
+| v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                                                                  |
+| v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                                                                               |
+| v2.4.5.2 | Added contact info to app                                                                                                                                                           |
+| v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                                                                              |
+| v2.4.6   | Clean up release notes and documentation                                                                                                                                            |
+| V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions                                                                                                                                 |
+| v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                                                                         | 
+| v2.5.2   | Restored the legacy Semantic Precision and Recall definition.                                                                                                                       |
+| v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                                                                    |
+| v2.5.5   | Added back exact match and off by one graph for release metrics.                                                                                                                    |
+| v3.0.0   | Tag v2.6.x has been retagged as v3.0.x since it's a major schema change.                                                                                                            |
+| v3.0.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.                                                            |
+| v3.0.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                                                                            |
+| v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                                                                         |
+| v3.0.3.1 | Fixed deployment tests                                                                                                                                                              |
 | v3.0.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation, and expands the default question bank to 160 questions. |
-| v3.1.0   | Design documentation for splitting knowledge_base and question_template.json |
+| v3.1.0  |   Design documentation for splitting knowledge_base and question_template.json                                                                                                      |
+| v3.1.1 | Split question and knowledge base schema |
 # Release Metrics
 
 ## Metric Definitions:
@@ -77,7 +78,7 @@
 | v3.0.1  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
 | v3.0.3  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
 | v3.0.4  | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
-
+| v3.1.1  |  90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
@@ -117,25 +118,25 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.0.4  | 90.62% | 100.00% | 90.91% | 87.50% | 100.00% | 94.95% |
+| v3.1.1 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 90.00% | 100.00% | 100.00% |
-| Recall | 100.00% | 75.00% | 100.00% |
-| F1 | 94.74% | 85.71% | 100.00% |
-| Support | 9 | 4 | 19 |
+| Precision | 90.91% | 100.00% | 100.00% |
+| Recall | 100.00% | 83.33% | 100.00% |
+| F1 | 95.24% | 90.91% | 100.00% |
+| Support | 10 | 6 | 21 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
-| Recall | 100.00% | 66.67% | 0.00% | 77.78% | 100.00% |
-| F1 | 94.74% | 66.67% | N/A | 87.50% | 90.91% |
-| Support | 9 | 3 | 1 | 9 | 10 |
+| Precision | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
+| Recall | 100.00% | 75.00% | 50.00% | 80.00% | 100.00% |
+| F1 | 95.24% | 75.00% | 66.67% | 88.89% | 91.67% |
+| Support | 10 | 4 | 2 | 10 | 11 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
@@ -150,7 +151,7 @@ Knowledge base file size: `13348` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service family count: `16`
 Knowledge base concept count: `27`
-Semantic evaluation count: `32`
+Semantic evaluation count: `37`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.

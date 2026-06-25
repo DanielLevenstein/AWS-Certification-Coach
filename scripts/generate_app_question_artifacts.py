@@ -6,18 +6,16 @@ import argparse
 import json
 from pathlib import Path
 
+from aws_certification_coach.knowledge_base import load_knowledge_base
+from aws_certification_coach.question_templates import load_question_templates
+
 try:
     from question_catalog import CERTIFICATION_EXAM_CODES, SERVICE_SPECS, rubric_metadata
 except ModuleNotFoundError:  # Imported as scripts.generate_app_question_artifacts in tests.
     from scripts.question_catalog import CERTIFICATION_EXAM_CODES, SERVICE_SPECS, rubric_metadata
 
 
-APP_VARIANTS = [
-    "A team is reviewing an AWS design and needs a solution that can {purpose}. Which AWS service or feature should they choose?",
-    "During exam preparation, explain which AWS service or feature is best suited to {purpose}.",
-    "An AWS workload must {purpose}. Identify the most appropriate service or feature and explain why.",
-    "Which AWS capability best meets a requirement to {purpose}? Explain the selection.",
-]
+SERVICE_SELECTION_TEMPLATE_ID = "service-selection-freeform"
 
 SOURCE_URLS = {
     "IAM roles": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
@@ -75,41 +73,46 @@ def main() -> None:
 
 
 def _build_app_questions(count: int) -> list[dict]:
-    max_count = len(SERVICE_SPECS) * len(APP_VARIANTS)
+    template = load_question_templates().get(SERVICE_SELECTION_TEMPLATE_ID)
+    prompt_variants = template.prompt_variants
+    max_count = len(SERVICE_SPECS) * len(prompt_variants)
     if count > max_count:
         raise ValueError(f"Cannot generate {count} unique app questions from {max_count} source scenarios.")
 
     questions = []
     for index in range(count):
         spec = SERVICE_SPECS[index % len(SERVICE_SPECS)]
-        variant = APP_VARIANTS[index // len(SERVICE_SPECS)]
+        variant = prompt_variants[index // len(SERVICE_SPECS)]
         service, domain, certification, difficulty, purpose, concepts, distractors = spec
-        correct_option = f"Use {service}."
-        explanation = f"Use {service} to {purpose}."
+        correct_option = template.option_pattern.format(service_name=service)
+        explanation = template.reference_answer_pattern.format(service_name=service, purpose=purpose)
         mcq_question = variant.format(purpose=purpose)
+        source_url = SOURCE_URLS[service]
         questions.append(
             {
                 "certification": certification,
                 "exam_code": CERTIFICATION_EXAM_CODES[certification],
                 "domain": domain,
                 "difficulty": difficulty,
-                "question_type": "service_selection",
-                "question": f"Explain which AWS service or feature should be used to {purpose}.",
+                "question_type": template.question_type,
+                "question": template.question_pattern.format(purpose=purpose),
                 "reference_answer": explanation,
                 "key_concepts": concepts,
+                "source_url": source_url,
+                "question_template_id": template.id,
                 **rubric_metadata(service, concepts, distractors, correct_option, explanation),
                 "original_multiple_choice": {
                     "question": mcq_question,
                     "options": [
                         _option("A", correct_option),
-                        _option("B", f"Use {distractors[0]}."),
-                        _option("C", f"Use {distractors[1]}."),
-                        _option("D", f"Use {distractors[2]}."),
+                        _option("B", template.option_pattern.format(service_name=distractors[0])),
+                        _option("C", template.option_pattern.format(service_name=distractors[1])),
+                        _option("D", template.option_pattern.format(service_name=distractors[2])),
                     ],
                     "correct_option_ids": ["A"],
                     "explanation": explanation,
                     "source_name": f"AWS Documentation: {service}",
-                    "source_url": SOURCE_URLS[service],
+                    "source_url": source_url,
                     "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored.",
                 },
             }
@@ -122,21 +125,72 @@ def _option(option_id: str, text: str) -> dict[str, str]:
     source_url = documentation_url_for_option(text)
     if source_url:
         payload["source_url"] = source_url
+        payload["metadata"] = service_metadata_for_option(text, source_url)
     return payload
 
 
 def documentation_url_for_option(text: str) -> str:
+    service_name = service_name_for_option(text)
+    return SOURCE_URLS.get(service_name, "")
+
+
+def service_name_for_option(text: str) -> str:
     normalized = _normalized_option_text(text)
-    for service, source_url in SOURCE_URLS.items():
+    for service in SOURCE_URLS:
         normalized_service = _normalized_option_text(service)
         if normalized == normalized_service or normalized_service in normalized or normalized in normalized_service:
-            return source_url
+            return service
     return ""
+
+
+def service_metadata_for_option(text: str, source_url: str = "") -> dict[str, str]:
+    service_name = service_name_for_option(text)
+    resolved_url = source_url or SOURCE_URLS.get(service_name, "")
+    if not service_name and resolved_url:
+        service_name = service_name_for_source_url(resolved_url)
+    if not service_name or not resolved_url:
+        return {}
+    knowledge_metadata = _knowledge_service_metadata(service_name, resolved_url)
+    if knowledge_metadata:
+        return knowledge_metadata
+    return {
+        "service_id": _metadata_service_id(service_name),
+        "service_name": service_name,
+        "source_url": resolved_url,
+    }
+
+
+def service_name_for_source_url(source_url: str) -> str:
+    for service, candidate_url in SOURCE_URLS.items():
+        if source_url == candidate_url:
+            return service
+    return ""
+
+
+def _knowledge_service_metadata(service_name: str, source_url: str) -> dict[str, str]:
+    knowledge = load_knowledge_base()
+    normalized = knowledge.canonicalize(service_name)
+    for service in knowledge.service_families:
+        terms = (service.name, *service.aliases, *service.tokens)
+        if normalized in {knowledge.canonicalize(term) for term in terms}:
+            return {
+                "service_id": service.id,
+                "service_name": service.name,
+                "source_url": source_url,
+            }
+    return {}
 
 
 def _normalized_option_text(text: str) -> str:
     value = " ".join(text.casefold().replace(".", "").split())
     return value.removeprefix("use ")
+
+
+def _metadata_service_id(service_name: str) -> str:
+    tokens = _normalized_option_text(service_name).split()
+    if tokens and tokens[0] in {"amazon", "aws"}:
+        tokens = tokens[1:]
+    return "-".join(tokens)
 
 
 def _write_json(path: str, payload: list[dict]) -> None:

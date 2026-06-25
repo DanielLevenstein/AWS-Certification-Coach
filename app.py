@@ -289,10 +289,10 @@ def _render_multiple_choice_source_documentation(original: MultipleChoiceQuestio
     options_with_sources = [option for option in original.options if option.source_url]
     if not options_with_sources:
         if original.source_url:
-            st.markdown("### Documentation")
+            st.markdown("### Additional Documentation")
             st.markdown(f"- [{original.source_name or 'AWS Documentation'}]({original.source_url})")
         return
-    st.markdown("### Documentation")
+    st.markdown("### Additional Documentation")
     seen_urls: set[str] = set()
     documentation_links = ""
     for option in original.options:
