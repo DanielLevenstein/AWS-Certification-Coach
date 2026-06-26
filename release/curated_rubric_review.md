@@ -2,8 +2,8 @@
 
 - Curated examples reviewed: 255
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 14, 'B': 7, 'C': 16, 'D': 210, 'F': 8}`
-- Suggested label updates: 9
+- Current grade distribution: `{'A': 14, 'B': 7, 'C': 8, 'D': 218, 'F': 8}`
+- Suggested label updates: 7
 
 ## Suggested Answer Updates
 
@@ -22,14 +22,6 @@
 - Reference: Amazon EventBridge
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
-
-### Row 13: C -> D
-
-- Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
-- Answer: `Parameter Store`
-- Reference: AWS Secrets Manager
-- Semantic score: `65`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ### Row 25: A -> B
 
@@ -72,15 +64,6 @@
 - Reference: an API Gateway Lambda authorizer
 - Semantic score: `65`
 - Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
-
-### Row 51: C -> D
-
-- Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
-- Answer: `Use AWS Secrets Manager `
-- Reference: AWS KMS
-- Semantic score: `65`
-- Reviewer feedback: When the best wrong answer is in the answer I think we should give the user a grade of either C or D depending on how wrong the answer is.
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ## Release Table Recommendation
 

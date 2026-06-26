@@ -642,7 +642,7 @@
       "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
     },
     "answer_given": "Use AWS Secrets Manager ",
-    "correct_rating": "C",
+    "correct_rating": "D",
     "rating_given": "F",
     "feedback_text": "When the best wrong answer is in the answer I think we should give the user a grade of either C or D depending on how wrong the answer is.",
     "source_url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html",

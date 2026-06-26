@@ -490,12 +490,15 @@ def _near_miss_option_score(question: Question, answer: str) -> int | None:
     if not answer_tokens:
         return None
     for option in incorrect_options:
-        option_tokens = set(_tokens(option)) - GENERIC_TOKENS
+        raw_option_tokens = set(_tokens(option))
+        option_tokens = raw_option_tokens - GENERIC_TOKENS
         if not {"alone", "only"} & option_tokens:
             continue
         normalized_option = _normalized(option)
         if normalized_answer in {normalized_option, _strip_leading_use(option)} or answer_tokens <= option_tokens:
-            return 75 if "alone" in option_tokens or "aws" in option_tokens else 65
+            if "aws" in raw_option_tokens:
+                return 65
+            return 75 if "alone" in option_tokens else 65
     return None
 
 
@@ -503,14 +506,15 @@ def _adjacent_service_score(question: Question, answer: str) -> int | None:
     normalized_answer = _normalized(answer)
     answer_tokens = set(_tokens(answer))
     correct = _normalized(correct_answer_text(question))
-    if "secretsmanager" in correct and {"parameter", "store"} <= answer_tokens:
-        return 75
+    correct_tokens = set(correct.split())
+    if ("secretsmanager" in correct or {"secrets", "manager"} <= correct_tokens) and {"parameter", "store"} <= answer_tokens:
+        return 65
     if "kms" in correct and "secretsmanager" in normalized_answer:
-        return 75
+        return 65
     if "dynamodb global tables" in correct and {"global", "database", "tables"} <= answer_tokens:
         return 75
     if "dynamodb global tables" in correct and {"rds", "read", "replicas"} <= answer_tokens:
-        return 75
+        return 65
     return None
 
 

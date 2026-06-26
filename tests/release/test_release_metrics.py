@@ -481,7 +481,7 @@ def test_semantic_similarity_awards_adjacent_partial_credit_without_family_token
     secrets_question = _structured_question("database passwords")
     s3_question = _structured_question("transitions or expires S3 objects")
 
-    assert score_to_letter(semantic_similarity_score(secrets_question, "AWS KMS Keys")) == "C"
+    assert score_to_letter(semantic_similarity_score(secrets_question, "AWS KMS Keys")) == "D"
     assert semantic_similarity_score(s3_question, "S3 version tracking") < 60
 
 def test_semantic_similarity_caps_question_rephrases_without_answer_detail():

@@ -2,12 +2,12 @@
 
 - Curated examples: 255
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
-- Passing exact-letter predictions: 44
-- Failing exact-letter predictions: 211
-- Exact-letter accuracy: 17.25%
-- Unique failing question/answer/grade cases: 91
+- Passing exact-letter predictions: 45
+- Failing exact-letter predictions: 210
+- Exact-letter accuracy: 17.65%
+- Unique failing question/answer/grade cases: 90
 - Conflicting normalized label sets: 3
-- Actual letter grades among failures: {'B': 2, 'D': 4, 'F': 205}
+- Actual letter grades among failures: {'B': 2, 'D': 3, 'F': 205}
 
 ## Primary Findings
 
@@ -619,11 +619,11 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 47. Expected C, received F
+### 47. Expected D, received F
 
 - Rows: `51`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
-- Expected rating: `0.75`
+- Expected rating: `0.65`
 - User answer: `Use AWS Secrets Manager`
 - Correct answer: AWS KMS
 - Raw model score: `49.00`; runtime score: `49`
@@ -1045,19 +1045,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 80. Expected C, received D
-
-- Rows: `13`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
-- Expected rating: `0.75`
-- User answer: `Parameter Store`
-- Correct answer: AWS Secrets Manager
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: 
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 81. Expected D, received F
+### 80. Expected D, received F
 
 - Rows: `77, 117, 157, 197`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -1070,7 +1058,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 82. Expected D, received F
+### 81. Expected D, received F
 
 - Rows: `58, 98, 138, 178`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
@@ -1083,7 +1071,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 83. Expected D, received F
+### 82. Expected D, received F
 
 - Rows: `75, 115, 155, 195`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.
@@ -1096,7 +1084,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 84. Expected D, received F
+### 83. Expected D, received F
 
 - Rows: `249`; occurrences: `1`
 - Question: Multiple Lambda functions use the same internal utility library, and the team wants to manage that library separately from each function package. Which Lambda feature should the developer use?
@@ -1109,7 +1097,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 85. Expected D, received F
+### 84. Expected D, received F
 
 - Rows: `251`; occurrences: `1`
 - Question: Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?
@@ -1122,7 +1110,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 86. Expected D, received F
+### 85. Expected D, received F
 
 - Rows: `252`; occurrences: `1`
 - Question: Review the Lambda handler. What security problem should the developer fix before deployment, and what AWS service is the best fit?
@@ -1135,7 +1123,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 87. Expected D, received F
+### 86. Expected D, received F
 
 - Rows: `254`; occurrences: `1`
 - Question: Review the SAM template. The function deploys but receives AccessDenied when it calls GetItem. What is missing from the template?
@@ -1148,7 +1136,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 88. Expected D, received F
+### 87. Expected D, received F
 
 - Rows: `253`; occurrences: `1`
 - Question: Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?
@@ -1161,7 +1149,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 89. Expected D, received F
+### 88. Expected D, received F
 
 - Rows: `241`; occurrences: `1`
 - Question: Several Lambda functions need to read shared non-rotating configuration values organized by application and environment path. Which AWS service should the developer use?
@@ -1174,7 +1162,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 90. Expected D, received F
+### 89. Expected D, received F
 
 - Rows: `247`; occurrences: `1`
 - Question: Several services publish domain events, and the platform team wants rules to route matching custom events to different Lambda targets without direct service-to-service calls. Which EventBridge resource should be used?
@@ -1187,7 +1175,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 91. Expected D, received F
+### 90. Expected D, received F
 
 - Rows: `219`; occurrences: `1`
 - Question: Two application instances may try to create the same DynamoDB item at the same time. Which DynamoDB write approach should the developer use to prevent replacing an existing item?
