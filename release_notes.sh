@@ -43,17 +43,10 @@ if [ "$#" -ne 1 ]; then
 fi
 
 RELEASE_TAG="$1"
-TEST_STATUS=0
 
 if [ "$MODE" = "full" ]; then
-  if ! .venv/bin/python test_suites.py unit; then
-    echo "Unit tests failed; continuing so release metrics can still be generated." >&2
-    TEST_STATUS=1
-  fi
-  if ! .venv/bin/python test_suites.py model-smoke; then
-    echo "Model smoke tests failed; continuing so release metrics can still be generated." >&2
-    TEST_STATUS=1
-  fi
+  .venv/bin/python test_suites.py unit
+  .venv/bin/python test_suites.py model-smoke
   METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
   RELEASE_SUITE="release"
 else
@@ -70,55 +63,17 @@ else
   RELEASE_SUITE="release-quick"
 fi
 
-if [ "$TEST_STATUS" -ne 0 ]; then
-  echo "Pre-release tests failed; generating metrics summary without updating release notes." >&2
-  if [ "$STRICT_GRADING" = "1" ]; then
-    .venv/bin/python test_suites.py "$RELEASE_SUITE" \
-      --release-label "$RELEASE_TAG" \
-      --metrics-dir "$METRICS_DIR" \
-      --strict-grading \
-      --summary-only
-  else
-    .venv/bin/python test_suites.py "$RELEASE_SUITE" \
-      --release-label "$RELEASE_TAG" \
-      --metrics-dir "$METRICS_DIR" \
-      --summary-only
-  fi
-  echo "Release metrics directory: $METRICS_DIR" >&2
-  echo "Release metrics were generated, but one or more pre-release test suites failed." >&2
-  exit "$TEST_STATUS"
-fi
-
-RELEASE_STATUS=0
 if [ "$STRICT_GRADING" = "1" ]; then
   .venv/bin/python test_suites.py "$RELEASE_SUITE" \
     --release-label "$RELEASE_TAG" \
     --release-notes RELEASE_NOTES.md \
     --metrics-dir "$METRICS_DIR" \
-    --strict-grading || RELEASE_STATUS=$?
+    --strict-grading
 else
   .venv/bin/python test_suites.py "$RELEASE_SUITE" \
     --release-label "$RELEASE_TAG" \
     --release-notes RELEASE_NOTES.md \
-    --metrics-dir "$METRICS_DIR" || RELEASE_STATUS=$?
-fi
-
-if [ "$RELEASE_STATUS" -ne 0 ]; then
-  echo "Release metrics failed; rerunning summary-only metrics without updating release notes." >&2
-  if [ "$STRICT_GRADING" = "1" ]; then
-    .venv/bin/python test_suites.py release-quick \
-      --release-label "$RELEASE_TAG" \
-      --metrics-dir "$METRICS_DIR" \
-      --strict-grading \
-      --summary-only
-  else
-    .venv/bin/python test_suites.py release-quick \
-      --release-label "$RELEASE_TAG" \
-      --metrics-dir "$METRICS_DIR" \
-      --summary-only
-  fi
-  echo "Release metrics directory: $METRICS_DIR" >&2
-  exit "$RELEASE_STATUS"
+    --metrics-dir "$METRICS_DIR"
 fi
 
 PER_GRADE_SOURCE="$METRICS_DIR/per_grade_metrics.png"
@@ -173,8 +128,3 @@ echo "Saved accuracy metrics chart: $ACCURACY_CHART_OUTPUT"
 echo "Saved question coverage chart: $QUESTION_COVERAGE_CHART_OUTPUT"
 echo "Saved latest release report $REPORT_OUTPUT"
 echo "Saved latest curated rubric review $RUBRIC_REVIEW_OUTPUT"
-
-if [ "$TEST_STATUS" -ne 0 ]; then
-  echo "Release metrics were generated, but one or more pre-release test suites failed." >&2
-  exit "$TEST_STATUS"
-fi

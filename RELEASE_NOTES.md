@@ -146,25 +146,25 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.3.2 | 96.79% | 98.33% | 98.74% | 94.38% | 97.99% | 94.95% |
+| v4.0.1 | 99.20% | 100.00% | 99.17% | 97.99% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 92.31% | 64.71% | 98.17% |
-| Recall | 92.31% | 68.75% | 97.73% |
-| F1 | 92.31% | 66.67% | 97.95% |
-| Support | 13 | 16 | 220 |
+| Precision | 100.00% | 94.74% | 99.08% |
+| Recall | 92.31% | 90.00% | 100.00% |
+| F1 | 96.00% | 92.31% | 99.54% |
+| Support | 13 | 20 | 216 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 92.31% | 83.33% | 54.55% | 98.09% | 70.00% |
-| Recall | 92.31% | 100.00% | 54.55% | 98.09% | 63.64% |
-| F1 | 92.31% | 90.91% | 54.55% | 98.09% | 66.67% |
-| Support | 13 | 5 | 11 | 209 | 11 |
+| Precision | 100.00% | 83.33% | 100.00% | 99.04% | 77.78% |
+| Recall | 92.31% | 100.00% | 86.67% | 99.04% | 100.00% |
+| F1 | 96.00% | 90.91% | 92.86% | 99.04% | 87.50% |
+| Support | 13 | 5 | 15 | 209 | 7 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`

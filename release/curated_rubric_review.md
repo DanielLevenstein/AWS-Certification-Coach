@@ -2,8 +2,8 @@
 
 - Curated examples reviewed: 255
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 14, 'B': 7, 'C': 12, 'D': 210, 'F': 12}`
-- Suggested label updates: 18
+- Current grade distribution: `{'A': 14, 'B': 7, 'C': 16, 'D': 210, 'F': 8}`
+- Suggested label updates: 9
 
 ## Suggested Answer Updates
 
@@ -23,38 +23,12 @@
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
-### Row 6: C -> D
-
-- Question: Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.
-- Answer: `NoSQL`
-- Reference: Amazon DynamoDB
-- Semantic score: `62`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 13: F -> C
+### Row 13: C -> D
 
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
 - Answer: `Parameter Store`
 - Reference: AWS Secrets Manager
-- Semantic score: `75`
-- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
-
-### Row 20: F -> C
-
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Answer: `AWS KMS Keys`
-- Reference: AWS Secrets Manager
-- Semantic score: `75`
-- Reviewer feedback: We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection.
-- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
-
-### Row 21: C -> D
-
-- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
-- Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
-- Reference: DynamoDB global tables
-- Semantic score: `62`
-- Reviewer feedback: We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C
+- Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ### Row 25: A -> B
@@ -83,24 +57,6 @@
 - Reviewer feedback: This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 29: F -> C
-
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Answer: `AWS KMS Keys`
-- Reference: AWS Secrets Manager
-- Semantic score: `75`
-- Reviewer feedback: We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection.
-- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
-
-### Row 30: C -> D
-
-- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
-- Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
-- Reference: DynamoDB global tables
-- Semantic score: `62`
-- Reviewer feedback: We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
 ### Row 31: C -> D
 
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
@@ -117,49 +73,13 @@
 - Semantic score: `65`
 - Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
 
-### Row 33: F -> C
+### Row 51: C -> D
 
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Answer: `AWS KMS Keys`
-- Reference: AWS Secrets Manager
-- Semantic score: `75`
-- Reviewer feedback: We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection.
-- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
-
-### Row 34: C -> D
-
-- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
-- Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
-- Reference: DynamoDB global tables
-- Semantic score: `62`
-- Reviewer feedback: We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 47: D -> F
-
-- Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
-- Answer: `Use S3 bucket policies.`
-- Reference: S3 lifecycle policies
-- Semantic score: `35`
-- Reviewer feedback: Can you help me understand the difference between lifecycle policies and bucket policies?
-- Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
-
-### Row 50: D -> C
-
-- Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
-- Answer: `Use read replica only.`
-- Reference: Amazon RDS Multi-AZ
-- Semantic score: `75`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 52: C -> A
-
-- Question: Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?
-- Answer: `The bucket contains more objects than a single ListObjectsV2 response can return.
-`
-- Reference: an S3 ListObjectsV2 paginator and iterate through every page
-- Semantic score: `90`
-- Reviewer feedback: -- I think you gave away the answer in the question.
+- Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
+- Answer: `Use AWS Secrets Manager `
+- Reference: AWS KMS
+- Semantic score: `65`
+- Reviewer feedback: When the best wrong answer is in the answer I think we should give the user a grade of either C or D depending on how wrong the answer is.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ## Release Table Recommendation
