@@ -1,10 +1,11 @@
-"""Evaluator providers backed by locally trained answer models."""
+"""Local classifier and deterministic semantic evaluator providers."""
 
 from __future__ import annotations
 
 import json
 import re
 from pathlib import Path
+from dataclasses import dataclass
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
@@ -12,10 +13,9 @@ from aws_certification_coach.questions.json_repository import JsonQuestionReposi
 from aws_certification_coach.ratings import letter_to_numeric
 from aws_certification_coach.training.answer_classifier import (
     AnswerClassificationModel,
-    AnswerRegressionModel,
     answer_calibration_key,
 )
-from aws_certification_coach.training.dataset import load_feedback_regression_examples
+from aws_certification_coach.training.dataset import load_feedback_graded_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor
 
 
@@ -26,6 +26,39 @@ MISSPELLED_SERVICE_SCORE = 65
 EXACT_CORRECT_OPTION_SCORE = 95
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 GENERIC_SERVICE_TOKENS = {"amazon", "aws", "service", "the", "use"}
+CURATED_FEEDBACK_SOURCE = "curated_answer_feedback"
+MISCONCEPTION_SCORE_CAP = 65
+MUST_NOT_CLAIM_SCORE_CAP = 49
+CLAIM_FILLER_TOKENS = {
+    "a",
+    "an",
+    "and",
+    "answer",
+    "better",
+    "best",
+    "claim",
+    "fit",
+    "for",
+    "is",
+    "meets",
+    "not",
+    "requirement",
+    "satisfies",
+    "scenario",
+    "should",
+    "than",
+    "the",
+    "this",
+    "to",
+    "use",
+}
+NEGATION_TOKENS = {"avoid", "cannot", "don't", "doesnt", "doesn't", "incorrect", "not", "wrong"}
+
+
+@dataclass(frozen=True)
+class AnswerCalibration:
+    rating: float
+    feedback: str = ""
 
 
 class TrainedClassifierEvaluatorProvider:
@@ -42,30 +75,6 @@ class TrainedClassifierEvaluatorProvider:
         return _evaluation_response(question, user_answer, probability * 100)
 
 
-class TrainedRegressionEvaluatorProvider:
-    """Uses the partial-credit regression model as the application score source."""
-
-    def __init__(
-        self,
-        model_path: str | Path | AnswerRegressionModel,
-        feature_extractor: AnswerFeatureExtractor | None = None,
-    ) -> None:
-        self.model = (
-            model_path
-            if isinstance(model_path, AnswerRegressionModel)
-            else AnswerRegressionModel.load(model_path)
-        )
-        self.feature_extractor = feature_extractor or AnswerFeatureExtractor(answer_form=self.model.answer_form)
-
-    def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
-        del prompt
-        calibration = self.model.calibrations.get(answer_calibration_key(question, user_answer))
-        if calibration is not None:
-            return _evaluation_response(question, user_answer, calibration * 100)
-        features = self.feature_extractor.extract(question, user_answer)
-        return _evaluation_response(question, user_answer, self.model.predict(features) * 100)
-
-
 class SemanticSimilarityEvaluatorProvider:
     """Uses deterministic semantic_similarity scoring as the application score source."""
 
@@ -80,14 +89,20 @@ class SemanticSimilarityEvaluatorProvider:
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
         del prompt
         calibration = self.calibrations.get(answer_calibration_key(question, user_answer))
-        score = calibration * 100 if calibration is not None else semantic_similarity_score(question, user_answer)
-        return _evaluation_response(question, user_answer, score)
+        score = calibration.rating * 100 if calibration is not None else semantic_similarity_score(question, user_answer)
+        curated_feedback = calibration.feedback if calibration is not None else ""
+        return _evaluation_response(question, user_answer, score, curated_feedback=curated_feedback)
 
 
 SemanticAwareEvaluatorProvider = SemanticSimilarityEvaluatorProvider
 
 
-def _evaluation_response(question: Question, user_answer: str, model_score: float) -> str:
+def _evaluation_response(
+    question: Question,
+    user_answer: str,
+    model_score: float,
+    curated_feedback: str = "",
+) -> str:
     if _is_exact_correct_option(question, user_answer):
         model_score = max(model_score, EXACT_CORRECT_OPTION_SCORE)
     prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
@@ -97,7 +112,8 @@ def _evaluation_response(question: Question, user_answer: str, model_score: floa
             "score": min(int(model_score), QUESTION_RESTATEMENT_SCORE_CAP),
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
-            "feedback": "This answer restates the question without identifying and explaining the solution.",
+            "feedback": curated_feedback or "This answer restates the question without identifying and explaining the solution.",
+            "feedback_source": CURATED_FEEDBACK_SOURCE if curated_feedback else "",
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -108,6 +124,19 @@ def _evaluation_response(question: Question, user_answer: str, model_score: floa
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": "The AWS service name appears to be misspelled.",
+            "feedback_source": CURATED_FEEDBACK_SOURCE if curated_feedback else "",
+            "detailed_answer": question.reference_answer,
+        }
+        return json.dumps(payload)
+    claim_issue = _rubric_claim_issue(question, user_answer)
+    if claim_issue:
+        missing = _missing_concepts(question, user_answer)
+        score_cap = MUST_NOT_CLAIM_SCORE_CAP if claim_issue["section"] == "must_not_claim" else MISCONCEPTION_SCORE_CAP
+        payload = {
+            "score": min(int(model_score), score_cap),
+            "missing_concepts": missing,
+            "suggested_improvements": [f"Explain {concept}." for concept in missing],
+            "feedback": str(claim_issue["feedback"]),
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -127,7 +156,6 @@ def _evaluation_response(question: Question, user_answer: str, model_score: floa
         "score": int(model_score),
         "missing_concepts": missing,
         "suggested_improvements": [f"Explain {concept}." for concept in missing],
-        "feedback": _feedback(model_score, prediction),
         "detailed_answer": question.reference_answer,
     }
     return json.dumps(payload)
@@ -137,7 +165,7 @@ def _feedback_calibrations(
     feedback_paths: tuple[str, ...] | list[str],
     questions_path: str | Path | None,
     questions: list[Question] | None,
-) -> dict[str, float]:
+) -> dict[str, AnswerCalibration]:
     paths = [Path(path) for path in feedback_paths]
     existing_paths = [path for path in paths if path.exists()]
     if not existing_paths:
@@ -148,16 +176,28 @@ def _feedback_calibrations(
             return {}
         available_questions = JsonQuestionRepository(questions_path).all()
     calibration_values: dict[str, set[float]] = {}
+    feedback_values: dict[str, set[str]] = {}
     for path in existing_paths:
-        for example in load_feedback_regression_examples(path, available_questions):
+        rows = json.loads(path.read_text(encoding="utf-8"))
+        examples = load_feedback_graded_examples(path, available_questions)
+        for row, example in zip(rows, examples, strict=True):
             key = answer_calibration_key(example.question, example.answer)
             calibration_values.setdefault(key, set()).add(example.rating)
+            feedback_text = str(row.get("feedback_text", "")).strip() if isinstance(row, dict) else ""
+            if feedback_text:
+                feedback_values.setdefault(key, set()).add(feedback_text)
     return {
-        key: next(iter(values))
+        key: AnswerCalibration(
+            rating=next(iter(values)),
+            feedback=_unique_feedback(feedback_values.get(key, set())),
+        )
         for key, values in calibration_values.items()
         if len(values) == 1
     }
 
+
+def _unique_feedback(values: set[str]) -> str:
+    return next(iter(values)) if len(values) == 1 else ""
 
 def _missing_concepts(question: Question, user_answer: str) -> list[str]:
     normalized_answer = user_answer.casefold()
@@ -174,6 +214,71 @@ def _incorrect_service_answer_issue(question: Question, user_answer: str) -> str
     if _is_incorrect_service_selection(question, user_answer):
         return "This exact service answer is not in the question's correct answer list."
     return None
+
+
+def _rubric_claim_issue(question: Question, user_answer: str) -> dict[str, str] | None:
+    for index, claim in enumerate(question.must_not_claim):
+        if _answer_affirms_claim(user_answer, claim):
+            return {
+                "section": "must_not_claim",
+                "feedback": _do_not_claim_feedback(question, index, claim),
+            }
+    for claim in question.common_misconceptions:
+        if _answer_affirms_claim(user_answer, claim):
+            return {
+                "section": "common_misconceptions",
+                "feedback": f"This answer appears to rely on a common misconception: {claim}",
+            }
+    return None
+
+
+def _do_not_claim_feedback(question: Question, index: int, claim: str) -> str:
+    if index < len(question.do_not_claim_explanation):
+        explanation = question.do_not_claim_explanation[index].strip()
+        if explanation:
+            return explanation
+    return f"Do not claim this for this question: {claim}"
+
+
+def _answer_affirms_claim(user_answer: str, claim: str) -> bool:
+    answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold()))
+    claim_tokens = _claim_subject_tokens(claim)
+    if not answer_tokens or not claim_tokens:
+        return False
+    if not claim_tokens <= answer_tokens:
+        return False
+    if _answer_negates_claim(user_answer, claim_tokens):
+        return False
+    return True
+
+
+def _claim_subject_tokens(claim: str) -> set[str]:
+    normalized = claim.casefold()
+    for separator in (
+        " satisfies ",
+        " is the best ",
+        " is best ",
+        " is the better ",
+        " is better ",
+    ):
+        if separator in normalized:
+            normalized = normalized.split(separator, 1)[0]
+            break
+    tokens = set(TOKEN_PATTERN.findall(normalized))
+    subject_tokens = tokens - CLAIM_FILLER_TOKENS
+    return subject_tokens or tokens
+
+
+def _answer_negates_claim(user_answer: str, claim_tokens: set[str]) -> bool:
+    tokens = TOKEN_PATTERN.findall(user_answer.casefold().replace("n't", " not"))
+    if not tokens:
+        return False
+    claim_positions = [index for index, token in enumerate(tokens) if token in claim_tokens]
+    for position in claim_positions:
+        window = tokens[max(0, position - 3): position + 4]
+        if set(window) & NEGATION_TOKENS:
+            return True
+    return False
 
 
 def _is_question_restatement(question: Question, user_answer: str) -> bool:
@@ -262,13 +367,6 @@ def _is_incorrect_service_selection(question: Question, user_answer: str) -> boo
         if option.option_id in correct_ids
     }
     return normalized_answer not in correct_answers
-
-
-def _feedback(model_score: float, prediction: int) -> str:
-    del model_score
-    if prediction == 1:
-        return "This answer covers the expected AWS concepts."
-    return "This answer needs more AWS-specific detail."
 
 
 def _normalized(value: str) -> str:

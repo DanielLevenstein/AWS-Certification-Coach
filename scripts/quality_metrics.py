@@ -19,7 +19,11 @@ def main() -> None:
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     complexity = measure_complexity(args.source)
-    coverage = measure_coverage(args.source, args.tests)
+    coverage = measure_coverage(
+        args.source,
+        args.tests,
+        ignore_paths=(Path("tests/deployment"), Path("tests/model_smoke")),
+    )
     _write(args.output_dir / "complexity.json", complexity)
     _write(args.output_dir / "coverage.json", coverage)
     print(f"coverage={coverage['coverage']:.2%}")

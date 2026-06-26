@@ -12,7 +12,7 @@ The previous TODO was backed up to `docs/TODO_COPY.md` before this roadmap was c
 - Do not commit `data/`, `scripts/data/`, or `metrics/`.
 - Do not push Docker images or create GitHub tags until a human reviews the changes.
 
-# Phase 1 Planning And Rubric Stabilization
+# Phase 1 Planning and Rubric Stabilization
 ## Rubric Stabilization
 Done
 ## Answer Grading Stabilization
@@ -23,6 +23,18 @@ Done
 In Progress: 
 The current model struggles with minor rewordings of answers which probably will some significant redesign. 
 Because the current accuracy metrics are stable, we are implementing these changes on a fresh feature branch to ensure the production app remains stable.
+
+Implementing dedicated AWS knowledge based on a dedicated feature branch using tinyLLama for local training.
+My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
+
+I was attempting to remove the new curated answer feedback feature as it wasn't working as intended. 
+In doing so I accidentally broke the existing references to `common_misconceptions` and `must_not_claim` fields.
+>       misconception_pattern = str(defaults["common_misconception_pattern"])
+For now the rubric metadata field has been removed completely from the code. 
+
+1) Add a `common_misconception` and section and `must_not_claim` section to knowledge base. 
+2) Use detect `common_misconceptions` and `must_not_claim` violations in user feedback.
+3) We also need to include the following flags from the question schema ["key_concepts", "common_misconceptions", "acceptable_answers", and "must_not_claim"] sections along with a source URL field.
 
 # Phase 2 Code & Configuration Review
 IAM policy questions.

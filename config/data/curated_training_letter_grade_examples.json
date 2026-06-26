@@ -1,0 +1,57 @@
+[
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "AWS KMS creates and manages encryption keys that protect data in AWS services.",
+    "correct_rating": "A",
+    "rating_given": "A",
+    "correct_answer_text": "Use AWS KMS.",
+    "feedback_text": "Letter-grade verification answer: complete service and concept coverage should receive A."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "KMS",
+    "correct_rating": "B",
+    "rating_given": "B",
+    "correct_answer_text": "Use AWS KMS.",
+    "feedback_text": "Letter-grade verification answer: names the right service but lacks explanation, so it should receive B."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "Encryption keys protect data in AWS services.",
+    "correct_rating": "C",
+    "rating_given": "C",
+    "correct_answer_text": "Use AWS KMS.",
+    "feedback_text": "Letter-grade verification answer: covers the security domain and key concepts but misses the AWS KMS service name, so it should receive C."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "Which service creates and manages encryption keys used to protect data?",
+    "correct_rating": "D",
+    "rating_given": "D",
+    "correct_answer_text": "Use AWS KMS.",
+    "feedback_text": "Letter-grade verification answer: mostly rephrases the question with minimal relevant signal and no service selection, so it should receive D."
+  },
+  {
+    "schema_version": 2,
+    "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
+    "answer_given": "Use Amazon S3.",
+    "correct_rating": "F",
+    "rating_given": "F",
+    "correct_answer_text": "Use AWS KMS.",
+    "feedback_text": "Letter-grade verification answer: selects the wrong service category for key management, so it should receive F."
+  }
+]

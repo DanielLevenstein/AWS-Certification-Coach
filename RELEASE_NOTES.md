@@ -1,31 +1,43 @@
 # Release Notes
 
 
-| Release  | Description                                                                                                                        |
-|:---------|:-----------------------------------------------------------------------------------------------------------------------------------|
-| v1.0.0   | Initial Streamlit/Docker release with generated AWS certification practice questions.                                              |
-| v1.3.4   | Swaps app scoring from trained regression to`semantic_similarity`.                                                                 |
-| v2.1.1   | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                   |
-| v2.1.2   | Expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture.                  |
-| v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table. |
-| v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.   |
-| v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                |
-| v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                    |
-| v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                 |
-| v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
-| v2.4.5.2 | Added contact info to app                                                                                                          |
-| v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
-| v2.4.6   | Clean up release notes and documentation                                                                                           |
-| V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions                                                                                |
-| v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                        | 
-| v2.5.2   | Defined A-C as the correct answer and D-F as incorrect in metrics.                                                                 |
+| Release  | Description                                                                                                                                                                         |
+|:---------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v1.0.0   | Initial Streamlit/Docker release with generated AWS certification practice questions.                                                                                               |
+| v1.3.4   | Swaps app scoring from trained regression to`semantic_similarity`.                                                                                                                  |
+| v2.1.1   | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                                                                    |
+| v2.1.2   | Expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture.                                                                   |
+| v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.                                                  |
+| v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.                                                    |
+| v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                                                                 |
+| v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                                                                     |
+| v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                                                                  |
+| v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                                                                               |
+| v2.4.5.2 | Added contact info to app                                                                                                                                                           |
+| v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                                                                              |
+| v2.4.6   | Clean up release notes and documentation                                                                                                                                            |
+| V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions                                                                                                                                 |
+| v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                                                                         | 
+| v2.5.2   | Restored the legacy Semantic Precision and Recall definition.                                                                                                                       |
+| v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                                                                    |
+| v2.5.5   | Added back exact match and off by one graph for release metrics.                                                                                                                    |
+| v3.0.0   | Tag v2.6.x has been retagged as v3.0.x since it's a major schema change.                                                                                                            |
+| v3.0.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.                                                            |
+| v3.0.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                                                                            |
+| v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                                                                         |
+| v3.0.3.1 | Fixed deployment tests                                                                                                                                                              |
+| v3.0.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation, and expands the default question bank to 160 questions. |
+| v3.1.0   | Design documentation for splitting knowledge_base and question_template.json                                                                                                        |
+| v3.1.1   | Split question and knowledge base schema                                                                                                                                            |
+| v3.1.2   | Added documentation links for all services and displayed suggested_improvements in UI                                                                                               |
+| v3.1.3   | Show must_not_claim sections in feedback.                                                                                                                                           |
+
 # Release Metrics
 
 ## Metric Definitions:
 
 - “Semantic Accuracy” was a grade-band agreement: A/B, C/D, or F.
-- Versions below v2.5 and below treat A–D as accepted and F as rejected;
-- Versions 2.5+ treat A–C as accepted and D/F as failing.
+- Semantic Precision and Recall retain the legacy definition: A–D are accepted and F is rejected.
 - Exact Letter required the identical A/B/C/D/F class.
 - Within one Letter used the ordered scale A → B → C → D → F.
 
@@ -52,8 +64,27 @@
 | v2.4.4.1 |            90.00% |            100.00% |          90.00% |                73.33% |          98.08% |            94.95% |
 | v2.4.5   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.4.6   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
-| v2.5.2   |            90.62% |            100.00% |         100.00% |                87.50% |          98.08% |            94.95% |
+| v2.5.2   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
+| v3.0.3   |            90.62% |            100.00% |          90.91% |                87.50% |          96.15% |            94.95% |
+| v3.1.1 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
+| v3.1.2 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
 
+## Grade Band Precision
+| Release |      A |    B&C |     D&F |
+|:--------|-------:|-------:|--------:|
+| v2.5.5  | 46.51% | 60.71% | 100.00% |
+| v3.0.1  | 50.00% | 69.70% | 100.00% |
+| v3.0.4  | 90.00% | 100.00% | 100.00% |
+
+## Grade Precision
+| Release |      A |      B |      C |       D |      F |
+|:--------|-------:|-------:|-------:|--------:|-------:|
+| v2.5.5  | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
+| v3.0.1  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
+| v3.0.3  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
+| v3.0.4  | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
+| v3.1.1  | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
+| v3.1.2  | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -79,6 +110,12 @@ For v2.3.6, `Within 1 Letter` comes from `scripts/evaluate_answer_model.py` and 
 
 For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` questions for IAM policy review, Lambda code review, SDK pagination review, and SAM template permission review. The app now preserves artifact metadata and renders self-authored code/configuration snippets in the learner question flow.
 
+For v2.6.1, answer evaluation loads a validated 13,214-byte local knowledge document containing 18 syntax aliases, 16 service families, and natural-language descriptions for all 27 concepts in the structured answer-training seed. Semantic grade-band accuracy, precision, recall, and exact-letter accuracy remain unchanged from the previous release baseline. The retrained regressor reports 96.15% test within-one-letter accuracy and 67.31% test exact-letter accuracy; exact-answer calibration removal remains deferred to a later knowledge-base iteration.
+
+For v2.6.2, routine model smoke checks are read-only and complete without training, while full held-out model training and candidate-artifact generation have separate documented commands. Tests are grouped into review-oriented directories with no loose root-level test modules. Unit tests exclude model-smoke and deployment directories, the existing Docker/HTTP guardrail runs through its own deployment suite, and full release-note generation performs only one release-training pass. The ambiguous `run_model_tests.sh` wrapper was removed, and Playwright remains a documented later iteration. Model and release metrics are unchanged from v2.knowledgeBase1.1.
+
+For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed full metrics directory, or the directory selected through `RELEASE_METRICS_DIR`. It performs no model training, evaluation, coverage, unit, or smoke run. The verified quick refresh completed in 1.57 seconds and preserved the v2.knowledgeBase1.2 metrics.
+
 ## Current Coverage
 
 ![Release Metrics Chart](release/question_coverage_metrics_chart.png)
@@ -86,40 +123,45 @@ For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` qu
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
-| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+| Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v2.5.3 | 90.62% | 100.00% | 100.00% | 87.50% | 98.08% | 94.95% |
+| v3.1.3 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
+
+## Grade Band Metrics
+
+| Metric | A | BC | DF |
+|:-------|--:|---:|---:|
+| Precision | 90.91% | 100.00% | 100.00% |
+| Recall | 100.00% | 83.33% | 100.00% |
+| F1 | 95.24% | 90.91% | 100.00% |
+| Support | 10 | 6 | 21 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
-| Recall | 83.33% | 21.88% | 62.50% | 31.25% | 100.00% |
-| F1 | 59.70% | 30.43% | 45.45% | 47.62% | 92.31% |
-| Support | 24 | 32 | 8 | 16 | 24 |
+| Precision | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
+| Recall | 100.00% | 75.00% | 50.00% | 80.00% | 100.00% |
+| F1 | 95.24% | 75.00% | 66.67% | 88.89% | 91.67% |
+| Support | 10 | 4 | 2 | 10 | 11 |
 
-Saved model answer form: `long`
-Saved model calibration count: `25`
+Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `38`
-App question count: `118`
+App question count: `198`
 Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
-Top covered concepts: `rules, least privilege, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, Secrets Manager, AWS Organizations, SCPs`
-Semantic evaluation count: `32`
-Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).
+Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
+Knowledge base schema version: `2`
+Knowledge base file size: `78941` bytes
+Knowledge base syntax alias count: `18`
+Knowledge base service count: `42`
+Knowledge base concept count: `161`
+Semantic evaluation count: `37`
+Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
-Semantic Precision and Recall treat `A`–`C` as accepted and `D`/`F` as failing.
+Legacy Semantic Precision and Recall retain the original `A`–`D` accepted and `F` rejected definition.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
-
-## Answer Model Split Evaluation
-
-| Split | Examples | Within 1 Letter | Exact Letter | MAE | MSE |
-|---|---:|---:|---:|---:|---:|
-| Train | 312 | 98.4% | 63.8% | 0.0569 | 0.0052 |
-| Validation | 104 | 100.0% | 73.1% | 0.0470 | 0.0034 |
-| Test | 104 | 98.1% | 58.7% | 0.0572 | 0.0053 |
 <!-- release-metrics:end -->

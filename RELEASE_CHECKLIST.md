@@ -2,13 +2,16 @@
 
 For each merge ensure the following.
 
+- Use `v3.1.x` for new releases from the schema redesign branch forward; leave historical v1/v2 release numbers unchanged.
 - Leave the todo.md file as is copy this file to todo.txt, which is outside source control.
 - Ensure no files in data directory are committed
 - run a clean script which deletes all files in the data directory.
-- Regenerate training data.
-- Ensure test cases are using verification data, not training data.
+- Regenerate app questions and curated semantic-evaluation data.
 - Copy config/curated_training_data.json to data/curated folder.
 - Get all unit tests passing, adding comments for updated tests.
+- Run `./run_model_smoke_tests.sh` for the read-only model contract gate.
+- Run `./release_notes.sh --full <tag>` for semantic, knowledge-base, and question-quality metrics.
+- Run `DOCKER_IMAGE=<candidate> ./run_deployment_tests.sh` for candidate images.
 - Files ending in _COPY which do not have local copies should be used as templates to create missing files
 - Files ending in COPY should not be committed to source control.
 - For agent skill changes, follow `docs/AGENT_SKILL_RELEASE_INSTRUCTIONS.md`.

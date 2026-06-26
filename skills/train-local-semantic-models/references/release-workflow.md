@@ -8,7 +8,7 @@ Run commands through the project virtual environment or existing shell wrappers:
 ./clean.sh
 ./setup.sh
 ./run_unit_tests.sh
-./run_model_tests.sh
+./run_model_smoke_tests.sh
 ./release_notes.sh --full <release-tag>
 ```
 

@@ -13,19 +13,17 @@ from aws_certification_coach.evaluation.service import EvaluationService
 from aws_certification_coach.evaluation.trained_classifier_provider import SemanticSimilarityEvaluatorProvider
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_numeric, score_to_letter
-from aws_certification_coach.training.dataset import load_feedback_regression_examples
+from aws_certification_coach.training.dataset import load_feedback_graded_examples
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 
 
 def build_failure_report(
-    model_path: Path,
     curated_path: Path,
     questions_path: Path,
 ) -> str:
     rows = json.loads(curated_path.read_text(encoding="utf-8"))
     questions = JsonQuestionRepository(questions_path).all()
-    examples = load_feedback_regression_examples(curated_path, questions)
-    del model_path
+    examples = load_feedback_graded_examples(curated_path, questions)
     extractor = AnswerFeatureExtractor()
     service = EvaluationService(SemanticSimilarityEvaluatorProvider())
     conflicts = _conflicting_labels(rows)
@@ -89,19 +87,6 @@ def _normalized(value: object) -> str:
     return " ".join(re.findall(r"[a-z0-9]+", str(value).casefold()))
 
 
-def _top_contributions(
-    model: AnswerRegressionModel,
-    features: list[float],
-    limit: int = 4,
-) -> list[tuple[str, float]]:
-    contributions = [
-        (name, weight * value)
-        for name, weight, value in zip(model.feature_names, model.weights, features)
-        if value
-    ]
-    return sorted(contributions, key=lambda item: abs(item[1]), reverse=True)[:limit]
-
-
 def _suspected_reason(
     expected: str,
     actual: str,
@@ -163,11 +148,11 @@ def _format_markdown(
     )
     primary_findings = [
         "1. The curated answer labels now align with the `semantic_similarity` exact-letter scorer for the reviewed benchmark.",
-        "2. Generated-label regression accuracy remains a training diagnostic; production answer grading is represented by semantic curated-answer metrics.",
+        "2. Production answer grading and release metrics use the same semantic curated-answer benchmark.",
         "3. Full-credit prose is scored through service and concept coverage rather than only exact option text.",
         f"4. {conflict_finding}",
     ] if not failures else [
-        "1. Generated-label training error is low; remaining app-scoring failures are now `semantic_similarity` calibration cases rather than epoch-count issues.",
+        "1. Remaining app-scoring failures are `semantic_similarity` calibration cases.",
         "2. The `semantic_similarity` model recognizes service aliases and concept coverage, but it still uses deterministic rules that miss some AWS synonym and near-service cases.",
         "3. Full-credit prose is scored through service and concept coverage rather than only exact option text.",
         f"4. {conflict_finding}",
@@ -225,8 +210,7 @@ def _format_markdown(
             "1. Reconcile conflicting curated labels before changing model code.",
             "2. Expand normalized AWS service aliases and near-service synonym handling.",
             "3. Tune concept-coverage thresholds against curated examples.",
-            "4. Keep generated-label regression metrics out of release tracking unless the trained model returns to the app path.",
-            "5. Revisit runtime exact-option and wrong-service guards so partial-credit expectations are represented consistently.",
+            "4. Revisit runtime exact-option and wrong-service guards so partial-credit expectations are represented consistently.",
             "",
         ]
     )
@@ -235,13 +219,12 @@ def _format_markdown(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", type=Path, default=Path("release/metrics/answer_regressor_model.json"))
     parser.add_argument("--curated", type=Path, default=Path("data/curated/curated_training_data.json"))
     parser.add_argument("--questions", type=Path, default=Path("data/questions/sample_questions.json"))
     parser.add_argument("--output", type=Path, default=Path("release/metrics/curated_failure_report.md"))
     args = parser.parse_args()
 
-    report = build_failure_report(args.model, args.curated, args.questions)
+    report = build_failure_report(args.curated, args.questions)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report + "\n", encoding="utf-8")
     print(f"Curated failure report: {args.output}")

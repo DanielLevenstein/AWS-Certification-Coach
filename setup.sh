@@ -8,8 +8,7 @@ fi
 PYTHON_BIN=".venv/bin/python"
 "$PYTHON_BIN" -m pip install -r requirements.txt
 "$PYTHON_BIN" scripts/download_developer_original_questions.py
-"$PYTHON_BIN" scripts/generate_sample_training_artifacts.py
-"$PYTHON_BIN" scripts/generate_app_question_artifacts.py --count 80
+"$PYTHON_BIN" scripts/generate_app_question_artifacts.py
 "$PYTHON_BIN" scripts/generate_developer_question_artifacts.py --app-output data/questions/sample_questions.json
 mkdir -p data/generated data/curated
 cp -p config/data/structured_answer_training_data.json data/curated/structured_answer_training_data.json

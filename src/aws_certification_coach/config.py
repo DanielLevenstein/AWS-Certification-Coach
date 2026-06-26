@@ -25,7 +25,6 @@ class OpenAIModelConfig:
 class EvaluatorConfig:
     provider: str = "heuristic"
     openai: OpenAIModelConfig = field(default_factory=OpenAIModelConfig)
-    trained_regressor_model_path: str = "models/answer_regressor_model.json"
     semantic_feedback_paths: tuple[str, ...] = (
         "data/curated/curated_training_data.json",
     )
@@ -39,14 +38,6 @@ def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:
     return EvaluatorConfig(
         provider=provider,
         openai=_openai_config(raw.get("openai", {})),
-        trained_regressor_model_path=str(
-            os.getenv(
-                "AWS_COACH_REGRESSOR_MODEL_PATH",
-                raw.get("trained_regressor", {}).get("model_path", "models/answer_regressor_model.json")
-                if isinstance(raw.get("trained_regressor", {}), dict)
-                else "models/answer_regressor_model.json",
-            )
-        ),
         semantic_feedback_paths=_semantic_feedback_paths(raw),
         semantic_questions_path=str(
             os.getenv(

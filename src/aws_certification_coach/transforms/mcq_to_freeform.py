@@ -32,6 +32,7 @@ Rules:
 - Remove answer-choice cues from the learner-facing freeform question.
 - Produce an answer paragraph that explains the correct concept, not just the selected option.
 - Include key concepts that should be present in a strong answer.
+- For each must_not_claim item, include a matching do_not_claim_explanation item explaining why the correct service or pattern is better than that distractor.
 - Keep the original multiple-choice item unchanged in original_multiple_choice.
 - Return JSON only using the schema shown below.
 
@@ -49,6 +50,7 @@ Output schema:
   "common_misconceptions": [string],
   "acceptable_answers": [string],
   "must_not_claim": [string],
+  "do_not_claim_explanation": [string],
   "original_multiple_choice": object
 }}
 
@@ -141,6 +143,10 @@ class HeuristicTransformationProvider:
             "common_misconceptions": [f"{option} is the best answer." for option in incorrect_options],
             "acceptable_answers": [*correct_options, reference_answer],
             "must_not_claim": [f"{option} is the best answer." for option in incorrect_options],
+            "do_not_claim_explanation": [
+                f"The reference answer is stronger because it satisfies the scenario, while {option} is a distractor."
+                for option in incorrect_options
+            ],
             "original_multiple_choice": original,
         }
         return json.dumps(transformed)

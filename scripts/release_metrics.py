@@ -34,34 +34,33 @@ def render_release_metrics(
     release_label: str = "Current",
     strict_grading: bool = False,
 ) -> str:
-    training_metrics = _optional_read(metrics_dir / "training_metrics.json")
     semantic = _read(metrics_dir / "semantic_similarity.json")
-    answer_model_evaluation = _optional_read(metrics_dir / "answer_model_evaluation.json")
-    answer_model_markdown = _optional_read_text(metrics_dir / "answer_model_evaluation.md")
     question_fidelity = _optional_read(metrics_dir / "question_fidelity.json")
     question_coverage = _optional_read(metrics_dir / "question_coverage.json")
-    saved_model = training_metrics.get("saved_model", {}) if training_metrics else {}
-    answer_form = saved_model.get("answer_form", training_metrics.get("answer_form", "unknown") if training_metrics else "unknown")
-    calibration_count = saved_model.get("calibration_count", 0)
+    knowledge_base = _optional_read(metrics_dir / "knowledge_base.json")
     exact_letter_accuracy = float(semantic.get("semantic_exact_letter_accuracy", semantic["semantic_grade_accuracy"]))
-    per_grade_table = _per_grade_metrics_table(answer_model_evaluation)
+    grade_band_table = _grade_band_metrics_table(semantic)
+    per_grade_table = _per_grade_metrics_table(semantic)
     return "\n".join(
         [
             "## Generated Release Metrics",
             "",
-            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
+            "| Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
             "|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|",
             f"| {release_label} | {semantic['semantic_grade_accuracy']:.2%} | "
             f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | "
-            f"{exact_letter_accuracy:.2%} | {_answer_within_one_letter_cell(answer_model_evaluation)} | "
+            f"{exact_letter_accuracy:.2%} | {_answer_within_one_letter_cell(semantic)} | "
             f"{_question_fidelity_cell(question_fidelity)} |",
+            "",
+            "## Grade Band Metrics",
+            "",
+            grade_band_table,
             "",
             "## Per Grade Metrics",
             "",
             per_grade_table,
             "",
-            f"Saved model answer form: `{answer_form}`",
-            f"Saved model calibration count: `{calibration_count}`",
+            "Answer evaluator: `semantic_similarity` with the local knowledge base",
             f"Question fidelity model: `{question_fidelity.get('model_name', 'not-run')}`",
             f"Developer source question count: `{question_fidelity.get('source_count', 0)}`",
             f"App question count: `{question_coverage.get('question_count', 0)}`",
@@ -69,16 +68,18 @@ def render_release_metrics(
             f"Question coverage concept count: `{question_coverage.get('concept_count', 0)}`",
             f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
             f"Top covered concepts: `{_coverage_names(question_coverage, 'top_concepts', limit=12)}`",
+            f"Knowledge base schema version: `{knowledge_base.get('schema_version', 'not-run')}`",
+            f"Knowledge base file size: `{knowledge_base.get('file_size_bytes', 0)}` bytes",
+            f"Knowledge base syntax alias count: `{knowledge_base.get('syntax_alias_count', 0)}`",
+            f"Knowledge base service count: `{knowledge_base.get('service_count', 0)}`",
+            f"Knowledge base concept count: `{knowledge_base.get('concept_count', 0)}`",
             f"Semantic evaluation count: `{semantic.get('semantic_example_count', 0)}`",
-            "Semantic Accuracy uses grade-band agreement (`A/B`, `C/D`, or `F`).",
+            "Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.",
             "Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.",
             "Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.",
-            "Semantic Precision and Recall treat `A`–`C` as accepted and `D`/`F` as failing.",
+            "Legacy Semantic Precision and Recall retain the original `A`–`D` accepted and `F` rejected definition.",
             "Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.",
             "",
-            "## Answer Model Split Evaluation",
-            "",
-            answer_model_markdown or "Not run.",
         ]
     ) + "\n"
 
@@ -96,32 +97,20 @@ def _optional_read(path: Path) -> dict[str, object]:
     return _read(path)
 
 
-def _optional_read_text(path: Path) -> str:
-    if not path.exists():
-        return ""
-    return path.read_text(encoding="utf-8").strip()
-
-
 def _question_fidelity_cell(question_fidelity: dict[str, object]) -> str:
     if "question_fidelity" not in question_fidelity:
         return "N/A"
     return f"{float(question_fidelity['question_fidelity']):.2f}%"
 
 
-def _answer_within_one_letter_cell(answer_model_evaluation: dict[str, object]) -> str:
-    splits = answer_model_evaluation.get("splits", {})
-    if not isinstance(splits, dict):
+def _answer_within_one_letter_cell(semantic: dict[str, object]) -> str:
+    if "semantic_within_one_letter_accuracy" not in semantic:
         return "N/A"
-    test_split = splits.get("test", {})
-    if not isinstance(test_split, dict) or "within_one_letter_accuracy" not in test_split:
-        return "N/A"
-    return f"{float(test_split['within_one_letter_accuracy']):.2%}"
+    return f"{float(semantic['semantic_within_one_letter_accuracy']):.2%}"
 
 
-def _per_grade_metrics_table(answer_model_evaluation: dict[str, object]) -> str:
-    splits = answer_model_evaluation.get("splits", {})
-    test_split = splits.get("test", {}) if isinstance(splits, dict) else {}
-    per_grade = test_split.get("per_grade", {}) if isinstance(test_split, dict) else {}
+def _per_grade_metrics_table(semantic: dict[str, object]) -> str:
+    per_grade = semantic.get("per_grade", {})
     if not isinstance(per_grade, dict):
         per_grade = {}
     lines = [
@@ -132,6 +121,23 @@ def _per_grade_metrics_table(answer_model_evaluation: dict[str, object]) -> str:
         cells = [_percentage_cell(per_grade.get(grade), key) for grade in GRADES]
         lines.append(f"| {label} | {' | '.join(cells)} |")
     support_cells = [_integer_cell(per_grade.get(grade), "support") for grade in GRADES]
+    lines.append(f"| Support | {' | '.join(support_cells)} |")
+    return "\n".join(lines)
+
+
+def _grade_band_metrics_table(semantic: dict[str, object]) -> str:
+    per_band = semantic.get("per_grade_band", {})
+    if not isinstance(per_band, dict):
+        per_band = {}
+    bands = ("A", "BC", "DF")
+    lines = [
+        "| Metric | A | BC | DF |",
+        "|:-------|--:|---:|---:|",
+    ]
+    for label, key in (("Precision", "precision"), ("Recall", "recall"), ("F1", "f1")):
+        cells = [_percentage_cell(per_band.get(band), key) for band in bands]
+        lines.append(f"| {label} | {' | '.join(cells)} |")
+    support_cells = [_integer_cell(per_band.get(band), "support") for band in bands]
     lines.append(f"| Support | {' | '.join(support_cells)} |")
     return "\n".join(lines)
 

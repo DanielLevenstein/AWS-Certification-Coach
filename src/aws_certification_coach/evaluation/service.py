@@ -5,7 +5,10 @@ from __future__ import annotations
 import json
 from typing import Protocol
 
+from dataclasses import replace
+
 from aws_certification_coach.domain import EvaluationResult, Question
+from aws_certification_coach.ratings import score_to_letter
 from aws_certification_coach.evaluation.prompting import EvaluationPromptBuilder, EvaluationResponseParser
 
 
@@ -32,7 +35,21 @@ class EvaluationService:
     def evaluate(self, question: Question, user_answer: str) -> EvaluationResult:
         prompt = self.prompt_builder.build(question, user_answer)
         response_text = self.provider.evaluate(prompt, question, user_answer)
-        return self.response_parser.parse(response_text)
+        result = self.response_parser.parse(response_text)
+        return _ensure_actionable_feedback(result, user_answer)
+
+
+def _ensure_actionable_feedback(result: EvaluationResult, user_answer: str) -> EvaluationResult:
+    """Guarantee one useful improvement sentence for every non-A answer."""
+    feedback=""
+    if score_to_letter(result.score) == "A":
+        return result
+    if result.score >= 80 and len(user_answer.split()) <= 4:
+        feedback = "Please write full sentence answers for full credit."
+    elif result.feedback.strip():
+        # Add business logic for other types of feedback.
+        feedback = result.feedback.strip()
+    return replace(result, feedback=feedback)
 
 
 class HeuristicEvaluatorProvider:
@@ -52,19 +69,9 @@ class HeuristicEvaluatorProvider:
             "score": score,
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
-            "feedback": _feedback(score),
             "detailed_answer": _detailed_answer(question, missing),
         }
         return json.dumps(payload)
-
-
-def _feedback(score: int) -> str:
-    if score >= 80:
-        return "This answer is close. Review the detailed answer below for exam-ready wording."
-    if score >= 50:
-        return "This answer has part of the idea, but it needs more complete AWS-specific detail."
-    return "This answer misses several expected concepts. Use the detailed answer below as the target."
-
 
 def _detailed_answer(question: Question, missing_concepts: list[str]) -> str:
     concept_sentence = ""

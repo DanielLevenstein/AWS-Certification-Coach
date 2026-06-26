@@ -1,0 +1,2514 @@
+{
+  "schema_version": 2,
+  "description": "Canonical AWS service, feature, concept, alias, source, and scenario facts shared by question generation and answer heuristics.",
+  "syntax_aliases": [
+    {
+      "alias": "api gateway",
+      "canonical": "apigateway"
+    },
+    {
+      "alias": "cloud formation",
+      "canonical": "cloudformation"
+    },
+    {
+      "alias": "cloud front",
+      "canonical": "cloudfront"
+    },
+    {
+      "alias": "cloud trail",
+      "canonical": "cloudtrail"
+    },
+    {
+      "alias": "cloud watch",
+      "canonical": "cloudwatch"
+    },
+    {
+      "alias": "code build",
+      "canonical": "codebuild"
+    },
+    {
+      "alias": "code deploy",
+      "canonical": "codedeploy"
+    },
+    {
+      "alias": "code pipeline",
+      "canonical": "codepipeline"
+    },
+    {
+      "alias": "dynamo db",
+      "canonical": "dynamodb"
+    },
+    {
+      "alias": "event bridge",
+      "canonical": "eventbridge"
+    },
+    {
+      "alias": "route 53",
+      "canonical": "route53"
+    },
+    {
+      "alias": "secret manager",
+      "canonical": "secretsmanager"
+    },
+    {
+      "alias": "secrets manager",
+      "canonical": "secretsmanager"
+    },
+    {
+      "alias": "step function",
+      "canonical": "stepfunctions"
+    },
+    {
+      "alias": "step functions",
+      "canonical": "stepfunctions"
+    },
+    {
+      "alias": "systems manager",
+      "canonical": "systemsmanager"
+    },
+    {
+      "alias": "time to live",
+      "canonical": "ttl"
+    },
+    {
+      "alias": "x ray",
+      "canonical": "xray"
+    }
+  ],
+  "services": [
+    {
+      "id": "amazon-athena",
+      "name": "Amazon Athena",
+      "tokens": [
+        "athena"
+      ],
+      "aliases": [
+        "athena",
+        "amazon athena"
+      ],
+      "source_url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html",
+      "description": "Amazon Athena is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-cloudfront",
+      "name": "Amazon CloudFront",
+      "tokens": [
+        "cloudfront"
+      ],
+      "aliases": [
+        "cloudfront",
+        "amazon cloudfront"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "description": "Amazon CloudFront is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-cloudwatch",
+      "name": "Amazon CloudWatch",
+      "tokens": [
+        "cloudwatch"
+      ],
+      "aliases": [
+        "cloudwatch",
+        "amazon cloudwatch"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html",
+      "description": "Amazon CloudWatch is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-cognito",
+      "name": "Amazon Cognito",
+      "tokens": [
+        "cognito"
+      ],
+      "aliases": [
+        "cognito",
+        "amazon cognito"
+      ],
+      "source_url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
+      "description": "Amazon Cognito is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-ebs-snapshots",
+      "name": "Amazon EBS snapshots",
+      "tokens": [
+        "ebssnapshots"
+      ],
+      "aliases": [
+        "ebs snapshots",
+        "amazon ebs snapshots"
+      ],
+      "source_url": "https://docs.aws.amazon.com/ebs/latest/userguide/EBSSnapshots.html",
+      "description": "Amazon EBS snapshots is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-efs",
+      "name": "Amazon EFS",
+      "tokens": [
+        "efs"
+      ],
+      "aliases": [
+        "efs",
+        "amazon efs"
+      ],
+      "source_url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html",
+      "description": "Amazon EFS is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-eventbridge",
+      "name": "Amazon EventBridge",
+      "tokens": [
+        "eventbridge"
+      ],
+      "aliases": [
+        "eventbridge",
+        "amazon eventbridge"
+      ],
+      "source_url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
+      "description": "Amazon EventBridge is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-kinesis-data-streams",
+      "name": "Amazon Kinesis Data Streams",
+      "tokens": [
+        "kinesisdatastreams"
+      ],
+      "aliases": [
+        "kinesis data streams",
+        "amazon kinesis data streams"
+      ],
+      "source_url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html",
+      "description": "Amazon Kinesis Data Streams is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-rds-multi-az",
+      "name": "Amazon RDS Multi-AZ",
+      "tokens": [
+        "rdsmultiaz"
+      ],
+      "aliases": [
+        "rds multi-az",
+        "amazon rds multi-az"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "description": "Amazon RDS Multi-AZ is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-rds-read-replicas",
+      "name": "Amazon RDS read replicas",
+      "tokens": [
+        "rdsreadreplicas"
+      ],
+      "aliases": [
+        "rds read replicas",
+        "amazon rds read replicas"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
+      "description": "Amazon RDS read replicas is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-redshift",
+      "name": "Amazon Redshift",
+      "tokens": [
+        "redshift"
+      ],
+      "aliases": [
+        "redshift",
+        "amazon redshift"
+      ],
+      "source_url": "https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html",
+      "description": "Amazon Redshift is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-route-53",
+      "name": "Amazon Route 53",
+      "tokens": [
+        "route53"
+      ],
+      "aliases": [
+        "route 53",
+        "amazon route 53"
+      ],
+      "source_url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
+      "description": "Amazon Route 53 is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-s3-versioning",
+      "name": "Amazon S3 versioning",
+      "tokens": [
+        "s3versioning"
+      ],
+      "aliases": [
+        "s3 versioning",
+        "amazon s3 versioning"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html",
+      "description": "Amazon S3 versioning is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "amazon-sns",
+      "name": "Amazon SNS",
+      "tokens": [
+        "sns"
+      ],
+      "aliases": [
+        "sns",
+        "amazon sns"
+      ],
+      "source_url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
+      "description": "Amazon SNS is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "apigateway",
+      "name": "Amazon API Gateway",
+      "tokens": [
+        "apigateway"
+      ],
+      "aliases": [
+        "api gateway"
+      ],
+      "source_url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html",
+      "description": "A managed service for creating and operating APIs that route requests to backend integrations."
+    },
+    {
+      "id": "auto-scaling-groups",
+      "name": "Auto Scaling groups",
+      "tokens": [
+        "autoscalinggroups"
+      ],
+      "aliases": [
+        "auto scaling groups"
+      ],
+      "source_url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html",
+      "description": "Auto Scaling groups is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "aws-backup",
+      "name": "AWS Backup",
+      "tokens": [
+        "backup"
+      ],
+      "aliases": [
+        "backup",
+        "aws backup"
+      ],
+      "source_url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html",
+      "description": "AWS Backup is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "aws-glue",
+      "name": "AWS Glue",
+      "tokens": [
+        "glue"
+      ],
+      "aliases": [
+        "glue",
+        "aws glue"
+      ],
+      "source_url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html",
+      "description": "AWS Glue is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "aws-organizations",
+      "name": "AWS Organizations",
+      "tokens": [
+        "organizations"
+      ],
+      "aliases": [
+        "organizations",
+        "aws organizations"
+      ],
+      "source_url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html",
+      "description": "AWS Organizations is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "aws-step-functions",
+      "name": "AWS Step Functions",
+      "tokens": [
+        "stepfunctions"
+      ],
+      "aliases": [
+        "step functions",
+        "aws step functions"
+      ],
+      "source_url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html",
+      "description": "AWS Step Functions is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "aws-trusted-advisor",
+      "name": "AWS Trusted Advisor",
+      "tokens": [
+        "trustedadvisor"
+      ],
+      "aliases": [
+        "trusted advisor",
+        "aws trusted advisor"
+      ],
+      "source_url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html",
+      "description": "AWS Trusted Advisor is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "aws-waf",
+      "name": "AWS WAF",
+      "tokens": [
+        "waf"
+      ],
+      "aliases": [
+        "waf",
+        "aws waf"
+      ],
+      "source_url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html",
+      "description": "AWS WAF is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "aws-well-architected-tool",
+      "name": "AWS Well-Architected Tool",
+      "tokens": [
+        "wellarchitectedtool"
+      ],
+      "aliases": [
+        "well-architected tool",
+        "aws well-architected tool"
+      ],
+      "source_url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html",
+      "description": "AWS Well-Architected Tool is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "budgets",
+      "name": "AWS Budgets",
+      "tokens": [
+        "budgets"
+      ],
+      "aliases": [
+        "aws budgets",
+        "aws cost center",
+        "cost center"
+      ],
+      "source_url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
+      "description": "A budgeting service that tracks cost or usage against configured thresholds and sends notifications."
+    },
+    {
+      "id": "cloudtrail",
+      "name": "AWS CloudTrail",
+      "tokens": [
+        "cloudtrail"
+      ],
+      "aliases": [
+        "cloud trail"
+      ],
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+      "description": "A service that records AWS account activity and API events for governance and auditing."
+    },
+    {
+      "id": "codebuild",
+      "name": "AWS CodeBuild",
+      "tokens": [
+        "codebuild"
+      ],
+      "aliases": [
+        "code build",
+        "aws codebuild",
+        "aws code build"
+      ],
+      "source_url": "https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html",
+      "description": "A managed build service that runs commands defined for a build project."
+    },
+    {
+      "id": "config",
+      "name": "AWS Config",
+      "tokens": [
+        "config"
+      ],
+      "aliases": [
+        "aws config"
+      ],
+      "source_url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html",
+      "description": "A service that records supported resource configuration state and evaluates configurations against rules."
+    },
+    {
+      "id": "dynamodb",
+      "name": "Amazon DynamoDB",
+      "tokens": [
+        "dynamodb"
+      ],
+      "aliases": [
+        "dynamo db"
+      ],
+      "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html",
+      "description": "A managed NoSQL database family for key-value and document workloads."
+    },
+    {
+      "id": "dynamodb-global-tables",
+      "name": "DynamoDB global tables",
+      "tokens": [
+        "dynamodbglobaltables"
+      ],
+      "aliases": [
+        "dynamodb global tables"
+      ],
+      "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html",
+      "description": "DynamoDB global tables is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "elastic-load-balancing",
+      "name": "Elastic Load Balancing",
+      "tokens": [
+        "elasticloadbalancing"
+      ],
+      "aliases": [
+        "elastic load balancing"
+      ],
+      "source_url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html",
+      "description": "Elastic Load Balancing is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "iam-roles",
+      "name": "IAM roles",
+      "tokens": [
+        "iamroles"
+      ],
+      "aliases": [
+        "iam roles"
+      ],
+      "source_url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
+      "description": "IAM roles is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "kms",
+      "name": "AWS KMS",
+      "tokens": [
+        "kms"
+      ],
+      "aliases": [
+        "aws kms",
+        "key management service"
+      ],
+      "source_url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html",
+      "description": "A managed service for creating and controlling encryption keys."
+    },
+    {
+      "id": "lambda",
+      "name": "AWS Lambda",
+      "tokens": [
+        "lambda"
+      ],
+      "aliases": [
+        "aws lambda"
+      ],
+      "source_url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "description": "The AWS serverless compute family for running functions in response to requests or events."
+    },
+    {
+      "id": "multiple-availability-zones",
+      "name": "multiple Availability Zones",
+      "tokens": [
+        "multipleavailabilityzones"
+      ],
+      "aliases": [
+        "multiple availability zones"
+      ],
+      "source_url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html",
+      "description": "multiple Availability Zones is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "network-acls",
+      "name": "network ACLs",
+      "tokens": [
+        "networkacls"
+      ],
+      "aliases": [
+        "network acls"
+      ],
+      "source_url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+      "description": "network ACLs is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "s3",
+      "name": "Amazon S3",
+      "tokens": [
+        "s3"
+      ],
+      "aliases": [
+        "amazon s3",
+        "simple storage service"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html",
+      "description": "The AWS object storage family for buckets, objects, and their lifecycle controls."
+    },
+    {
+      "id": "s3-glacier-storage-classes",
+      "name": "S3 Glacier storage classes",
+      "tokens": [
+        "s3glacierstorageclasses"
+      ],
+      "aliases": [
+        "s3 glacier storage classes"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
+      "description": "S3 Glacier storage classes is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "s3-lifecycle-policies",
+      "name": "S3 lifecycle policies",
+      "tokens": [
+        "s3lifecyclepolicies"
+      ],
+      "aliases": [
+        "s3 lifecycle policies"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html",
+      "description": "S3 lifecycle policies is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "secretsmanager",
+      "name": "AWS Secrets Manager",
+      "tokens": [
+        "secretsmanager"
+      ],
+      "aliases": [
+        "secret manager",
+        "secrets manager",
+        "aws secrets manager"
+      ],
+      "source_url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html",
+      "description": "A managed service for storing, retrieving, and rotating application secrets."
+    },
+    {
+      "id": "service-control-policies",
+      "name": "Service Control Policies",
+      "tokens": [
+        "servicecontrolpolicies"
+      ],
+      "aliases": [
+        "service control policies"
+      ],
+      "source_url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+      "description": "Service Control Policies is an AWS service or feature used by generated certification-coach scenarios."
+    },
+    {
+      "id": "sqs",
+      "name": "Amazon SQS",
+      "tokens": [
+        "sqs"
+      ],
+      "aliases": [
+        "amazon sqs",
+        "simple queue service"
+      ],
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "description": "A managed message queue service for decoupling producers and consumers."
+    },
+    {
+      "id": "vpc-security-groups",
+      "name": "VPC security groups",
+      "tokens": [
+        "vpcsecuritygroups"
+      ],
+      "aliases": [
+        "vpc security groups"
+      ],
+      "source_url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
+      "description": "VPC security groups is an AWS service or feature used by generated certification-coach scenarios."
+    }
+  ],
+  "concepts": [
+    {
+      "id": "accounts",
+      "name": "accounts",
+      "aliases": [],
+      "service_ids": [
+        "service-control-policies"
+      ],
+      "description": "accounts is a reusable concept for scenarios about Service Control Policies."
+    },
+    {
+      "id": "alarms",
+      "name": "alarms",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cloudwatch"
+      ],
+      "description": "alarms is a reusable concept for scenarios about Amazon CloudWatch."
+    },
+    {
+      "id": "alerts",
+      "name": "alerts",
+      "aliases": [
+        "alert",
+        "budget notifications"
+      ],
+      "service_ids": [
+        "budgets"
+      ],
+      "description": "Budget alerts notify recipients when configured AWS Budgets conditions are reached."
+    },
+    {
+      "id": "allow-and-deny-rules",
+      "name": "allow and deny rules",
+      "aliases": [],
+      "service_ids": [
+        "network-acls"
+      ],
+      "description": "allow and deny rules is a reusable concept for scenarios about network ACLs."
+    },
+    {
+      "id": "amazon-rds",
+      "name": "Amazon RDS",
+      "aliases": [],
+      "service_ids": [
+        "amazon-rds-multi-az"
+      ],
+      "description": "Amazon RDS is a reusable concept for scenarios about Amazon RDS Multi-AZ."
+    },
+    {
+      "id": "amazon-s3",
+      "name": "Amazon S3",
+      "aliases": [],
+      "service_ids": [
+        "amazon-s3-versioning"
+      ],
+      "description": "Amazon S3 is a reusable concept for scenarios about Amazon S3 versioning."
+    },
+    {
+      "id": "analytics",
+      "name": "analytics",
+      "aliases": [],
+      "service_ids": [
+        "amazon-redshift"
+      ],
+      "description": "analytics is a reusable concept for scenarios about Amazon Redshift."
+    },
+    {
+      "id": "api-activity",
+      "name": "API activity",
+      "aliases": [
+        "api events",
+        "aws api calls"
+      ],
+      "service_ids": [
+        "cloudtrail"
+      ],
+      "description": "API activity consists of management or data events produced by calls to AWS APIs and recorded by CloudTrail."
+    },
+    {
+      "id": "api-gateway",
+      "name": "API Gateway",
+      "aliases": [
+        "amazon api gateway",
+        "apigateway"
+      ],
+      "service_ids": [
+        "apigateway"
+      ],
+      "description": "Amazon API Gateway is a managed API front door that routes requests to configured backend integrations."
+    },
+    {
+      "id": "apis",
+      "name": "APIs",
+      "aliases": [],
+      "service_ids": [
+        "apigateway"
+      ],
+      "description": "APIs is a reusable concept for scenarios about Amazon API Gateway."
+    },
+    {
+      "id": "archive",
+      "name": "archive",
+      "aliases": [],
+      "service_ids": [
+        "s3-glacier-storage-classes"
+      ],
+      "description": "archive is a reusable concept for scenarios about S3 Glacier storage classes."
+    },
+    {
+      "id": "asynchronous-processing",
+      "name": "asynchronous processing",
+      "aliases": [],
+      "service_ids": [
+        "sqs"
+      ],
+      "description": "asynchronous processing is a reusable concept for scenarios about Amazon SQS."
+    },
+    {
+      "id": "athena",
+      "name": "Athena",
+      "aliases": [],
+      "service_ids": [
+        "amazon-athena"
+      ],
+      "description": "Athena is a reusable concept for scenarios about Amazon Athena."
+    },
+    {
+      "id": "auditing",
+      "name": "auditing",
+      "aliases": [
+        "audit",
+        "activity audit"
+      ],
+      "service_ids": [
+        "cloudtrail"
+      ],
+      "description": "Auditing uses CloudTrail event history to understand which actions occurred and which identities performed them."
+    },
+    {
+      "id": "auto-scaling",
+      "name": "Auto Scaling",
+      "aliases": [],
+      "service_ids": [
+        "auto-scaling-groups"
+      ],
+      "description": "Auto Scaling is a reusable concept for scenarios about Auto Scaling groups."
+    },
+    {
+      "id": "automatic-failover",
+      "name": "automatic failover",
+      "aliases": [],
+      "service_ids": [
+        "amazon-rds-multi-az"
+      ],
+      "description": "automatic failover is a reusable concept for scenarios about Amazon RDS Multi-AZ."
+    },
+    {
+      "id": "automatic-scaling",
+      "name": "automatic scaling",
+      "aliases": [],
+      "service_ids": [
+        "lambda"
+      ],
+      "description": "automatic scaling is a reusable concept for scenarios about AWS Lambda."
+    },
+    {
+      "id": "automation",
+      "name": "automation",
+      "aliases": [],
+      "service_ids": [
+        "aws-backup"
+      ],
+      "description": "automation is a reusable concept for scenarios about AWS Backup."
+    },
+    {
+      "id": "availability-zones",
+      "name": "Availability Zones",
+      "aliases": [],
+      "service_ids": [
+        "multiple-availability-zones"
+      ],
+      "description": "Availability Zones is a reusable concept for scenarios about multiple Availability Zones."
+    },
+    {
+      "id": "aws-backup",
+      "name": "AWS Backup",
+      "aliases": [],
+      "service_ids": [
+        "aws-backup"
+      ],
+      "description": "AWS Backup is a reusable concept for scenarios about AWS Backup."
+    },
+    {
+      "id": "aws-budgets",
+      "name": "AWS Budgets",
+      "aliases": [
+        "budgets",
+        "aws budget"
+      ],
+      "service_ids": [
+        "budgets"
+      ],
+      "description": "AWS Budgets tracks cost or usage against configured limits and can notify stakeholders."
+    },
+    {
+      "id": "aws-cloudtrail",
+      "name": "AWS CloudTrail",
+      "aliases": [
+        "cloudtrail",
+        "cloud trail"
+      ],
+      "service_ids": [
+        "cloudtrail"
+      ],
+      "description": "AWS CloudTrail records AWS account activity and API events."
+    },
+    {
+      "id": "aws-config",
+      "name": "AWS Config",
+      "aliases": [
+        "config service"
+      ],
+      "service_ids": [
+        "config"
+      ],
+      "description": "AWS Config records supported resource configuration state and evaluates resources against compliance rules."
+    },
+    {
+      "id": "aws-glue",
+      "name": "AWS Glue",
+      "aliases": [],
+      "service_ids": [
+        "aws-glue"
+      ],
+      "description": "AWS Glue is a reusable concept for scenarios about AWS Glue."
+    },
+    {
+      "id": "aws-kms",
+      "name": "AWS KMS",
+      "aliases": [
+        "kms",
+        "key management service"
+      ],
+      "service_ids": [
+        "kms"
+      ],
+      "description": "AWS KMS is the managed service for creating and controlling encryption keys."
+    },
+    {
+      "id": "aws-lambda",
+      "name": "AWS Lambda",
+      "aliases": [],
+      "service_ids": [
+        "lambda"
+      ],
+      "description": "AWS Lambda is a reusable concept for scenarios about AWS Lambda."
+    },
+    {
+      "id": "aws-organizations",
+      "name": "AWS Organizations",
+      "aliases": [],
+      "service_ids": [
+        "aws-organizations"
+      ],
+      "description": "AWS Organizations is a reusable concept for scenarios about AWS Organizations."
+    },
+    {
+      "id": "aws-waf",
+      "name": "AWS WAF",
+      "aliases": [],
+      "service_ids": [
+        "aws-waf"
+      ],
+      "description": "AWS WAF is a reusable concept for scenarios about AWS WAF."
+    },
+    {
+      "id": "backend-integration",
+      "name": "backend integration",
+      "aliases": [
+        "api backend",
+        "lambda integration"
+      ],
+      "service_ids": [
+        "apigateway",
+        "lambda"
+      ],
+      "description": "A backend integration connects an API Gateway route to a target such as an AWS Lambda function."
+    },
+    {
+      "id": "backup-policies",
+      "name": "backup policies",
+      "aliases": [],
+      "service_ids": [
+        "aws-backup"
+      ],
+      "description": "backup policies is a reusable concept for scenarios about AWS Backup."
+    },
+    {
+      "id": "best-practices",
+      "name": "best practices",
+      "aliases": [],
+      "service_ids": [
+        "aws-well-architected-tool"
+      ],
+      "description": "best practices is a reusable concept for scenarios about AWS Well-Architected Tool."
+    },
+    {
+      "id": "block-storage",
+      "name": "block storage",
+      "aliases": [],
+      "service_ids": [
+        "amazon-ebs-snapshots"
+      ],
+      "description": "block storage is a reusable concept for scenarios about Amazon EBS snapshots."
+    },
+    {
+      "id": "build-phases",
+      "name": "build phases",
+      "aliases": [
+        "build phase",
+        "buildspec phases"
+      ],
+      "service_ids": [
+        "codebuild"
+      ],
+      "description": "Build phases organize ordered install, pre-build, build, and post-build work within a CodeBuild buildspec."
+    },
+    {
+      "id": "caching",
+      "name": "caching",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cloudfront"
+      ],
+      "description": "caching is a reusable concept for scenarios about Amazon CloudFront."
+    },
+    {
+      "id": "capacity",
+      "name": "capacity",
+      "aliases": [],
+      "service_ids": [
+        "auto-scaling-groups"
+      ],
+      "description": "capacity is a reusable concept for scenarios about Auto Scaling groups."
+    },
+    {
+      "id": "central-management",
+      "name": "central management",
+      "aliases": [],
+      "service_ids": [
+        "aws-organizations"
+      ],
+      "description": "central management is a reusable concept for scenarios about AWS Organizations."
+    },
+    {
+      "id": "centralized-backups",
+      "name": "centralized backups",
+      "aliases": [],
+      "service_ids": [
+        "aws-backup"
+      ],
+      "description": "centralized backups is a reusable concept for scenarios about AWS Backup."
+    },
+    {
+      "id": "cloudfront",
+      "name": "CloudFront",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cloudfront"
+      ],
+      "description": "CloudFront is a reusable concept for scenarios about Amazon CloudFront."
+    },
+    {
+      "id": "cloudtrail",
+      "name": "CloudTrail",
+      "aliases": [],
+      "service_ids": [
+        "cloudtrail"
+      ],
+      "description": "CloudTrail is a reusable concept for scenarios about AWS CloudTrail."
+    },
+    {
+      "id": "cloudwatch",
+      "name": "CloudWatch",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cloudwatch"
+      ],
+      "description": "CloudWatch is a reusable concept for scenarios about Amazon CloudWatch."
+    },
+    {
+      "id": "codebuild-buildspec",
+      "name": "CodeBuild buildspec",
+      "aliases": [
+        "buildspec",
+        "buildspec file"
+      ],
+      "service_ids": [
+        "codebuild"
+      ],
+      "description": "A buildspec defines the install, pre-build, build, and post-build commands that CodeBuild runs."
+    },
+    {
+      "id": "cognito",
+      "name": "Cognito",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cognito"
+      ],
+      "description": "Cognito is a reusable concept for scenarios about Amazon Cognito."
+    },
+    {
+      "id": "common-exploits",
+      "name": "common exploits",
+      "aliases": [],
+      "service_ids": [
+        "aws-waf"
+      ],
+      "description": "common exploits is a reusable concept for scenarios about AWS WAF."
+    },
+    {
+      "id": "compliance-rules",
+      "name": "compliance rules",
+      "aliases": [
+        "config rules",
+        "compliance rule"
+      ],
+      "service_ids": [
+        "config"
+      ],
+      "description": "AWS Config rules evaluate resource configurations against managed or custom compliance expectations."
+    },
+    {
+      "id": "configuration-history",
+      "name": "configuration history",
+      "aliases": [
+        "resource configuration history",
+        "configuration changes"
+      ],
+      "service_ids": [
+        "config"
+      ],
+      "description": "Configuration history is the time-ordered record of supported resource configuration changes captured by AWS Config."
+    },
+    {
+      "id": "coordination",
+      "name": "coordination",
+      "aliases": [],
+      "service_ids": [
+        "aws-step-functions"
+      ],
+      "description": "coordination is a reusable concept for scenarios about AWS Step Functions."
+    },
+    {
+      "id": "cost-optimization",
+      "name": "cost optimization",
+      "aliases": [],
+      "service_ids": [
+        "s3-lifecycle-policies"
+      ],
+      "description": "cost optimization is a reusable concept for scenarios about S3 lifecycle policies."
+    },
+    {
+      "id": "cost-thresholds",
+      "name": "cost thresholds",
+      "aliases": [
+        "cost threshold",
+        "budget thresholds"
+      ],
+      "service_ids": [
+        "budgets"
+      ],
+      "description": "Cost thresholds are actual or forecasted budget limits that can trigger AWS Budgets notifications."
+    },
+    {
+      "id": "credentials",
+      "name": "credentials",
+      "aliases": [],
+      "service_ids": [
+        "secretsmanager"
+      ],
+      "description": "credentials is a reusable concept for scenarios about AWS Secrets Manager."
+    },
+    {
+      "id": "custom-authorization",
+      "name": "custom authorization",
+      "aliases": [
+        "custom token validation",
+        "authorization logic"
+      ],
+      "service_ids": [
+        "apigateway",
+        "lambda"
+      ],
+      "description": "Custom authorization uses application-specific logic, often in a Lambda authorizer, to allow or deny API Gateway requests."
+    },
+    {
+      "id": "data-catalog",
+      "name": "data catalog",
+      "aliases": [],
+      "service_ids": [
+        "aws-glue"
+      ],
+      "description": "data catalog is a reusable concept for scenarios about AWS Glue."
+    },
+    {
+      "id": "data-protection",
+      "name": "data protection",
+      "aliases": [],
+      "service_ids": [
+        "kms"
+      ],
+      "description": "data protection is a reusable concept for scenarios about AWS KMS."
+    },
+    {
+      "id": "data-warehouse",
+      "name": "data warehouse",
+      "aliases": [],
+      "service_ids": [
+        "amazon-redshift"
+      ],
+      "description": "data warehouse is a reusable concept for scenarios about Amazon Redshift."
+    },
+    {
+      "id": "database-credentials",
+      "name": "database credentials",
+      "aliases": [
+        "database password",
+        "database passwords",
+        "db credentials"
+      ],
+      "service_ids": [
+        "secretsmanager"
+      ],
+      "description": "Database credentials are usernames and passwords managed as secrets instead of being embedded in application code."
+    },
+    {
+      "id": "decoupling",
+      "name": "decoupling",
+      "aliases": [],
+      "service_ids": [
+        "sqs"
+      ],
+      "description": "decoupling is a reusable concept for scenarios about Amazon SQS."
+    },
+    {
+      "id": "dns",
+      "name": "DNS",
+      "aliases": [],
+      "service_ids": [
+        "amazon-route-53"
+      ],
+      "description": "DNS is a reusable concept for scenarios about Amazon Route 53."
+    },
+    {
+      "id": "dynamodb",
+      "name": "DynamoDB",
+      "aliases": [],
+      "service_ids": [
+        "dynamodb"
+      ],
+      "description": "DynamoDB is a reusable concept for scenarios about Amazon DynamoDB."
+    },
+    {
+      "id": "dynamodb-global-tables",
+      "name": "DynamoDB global tables",
+      "aliases": [],
+      "service_ids": [
+        "dynamodb-global-tables"
+      ],
+      "description": "DynamoDB global tables is a reusable concept for scenarios about DynamoDB global tables."
+    },
+    {
+      "id": "ebs-snapshots",
+      "name": "EBS snapshots",
+      "aliases": [],
+      "service_ids": [
+        "amazon-ebs-snapshots"
+      ],
+      "description": "EBS snapshots is a reusable concept for scenarios about Amazon EBS snapshots."
+    },
+    {
+      "id": "ec2",
+      "name": "EC2",
+      "aliases": [],
+      "service_ids": [
+        "auto-scaling-groups"
+      ],
+      "description": "EC2 is a reusable concept for scenarios about Auto Scaling groups."
+    },
+    {
+      "id": "edge-locations",
+      "name": "edge locations",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cloudfront"
+      ],
+      "description": "edge locations is a reusable concept for scenarios about Amazon CloudFront."
+    },
+    {
+      "id": "efs",
+      "name": "EFS",
+      "aliases": [],
+      "service_ids": [
+        "amazon-efs"
+      ],
+      "description": "EFS is a reusable concept for scenarios about Amazon EFS."
+    },
+    {
+      "id": "elastic",
+      "name": "elastic",
+      "aliases": [],
+      "service_ids": [
+        "amazon-efs"
+      ],
+      "description": "elastic is a reusable concept for scenarios about Amazon EFS."
+    },
+    {
+      "id": "elastic-load-balancing",
+      "name": "Elastic Load Balancing",
+      "aliases": [],
+      "service_ids": [
+        "elastic-load-balancing"
+      ],
+      "description": "Elastic Load Balancing is a reusable concept for scenarios about Elastic Load Balancing."
+    },
+    {
+      "id": "encryption-keys",
+      "name": "encryption keys",
+      "aliases": [
+        "encryption key",
+        "kms keys"
+      ],
+      "service_ids": [
+        "kms"
+      ],
+      "description": "Encryption keys are cryptographic keys whose use and access can be controlled through AWS KMS."
+    },
+    {
+      "id": "etl",
+      "name": "ETL",
+      "aliases": [],
+      "service_ids": [
+        "aws-glue"
+      ],
+      "description": "ETL is a reusable concept for scenarios about AWS Glue."
+    },
+    {
+      "id": "event-bus",
+      "name": "event bus",
+      "aliases": [],
+      "service_ids": [
+        "amazon-eventbridge"
+      ],
+      "description": "event bus is a reusable concept for scenarios about Amazon EventBridge."
+    },
+    {
+      "id": "event-driven",
+      "name": "event-driven",
+      "aliases": [],
+      "service_ids": [
+        "lambda"
+      ],
+      "description": "event-driven is a reusable concept for scenarios about AWS Lambda."
+    },
+    {
+      "id": "event-routing",
+      "name": "event routing",
+      "aliases": [],
+      "service_ids": [
+        "amazon-eventbridge"
+      ],
+      "description": "event routing is a reusable concept for scenarios about Amazon EventBridge."
+    },
+    {
+      "id": "eventbridge",
+      "name": "EventBridge",
+      "aliases": [],
+      "service_ids": [
+        "amazon-eventbridge"
+      ],
+      "description": "EventBridge is a reusable concept for scenarios about Amazon EventBridge."
+    },
+    {
+      "id": "fanout",
+      "name": "fanout",
+      "aliases": [],
+      "service_ids": [
+        "amazon-sns"
+      ],
+      "description": "fanout is a reusable concept for scenarios about Amazon SNS."
+    },
+    {
+      "id": "fault-tolerance",
+      "name": "fault tolerance",
+      "aliases": [],
+      "service_ids": [
+        "multiple-availability-zones"
+      ],
+      "description": "fault tolerance is a reusable concept for scenarios about multiple Availability Zones."
+    },
+    {
+      "id": "fully-managed",
+      "name": "fully managed",
+      "aliases": [],
+      "service_ids": [
+        "dynamodb"
+      ],
+      "description": "fully managed is a reusable concept for scenarios about Amazon DynamoDB."
+    },
+    {
+      "id": "governance",
+      "name": "governance",
+      "aliases": [],
+      "service_ids": [
+        "cloudtrail"
+      ],
+      "description": "governance is a reusable concept for scenarios about AWS CloudTrail."
+    },
+    {
+      "id": "health-checks",
+      "name": "health checks",
+      "aliases": [],
+      "service_ids": [
+        "auto-scaling-groups"
+      ],
+      "description": "health checks is a reusable concept for scenarios about Auto Scaling groups."
+    },
+    {
+      "id": "healthy-targets",
+      "name": "healthy targets",
+      "aliases": [],
+      "service_ids": [
+        "elastic-load-balancing"
+      ],
+      "description": "healthy targets is a reusable concept for scenarios about Elastic Load Balancing."
+    },
+    {
+      "id": "hide-message-from-other-consumers",
+      "name": "hide message from other consumers",
+      "aliases": [
+        "hide messages from consumers",
+        "temporarily hide a received message"
+      ],
+      "service_ids": [
+        "sqs"
+      ],
+      "description": "After an SQS consumer receives a message, the visibility timeout temporarily hides that message from other consumers so the current consumer can finish processing it."
+    },
+    {
+      "id": "high-availability",
+      "name": "high availability",
+      "aliases": [],
+      "service_ids": [
+        "multiple-availability-zones"
+      ],
+      "description": "high availability is a reusable concept for scenarios about multiple Availability Zones."
+    },
+    {
+      "id": "iam",
+      "name": "IAM",
+      "aliases": [],
+      "service_ids": [
+        "iam-roles"
+      ],
+      "description": "IAM is a reusable concept for scenarios about IAM roles."
+    },
+    {
+      "id": "identity-management",
+      "name": "identity management",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cognito"
+      ],
+      "description": "identity management is a reusable concept for scenarios about Amazon Cognito."
+    },
+    {
+      "id": "improvements",
+      "name": "improvements",
+      "aliases": [],
+      "service_ids": [
+        "aws-well-architected-tool"
+      ],
+      "description": "improvements is a reusable concept for scenarios about AWS Well-Architected Tool."
+    },
+    {
+      "id": "inbound-rules",
+      "name": "inbound rules",
+      "aliases": [],
+      "service_ids": [
+        "vpc-security-groups"
+      ],
+      "description": "inbound rules is a reusable concept for scenarios about VPC security groups."
+    },
+    {
+      "id": "key-management",
+      "name": "key management",
+      "aliases": [
+        "manage encryption keys",
+        "encryption key management"
+      ],
+      "service_ids": [
+        "kms"
+      ],
+      "description": "Key management covers the lifecycle, permissions, and controlled use of encryption keys in AWS KMS."
+    },
+    {
+      "id": "kinesis-data-streams",
+      "name": "Kinesis Data Streams",
+      "aliases": [],
+      "service_ids": [
+        "amazon-kinesis-data-streams"
+      ],
+      "description": "Kinesis Data Streams is a reusable concept for scenarios about Amazon Kinesis Data Streams."
+    },
+    {
+      "id": "lambda-authorizer",
+      "name": "Lambda authorizer",
+      "aliases": [
+        "api gateway lambda authorizer",
+        "custom authorizer"
+      ],
+      "service_ids": [
+        "apigateway",
+        "lambda"
+      ],
+      "description": "A Lambda authorizer runs custom authorization logic for an API Gateway request before the backend is invoked."
+    },
+    {
+      "id": "latency-reduction",
+      "name": "latency reduction",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cloudfront"
+      ],
+      "description": "latency reduction is a reusable concept for scenarios about Amazon CloudFront."
+    },
+    {
+      "id": "least-privilege",
+      "name": "least privilege",
+      "aliases": [],
+      "service_ids": [
+        "iam-roles"
+      ],
+      "description": "least privilege is a reusable concept for scenarios about IAM roles."
+    },
+    {
+      "id": "load-balancing",
+      "name": "load balancing",
+      "aliases": [],
+      "service_ids": [
+        "multiple-availability-zones"
+      ],
+      "description": "load balancing is a reusable concept for scenarios about multiple Availability Zones."
+    },
+    {
+      "id": "logs",
+      "name": "logs",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cloudwatch"
+      ],
+      "description": "logs is a reusable concept for scenarios about Amazon CloudWatch."
+    },
+    {
+      "id": "low-cost",
+      "name": "low cost",
+      "aliases": [],
+      "service_ids": [
+        "s3-glacier-storage-classes"
+      ],
+      "description": "low cost is a reusable concept for scenarios about S3 Glacier storage classes."
+    },
+    {
+      "id": "low-latency",
+      "name": "low latency",
+      "aliases": [],
+      "service_ids": [
+        "dynamodb"
+      ],
+      "description": "low latency is a reusable concept for scenarios about Amazon DynamoDB."
+    },
+    {
+      "id": "message-queue",
+      "name": "message queue",
+      "aliases": [],
+      "service_ids": [
+        "sqs"
+      ],
+      "description": "message queue is a reusable concept for scenarios about Amazon SQS."
+    },
+    {
+      "id": "metrics",
+      "name": "metrics",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cloudwatch"
+      ],
+      "description": "metrics is a reusable concept for scenarios about Amazon CloudWatch."
+    },
+    {
+      "id": "multi-az",
+      "name": "Multi-AZ",
+      "aliases": [],
+      "service_ids": [
+        "amazon-rds-multi-az"
+      ],
+      "description": "Multi-AZ is a reusable concept for scenarios about Amazon RDS Multi-AZ."
+    },
+    {
+      "id": "multi-region",
+      "name": "multi-Region",
+      "aliases": [],
+      "service_ids": [
+        "dynamodb-global-tables"
+      ],
+      "description": "multi-Region is a reusable concept for scenarios about DynamoDB global tables."
+    },
+    {
+      "id": "multiple-accounts",
+      "name": "multiple accounts",
+      "aliases": [],
+      "service_ids": [
+        "aws-organizations"
+      ],
+      "description": "multiple accounts is a reusable concept for scenarios about AWS Organizations."
+    },
+    {
+      "id": "multiple-compute-resources",
+      "name": "multiple compute resources",
+      "aliases": [],
+      "service_ids": [
+        "amazon-efs"
+      ],
+      "description": "multiple compute resources is a reusable concept for scenarios about Amazon EFS."
+    },
+    {
+      "id": "network-acls",
+      "name": "network ACLs",
+      "aliases": [],
+      "service_ids": [
+        "network-acls"
+      ],
+      "description": "network ACLs is a reusable concept for scenarios about network ACLs."
+    },
+    {
+      "id": "nosql",
+      "name": "NoSQL",
+      "aliases": [],
+      "service_ids": [
+        "dynamodb"
+      ],
+      "description": "NoSQL is a reusable concept for scenarios about Amazon DynamoDB."
+    },
+    {
+      "id": "object-expiration",
+      "name": "object expiration",
+      "aliases": [
+        "expire objects",
+        "object expiry"
+      ],
+      "service_ids": [
+        "s3"
+      ],
+      "description": "Object expiration is the automatic removal of S3 objects by a Lifecycle expiration action."
+    },
+    {
+      "id": "object-recovery",
+      "name": "object recovery",
+      "aliases": [],
+      "service_ids": [
+        "amazon-s3-versioning"
+      ],
+      "description": "object recovery is a reusable concept for scenarios about Amazon S3 versioning."
+    },
+    {
+      "id": "outbound-rules",
+      "name": "outbound rules",
+      "aliases": [],
+      "service_ids": [
+        "vpc-security-groups"
+      ],
+      "description": "outbound rules is a reusable concept for scenarios about VPC security groups."
+    },
+    {
+      "id": "overwrite-protection",
+      "name": "overwrite protection",
+      "aliases": [],
+      "service_ids": [
+        "amazon-s3-versioning"
+      ],
+      "description": "overwrite protection is a reusable concept for scenarios about Amazon S3 versioning."
+    },
+    {
+      "id": "permission-guardrails",
+      "name": "permission guardrails",
+      "aliases": [],
+      "service_ids": [
+        "service-control-policies"
+      ],
+      "description": "permission guardrails is a reusable concept for scenarios about Service Control Policies."
+    },
+    {
+      "id": "point-in-time-backup",
+      "name": "point-in-time backup",
+      "aliases": [],
+      "service_ids": [
+        "amazon-ebs-snapshots"
+      ],
+      "description": "point-in-time backup is a reusable concept for scenarios about Amazon EBS snapshots."
+    },
+    {
+      "id": "processing-window",
+      "name": "processing window",
+      "aliases": [
+        "message processing window",
+        "processing time"
+      ],
+      "service_ids": [
+        "sqs"
+      ],
+      "description": "The SQS processing window is the time a consumer has before a received message can become visible again."
+    },
+    {
+      "id": "pub-sub",
+      "name": "pub/sub",
+      "aliases": [],
+      "service_ids": [
+        "amazon-sns"
+      ],
+      "description": "pub/sub is a reusable concept for scenarios about Amazon SNS."
+    },
+    {
+      "id": "read-replicas",
+      "name": "read replicas",
+      "aliases": [],
+      "service_ids": [
+        "amazon-rds-read-replicas"
+      ],
+      "description": "read replicas is a reusable concept for scenarios about Amazon RDS read replicas."
+    },
+    {
+      "id": "read-scaling",
+      "name": "read scaling",
+      "aliases": [],
+      "service_ids": [
+        "amazon-rds-read-replicas"
+      ],
+      "description": "read scaling is a reusable concept for scenarios about Amazon RDS read replicas."
+    },
+    {
+      "id": "real-time",
+      "name": "real-time",
+      "aliases": [],
+      "service_ids": [
+        "amazon-kinesis-data-streams"
+      ],
+      "description": "real-time is a reusable concept for scenarios about Amazon Kinesis Data Streams."
+    },
+    {
+      "id": "recommendations",
+      "name": "recommendations",
+      "aliases": [],
+      "service_ids": [
+        "aws-trusted-advisor"
+      ],
+      "description": "recommendations is a reusable concept for scenarios about AWS Trusted Advisor."
+    },
+    {
+      "id": "recovery",
+      "name": "recovery",
+      "aliases": [],
+      "service_ids": [
+        "amazon-ebs-snapshots"
+      ],
+      "description": "recovery is a reusable concept for scenarios about Amazon EBS snapshots."
+    },
+    {
+      "id": "redshift",
+      "name": "Redshift",
+      "aliases": [],
+      "service_ids": [
+        "amazon-redshift"
+      ],
+      "description": "Redshift is a reusable concept for scenarios about Amazon Redshift."
+    },
+    {
+      "id": "replication",
+      "name": "replication",
+      "aliases": [],
+      "service_ids": [
+        "amazon-rds-read-replicas"
+      ],
+      "description": "replication is a reusable concept for scenarios about Amazon RDS read replicas."
+    },
+    {
+      "id": "resource-inventory",
+      "name": "resource inventory",
+      "aliases": [],
+      "service_ids": [
+        "config"
+      ],
+      "description": "resource inventory is a reusable concept for scenarios about AWS Config."
+    },
+    {
+      "id": "retrieval-time",
+      "name": "retrieval time",
+      "aliases": [],
+      "service_ids": [
+        "s3-glacier-storage-classes"
+      ],
+      "description": "retrieval time is a reusable concept for scenarios about S3 Glacier storage classes."
+    },
+    {
+      "id": "route-53",
+      "name": "Route 53",
+      "aliases": [],
+      "service_ids": [
+        "amazon-route-53"
+      ],
+      "description": "Route 53 is a reusable concept for scenarios about Amazon Route 53."
+    },
+    {
+      "id": "routing",
+      "name": "routing",
+      "aliases": [],
+      "service_ids": [
+        "amazon-route-53"
+      ],
+      "description": "routing is a reusable concept for scenarios about Amazon Route 53."
+    },
+    {
+      "id": "rules",
+      "name": "rules",
+      "aliases": [],
+      "service_ids": [
+        "amazon-eventbridge"
+      ],
+      "description": "rules is a reusable concept for scenarios about Amazon EventBridge."
+    },
+    {
+      "id": "s3-glacier",
+      "name": "S3 Glacier",
+      "aliases": [],
+      "service_ids": [
+        "s3-glacier-storage-classes"
+      ],
+      "description": "S3 Glacier is a reusable concept for scenarios about S3 Glacier storage classes."
+    },
+    {
+      "id": "s3-lifecycle",
+      "name": "S3 Lifecycle",
+      "aliases": [
+        "s3 lifecycle policy",
+        "s3 lifecycle policies",
+        "lifecycle rules"
+      ],
+      "service_ids": [
+        "s3"
+      ],
+      "description": "S3 Lifecycle rules transition or expire objects automatically based on configured criteria."
+    },
+    {
+      "id": "scalability",
+      "name": "scalability",
+      "aliases": [],
+      "service_ids": [
+        "elastic-load-balancing"
+      ],
+      "description": "scalability is a reusable concept for scenarios about Elastic Load Balancing."
+    },
+    {
+      "id": "scheduled-rotation",
+      "name": "scheduled rotation",
+      "aliases": [
+        "automatic rotation",
+        "secret rotation"
+      ],
+      "service_ids": [
+        "secretsmanager"
+      ],
+      "description": "Scheduled rotation replaces a secret automatically according to a configured Secrets Manager schedule."
+    },
+    {
+      "id": "scps",
+      "name": "SCPs",
+      "aliases": [],
+      "service_ids": [
+        "aws-organizations"
+      ],
+      "description": "SCPs is a reusable concept for scenarios about AWS Organizations."
+    },
+    {
+      "id": "secret-rotation",
+      "name": "secret rotation",
+      "aliases": [],
+      "service_ids": [
+        "secretsmanager"
+      ],
+      "description": "secret rotation is a reusable concept for scenarios about AWS Secrets Manager."
+    },
+    {
+      "id": "secrets-manager",
+      "name": "Secrets Manager",
+      "aliases": [
+        "aws secrets manager"
+      ],
+      "service_ids": [
+        "secretsmanager"
+      ],
+      "description": "AWS Secrets Manager stores, retrieves, and rotates application secrets."
+    },
+    {
+      "id": "secure-retrieval",
+      "name": "secure retrieval",
+      "aliases": [],
+      "service_ids": [
+        "secretsmanager"
+      ],
+      "description": "secure retrieval is a reusable concept for scenarios about AWS Secrets Manager."
+    },
+    {
+      "id": "security-groups",
+      "name": "security groups",
+      "aliases": [],
+      "service_ids": [
+        "vpc-security-groups"
+      ],
+      "description": "security groups is a reusable concept for scenarios about VPC security groups."
+    },
+    {
+      "id": "serverless",
+      "name": "serverless",
+      "aliases": [],
+      "service_ids": [
+        "lambda"
+      ],
+      "description": "serverless is a reusable concept for scenarios about AWS Lambda."
+    },
+    {
+      "id": "serverless-queries",
+      "name": "serverless queries",
+      "aliases": [],
+      "service_ids": [
+        "amazon-athena"
+      ],
+      "description": "serverless queries is a reusable concept for scenarios about Amazon Athena."
+    },
+    {
+      "id": "service-limits",
+      "name": "service limits",
+      "aliases": [],
+      "service_ids": [
+        "aws-trusted-advisor"
+      ],
+      "description": "service limits is a reusable concept for scenarios about AWS Trusted Advisor."
+    },
+    {
+      "id": "shards",
+      "name": "shards",
+      "aliases": [],
+      "service_ids": [
+        "amazon-kinesis-data-streams"
+      ],
+      "description": "shards is a reusable concept for scenarios about Amazon Kinesis Data Streams."
+    },
+    {
+      "id": "shared-file-storage",
+      "name": "shared file storage",
+      "aliases": [],
+      "service_ids": [
+        "amazon-efs"
+      ],
+      "description": "shared file storage is a reusable concept for scenarios about Amazon EFS."
+    },
+    {
+      "id": "sign-in",
+      "name": "sign-in",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cognito"
+      ],
+      "description": "sign-in is a reusable concept for scenarios about Amazon Cognito."
+    },
+    {
+      "id": "sns",
+      "name": "SNS",
+      "aliases": [],
+      "service_ids": [
+        "amazon-sns"
+      ],
+      "description": "SNS is a reusable concept for scenarios about Amazon SNS."
+    },
+    {
+      "id": "sql",
+      "name": "SQL",
+      "aliases": [],
+      "service_ids": [
+        "amazon-athena"
+      ],
+      "description": "SQL is a reusable concept for scenarios about Amazon Athena."
+    },
+    {
+      "id": "sql-queries",
+      "name": "SQL queries",
+      "aliases": [],
+      "service_ids": [
+        "amazon-redshift"
+      ],
+      "description": "SQL queries is a reusable concept for scenarios about Amazon Redshift."
+    },
+    {
+      "id": "sqs",
+      "name": "SQS",
+      "aliases": [],
+      "service_ids": [
+        "sqs"
+      ],
+      "description": "SQS is a reusable concept for scenarios about Amazon SQS."
+    },
+    {
+      "id": "sqs-visibility-timeout",
+      "name": "SQS visibility timeout",
+      "aliases": [
+        "visibility timeout",
+        "hide messages from consumers",
+        "message visibility"
+      ],
+      "service_ids": [
+        "sqs"
+      ],
+      "description": "The SQS visibility timeout is the period in which a received message stays hidden from other consumers."
+    },
+    {
+      "id": "standby-replica",
+      "name": "standby replica",
+      "aliases": [],
+      "service_ids": [
+        "amazon-rds-multi-az"
+      ],
+      "description": "standby replica is a reusable concept for scenarios about Amazon RDS Multi-AZ."
+    },
+    {
+      "id": "state-machine",
+      "name": "state machine",
+      "aliases": [],
+      "service_ids": [
+        "aws-step-functions"
+      ],
+      "description": "state machine is a reusable concept for scenarios about AWS Step Functions."
+    },
+    {
+      "id": "stateful",
+      "name": "stateful",
+      "aliases": [],
+      "service_ids": [
+        "vpc-security-groups"
+      ],
+      "description": "stateful is a reusable concept for scenarios about VPC security groups."
+    },
+    {
+      "id": "stateless",
+      "name": "stateless",
+      "aliases": [],
+      "service_ids": [
+        "network-acls"
+      ],
+      "description": "stateless is a reusable concept for scenarios about network ACLs."
+    },
+    {
+      "id": "step-functions",
+      "name": "Step Functions",
+      "aliases": [],
+      "service_ids": [
+        "aws-step-functions"
+      ],
+      "description": "Step Functions is a reusable concept for scenarios about AWS Step Functions."
+    },
+    {
+      "id": "storage-classes",
+      "name": "storage classes",
+      "aliases": [],
+      "service_ids": [
+        "s3-lifecycle-policies"
+      ],
+      "description": "storage classes is a reusable concept for scenarios about S3 lifecycle policies."
+    },
+    {
+      "id": "streaming-data",
+      "name": "streaming data",
+      "aliases": [],
+      "service_ids": [
+        "amazon-kinesis-data-streams"
+      ],
+      "description": "streaming data is a reusable concept for scenarios about Amazon Kinesis Data Streams."
+    },
+    {
+      "id": "subnet",
+      "name": "subnet",
+      "aliases": [],
+      "service_ids": [
+        "network-acls"
+      ],
+      "description": "subnet is a reusable concept for scenarios about network ACLs."
+    },
+    {
+      "id": "subscribers",
+      "name": "subscribers",
+      "aliases": [],
+      "service_ids": [
+        "amazon-sns"
+      ],
+      "description": "subscribers is a reusable concept for scenarios about Amazon SNS."
+    },
+    {
+      "id": "temporary-credentials",
+      "name": "temporary credentials",
+      "aliases": [],
+      "service_ids": [
+        "iam-roles"
+      ],
+      "description": "temporary credentials is a reusable concept for scenarios about IAM roles."
+    },
+    {
+      "id": "test-commands",
+      "name": "test commands",
+      "aliases": [
+        "test command",
+        "testing commands"
+      ],
+      "service_ids": [
+        "codebuild"
+      ],
+      "description": "Test commands are invocations run by CodeBuild as commands declared in a buildspec phase."
+    },
+    {
+      "id": "throttling",
+      "name": "throttling",
+      "aliases": [],
+      "service_ids": [
+        "apigateway"
+      ],
+      "description": "throttling is a reusable concept for scenarios about Amazon API Gateway."
+    },
+    {
+      "id": "traffic-distribution",
+      "name": "traffic distribution",
+      "aliases": [],
+      "service_ids": [
+        "elastic-load-balancing"
+      ],
+      "description": "traffic distribution is a reusable concept for scenarios about Elastic Load Balancing."
+    },
+    {
+      "id": "trusted-advisor",
+      "name": "Trusted Advisor",
+      "aliases": [],
+      "service_ids": [
+        "aws-trusted-advisor"
+      ],
+      "description": "Trusted Advisor is a reusable concept for scenarios about AWS Trusted Advisor."
+    },
+    {
+      "id": "trusted-entities",
+      "name": "trusted entities",
+      "aliases": [],
+      "service_ids": [
+        "iam-roles"
+      ],
+      "description": "trusted entities is a reusable concept for scenarios about IAM roles."
+    },
+    {
+      "id": "usage-thresholds",
+      "name": "usage thresholds",
+      "aliases": [],
+      "service_ids": [
+        "budgets"
+      ],
+      "description": "usage thresholds is a reusable concept for scenarios about AWS Budgets."
+    },
+    {
+      "id": "user-authentication",
+      "name": "user authentication",
+      "aliases": [],
+      "service_ids": [
+        "amazon-cognito"
+      ],
+      "description": "user authentication is a reusable concept for scenarios about Amazon Cognito."
+    },
+    {
+      "id": "versioning",
+      "name": "versioning",
+      "aliases": [],
+      "service_ids": [
+        "amazon-s3-versioning"
+      ],
+      "description": "versioning is a reusable concept for scenarios about Amazon S3 versioning."
+    },
+    {
+      "id": "web-application",
+      "name": "web application",
+      "aliases": [],
+      "service_ids": [
+        "aws-waf"
+      ],
+      "description": "web application is a reusable concept for scenarios about AWS WAF."
+    },
+    {
+      "id": "well-architected-tool",
+      "name": "Well-Architected Tool",
+      "aliases": [],
+      "service_ids": [
+        "aws-well-architected-tool"
+      ],
+      "description": "Well-Architected Tool is a reusable concept for scenarios about AWS Well-Architected Tool."
+    },
+    {
+      "id": "workflow-orchestration",
+      "name": "workflow orchestration",
+      "aliases": [],
+      "service_ids": [
+        "aws-step-functions"
+      ],
+      "description": "workflow orchestration is a reusable concept for scenarios about AWS Step Functions."
+    },
+    {
+      "id": "workload-review",
+      "name": "workload review",
+      "aliases": [],
+      "service_ids": [
+        "aws-well-architected-tool"
+      ],
+      "description": "workload review is a reusable concept for scenarios about AWS Well-Architected Tool."
+    }
+  ],
+  "common_misconceptions": [
+    {
+      "id": "iam",
+      "key_concepts": [
+        "IAM",
+        "temporary credentials",
+        "least privilege",
+        "trusted entities"
+      ],
+      "common_misconceptions": [
+        "IAM user access keys is the best fit for this requirement.",
+        "AWS Shield Advanced is the best fit for this requirement.",
+        "hard-coded credentials is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use IAM roles.",
+        "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+        "IAM roles"
+      ],
+      "must_not_claim": [
+        "IAM user access keys satisfies the scenario better than IAM roles.",
+        "AWS Shield Advanced satisfies the scenario better than IAM roles.",
+        "hard-coded credentials satisfies the scenario better than IAM roles."
+      ],
+      "source_url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
+      "do_not_claim_explanation": [
+        "IAM roles is a better option for this scenario. IAM user access keys does not satisfy the same requirement.",
+        "IAM roles is a better option for this scenario. AWS Shield Advanced does not satisfy the same requirement.",
+        "IAM roles is a better option for this scenario. hard-coded credentials does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "aws-budgets",
+      "key_concepts": [
+        "AWS Budgets",
+        "cost thresholds",
+        "usage thresholds",
+        "alerts"
+      ],
+      "common_misconceptions": [
+        "AWS CloudTrail is the best fit for this requirement.",
+        "AWS Artifact is the best fit for this requirement.",
+        "Elastic Load Balancing is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use AWS Budgets.",
+        "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+        "AWS Budgets"
+      ],
+      "must_not_claim": [
+        "AWS CloudTrail satisfies the scenario better than AWS Budgets.",
+        "AWS Artifact satisfies the scenario better than AWS Budgets.",
+        "Elastic Load Balancing satisfies the scenario better than AWS Budgets."
+      ],
+      "source_url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
+      "do_not_claim_explanation": [
+        "AWS Budgets is a better option for this scenario. AWS CloudTrail does not satisfy the same requirement.",
+        "AWS Budgets is a better option for this scenario. AWS Artifact does not satisfy the same requirement.",
+        "AWS Budgets is a better option for this scenario. Elastic Load Balancing does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "availability-zones",
+      "key_concepts": [
+        "Availability Zones",
+        "high availability",
+        "fault tolerance",
+        "load balancing"
+      ],
+      "common_misconceptions": [
+        "single Availability Zone deployment is the best fit for this requirement.",
+        "larger instance is the best fit for this requirement.",
+        "root volume backups is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use multiple Availability Zones.",
+        "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+        "multiple Availability Zones"
+      ],
+      "must_not_claim": [
+        "single Availability Zone deployment satisfies the scenario better than multiple Availability Zones.",
+        "larger instance satisfies the scenario better than multiple Availability Zones.",
+        "root volume backups satisfies the scenario better than multiple Availability Zones."
+      ],
+      "source_url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html",
+      "do_not_claim_explanation": [
+        "multiple Availability Zones is a better option for this scenario. single Availability Zone deployment does not satisfy the same requirement.",
+        "multiple Availability Zones is a better option for this scenario. larger instance does not satisfy the same requirement.",
+        "multiple Availability Zones is a better option for this scenario. root volume backups does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "amazon-s3",
+      "key_concepts": [
+        "Amazon S3",
+        "versioning",
+        "object recovery",
+        "overwrite protection"
+      ],
+      "common_misconceptions": [
+        "S3 Transfer Acceleration is the best fit for this requirement.",
+        "Amazon EFS is the best fit for this requirement.",
+        "S3 static website hosting is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use Amazon S3 versioning.",
+        "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+        "Amazon S3 versioning"
+      ],
+      "must_not_claim": [
+        "S3 Transfer Acceleration satisfies the scenario better than Amazon S3 versioning.",
+        "Amazon EFS satisfies the scenario better than Amazon S3 versioning.",
+        "S3 static website hosting satisfies the scenario better than Amazon S3 versioning."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html",
+      "do_not_claim_explanation": [
+        "Amazon S3 versioning is a better option for this scenario. S3 Transfer Acceleration does not satisfy the same requirement.",
+        "Amazon S3 versioning is a better option for this scenario. Amazon EFS does not satisfy the same requirement.",
+        "Amazon S3 versioning is a better option for this scenario. S3 static website hosting does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "s3-lifecycle",
+      "key_concepts": [
+        "S3 Lifecycle",
+        "storage classes",
+        "object expiration",
+        "cost optimization"
+      ],
+      "common_misconceptions": [
+        "S3 bucket policies is the best fit for this requirement.",
+        "AWS Organizations is the best fit for this requirement.",
+        "Amazon GuardDuty is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use S3 lifecycle policies.",
+        "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+        "S3 lifecycle policies"
+      ],
+      "must_not_claim": [
+        "S3 bucket policies satisfies the scenario better than S3 lifecycle policies.",
+        "AWS Organizations satisfies the scenario better than S3 lifecycle policies.",
+        "Amazon GuardDuty satisfies the scenario better than S3 lifecycle policies."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html",
+      "do_not_claim_explanation": [
+        "S3 lifecycle policies is a better option for this scenario. S3 bucket policies does not satisfy the same requirement.",
+        "S3 lifecycle policies is a better option for this scenario. AWS Organizations does not satisfy the same requirement.",
+        "S3 lifecycle policies is a better option for this scenario. Amazon GuardDuty does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "amazon-rds",
+      "key_concepts": [
+        "Amazon RDS",
+        "Multi-AZ",
+        "automatic failover",
+        "standby replica"
+      ],
+      "common_misconceptions": [
+        "read replica only is the best fit for this requirement.",
+        "DynamoDB global table is the best fit for this requirement.",
+        "manual snapshot is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use Amazon RDS Multi-AZ.",
+        "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+        "Amazon RDS Multi-AZ"
+      ],
+      "must_not_claim": [
+        "read replica only satisfies the scenario better than Amazon RDS Multi-AZ.",
+        "DynamoDB global table satisfies the scenario better than Amazon RDS Multi-AZ.",
+        "manual snapshot satisfies the scenario better than Amazon RDS Multi-AZ."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "do_not_claim_explanation": [
+        "Amazon RDS Multi-AZ is a better option for this scenario. read replica only does not satisfy the same requirement.",
+        "Amazon RDS Multi-AZ is a better option for this scenario. DynamoDB global table does not satisfy the same requirement.",
+        "Amazon RDS Multi-AZ is a better option for this scenario. manual snapshot does not satisfy the same requirement."
+      ]
+    }
+  ],
+  "must_not_claim": [
+    {
+      "id": "iam",
+      "key_concepts": [
+        "IAM",
+        "temporary credentials",
+        "least privilege",
+        "trusted entities"
+      ],
+      "common_misconceptions": [
+        "IAM user access keys is the best fit for this requirement.",
+        "AWS Shield Advanced is the best fit for this requirement.",
+        "hard-coded credentials is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use IAM roles.",
+        "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+        "IAM roles"
+      ],
+      "must_not_claim": [
+        "IAM user access keys satisfies the scenario better than IAM roles.",
+        "AWS Shield Advanced satisfies the scenario better than IAM roles.",
+        "hard-coded credentials satisfies the scenario better than IAM roles."
+      ],
+      "source_url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
+      "do_not_claim_explanation": [
+        "IAM roles is a better option for this scenario. IAM user access keys does not satisfy the same requirement.",
+        "IAM roles is a better option for this scenario. AWS Shield Advanced does not satisfy the same requirement.",
+        "IAM roles is a better option for this scenario. hard-coded credentials does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "aws-budgets",
+      "key_concepts": [
+        "AWS Budgets",
+        "cost thresholds",
+        "usage thresholds",
+        "alerts"
+      ],
+      "common_misconceptions": [
+        "AWS CloudTrail is the best fit for this requirement.",
+        "AWS Artifact is the best fit for this requirement.",
+        "Elastic Load Balancing is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use AWS Budgets.",
+        "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+        "AWS Budgets"
+      ],
+      "must_not_claim": [
+        "AWS CloudTrail satisfies the scenario better than AWS Budgets.",
+        "AWS Artifact satisfies the scenario better than AWS Budgets.",
+        "Elastic Load Balancing satisfies the scenario better than AWS Budgets."
+      ],
+      "source_url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
+      "do_not_claim_explanation": [
+        "AWS Budgets is a better option for this scenario. AWS CloudTrail does not satisfy the same requirement.",
+        "AWS Budgets is a better option for this scenario. AWS Artifact does not satisfy the same requirement.",
+        "AWS Budgets is a better option for this scenario. Elastic Load Balancing does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "availability-zones",
+      "key_concepts": [
+        "Availability Zones",
+        "high availability",
+        "fault tolerance",
+        "load balancing"
+      ],
+      "common_misconceptions": [
+        "single Availability Zone deployment is the best fit for this requirement.",
+        "larger instance is the best fit for this requirement.",
+        "root volume backups is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use multiple Availability Zones.",
+        "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+        "multiple Availability Zones"
+      ],
+      "must_not_claim": [
+        "single Availability Zone deployment satisfies the scenario better than multiple Availability Zones.",
+        "larger instance satisfies the scenario better than multiple Availability Zones.",
+        "root volume backups satisfies the scenario better than multiple Availability Zones."
+      ],
+      "source_url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html",
+      "do_not_claim_explanation": [
+        "multiple Availability Zones is a better option for this scenario. single Availability Zone deployment does not satisfy the same requirement.",
+        "multiple Availability Zones is a better option for this scenario. larger instance does not satisfy the same requirement.",
+        "multiple Availability Zones is a better option for this scenario. root volume backups does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "amazon-s3",
+      "key_concepts": [
+        "Amazon S3",
+        "versioning",
+        "object recovery",
+        "overwrite protection"
+      ],
+      "common_misconceptions": [
+        "S3 Transfer Acceleration is the best fit for this requirement.",
+        "Amazon EFS is the best fit for this requirement.",
+        "S3 static website hosting is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use Amazon S3 versioning.",
+        "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+        "Amazon S3 versioning"
+      ],
+      "must_not_claim": [
+        "S3 Transfer Acceleration satisfies the scenario better than Amazon S3 versioning.",
+        "Amazon EFS satisfies the scenario better than Amazon S3 versioning.",
+        "S3 static website hosting satisfies the scenario better than Amazon S3 versioning."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html",
+      "do_not_claim_explanation": [
+        "Amazon S3 versioning is a better option for this scenario. S3 Transfer Acceleration does not satisfy the same requirement.",
+        "Amazon S3 versioning is a better option for this scenario. Amazon EFS does not satisfy the same requirement.",
+        "Amazon S3 versioning is a better option for this scenario. S3 static website hosting does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "s3-lifecycle",
+      "key_concepts": [
+        "S3 Lifecycle",
+        "storage classes",
+        "object expiration",
+        "cost optimization"
+      ],
+      "common_misconceptions": [
+        "S3 bucket policies is the best fit for this requirement.",
+        "AWS Organizations is the best fit for this requirement.",
+        "Amazon GuardDuty is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use S3 lifecycle policies.",
+        "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+        "S3 lifecycle policies"
+      ],
+      "must_not_claim": [
+        "S3 bucket policies satisfies the scenario better than S3 lifecycle policies.",
+        "AWS Organizations satisfies the scenario better than S3 lifecycle policies.",
+        "Amazon GuardDuty satisfies the scenario better than S3 lifecycle policies."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html",
+      "do_not_claim_explanation": [
+        "S3 lifecycle policies is a better option for this scenario. S3 bucket policies does not satisfy the same requirement.",
+        "S3 lifecycle policies is a better option for this scenario. AWS Organizations does not satisfy the same requirement.",
+        "S3 lifecycle policies is a better option for this scenario. Amazon GuardDuty does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "amazon-rds",
+      "key_concepts": [
+        "Amazon RDS",
+        "Multi-AZ",
+        "automatic failover",
+        "standby replica"
+      ],
+      "common_misconceptions": [
+        "read replica only is the best fit for this requirement.",
+        "DynamoDB global table is the best fit for this requirement.",
+        "manual snapshot is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use Amazon RDS Multi-AZ.",
+        "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+        "Amazon RDS Multi-AZ"
+      ],
+      "must_not_claim": [
+        "read replica only satisfies the scenario better than Amazon RDS Multi-AZ.",
+        "DynamoDB global table satisfies the scenario better than Amazon RDS Multi-AZ.",
+        "manual snapshot satisfies the scenario better than Amazon RDS Multi-AZ."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "do_not_claim_explanation": [
+        "Amazon RDS Multi-AZ is a better option for this scenario. read replica only does not satisfy the same requirement.",
+        "Amazon RDS Multi-AZ is a better option for this scenario. DynamoDB global table does not satisfy the same requirement.",
+        "Amazon RDS Multi-AZ is a better option for this scenario. manual snapshot does not satisfy the same requirement."
+      ]
+    }
+  ]
+}

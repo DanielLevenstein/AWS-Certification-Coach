@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Root-level helpers for the three independent quality suites."""
+"""Root-level helpers for independent unit, model, release, and deployment suites."""
 
 from __future__ import annotations
 
@@ -11,70 +11,66 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parent
+QUICK_RELEASE_ARTIFACTS = (
+    "semantic_similarity.json",
+    "question_fidelity.json",
+    "question_coverage.json",
+    "knowledge_base.json",
+    "per_grade_metrics.png",
+    "grade_band_metrics.png",
+    "letter_distance_metrics.png",
+    "question_domain_coverage.png",
+    "question_intent_coverage.png",
+    "question_certification_coverage.png",
+    "curated_failure_report.md",
+    "curated_rubric_review.md",
+)
 
 
 def run_unit_tests(extra_args: list[str] | None = None) -> None:
-    _run([sys.executable, "-m", "pytest", "tests", *(extra_args or [])])
+    _run(
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "tests",
+            "--ignore=tests/deployment",
+            "--ignore=tests/model_smoke",
+            *(extra_args or []),
+        ]
+    )
 
 
-def run_model_evaluation(extra_args: list[str] | None = None) -> None:
-    _run([sys.executable, "scripts/model_evaluation.py", *(extra_args or [])])
+def run_model_smoke_tests(extra_args: list[str] | None = None) -> None:
+    before = _artifact_snapshot()
+    _run([sys.executable, "-m", "pytest", "tests/model_smoke", *(extra_args or [])])
+    after = _artifact_snapshot()
+    if after != before:
+        changed = sorted(path for path in before.keys() | after.keys() if before.get(path) != after.get(path))
+        raise RuntimeError(f"Model smoke tests modified generated/model artifacts: {changed}")
+
+
+def run_deployment_tests(extra_args: list[str] | None = None) -> None:
+    _run(
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "tests/deployment",
+            *(extra_args or []),
+        ]
+    )
 
 
 def run_release_metrics(extra_args: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--release-label", default="Current")
-    parser.add_argument("--release-notes", default=None)
-    parser.add_argument("--metrics-dir", type=Path, default=None)
-    parser.add_argument("--strict-grading", action="store_true")
-    args = parser.parse_args(extra_args or [])
+    args = _parse_release_args(extra_args)
     metrics_dir = args.metrics_dir or timestamped_metrics_dir()
     _run(
         [
             sys.executable,
-            "scripts/train_answer_accuracy.py",
-            "--eval-mode",
-            "training",
-            "--output",
-            str(metrics_dir / "answer_regressor_model.json"),
-            "--metrics-output",
-            str(metrics_dir / "training_metrics.json"),
-            "--history-output",
-            str(metrics_dir / "training_history.json"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
-            "scripts/plot_training_history.py",
-            "--history",
-            str(metrics_dir / "training_history.json"),
-            "--output",
-            str(metrics_dir / "training_performance.png"),
-            "--accuracy-output",
-            str(metrics_dir / "curated_grade_accuracy.png"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
             "scripts/curated_failure_report.py",
-            "--model",
-            str(metrics_dir / "answer_regressor_model.json"),
             "--output",
             str(metrics_dir / "curated_failure_report.md"),
-        ]
-    )
-    _run(
-        [
-            sys.executable,
-            "scripts/evaluate_answer_model.py",
-            "--model",
-            str(metrics_dir / "answer_regressor_model.json"),
-            "--json-output",
-            str(metrics_dir / "answer_model_evaluation.json"),
-            "--table-output",
-            str(metrics_dir / "answer_model_evaluation.md"),
         ]
     )
     _run(
@@ -93,10 +89,12 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             str(metrics_dir / "semantic_similarity.json"),
             "--chart-output",
             str(metrics_dir / "semantic_accuracy.png"),
-            "--answer-model-evaluation",
-            str(metrics_dir / "answer_model_evaluation.json"),
-            "--per-grade-precision-output",
-            str(metrics_dir / "per_grade_precision.png"),
+            "--per-grade-output",
+            str(metrics_dir / "per_grade_metrics.png"),
+            "--grade-band-output",
+            str(metrics_dir / "grade_band_metrics.png"),
+            "--letter-distance-output",
+            str(metrics_dir / "letter_distance_metrics.png"),
         ]
     )
     _run(
@@ -117,7 +115,42 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             str(metrics_dir),
         ]
     )
+    _run(
+        [
+            sys.executable,
+            "scripts/knowledge_base_metrics.py",
+            "--output",
+            str(metrics_dir / "knowledge_base.json"),
+        ]
+    )
     _run([sys.executable, "scripts/quality_metrics.py", "--output-dir", str(metrics_dir)])
+    _render_release_summary(args, metrics_dir)
+    print(f"Release metrics directory: {metrics_dir}")
+
+
+def run_quick_release_metrics(extra_args: list[str] | None = None) -> None:
+    """Refresh release-note Markdown from an existing full metrics run."""
+
+    args = _parse_release_args(extra_args)
+    if args.metrics_dir is None:
+        raise ValueError("Quick release metrics require --metrics-dir from a previous full run.")
+    missing = [name for name in QUICK_RELEASE_ARTIFACTS if not (args.metrics_dir / name).is_file()]
+    if missing:
+        raise FileNotFoundError(f"Quick release metrics are missing artifacts: {missing}")
+    _render_release_summary(args, args.metrics_dir)
+    print(f"Reused release metrics directory without training: {args.metrics_dir}")
+
+
+def _parse_release_args(extra_args: list[str] | None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--release-label", default="Current")
+    parser.add_argument("--release-notes", default=None)
+    parser.add_argument("--metrics-dir", type=Path, default=None)
+    parser.add_argument("--strict-grading", action="store_true")
+    return parser.parse_args(extra_args or [])
+
+
+def _render_release_summary(args: argparse.Namespace, metrics_dir: Path) -> None:
     release_metrics_command = [
         sys.executable,
         "scripts/release_metrics.py",
@@ -133,22 +166,48 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
     if args.strict_grading:
         release_metrics_command.append("--strict-grading")
     _run(release_metrics_command)
-    print(f"Release metrics directory: {metrics_dir}")
 
 
 def timestamped_metrics_dir() -> Path:
     return Path("metrics") / datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
+def _artifact_snapshot() -> dict[str, tuple[int, int]]:
+    snapshot = {}
+    for directory_name in ("models", "data", "metrics"):
+        directory = ROOT / directory_name
+        if not directory.exists():
+            continue
+        for path in directory.rglob("*"):
+            if path.is_file():
+                stat = path.stat()
+                snapshot[str(path.relative_to(ROOT))] = (stat.st_size, stat.st_mtime_ns)
+    return snapshot
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("suite", choices=["unit", "model", "release"])
+    help_parser = _suite_parser()
+    if len(sys.argv) == 1 or sys.argv[1] in {"-h", "--help"}:
+        help_parser.print_help()
+        return
+    parser = _suite_parser(add_help=False)
     args, extra_args = parser.parse_known_args()
     {
         "unit": run_unit_tests,
-        "model": run_model_evaluation,
+        "model-smoke": run_model_smoke_tests,
         "release": run_release_metrics,
+        "release-quick": run_quick_release_metrics,
+        "deployment": run_deployment_tests,
     }[args.suite](extra_args)
+
+
+def _suite_parser(add_help: bool = True) -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(add_help=add_help)
+    parser.add_argument(
+        "suite",
+        choices=["unit", "model-smoke", "release", "release-quick", "deployment"],
+    )
+    return parser
 
 
 def _run(command: list[str]) -> None:

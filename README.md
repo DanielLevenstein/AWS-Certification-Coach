@@ -9,6 +9,7 @@ AI study partner for AWS certification exams.
 ## Live Demo
 
 The latest version of this project is deployed live on Render.
+
 - Render Deployment: [AWS Certification Coach](https://aws-certification-coach-latest.onrender.com/)
 
 ## Application Screenshot
@@ -23,27 +24,29 @@ AWS Certification Coach is a lightweight study app for AWS certification practic
 
 This version intentionally removes the runtime RAG stack from the earlier prototype. There is no document ingestion, FAISS index, vector database, or embedding model in the deployed app. Certification content is generated and reviewed offline, then served from a simple question repository.
 
-## Training Data Generation
+## Question Data Generation
 
-The V1 training data is generated offline from self-authored, exam-style AWS scenarios. The project does not copy real exam dumps, paid practice-test text, or restricted AWS Skill Builder content. AWS exam guides and documentation are used as style and scope references, while the local artifacts are generated specifically for this project.
+The app question bank is generated offline from self-authored, exam-style AWS scenarios. The project does not copy real exam dumps, paid practice-test text, or restricted AWS Skill Builder content. AWS exam guides and documentation are used as style and scope references, while the local artifacts are generated specifically for this project.
 
-The generation flow starts with service-level scenario specs in `scripts/generate_sample_training_artifacts.py`. Each spec defines the target AWS service or feature, certification, domain, difficulty, expected purpose, key concepts, and plausible distractors. The script turns those specs into original multiple-choice questions, then converts them into freeform recall prompts so learners must explain the answer instead of recognizing it from choices.
+The generation flow starts with `config/knowledge_base/knowledge_base.json` for canonical service, source URL, concept, and scenario facts, applies reusable mechanics from `config/question_templates/question_template.json`, and uses `config/answer_rubric/answer_rubric.json` for learner-answer rubric defaults. `scripts/generate_app_question_artifacts.py` renders 160 app-facing questions by default, then the Developer Associate generator appends its reviewed set.
 
-Each generated question keeps its source-style multiple-choice item in the same JSON row under `original_multiple_choice`. The same row also stores answer examples used for diagnostic model training:
+Each generated question keeps its source-style multiple-choice item in the same JSON row under `original_multiple_choice`. Curated answer feedback and the structured knowledge-base seed remain separate from the app question bank.
 
-- `generated_answers`: complete, partial, weak, and incorrect answers labeled with human-readable grades `A`, `B`, `C`, `D`, and `F`, plus `intended_coverage` metadata.
+`config/knowledge_base/knowledge_base.json` is committed curated configuration, not an auto-generated artifact. `./setup.sh` and the question generators read scoring and question sources but do not rewrite the knowledge base. Make manual knowledge-base changes in `config/knowledge_base/` and commit them; generated local outputs live under `data/` and release metrics under `metrics/`.
 
-Training and verification data are generated separately:
+Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C`, and `D/F`.
 
-Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C/D`, and `F`. Precision and recall treat `A/B` and `C/D` as accepted answers and `F` as rejected.
+![Accuracy Metrics Chart](release/accuracy_metrics_chart.png)
 
-To regenerate local data:
+### To regenerate local data:
 
 ```bash
 ./setup.sh
 ```
 
 ## Releases
+
+The schema redesign branch starts the v3 release line. Use `v3.1.x` for new releases from this branch forward so earlier `v3.0.x` and `v3.0.0` space remains available for any future migration/backfill tags. Historical v1 and v2 release numbers are intentionally left as-is.
 
 
 | Release | Description                                                                                        |
@@ -92,18 +95,41 @@ Then run the app:
 ```
 
 ### Application Tests and Release Notes
+
 Run the fast unit and contract tests:
 
 ```bash
 ./run_unit_tests.sh
 ```
 
-Run the release suite and save the latest release chart artifacts:
-Refresh the training graph, curated failure report, semantic metrics, and detailed tagged report:
+Run the read-only model smoke checks during routine development:
 
 ```bash
-./release_notes.sh --full v2.2.0
+./run_model_smoke_tests.sh
 ```
+
+Tests are grouped by review area under `tests/application`, `tests/artifacts`, `tests/evaluation`, `tests/knowledge`, `tests/question_quality`, and `tests/release`. The explicit `tests/model_smoke` and `tests/deployment` directories are run only by their corresponding wrappers.
+
+Run deployment health checks against an already-built image:
+
+```bash
+DOCKER_IMAGE=aws-certification-coach:latest ./run_deployment_tests.sh
+```
+
+Run the release suite and save the latest release chart artifacts:
+Refresh semantic metrics, curated diagnostics, knowledge metrics, and tagged charts:
+
+```bash
+./release_notes.sh --full v3.1.0
+```
+
+Refresh release-note Markdown and chart copies from the latest completed full metrics run without rerunning tests:
+
+```bash
+./release_notes.sh --quick v3.1.0
+```
+
+Set `RELEASE_METRICS_DIR=metrics/<timestamp>` to reuse a specific full run. Quick mode fails when the selected directory is incomplete instead of silently retraining.
 
 The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, and a combined four-panel chart as latest-only files in `release/`.
 
@@ -111,30 +137,22 @@ The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<t
 
 Summary artifiacts are copied to the release directory and saved with `$tag_name` in front of the file name.
 
+### Regenerate Questions Locally
 
-### Retrain Model Locally
-Regenerate local training, validation, test, and app sample artifacts:
-
-```bash
-.venv/bin/python scripts/generate_sample_training_artifacts.py
-.venv/bin/python scripts/generate_app_question_artifacts.py --count 80
-```
-
-Train the diagnostic partial-credit regressor:
+Regenerate the 160-question default bank plus reviewed Developer Associate questions:
 
 ```bash
-.venv/bin/python scripts/train_answer_accuracy.py
+.venv/bin/python scripts/generate_app_question_artifacts.py
+.venv/bin/python scripts/generate_developer_question_artifacts.py --app-output data/questions/sample_questions.json
 ```
 
-The regression metrics are retained for diagnostics, but release tracking uses `semantic_similarity` precision as the guardrail.
+The application and release pipeline use the deterministic `semantic_similarity` evaluator backed by the local knowledge base and curated feedback. There is no answer-regressor training workflow.
 
 Print a single release-note-friendly model performance summary:
 
 ```bash
 .venv/bin/python scripts/release_metrics.py
 ```
-
-Final verification data is stored separately in `data/generated/questions_with_answers_test.json`. Do not use that file for training.
 
 ## Docker
 

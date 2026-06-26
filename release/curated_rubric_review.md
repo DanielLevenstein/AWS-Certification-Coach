@@ -1,8 +1,8 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 39
+- Curated examples reviewed: 44
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 10, 'B': 5, 'C': 3, 'D': 11, 'F': 10}`
+- Current grade distribution: `{'A': 11, 'B': 6, 'C': 4, 'D': 12, 'F': 11}`
 - Suggested label updates: 8
 
 ## Suggested Answer Updates
@@ -36,7 +36,7 @@
 - Question: An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?
 - Answer: `SQS FILO queue`
 - Reference: Adjust the SQS visibility timeout
-- Semantic score: `84`
+- Semantic score: `80`
 - Reviewer feedback: My answer had nothing to do with the cannon answer but might still be partially right.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
@@ -53,7 +53,7 @@
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
 - Answer: `AWS Kinesis`
 - Reference: Amazon Kinesis Data Streams
-- Semantic score: `80`
+- Semantic score: `84`
 - Reviewer feedback: This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
@@ -78,5 +78,5 @@
 
 Keep `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, and `Question Fidelity` in release notes.
 Calculate `Semantic Accuracy` as grade-band agreement and `Exact Letter Accuracy` as strict A/B/C/D/F agreement on curated answer rows.
-Do not publish `Training Accuracy` or `Saved Accuracy`; keep those values in generated JSON artifacts only for model-training diagnostics.
+Use the semantic benchmark as the single answer-scoring release metric source.
 

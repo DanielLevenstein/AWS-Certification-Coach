@@ -162,8 +162,7 @@ The project should keep these data categories separate:
 
 - App-facing question artifacts used by the Streamlit app.
 - Source and calibration artifacts under `data/original_questions/`.
-- Training examples used to tune or evaluate answer grading.
-- Final verification data that must not be used for training or threshold tuning.
+- Curated answer examples used to evaluate deterministic semantic grading.
 - Release metrics and generated reports.
 
 Do not commit `data/`, `scripts/data/`, or `metrics/`. Regenerate local artifacts with `./clean.sh` and `./setup.sh` when schema or generated-data behavior changes.
@@ -174,9 +173,12 @@ Before a milestone is considered ready:
 
 - Confirm architecture and rubric docs use the same terminology.
 - Confirm learner-answer grading remains separate from question-fidelity scoring.
-- Confirm answer-training rows and final verification rows remain separate.
+- Confirm app questions remain separate from curated answer feedback.
 - Run unit tests with `./run_unit_tests.sh`.
-- Run release metrics and update `docs/RELEASE_NOTES.md`.
+- Run the read-only model sanity gate with `./run_model_smoke_tests.sh`.
+- Run the full release metrics suite when semantic scoring, knowledge, or curated feedback changes.
+- Run the explicit deployment suite with `DOCKER_IMAGE=<candidate> ./run_deployment_tests.sh` before deploying an image.
+- Run release metrics and update `RELEASE_NOTES.md`.
 - Confirm generated data and metrics artifacts are not staged.
 
 Release gates and metric names should live in release tooling and release notes. Roadmap milestones may have target versions, but architecture should describe durable boundaries rather than fixed release sequencing.

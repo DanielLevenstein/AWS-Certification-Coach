@@ -220,4 +220,11 @@ def _rubric_metadata(
         ],
         "acceptable_answers": [candidate.best_choice, reference_answer],
         "must_not_claim": [f"{candidate.near_miss_choice} is the better fit than {candidate.best_choice}."],
+        "do_not_claim_explanation": [
+            f"{_trim_sentence(candidate.best_choice)} is a better option because it satisfies the scenario more directly; {_trim_sentence(candidate.near_miss_choice)} is the tempting but weaker alternative."
+        ],
     }
+
+
+def _trim_sentence(value: str) -> str:
+    return value.strip().rstrip(".")

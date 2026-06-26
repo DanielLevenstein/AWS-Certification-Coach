@@ -7,7 +7,6 @@ from .trained_classifier_provider import (
     SemanticAwareEvaluatorProvider,
     SemanticSimilarityEvaluatorProvider,
     TrainedClassifierEvaluatorProvider,
-    TrainedRegressionEvaluatorProvider,
 )
 
 __all__ = [
@@ -19,6 +18,5 @@ __all__ = [
     "SemanticAwareEvaluatorProvider",
     "SemanticSimilarityEvaluatorProvider",
     "TrainedClassifierEvaluatorProvider",
-    "TrainedRegressionEvaluatorProvider",
     "build_evaluation_service",
 ]

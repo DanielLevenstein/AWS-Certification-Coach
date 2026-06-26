@@ -25,17 +25,18 @@ CHART_FONT_SIZES = {
 
 DEFAULT_CHARTS = (
     ("Certification Split", Path("release/question_certification_coverage.png")),
-    ("Semantic Accuracy", Path("release/semantic_accuracy.png")),
-    ("Per-Grade Precision & Recall", Path("release/per_grade_precision.png")),
+    ("Per-Grade Precision & Recall", Path("release/per_grade_metrics.png")),
+    ("Grade Bands", Path("release/grade_band_metrics.png")),
+    ("Letter Distance", Path("release/letter_distance_metrics.png")),
     ("Domain Coverage", Path("release/question_domain_coverage.png")),
     ("Question Intent Mix", Path("release/question_intent_coverage.png")),
 )
 
 
 def combine_accuracy_charts(charts: list[tuple[str, Path]], output: Path) -> None:
-    _validate_charts(charts, {"Semantic Accuracy", "Per-Grade Precision & Recall"})
-    figure, axes = plt.subplots(1, 2, figsize=(16, 7), constrained_layout=True)
-    _render_panels(figure, list(axes), charts, "AWS Certification Coach Accuracy Metrics")
+    _validate_charts(charts, {"Per-Grade Precision & Recall", "Grade Bands", "Letter Distance"})
+    figure, axes = plt.subplots(1, 3, figsize=(24, 7), constrained_layout=True)
+    _render_panels(figure, list(axes), charts, "AWS Certification Coach Grade Metrics")
     _save(figure, output)
 
 
@@ -76,18 +77,20 @@ def _save(figure: object, output: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--certification-coverage", type=Path, default=DEFAULT_CHARTS[0][1])
-    parser.add_argument("--semantic-accuracy", type=Path, default=DEFAULT_CHARTS[1][1])
-    parser.add_argument("--per-grade-precision", type=Path, default=DEFAULT_CHARTS[2][1])
-    parser.add_argument("--domain-coverage", type=Path, default=DEFAULT_CHARTS[3][1])
-    parser.add_argument("--intent-coverage", type=Path, default=DEFAULT_CHARTS[4][1])
+    parser.add_argument("--per-grade", type=Path, default=DEFAULT_CHARTS[1][1])
+    parser.add_argument("--grade-bands", type=Path, default=DEFAULT_CHARTS[2][1])
+    parser.add_argument("--letter-distance", type=Path, default=DEFAULT_CHARTS[3][1])
+    parser.add_argument("--domain-coverage", type=Path, default=DEFAULT_CHARTS[4][1])
+    parser.add_argument("--intent-coverage", type=Path, default=DEFAULT_CHARTS[5][1])
     parser.add_argument("--accuracy-output", type=Path, default=Path("release/accuracy_metrics_chart.png"))
     parser.add_argument("--coverage-output", type=Path, default=Path("release/question_coverage_metrics_chart.png"))
     args = parser.parse_args()
 
     combine_accuracy_charts(
         [
-            ("Semantic Accuracy", args.semantic_accuracy),
-            ("Per-Grade Precision & Recall", args.per_grade_precision),
+            ("Letter Distance", args.letter_distance),
+            ("Grade Bands", args.grade_bands),
+            ("Per-Grade Precision & Recall", args.per_grade),
         ],
         args.accuracy_output,
     )

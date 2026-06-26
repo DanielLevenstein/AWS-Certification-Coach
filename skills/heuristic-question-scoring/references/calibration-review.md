@@ -38,8 +38,8 @@ Reviewers should answer:
 - Does it test the same service boundary or decision point as the source concept?
 - Does it feel like a Developer Associate question rather than Cloud Practitioner trivia or Solutions Architect design breadth?
 - Are the distractors plausible and aligned with the intended misconception?
-- Is the generated text clearly self-authored?
-- Would a learner need applied AWS reasoning to answer it?
+- Is the generated text self-authored?
+- Would a learner need to apply AWS reasoning to answer it?
 
 ## Batch Acceptance
 

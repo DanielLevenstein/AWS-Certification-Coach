@@ -73,7 +73,7 @@ def build_feedback_record(
     feedback_text: str = "",
     schema_version: int | float = 1,
 ) -> dict[str, Any]:
-    return {
+    record = {
         "schema_version": schema_version,
         "question": question.question,
         "exam_code": question.exam_code,
@@ -84,6 +84,26 @@ def build_feedback_record(
         "rating_given": rating_given,
         "feedback_text": feedback_text.strip(),
     }
+    if float(schema_version) >= 2:
+        record.update(
+            {
+                "source_url": _question_source_url(question),
+                "key_concepts": list(question.key_concepts),
+                "common_misconceptions": list(question.common_misconceptions),
+                "acceptable_answers": list(question.acceptable_answers),
+                "must_not_claim": list(question.must_not_claim),
+                "do_not_claim_explanation": list(question.do_not_claim_explanation),
+            }
+        )
+    return record
+
+
+def _question_source_url(question: Question) -> str:
+    if question.source_url:
+        return question.source_url
+    if question.original_multiple_choice is not None:
+        return question.original_multiple_choice.source_url
+    return ""
 
 
 def _schema_version_from_path(path: Path) -> int | float:
@@ -102,13 +122,19 @@ def _multiple_choice_to_json(original: MultipleChoiceQuestion | None) -> dict[st
         return None
     return {
         "question": original.question,
-        "options": [
-            {"option_id": option.option_id, "text": option.text}
-            for option in original.options
-        ],
+        "options": [_multiple_choice_option_to_json(option) for option in original.options],
         "correct_option_ids": list(original.correct_option_ids),
         "explanation": original.explanation,
         "source_name": original.source_name,
         "source_url": original.source_url,
         "source_license_notes": original.source_license_notes,
     }
+
+
+def _multiple_choice_option_to_json(option) -> dict[str, str]:
+    payload = {"option_id": option.option_id, "text": option.text}
+    if option.source_url:
+        payload["source_url"] = option.source_url
+    if option.metadata:
+        payload["metadata"] = dict(option.metadata)
+    return payload
