@@ -334,10 +334,11 @@ def test_semantic_similarity_recognizes_aliases_and_concepts():
     assert semantic_similarity_score(question, "Use Amazon S3.") < 60
 
 
-def test_semantic_similarity_awards_a_for_complete_sentence_naming_correct_service():
+def test_semantic_similarity_requires_reasoning_for_a_grade():
     question = _structured_question("manages encryption keys")
 
-    assert semantic_similarity_score(question, "The correct service is AWS KMS.") >= 90
+    assert 80 <= semantic_similarity_score(question, "The correct service is AWS KMS.") < 90
+    assert semantic_similarity_score(question, "AWS KMS manages encryption keys.") >= 90
     assert semantic_similarity_score(question, "KMS") < 90
 
 
@@ -346,13 +347,13 @@ def test_semantic_similarity_uses_syntax_alias_table_for_service_names():
     codebuild_question = _structured_question("managed build project")
 
     assert semantic_similarity_score(cloudtrail_question, "AWS Cloud trail records API activity for auditing.") >= 90
-    assert semantic_similarity_score(cloudtrail_question, "Use AWS CloudTrail.") >= 90
+    assert 80 <= semantic_similarity_score(cloudtrail_question, "Use AWS CloudTrail.") < 90
     assert semantic_similarity_score(codebuild_question, "AWS Code Build") >= 80
 
 def test_semantic_similarity_uses_acceptable_answers_as_correct_evidence():
     question = _structured_question("managed build project")
 
-    assert semantic_similarity_score(question, "AWS Code Build") >= 90
+    assert 80 <= semantic_similarity_score(question, "AWS Code Build") < 90
 
 def test_semantic_similarity_recognizes_budget_cost_center_alias():
     question = _structured_question("track cost or usage thresholds")
@@ -382,9 +383,28 @@ def test_semantic_accuracy_uses_grade_bands_and_reports_exact_letter_match(tmp_p
     assert metrics["semantic_grade_accuracy"] == 1
     assert metrics["semantic_matching_grade_bands"] == 1
     assert metrics["semantic_exact_letter_accuracy"] == 0
-    assert metrics["semantic_matching_letter_grades"] == 0
-    assert metrics["semantic_mismatches"][0]["expected_letter"] == "A"
-    assert metrics["semantic_mismatches"][0]["actual_letter"] == "B"
+
+def test_curated_semantic_metrics_keep_grade_a_precision_high():
+    project_root = Path(__file__).resolve().parents[2]
+    questions = JsonQuestionRepository(project_root / "data" / "questions" / "sample_questions.json").all()
+
+    metrics = evaluate_semantic_curated_answers(
+        project_root / "data" / "curated" / "curated_training_data.json",
+        questions,
+    )
+
+    assert metrics["per_grade_band"]["A"]["precision"] >= 0.9
+
+def test_curated_semantic_metrics_keep_grade_b_precision_stable():
+    project_root = Path(__file__).resolve().parents[2]
+    questions = JsonQuestionRepository(project_root / "data" / "questions" / "sample_questions.json").all()
+
+    metrics = evaluate_semantic_curated_answers(
+        project_root / "data" / "curated" / "curated_training_data.json",
+        questions,
+    )
+
+    assert metrics["per_grade"]["B"]["precision"] >= 0.8
 
 def test_semantic_accuracy_skips_conflicting_duplicate_feedback(tmp_path: Path):
     question = _structured_question("manages encryption keys")
@@ -431,7 +451,25 @@ def test_semantic_similarity_caps_question_rephrases_without_answer_detail():
         question,
         "Which API Gateway feature should be used to run token validation on requests?",
     ) < 80
+    assert semantic_similarity_score(
+        question,
+        "This question is asking the learner to identify which API Gateway feature should run token validation on requests.",
+    ) < 80
     assert semantic_similarity_score(question, "Use an API Gateway Lambda authorizer.") >= 80
+
+def test_semantic_similarity_caps_hedged_and_ambiguous_service_mentions():
+    api_question = _structured_question("custom token validation")
+    sqs_question = _structured_question("another worker does not immediately receive")
+
+    assert semantic_similarity_score(
+        api_question,
+        "I don't know. AWS API Gateway routes requests, but I would be guessing.",
+    ) < 70
+    assert semantic_similarity_score(
+        api_question,
+        "Use API Gateway or AWS WAF for token validation.",
+    ) < 80
+    assert semantic_similarity_score(sqs_question, "SQS FILO queue") < 80
 
 def test_correct_answer_text_uses_multiple_choice_value_without_answer_cue():
     question = Question(

@@ -82,3 +82,51 @@ def test_combiner_preserves_feedback_text_and_correct_answer_text(tmp_path):
             "feedback_text": "Treat this as a partial-credit near miss.",
         }
     ]
+
+
+def test_combiner_includes_generated_curated_fragments(tmp_path):
+    config_dir = tmp_path / "config"
+    generated_dir = tmp_path / "generated"
+    config_dir.mkdir()
+    generated_dir.mkdir()
+    (config_dir / "curated_training_data.json").write_text(
+        json.dumps(
+            [
+                {
+                    "question": "Readable question",
+                    "reference_answer": "Use the exact service.",
+                    "answer_given": "Correct service",
+                    "correct_rating": "A",
+                    "rating_given": "A",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+    (generated_dir / "curated_training_question_rewordings.json").write_text(
+        json.dumps(
+            [
+                {
+                    "schema_version": 2,
+                    "question": "Readable question",
+                    "reference_answer": "Use the exact service.",
+                    "answer_given": "This question asks which service is exact.",
+                    "correct_rating": "D",
+                    "rating_given": "A",
+                    "feedback_text": "Generated question-restatement negative example.",
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+    output = tmp_path / "combined.json"
+
+    file_count, row_count = combine_curated_training_data(config_dir, output, generated_dir)
+
+    rows = json.loads(output.read_text(encoding="utf-8"))
+    assert file_count == 2
+    assert row_count == 2
+    assert [row["answer_given"] for row in rows] == [
+        "Correct service",
+        "This question asks which service is exact.",
+    ]

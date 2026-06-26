@@ -16,21 +16,12 @@ DEFAULT_PATTERNS = (
 )
 
 
-def combine_curated_training_data(config_dir: Path, output: Path) -> tuple[int, int]:
-    input_paths = sorted(
-        {
-            path
-            for pattern in DEFAULT_PATTERNS
-            for path in config_dir.glob(pattern)
-            if path.is_file()
-        }
-    )
+def combine_curated_training_data(config_dir: Path, output: Path, generated_dir: Path | None = None) -> tuple[int, int]:
+    input_paths = curated_training_input_paths(config_dir, generated_dir)
     if not input_paths:
         patterns = ", ".join(DEFAULT_PATTERNS)
         raise FileNotFoundError(f"No curated training data found in {config_dir} matching {patterns}")
     combined_rows: list[object] = []
-    seen_rows: set[str] = set()
-    seen_questions: set[str] = set()
     for path in input_paths:
         with path.open("r", encoding="utf-8") as input_file:
             rows = json.load(input_file)
@@ -39,13 +30,29 @@ def combine_curated_training_data(config_dir: Path, output: Path) -> tuple[int, 
         for index, row in enumerate(rows):
             _validate_curated_row(row, path, index)
             curated_row = json.dumps(_curated_row(row))
-            question = row['question']
-            if question not in seen_questions:
-                combined_rows.append(json.loads(curated_row))
+            combined_rows.append(json.loads(curated_row))
 
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(combined_rows, indent=2) + "\n", encoding="utf-8")
     return len(input_paths), len(combined_rows)
+
+
+def curated_training_input_paths(config_dir: Path, generated_dir: Path | None = None) -> list[Path]:
+    return sorted(
+        {
+            path
+            for source_dir in _source_dirs(config_dir, generated_dir)
+            for pattern in DEFAULT_PATTERNS
+            for path in source_dir.glob(pattern)
+            if path.is_file()
+        }
+    )
+
+
+def _source_dirs(config_dir: Path, generated_dir: Path | None) -> tuple[Path, ...]:
+    if generated_dir is None:
+        return (config_dir,)
+    return tuple(dict.fromkeys((config_dir, generated_dir)))
 
 
 def _validate_curated_row(row: object, path: Path, index: int) -> None:
@@ -99,10 +106,15 @@ def main() -> None:
         type=Path,
         default=Path("data/curated/curated_training_data.json"),
     )
+    parser.add_argument("--generated-dir", type=Path, default=Path("data/generated"))
     args = parser.parse_args()
 
-    file_count, row_count = combine_curated_training_data(args.config_dir, args.output)
+    input_paths = curated_training_input_paths(args.config_dir, args.generated_dir)
+    file_count, row_count = combine_curated_training_data(args.config_dir, args.output, args.generated_dir)
     print(f"Combined {row_count} rows from {file_count} files into {args.output}")
+    print("Curated source files:")
+    for path in input_paths:
+        print(f"- {path}")
 
 
 if __name__ == "__main__":

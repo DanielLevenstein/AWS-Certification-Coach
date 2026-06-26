@@ -1,9 +1,9 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 44
+- Curated examples reviewed: 244
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 11, 'B': 6, 'C': 4, 'D': 12, 'F': 11}`
-- Suggested label updates: 8
+- Current grade distribution: `{'A': 11, 'B': 6, 'C': 5, 'D': 211, 'F': 11}`
+- Suggested label updates: 7
 
 ## Suggested Answer Updates
 
@@ -23,29 +23,21 @@
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
-### Row 16: B -> A
+### Row 26: A -> B
 
-- Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
-- Answer: `AWS KMS`
-- Reference: AWS KMS
-- Semantic score: `95`
+- Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
+- Answer: `AWS Code Build`
+- Reference: a CodeBuild buildspec file
+- Semantic score: `85`
+- Reviewer feedback: Again my answer is correct. Are you sure you are using the semantic evaluation logic?
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 27: C -> B
-
-- Question: An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?
-- Answer: `SQS FILO queue`
-- Reference: Adjust the SQS visibility timeout
-- Semantic score: `80`
-- Reviewer feedback: My answer had nothing to do with the cannon answer but might still be partially right.
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 28: B -> A
+### Row 28: B -> D
 
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
 - Answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. `
 - Reference: Configure SNS subscription filter policies
-- Semantic score: `90`
+- Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ### Row 29: A -> B
@@ -57,12 +49,12 @@
 - Reviewer feedback: This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 32: C -> A
+### Row 32: C -> D
 
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
 - Answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. `
 - Reference: Configure SNS subscription filter policies
-- Semantic score: `90`
+- Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ### Row 35: C -> D

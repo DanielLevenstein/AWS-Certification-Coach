@@ -112,6 +112,25 @@ def test_negated_misconception_does_not_trigger_feedback():
     assert "common misconception" not in result.feedback
 
 
+def test_framed_question_restatement_receives_restatement_feedback():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Explain which AWS service should manage encryption keys.",
+        reference_answer="Use AWS KMS.",
+        key_concepts=["AWS KMS", "encryption keys"],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(
+        question,
+        "This question is asking the learner to identify which AWS service should manage encryption keys.",
+    )
+
+    assert result.score <= 25
+    assert result.feedback == "This answer restates the question without identifying and explaining the solution."
+
+
 def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
     rendered = []
     monkeypatch.setattr(app.st, "write", lambda value: rendered.append(("write", value)))
