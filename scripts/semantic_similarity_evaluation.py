@@ -31,6 +31,17 @@ CHART_FONT_SIZES = {
     "annotation": 14,
 }
 
+# Read guardrails from config/guardrails.json
+def load_guardrails_config():
+    with open("config/guardrails.json", "r", encoding="utf-8") as guardrails_file:
+        return json.load(guardrails_file)
+
+
+_GUARDRAILS = load_guardrails_config()
+SEMANTIC_SIMILARITY_GUARDRAIL = _GUARDRAILS['SEMANTIC_SIMILARITY_GUARDRAIL']
+GRADE_BAND_PRECISION_GUARDRAIL_PERCENT = _GUARDRAILS['GRADE_BAND_PRECISION_GUARDRAIL_PERCENT']
+PER_GRADE_PRECISION_GUARDRAIL_PERCENT = _GUARDRAILS['PER_GRADE_PRECISION_GUARDRAIL_PERCENT']
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -46,7 +57,6 @@ def main() -> None:
     parser.add_argument("--chart-output", type=Path, default=Path("release/metrics/semantic_accuracy.png"))
     parser.add_argument("--per-grade-output", type=Path, default=None)
     parser.add_argument("--grade-band-output", type=Path, default=None)
-    parser.add_argument("--letter-distance-output", type=Path, default=None)
     args = parser.parse_args()
 
     questions = JsonQuestionRepository(args.questions).all()
@@ -64,8 +74,6 @@ def main() -> None:
         plot_per_grade_metrics(metrics, args.per_grade_output)
     if args.grade_band_output is not None:
         plot_grade_band_metrics(metrics, args.grade_band_output)
-    if args.letter_distance_output is not None:
-        plot_letter_distance_metrics(metrics, args.letter_distance_output)
     print(json.dumps(metrics, indent=2))
     print(f"Semantic accuracy graph: {args.chart_output}")
 
@@ -86,7 +94,7 @@ def plot_semantic_accuracy(
     colors = ["#2ca02c", "#1f77b4", "#9467bd", "#ff7f0e", "#17becf"]
     figure, axis = plt.subplots(figsize=(12, 6))
     bars = axis.bar(values.keys(), values.values(), color=colors)
-    axis.axhline(90, color="#d62728", linestyle="--", linewidth=2, label="Precision guardrail (90%)")
+    _draw_guardrail(axis, SEMANTIC_SIMILARITY_GUARDRAIL, "Semantic similarity guardrail")
     axis.set_title("Semantic Diagnostic Accuracy", fontsize=CHART_FONT_SIZES["title"], pad=14)
     axis.set_ylabel("Percent", fontsize=CHART_FONT_SIZES["axis"])
     axis.set_ylim(0, 108)
@@ -130,6 +138,11 @@ def plot_per_grade_metrics(metrics: dict[str, object], output_path: Path) -> Non
         recalls.append(0.0 if recall is None else float(recall) * 100)
         precision_labels.append("N/A" if precision is None else f"{float(precision):.0%}")
         recall_labels.append("N/A" if recall is None else f"{float(recall):.0%}")
+    _validate_precision_guardrail(
+        "Per-grade",
+        dict(zip(grades, precisions, strict=True)),
+        PER_GRADE_PRECISION_GUARDRAIL_PERCENT,
+    )
 
     figure, axis = plt.subplots(figsize=(8, 5))
     positions = list(range(len(grades)))
@@ -154,6 +167,7 @@ def plot_per_grade_metrics(metrics: dict[str, object], output_path: Path) -> Non
     axis.set_xlabel("Grade", fontsize=CHART_FONT_SIZES["axis"])
     axis.set_title("Per-Grade Precision and Recall", fontsize=CHART_FONT_SIZES["title"], pad=14)
     axis.grid(axis="y", alpha=0.25)
+    _draw_guardrail(axis, PER_GRADE_PRECISION_GUARDRAIL_PERCENT, "Precision guardrail")
     axis.legend(loc="lower right", fontsize=CHART_FONT_SIZES["legend"])
     axis.bar_label(
         precision_bars,
@@ -191,6 +205,11 @@ def plot_grade_band_metrics(metrics: dict[str, object], output_path: Path) -> No
         recalls.append(0.0 if recall is None else float(recall) * 100)
         precision_labels.append("N/A" if precision is None else f"{float(precision):.0%}")
         recall_labels.append("N/A" if recall is None else f"{float(recall):.0%}")
+    _validate_precision_guardrail(
+        "Grade-band",
+        dict(zip(bands, precisions, strict=True)),
+        GRADE_BAND_PRECISION_GUARDRAIL_PERCENT,
+    )
 
     figure, axis = plt.subplots(figsize=(8, 5))
     positions = list(range(len(bands)))
@@ -215,6 +234,7 @@ def plot_grade_band_metrics(metrics: dict[str, object], output_path: Path) -> No
     axis.set_xlabel("Grade band", fontsize=CHART_FONT_SIZES["axis"])
     axis.set_title("Grade-Band Precision and Recall", fontsize=CHART_FONT_SIZES["title"], pad=14)
     axis.grid(axis="y", alpha=0.25)
+    _draw_guardrail(axis, GRADE_BAND_PRECISION_GUARDRAIL_PERCENT, "Precision guardrail")
     axis.legend(loc="lower right", fontsize=CHART_FONT_SIZES["legend"])
     axis.bar_label(precision_bars, labels=precision_labels, padding=3, fontsize=CHART_FONT_SIZES["annotation"])
     axis.bar_label(recall_bars, labels=recall_labels, padding=3, fontsize=CHART_FONT_SIZES["annotation"])
@@ -224,51 +244,28 @@ def plot_grade_band_metrics(metrics: dict[str, object], output_path: Path) -> No
     plt.close(figure)
 
 
-def plot_letter_distance_metrics(metrics: dict[str, object], output_path: Path) -> None:
-    """Show how exact and adjacent predictions compose Within 1 Letter."""
+def _validate_precision_guardrail(chart_name: str, precision_values: dict[str, float], guardrail_percent: float) -> None:
+    failures = [
+        f"{label}={precision:.2f}%"
+        for label, precision in precision_values.items()
+        if precision <= guardrail_percent
+    ]
+    if failures:
+        raise ValueError(
+            f"{chart_name} precision does not clear the {guardrail_percent:.2f}% guardrail: "
+            + ", ".join(failures)
+        )
 
-    exact = metrics.get("semantic_exact_letter_accuracy")
-    within_one = metrics.get("semantic_within_one_letter_accuracy")
-    if not isinstance(exact, (int, float)) or not isinstance(within_one, (int, float)):
-        raise ValueError("Semantic metrics must define exact and within-one-letter accuracy.")
 
-    exact_percent = float(exact) * 100
-    off_by_one_percent = max(0.0, float(within_one) - float(exact)) * 100
-    beyond_one_percent = max(0.0, 1.0 - float(within_one)) * 100
-    segments = (
-        ("Exact Match", exact_percent, "#2f855a"),
-        ("Off by 1", off_by_one_percent, "#4299e1"),
-        ("More than 1", beyond_one_percent, "#c53030"),
+def _draw_guardrail(axis: object, guardrail_percent: float, label: str) -> None:
+    axis.axhline(
+        guardrail_percent,
+        color="#d62728",
+        linestyle="--",
+        linewidth=2,
+        label=f"{label} ({guardrail_percent:g}%)",
     )
 
-    figure, axis = plt.subplots(figsize=(8, 5))
-    left = 0.0
-    for label, value, color in segments:
-        axis.barh([0], [value], left=left, color=color, height=0.42, label=label)
-        if value >= 5:
-            axis.text(left + value / 2, 0, f"{value:.0f}%", ha="center", va="center", color="white", fontweight="bold")
-        left += value
-    within_one_percent = float(within_one) * 100
-    axis.axvline(within_one_percent, color="#742a2a", linestyle="--", linewidth=2)
-    axis.annotate(
-        f"Within 1 Letter: {within_one_percent:.1f}%",
-        xy=(within_one_percent, 0.23),
-        xytext=(within_one_percent - 3, 0.48),
-        ha="right",
-        fontsize=CHART_FONT_SIZES["annotation"],
-        fontweight="bold",
-    )
-    axis.set_xlim(0, 100)
-    axis.set_ylim(-0.6, 0.72)
-    axis.set_yticks([])
-    axis.set_xlabel("Percent of predictions", fontsize=CHART_FONT_SIZES["axis"])
-    axis.set_title("Letter-Distance Accuracy", fontsize=CHART_FONT_SIZES["title"], pad=14)
-    axis.grid(axis="x", alpha=0.25)
-    axis.legend(loc="lower center", ncol=3, fontsize=CHART_FONT_SIZES["legend"])
-    figure.tight_layout()
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(output_path, dpi=160)
-    plt.close(figure)
 
 if __name__ == "__main__":
     main()

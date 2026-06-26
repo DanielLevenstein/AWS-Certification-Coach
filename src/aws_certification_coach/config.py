@@ -10,6 +10,7 @@ from typing import Any
 
 
 DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "config" / "evaluator_default.json"
+DEFAULT_GUARDRAILS_CONFIG_PATH = Path(__file__).resolve().parents[2] / "config" / "guardrails.json"
 
 
 @dataclass(frozen=True)
