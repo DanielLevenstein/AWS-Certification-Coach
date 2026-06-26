@@ -17,6 +17,9 @@ class EvaluationPromptBuilder:
         acceptable_answers = "\n".join(f"- {answer}" for answer in question.acceptable_answers) or "- None"
         common_misconceptions = "\n".join(f"- {concept}" for concept in question.common_misconceptions) or "- None"
         must_not_claim = "\n".join(f"- {claim}" for claim in question.must_not_claim) or "- None"
+        do_not_claim_explanation = (
+            "\n".join(f"- {explanation}" for explanation in question.do_not_claim_explanation) or "- None"
+        )
         return f"""Evaluate the learner's answer against the reference answer.
 
 Question type:
@@ -45,6 +48,9 @@ Common misconceptions:
 
 Must not claim:
 {must_not_claim}
+
+Do-not-claim explanations:
+{do_not_claim_explanation}
 
 Learner answer:
 {user_answer}

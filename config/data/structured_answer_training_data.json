@@ -52,6 +52,9 @@
         "rating": 0.25,
         "source": "structured_answer_test_case"
       }
+    ],
+    "do_not_claim_explanation": [
+      "AWS Code Build is a better option because Define the install, build, and test command phases in an AWS CodeBuild buildspec file for the managed build project. CodeDeploy AppSpec is the build command file. does not satisfy the same scenario requirement."
     ]
   },
   {

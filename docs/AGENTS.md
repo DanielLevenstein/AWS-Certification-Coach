@@ -1,3 +1,6 @@
+# Local Edits
+- Do not override local file edits without permission.
+
 # Project Setup
 - Do not autorun streamlit app on opening codespace.
 - Run all python code in a virtual environment.

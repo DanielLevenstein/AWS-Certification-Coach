@@ -22,6 +22,8 @@ def test_default_knowledge_base_has_expected_first_version_sections():
     assert len(knowledge.syntax_aliases) == 18
     assert len(knowledge.services) == 42
     assert len(knowledge.concepts) == 161
+    assert len(knowledge.common_misconceptions) >= 1
+    assert len(knowledge.must_not_claim) >= 1
     assert not hasattr(knowledge, "rubric_profiles")
 
 
@@ -33,6 +35,19 @@ def test_knowledge_base_covers_every_structured_training_key_concept():
     assert expected <= {concept.name for concept in knowledge.concepts}
     assert all(concept.service_ids for concept in knowledge.concepts)
     assert all(concept.description for concept in knowledge.concepts)
+
+
+def test_knowledge_base_exposes_feedback_flag_sections_with_sources():
+    knowledge = load_knowledge_base()
+    row = knowledge.common_misconceptions[0]
+
+    assert row.key_concepts
+    assert row.common_misconceptions
+    assert row.acceptable_answers
+    assert row.must_not_claim
+    assert row.do_not_claim_explanation
+    assert row.source_url.startswith("https://docs.aws.amazon.com/")
+    assert row in knowledge.flag_sets_for_source_url(row.source_url)
 
 
 def test_knowledge_base_normalizes_syntax_and_exposes_service_aliases():

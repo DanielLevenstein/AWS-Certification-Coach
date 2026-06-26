@@ -27,6 +27,32 @@ EXACT_CORRECT_OPTION_SCORE = 95
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 GENERIC_SERVICE_TOKENS = {"amazon", "aws", "service", "the", "use"}
 CURATED_FEEDBACK_SOURCE = "curated_answer_feedback"
+MISCONCEPTION_SCORE_CAP = 65
+MUST_NOT_CLAIM_SCORE_CAP = 49
+CLAIM_FILLER_TOKENS = {
+    "a",
+    "an",
+    "and",
+    "answer",
+    "better",
+    "best",
+    "claim",
+    "fit",
+    "for",
+    "is",
+    "meets",
+    "not",
+    "requirement",
+    "satisfies",
+    "scenario",
+    "should",
+    "than",
+    "the",
+    "this",
+    "to",
+    "use",
+}
+NEGATION_TOKENS = {"avoid", "cannot", "don't", "doesnt", "doesn't", "incorrect", "not", "wrong"}
 
 
 @dataclass(frozen=True)
@@ -99,6 +125,18 @@ def _evaluation_response(
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": "The AWS service name appears to be misspelled.",
             "feedback_source": CURATED_FEEDBACK_SOURCE if curated_feedback else "",
+            "detailed_answer": question.reference_answer,
+        }
+        return json.dumps(payload)
+    claim_issue = _rubric_claim_issue(question, user_answer)
+    if claim_issue:
+        missing = _missing_concepts(question, user_answer)
+        score_cap = MUST_NOT_CLAIM_SCORE_CAP if claim_issue["section"] == "must_not_claim" else MISCONCEPTION_SCORE_CAP
+        payload = {
+            "score": min(int(model_score), score_cap),
+            "missing_concepts": missing,
+            "suggested_improvements": [f"Explain {concept}." for concept in missing],
+            "feedback": str(claim_issue["feedback"]),
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -176,6 +214,71 @@ def _incorrect_service_answer_issue(question: Question, user_answer: str) -> str
     if _is_incorrect_service_selection(question, user_answer):
         return "This exact service answer is not in the question's correct answer list."
     return None
+
+
+def _rubric_claim_issue(question: Question, user_answer: str) -> dict[str, str] | None:
+    for index, claim in enumerate(question.must_not_claim):
+        if _answer_affirms_claim(user_answer, claim):
+            return {
+                "section": "must_not_claim",
+                "feedback": _do_not_claim_feedback(question, index, claim),
+            }
+    for claim in question.common_misconceptions:
+        if _answer_affirms_claim(user_answer, claim):
+            return {
+                "section": "common_misconceptions",
+                "feedback": f"This answer appears to rely on a common misconception: {claim}",
+            }
+    return None
+
+
+def _do_not_claim_feedback(question: Question, index: int, claim: str) -> str:
+    if index < len(question.do_not_claim_explanation):
+        explanation = question.do_not_claim_explanation[index].strip()
+        if explanation:
+            return explanation
+    return f"Do not claim this for this question: {claim}"
+
+
+def _answer_affirms_claim(user_answer: str, claim: str) -> bool:
+    answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold()))
+    claim_tokens = _claim_subject_tokens(claim)
+    if not answer_tokens or not claim_tokens:
+        return False
+    if not claim_tokens <= answer_tokens:
+        return False
+    if _answer_negates_claim(user_answer, claim_tokens):
+        return False
+    return True
+
+
+def _claim_subject_tokens(claim: str) -> set[str]:
+    normalized = claim.casefold()
+    for separator in (
+        " satisfies ",
+        " is the best ",
+        " is best ",
+        " is the better ",
+        " is better ",
+    ):
+        if separator in normalized:
+            normalized = normalized.split(separator, 1)[0]
+            break
+    tokens = set(TOKEN_PATTERN.findall(normalized))
+    subject_tokens = tokens - CLAIM_FILLER_TOKENS
+    return subject_tokens or tokens
+
+
+def _answer_negates_claim(user_answer: str, claim_tokens: set[str]) -> bool:
+    tokens = TOKEN_PATTERN.findall(user_answer.casefold().replace("n't", " not"))
+    if not tokens:
+        return False
+    claim_positions = [index for index, token in enumerate(tokens) if token in claim_tokens]
+    for position in claim_positions:
+        window = tokens[max(0, position - 3): position + 4]
+        if set(window) & NEGATION_TOKENS:
+            return True
+    return False
 
 
 def _is_question_restatement(question: Question, user_answer: str) -> bool:

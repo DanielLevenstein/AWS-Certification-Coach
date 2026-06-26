@@ -97,6 +97,12 @@ def test_user_feedback_v2_filename_uses_schema_version_2(tmp_path: Path):
 
     rows = json.loads(path.read_text(encoding="utf-8"))
     assert {row["schema_version"] for row in rows} == {2}
+    assert rows[0]["source_url"] == "https://docs.aws.amazon.com/kms/"
+    assert rows[0]["key_concepts"] == ["AWS KMS"]
+    assert rows[0]["common_misconceptions"] == []
+    assert rows[0]["acceptable_answers"] == []
+    assert rows[0]["must_not_claim"] == []
+    assert rows[0]["do_not_claim_explanation"] == []
 
 
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):

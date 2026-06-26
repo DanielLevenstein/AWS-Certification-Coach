@@ -63,6 +63,7 @@ def test_sample_question_artifact_includes_answer_rubric_contract():
         "common_misconceptions",
         "acceptable_answers",
         "must_not_claim",
+        "do_not_claim_explanation",
     }
 
     assert rows
@@ -71,6 +72,7 @@ def test_sample_question_artifact_includes_answer_rubric_contract():
         assert rubric_fields <= set(row)
         assert row["required_concepts"]
         assert row["acceptable_answers"]
+        assert len(row["do_not_claim_explanation"]) == len(row["must_not_claim"])
 
 
 def test_existing_question_rows_load_without_rubric_metadata():

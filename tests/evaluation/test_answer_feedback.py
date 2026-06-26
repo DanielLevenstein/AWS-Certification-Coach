@@ -52,6 +52,66 @@ def test_non_a_answer_preserves_specific_provider_feedback():
     assert result.feedback == "The service name is misspelled."
 
 
+def test_common_misconception_answer_gets_specific_feedback():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Billing",
+        difficulty="Easy",
+        question="Explain which service tracks cost thresholds and sends alerts.",
+        reference_answer="Use AWS Budgets to track thresholds and send alerts.",
+        key_concepts=["AWS Budgets", "cost thresholds", "alerts"],
+        common_misconceptions=["AWS CloudTrail is the best fit for this requirement."],
+        acceptable_answers=["AWS Budgets"],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(question, "Use AWS CloudTrail.")
+
+    assert result.score <= 65
+    assert result.feedback == (
+        "This answer appears to rely on a common misconception: "
+        "AWS CloudTrail is the best fit for this requirement."
+    )
+
+
+def test_must_not_claim_answer_gets_stronger_feedback():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Explain which service should manage encryption keys.",
+        reference_answer="Use AWS KMS.",
+        key_concepts=["AWS KMS"],
+        must_not_claim=["Amazon S3 satisfies the scenario better than AWS KMS."],
+        do_not_claim_explanation=["AWS KMS is a better option because it is designed to manage encryption keys."],
+        acceptable_answers=["AWS KMS"],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(question, "Use Amazon S3.")
+
+    assert result.score <= 49
+    assert result.feedback == "AWS KMS is a better option because it is designed to manage encryption keys."
+
+
+def test_negated_misconception_does_not_trigger_feedback():
+    question = Question(
+        certification="Cloud Practitioner",
+        domain="Billing",
+        difficulty="Easy",
+        question="Explain which service tracks cost thresholds and sends alerts.",
+        reference_answer="Use AWS Budgets to track thresholds and send alerts.",
+        key_concepts=["AWS Budgets", "cost thresholds", "alerts"],
+        common_misconceptions=["AWS CloudTrail is the best fit for this requirement."],
+        acceptable_answers=["AWS Budgets"],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(
+        question,
+        "Do not use AWS CloudTrail; use AWS Budgets for alerts.",
+    )
+
+    assert "common misconception" not in result.feedback
+
+
 def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
     rendered = []
     monkeypatch.setattr(app.st, "write", lambda value: rendered.append(("write", value)))

@@ -56,7 +56,8 @@
         "key_concepts": "scenario_concepts",
         "common_misconceptions": "distractor_best_fit_claims",
         "acceptable_answers": "correct_option_reference_answer_and_service",
-        "must_not_claim": "distractor_satisfies_requirement_claims"
+        "must_not_claim": "distractor_satisfies_requirement_claims",
+        "do_not_claim_explanation": "explain_why_correct_option_beats_distractor"
       },
       "composition_rules": {
         "source_url": "knowledge_service_source_url",
@@ -65,7 +66,8 @@
         "bonus_concepts": "empty",
         "common_misconceptions": "knowledge_profile_distractors_with_template_pattern",
         "acceptable_answers": "correct_option_reference_answer_and_service",
-        "must_not_claim": "knowledge_profile_distractors_with_template_pattern"
+        "must_not_claim": "knowledge_profile_distractors_with_template_pattern",
+        "do_not_claim_explanation": "correct_service_better_than_distractor_explanation"
       }
     }
   ],

@@ -62,4 +62,16 @@ def rubric_metadata(
         "common_misconceptions": [f"{distractor} is the best fit for this requirement." for distractor in distractors],
         "acceptable_answers": [correct_option, explanation, service],
         "must_not_claim": [f"{distractor} satisfies the scenario better than {service}." for distractor in distractors],
+        "do_not_claim_explanation": [
+            f"{service} is a better option because {_explanation_reason(explanation, service)}"
+            f"while {distractor} does not satisfy that requirement."
+            for distractor in distractors
+        ],
     }
+
+
+def _explanation_reason(explanation: str, service: str) -> str:
+    prefix = f"Use {service} to "
+    if explanation.startswith(prefix):
+        return f"it is designed to {explanation.removeprefix(prefix).rstrip('.')}"
+    return f"the reference answer is: {explanation.rstrip('.')}"

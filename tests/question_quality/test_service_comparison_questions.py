@@ -35,6 +35,9 @@ def test_service_comparison_service_builds_near_miss_question():
     assert "tempting but weaker" in question["question"]
     assert question["original_multiple_choice"] == source["original_multiple_choice"]
     assert "replication" in question["tradeoff_concepts"]
+    assert question["do_not_claim_explanation"] == [
+        "Use DynamoDB global tables is a better option because it satisfies the scenario more directly; Use an RDS read replica is the tempting but weaker alternative."
+    ]
 
 
 def test_service_comparison_service_skips_obviously_weak_distractors():

@@ -56,6 +56,7 @@ def _build_app_questions(count: int) -> list[dict]:
                 "key_concepts": concepts,
                 "source_url": service.source_url,
                 "question_template_id": template.id,
+                **_rubric_metadata(service.name, concepts, distractors, correct_option, explanation, scenario.purpose),
                 "original_multiple_choice": {
                     "question": mcq_question,
                     "options": [
@@ -73,6 +74,27 @@ def _build_app_questions(count: int) -> list[dict]:
             }
         )
     return questions
+
+
+def _rubric_metadata(
+    service_name: str,
+    concepts: list[str],
+    distractors: list[str],
+    correct_option: str,
+    explanation: str,
+    purpose: str,
+) -> dict[str, list[str]]:
+    return {
+        "required_concepts": concepts,
+        "bonus_concepts": [],
+        "common_misconceptions": [f"{distractor} is the best fit for this requirement." for distractor in distractors],
+        "acceptable_answers": [correct_option, explanation, service_name],
+        "must_not_claim": [f"{distractor} satisfies the scenario better than {service_name}." for distractor in distractors],
+        "do_not_claim_explanation": [
+            f"{service_name} is a better option because it is designed to {purpose}, while {distractor} does not satisfy that requirement."
+            for distractor in distractors
+        ],
+    }
 
 
 def _option(option_id: str, text: str) -> dict[str, str]:

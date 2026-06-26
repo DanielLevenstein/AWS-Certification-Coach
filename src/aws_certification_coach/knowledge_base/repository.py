@@ -48,6 +48,17 @@ class Concept:
 
 
 @dataclass(frozen=True)
+class QuestionFlagSet:
+    id: str
+    key_concepts: tuple[str, ...]
+    common_misconceptions: tuple[str, ...]
+    acceptable_answers: tuple[str, ...]
+    must_not_claim: tuple[str, ...]
+    do_not_claim_explanation: tuple[str, ...]
+    source_url: str
+
+
+@dataclass(frozen=True)
 class KnowledgeSelection:
     concepts: tuple[Concept, ...]
     services: tuple[Service, ...]
@@ -85,6 +96,8 @@ class KnowledgeBase:
     syntax_aliases: tuple[tuple[str, str], ...]
     services: tuple[Service, ...]
     concepts: tuple[Concept, ...]
+    common_misconceptions: tuple[QuestionFlagSet, ...] = ()
+    must_not_claim: tuple[QuestionFlagSet, ...] = ()
 
     @property
     def service_tokens(self) -> frozenset[str]:
@@ -125,6 +138,15 @@ class KnowledgeBase:
             if self.canonicalize(concept.name) == normalized_name:
                 return tuple(dict.fromkeys((concept.name, *concept.aliases)))
         return (name,)
+
+    def flag_sets_for_source_url(self, source_url: str) -> tuple[QuestionFlagSet, ...]:
+        if not source_url:
+            return ()
+        return tuple(
+            row
+            for row in (*self.common_misconceptions, *self.must_not_claim)
+            if row.source_url == source_url
+        )
 
     def select(self, concept_names: Iterable[str], answer: str = "") -> KnowledgeSelection:
         """Select exact requested concepts, then relevant alias matches from the answer."""
@@ -180,6 +202,8 @@ def _load_knowledge_base(resolved_path: str) -> KnowledgeBase:
         )
         for row in payload["concepts"]
     )
+    common_misconceptions = tuple(_flag_set_from_json(row) for row in payload["common_misconceptions"])
+    must_not_claim = tuple(_flag_set_from_json(row) for row in payload["must_not_claim"])
     knowledge = KnowledgeBase(
         schema_version=int(payload["schema_version"]),
         description=str(payload["description"]),
@@ -189,6 +213,8 @@ def _load_knowledge_base(resolved_path: str) -> KnowledgeBase:
         ),
         services=services,
         concepts=concepts,
+        common_misconceptions=common_misconceptions,
+        must_not_claim=must_not_claim,
     )
     _validate_normalized_values(knowledge, source)
     return knowledge
@@ -197,7 +223,15 @@ def _load_knowledge_base(resolved_path: str) -> KnowledgeBase:
 def _validate_payload(payload: object, source: Path) -> None:
     if not isinstance(payload, dict):
         raise ValueError(f"Knowledge base must be a JSON object: {source}")
-    required = {"schema_version", "description", "syntax_aliases", "services", "concepts"}
+    required = {
+        "schema_version",
+        "description",
+        "syntax_aliases",
+        "services",
+        "concepts",
+        "common_misconceptions",
+        "must_not_claim",
+    }
     missing = required - payload.keys()
     if missing:
         raise ValueError(f"Knowledge base is missing fields {sorted(missing)}: {source}")
@@ -218,6 +252,29 @@ def _validate_payload(payload: object, source: Path) -> None:
         {"id", "name", "aliases", "service_ids", "description"},
         "concepts",
         source,
+    )
+    flag_fields = {
+        "id",
+        "key_concepts",
+        "common_misconceptions",
+        "acceptable_answers",
+        "must_not_claim",
+        "do_not_claim_explanation",
+        "source_url",
+    }
+    _require_rows(payload["common_misconceptions"], flag_fields, "common_misconceptions", source)
+    _require_rows(payload["must_not_claim"], flag_fields, "must_not_claim", source)
+
+
+def _flag_set_from_json(row: dict[str, object]) -> QuestionFlagSet:
+    return QuestionFlagSet(
+        id=str(row["id"]),
+        key_concepts=tuple(str(value) for value in row["key_concepts"]),
+        common_misconceptions=tuple(str(value) for value in row["common_misconceptions"]),
+        acceptable_answers=tuple(str(value) for value in row["acceptable_answers"]),
+        must_not_claim=tuple(str(value) for value in row["must_not_claim"]),
+        do_not_claim_explanation=tuple(str(value) for value in row["do_not_claim_explanation"]),
+        source_url=str(row["source_url"]),
     )
 
 
@@ -267,3 +324,12 @@ def _validate_normalized_values(knowledge: KnowledgeBase, source: Path) -> None:
     for concept in knowledge.concepts:
         if not concept.id or not concept.name or not concept.service_ids or not concept.description:
             raise ValueError(f"Incomplete concept {concept.id!r}: {source}")
+    for section, rows in (
+        ("common_misconceptions", knowledge.common_misconceptions),
+        ("must_not_claim", knowledge.must_not_claim),
+    ):
+        for row in rows:
+            if not row.id or not row.key_concepts or not row.source_url:
+                raise ValueError(f"Incomplete {section} row {row.id!r}: {source}")
+            if len(row.do_not_claim_explanation) != len(row.must_not_claim):
+                raise ValueError(f"Mismatched do-not-claim explanations in {section} row {row.id!r}: {source}")

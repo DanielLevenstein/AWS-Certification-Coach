@@ -61,6 +61,7 @@ def test_generated_app_questions_include_template_source_and_normalized_option_m
     for row in lambda_rows:
         assert row["question_template_id"] == "service-selection-freeform"
         assert row["source_url"].startswith("https://docs.aws.amazon.com/")
+        assert len(row["do_not_claim_explanation"]) == len(row["must_not_claim"])
         for option in row["original_multiple_choice"]["options"]:
             if option["text"] == "Use AWS Lambda.":
                 lambda_metadata.append(option["metadata"])

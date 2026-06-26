@@ -27,7 +27,8 @@ USER_FEEDBACK_PATH = Path(
         ROOT_DIR / "data" / "generated" / "user_feedback.v2.json",
     )
 )
-SHOW_ANSWER_FEEDBACK_ENV = "SHOW_ANSWER_FEEDBACK"
+SHOW_SUGGESTED_IMPROVEMENTS_ENV = "SHOW_SUGGESTED_IMPROVEMENTS"
+
 author = "Daniel Levenstein"
 linked_in_url = "https://www.linkedin.com/in/daniel-aaron-levenstein/"
 github_url="https://github.com/DanielLevenstein/AWS-Certification-Coach"
@@ -119,8 +120,7 @@ def main() -> None:
         feedback_column, source_column = st.columns([3, 2])
         with feedback_column:
             _render_score(result.score)
-            if _env_enabled(SHOW_ANSWER_FEEDBACK_ENV):
-                _render_answer_feedback(result.score, result.feedback, result.suggested_improvements)
+            _render_answer_feedback(result.score, result.feedback, result.suggested_improvements)
             st.markdown("### Detailed Answer")
             st.write(result.detailed_answer)
             _render_source_documentation(question.original_multiple_choice)
@@ -172,12 +172,13 @@ def _render_answer_feedback(score: int, feedback: str, suggest_improvements: str
         return
     if feedback:
         st.info(feedback)
-    if suggest_improvements:
-        st.info(f"Here are some suggestions for improving your answer:")
-        output = ""
-        for suggestion in suggest_improvements:
-            output+= f"- {suggestion}\n"
-        st.write(output)
+    if _env_enabled(SHOW_SUGGESTED_IMPROVEMENTS_ENV):
+        if suggest_improvements:
+            st.info(f"Here are some suggestions for improving your answer:")
+            output = ""
+            for suggestion in suggest_improvements:
+                output+= f"- {suggestion}\n"
+            st.write(output)
 
 def _render_contact_info_link() -> None:
     st.markdown(f"Author: [{author}]({linked_in_url}) — GitHub: [AWS-Certification-Coach]({github_url})")

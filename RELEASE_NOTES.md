@@ -27,9 +27,10 @@
 | v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                                                                         |
 | v3.0.3.1 | Fixed deployment tests                                                                                                                                                              |
 | v3.0.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation, and expands the default question bank to 160 questions. |
-| v3.1.0  |   Design documentation for splitting knowledge_base and question_template.json                                                                                                      |
-| v3.1.1 | Split question and knowledge base schema |
-| v3.1.2 | Added documentation links for all services and displayed suggested_improvements in UI |
+| v3.1.0   | Design documentation for splitting knowledge_base and question_template.json                                                                                                        |
+| v3.1.1   | Split question and knowledge base schema                                                                                                                                            |
+| v3.1.2   | Added documentation links for all services and displayed suggested_improvements in UI                                                                                               |
+| v3.1.3   | Show must_not_claim sections in feedback.                                                                                                                                           |
 
 # Release Metrics
 
@@ -124,7 +125,7 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.1.2 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
+| v3.1.3 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 
@@ -153,7 +154,7 @@ Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
 Knowledge base schema version: `2`
-Knowledge base file size: `61306` bytes
+Knowledge base file size: `78941` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`

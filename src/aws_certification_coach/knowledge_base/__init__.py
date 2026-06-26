@@ -5,6 +5,7 @@ from aws_certification_coach.knowledge_base.repository import (
     Concept,
     KnowledgeBase,
     KnowledgeSelection,
+    QuestionFlagSet,
     Service,
     load_knowledge_base,
 )
@@ -14,6 +15,7 @@ __all__ = [
     "Concept",
     "KnowledgeBase",
     "KnowledgeSelection",
+    "QuestionFlagSet",
     "Service",
     "load_knowledge_base",
 ]
