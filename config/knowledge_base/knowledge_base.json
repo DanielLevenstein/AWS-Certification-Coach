@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "description": "Canonical AWS service, feature, concept, alias, source, and scenario facts shared by question generation and answer heuristics.",
   "syntax_aliases": [
     {

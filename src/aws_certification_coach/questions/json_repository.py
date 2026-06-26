@@ -66,6 +66,7 @@ def question_from_json(row: object) -> Question:
     if not isinstance(key_concepts, list):
         raise ValueError("Question key_concepts must be a list.")
     return Question(
+        schema_version=3,
         certification=str(row["certification"]),
         domain=str(row["domain"]),
         difficulty=str(row["difficulty"]),

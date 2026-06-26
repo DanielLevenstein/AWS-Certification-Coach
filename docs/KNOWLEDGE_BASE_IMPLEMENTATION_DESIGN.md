@@ -91,7 +91,7 @@ The current schema is:
 
 ```json
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "description": "Canonical AWS service, feature, concept, alias, source, and scenario facts shared by question generation and answer heuristics.",
   "syntax_aliases": [
     {
@@ -138,35 +138,6 @@ The current schema is:
       "purpose": "define repeatable build commands",
       "key_concepts": ["CodeBuild buildspec", "build phases"],
       "distractors": ["Define the phases in a CodeDeploy AppSpec file."]
-    }
-  ]
-}
-```
-
-## Answer Rubric Contract
-
-The current answer-rubric schema stores an extensible rule list. Each rule keeps the existing `answer_rubric_defaults` section shape:
-
-```json
-{
-  "schema_version": 2,
-  "description": "Reusable learner-answer rubric rules and approved feedback messages.",
-  "rules": [
-    {
-      "id": "service_selection_defaults",
-      "description": "Default learner-answer rubric composition for service-selection style questions.",
-      "question_types": ["service_selection", "scenario_multiple_choice"],
-      "answer_rubric_defaults": {
-        "common_misconception_pattern": "{distractor} is the best fit for this requirement.",
-        "acceptable_answer_sources": ["correct_option", "reference_answer", "service_name"],
-        "must_not_claim_pattern": "{distractor} satisfies the scenario better than {service_name}."
-      }
-    }
-  ],
-  "feedback_messages": [
-    {
-      "id": "full_sentence_for_full_credit",
-      "message": "Please write full sentence answers for full credit."
     }
   ]
 }

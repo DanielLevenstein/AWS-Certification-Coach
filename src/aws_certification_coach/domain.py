@@ -19,6 +19,7 @@ class EvaluationResult:
 
 @dataclass(frozen=True)
 class Question:
+    schema_version: int
     certification: str
     domain: str
     difficulty: str
