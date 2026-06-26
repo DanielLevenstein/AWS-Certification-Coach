@@ -19,6 +19,7 @@ QUICK_RELEASE_ARTIFACTS = (
     "per_grade_metrics.png",
     "grade_band_metrics.png",
     "letter_distance_metrics.png",
+    "grade_distribution_metrics.png",
     "question_domain_coverage.png",
     "question_intent_coverage.png",
     "question_certification_coverage.png",
@@ -95,6 +96,8 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             str(metrics_dir / "grade_band_metrics.png"),
             "--letter-distance-output",
             str(metrics_dir / "letter_distance_metrics.png"),
+            "--grade-distribution-output",
+            str(metrics_dir / "grade_distribution_metrics.png"),
         ]
     )
     _run(

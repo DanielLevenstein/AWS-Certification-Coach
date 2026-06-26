@@ -8,7 +8,7 @@ The previous TODO was backed up to `docs/TODO_COPY.md` before this roadmap was c
 - Run `./setup.sh` after cleaning to regenerate local test data.
 - Run `./run_unit_tests.sh` before considering a milestone ready.
 - Run release metrics before any commit that claims a release milestone.
-- Update `docs/RELEASE_NOTES.md` for each release with a one-line change description and release metrics.
+- Update `RELEASE_NOTES.md` for each release with a one-line change description and release metrics.
 - Do not commit `data/`, `scripts/data/`, or `metrics/`.
 - Do not push Docker images or create GitHub tags until a human reviews the changes.
 
@@ -27,22 +27,26 @@ Because the current accuracy metrics are stable, we are implementing these chang
 Implementing dedicated AWS knowledge based on a dedicated feature branch using tinyLLama for local training.
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
-### v3.3 User Feedback Update:
-- Schema version should be pulled from config/schema_version.json
-```
-{
-  "KNOWLEDGE_BASE_VERSION": 3,
-  "USER_FEEDBACK_VERSION": 3,
-  "QUESTION_SCHEMA_VERSION": 3
-}
-```
-- Schema version should be set to 1 for legacy questions so unit tests pass.
-- Answers which list the best wrong service name for a service should receive a grade of C.
-  - Existing documentation rubric should be updated based on this new rule.
-- A new graph should be added to the release notes showing grade distribution by letter.
-- Rerun setup.sh after the first round of changes.
-- Manually go through feedback in curated_training_data.json and user_feedback.v3.json located in config. 
-- Write a new TODO list with any suggestions present in user feedback which weren't handled in the original change set. 
+### v3.3 User Feedback Update
+
+Handled in the v3.3 feedback implementation:
+
+- Pull current schema versions from `config/schema_version.json`.
+- Keep missing question schema versions as legacy `1` while generated question rows use the configured question schema.
+- Grade strongest wrong-service near misses as `C`.
+- Update the answer rubric for the wrong-service near-miss rule.
+- Add a release-note chart for expected grade distribution by letter.
+- Refresh setup-generated artifacts after implementation.
+- Review `config/data/curated_training_data.json` and `config/data/user_feedback.v3.json`.
+
+### User Feedback Follow-Ups
+
+- Add an explanatory question or feedback note contrasting S3 lifecycle policies with S3 bucket policies.
+- Add a major SNS vs. SQS comparison question that teaches pub/sub fan-out versus queue-based polling/worker processing.
+- Add a vertical-scaling versus horizontal-scaling question for EC2 and Auto Scaling concepts.
+- Review artifact-review prompts that may give away the expected issue in the question wording, especially SDK pagination examples.
+- Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
+- Fix duplicate DynamoDB documentation links in the documentation/source section.
 
 # Phase 2 Code & Configuration Review
 IAM policy questions.

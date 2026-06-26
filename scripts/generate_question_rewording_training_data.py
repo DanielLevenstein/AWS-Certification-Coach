@@ -8,6 +8,8 @@ import json
 from pathlib import Path
 from typing import Protocol
 
+from aws_certification_coach.config import current_schema_version
+
 
 class RewordingProvider(Protocol):
     def reword(self, question: dict[str, object]) -> str:
@@ -85,7 +87,7 @@ def _validate_question_row(question: object) -> None:
 
 def _curated_row(question: dict[str, object], reworded_answer: str) -> dict[str, object]:
     row = {
-        "schema_version": 3,
+        "schema_version": current_schema_version("USER_FEEDBACK_VERSION"),
         "question": str(question["question"]),
         "exam_code": str(question.get("exam_code", "")),
         "reference_answer": str(question["reference_answer"]),

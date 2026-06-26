@@ -21,7 +21,7 @@ def test_rewording_generator_creates_negative_curated_feedback_rows():
 
     assert rows == [
         {
-            "schema_version": 2,
+            "schema_version": 3,
             "question": "Explain which AWS service should manage encryption keys.",
             "exam_code": "CLF-C02",
             "reference_answer": "Use AWS KMS.",

@@ -7,6 +7,7 @@ import argparse
 import json
 from pathlib import Path
 
+from aws_certification_coach.config import current_schema_version
 from aws_certification_coach.question_fidelity.model import QuestionFidelityModel
 try:
     from generate_app_question_artifacts import documentation_url_for_option, service_metadata_for_option
@@ -80,6 +81,7 @@ def main() -> None:
 
 def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]:
     model = QuestionFidelityModel()
+    schema_version = current_schema_version("QUESTION_SCHEMA_VERSION")
     questions: list[dict[str, object]] = []
     for source in sources:
         source_id = str(source["source_id"])
@@ -93,6 +95,7 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
             for option_id, text in zip(["B", "C", "D"], _distractors(source, source_id), strict=True)
         )
         row = {
+            "schema_version": schema_version,
             "certification": source["certification"],
             "exam_code": source.get("exam_code", ""),
             "domain": source["domain"],

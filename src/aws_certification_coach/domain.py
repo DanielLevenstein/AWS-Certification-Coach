@@ -19,7 +19,6 @@ class EvaluationResult:
 
 @dataclass(frozen=True)
 class Question:
-    schema_version: int
     certification: str
     domain: str
     difficulty: str
@@ -41,6 +40,7 @@ class Question:
     artifact_body: str = ""
     artifact_context: str = ""
     expected_issue: str = ""
+    schema_version: int = 1
 
 
 @dataclass(frozen=True)

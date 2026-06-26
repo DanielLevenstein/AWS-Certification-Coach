@@ -1,4 +1,4 @@
-"""Configuration loading for model providers and hyperparameters."""
+"""Configuration loading for model providers, hyperparameters, and schemas."""
 
 from __future__ import annotations
 
@@ -9,7 +9,9 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "config" / "evaluator_default.json"
+CONFIG_DIR = Path(__file__).resolve().parents[2] / "config"
+DEFAULT_CONFIG_PATH = CONFIG_DIR / "evaluator_default.json"
+DEFAULT_SCHEMA_VERSION_PATH = CONFIG_DIR / "schema_version.json"
 
 
 @dataclass(frozen=True)
@@ -29,6 +31,21 @@ class EvaluatorConfig:
         "data/curated/curated_training_data.json",
     )
     semantic_questions_path: str = "data/questions/sample_questions.json"
+
+
+def load_schema_versions(path: str | Path | None = None) -> dict[str, int]:
+    """Load project schema-version constants from config/schema_version.json."""
+
+    payload = _read_json(Path(path) if path is not None else DEFAULT_SCHEMA_VERSION_PATH)
+    return {str(key): int(value) for key, value in payload.items()}
+
+
+def current_schema_version(name: str, path: str | Path | None = None) -> int:
+    versions = load_schema_versions(path)
+    try:
+        return versions[name]
+    except KeyError as exc:
+        raise KeyError(f"Schema version {name!r} is not defined in {DEFAULT_SCHEMA_VERSION_PATH}") from exc
 
 
 def load_evaluator_config(path: str | Path | None = None) -> EvaluatorConfig:

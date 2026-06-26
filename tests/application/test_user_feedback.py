@@ -34,7 +34,7 @@ def test_feedback_repository_saves_letter_grades_without_numeric_values(tmp_path
     rows = json.loads(path.read_text(encoding="utf-8"))
     assert rows == [
         {
-            "schema_version": 1,
+            "schema_version": 3,
             "question": question.question,
             "exam_code": "",
             "reference_answer": question.reference_answer,
@@ -54,6 +54,12 @@ def test_feedback_repository_saves_letter_grades_without_numeric_values(tmp_path
             "correct_rating": "F",
             "rating_given": "A",
             "feedback_text": "This only names the cloud provider.",
+            "source_url": "https://docs.aws.amazon.com/kms/",
+            "key_concepts": ["AWS KMS"],
+            "common_misconceptions": [],
+            "acceptable_answers": [],
+            "must_not_claim": [],
+            "do_not_claim_explanation": [],
         }
     ]
 
@@ -103,6 +109,15 @@ def test_user_feedback_v2_filename_uses_schema_version_2(tmp_path: Path):
     assert rows[0]["acceptable_answers"] == []
     assert rows[0]["must_not_claim"] == []
     assert rows[0]["do_not_claim_explanation"] == []
+
+
+def test_user_feedback_default_filename_uses_configured_schema_version(tmp_path: Path):
+    path = tmp_path / "generated" / "user_feedback.json"
+
+    UserFeedbackRepository(path).submit(_question(), "AWS KMS", rating_given="A", correct_rating="A")
+
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    assert {row["schema_version"] for row in rows} == {3}
 
 
 def test_feedback_loaders_match_full_question_text_and_convert_grade(tmp_path: Path):

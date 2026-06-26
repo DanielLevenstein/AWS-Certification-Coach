@@ -18,7 +18,7 @@ STRUCTURED_TRAINING_DATA = PROJECT_ROOT / "config" / "data" / "structured_answer
 def test_default_knowledge_base_has_expected_first_version_sections():
     knowledge = load_knowledge_base()
 
-    assert knowledge.schema_version == 2
+    assert knowledge.schema_version == 3
     assert len(knowledge.syntax_aliases) == 18
     assert len(knowledge.services) == 42
     assert len(knowledge.concepts) == 161

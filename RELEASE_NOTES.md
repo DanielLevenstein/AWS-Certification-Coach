@@ -35,6 +35,8 @@
 | v3.2.2   | Added Guardrail lines to all charts                                                                                                                                                 |
 | v3.2.3   | Updated letter grade screenshots.                                                                                                                                                   |
 | v3.3.1   | Updated feedback with data from latest release                                                                                                                                      |
+| v3.3.1   | Applies v3 feedback schema configuration, C-grade near-miss service handling, and grade distribution release charting.                                                              |
+
 # Release Metrics
 
 ## Metric Definitions:
@@ -76,6 +78,7 @@
 | v3.1.4.3 |            99.16% |            100.00% |          99.12% |                98.73% |         100.00% |            94.95% |
 | v3.2.2   |            99.16% |            100.00% |          99.12% |                98.73% |         100.00% |            94.95% |
 | v3.3.0   |            96.79% |            100.00% |          97.90% |                94.78% |          98.80% |            94.95% |
+| v3.3.1 | 96.79% | 98.33% | 98.74% | 94.38% | 97.99% | 94.95% |
 
 ## Grade Band Precision
 | Release |      A |    B&C |     D&F |
@@ -84,6 +87,7 @@
 | v3.0.1  | 50.00% | 69.70% | 100.00% |
 | v3.0.4  | 90.00% | 100.00% | 100.00% |
 | v3.3.0  | 90.00% | 84.62% | 97.79% |
+| v3.3.1  | 92.31% | 64.71% | 98.17% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |       D |      F |
@@ -98,6 +102,7 @@
 | v3.1.4.3 | 100.00% | 80.00% | 100.00% | 100.00% | 84.62% |
 | v3.2.2   | 100.00% | 80.00% | 100.00% | 100.00% | 84.62% |
 | v3.3.0   | 90.00% | 71.43% | 83.33% | 98.10% | 68.75% |
+| v3.3.1   | 92.31% | 83.33% | 54.55% | 98.09% | 70.00% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -138,25 +143,29 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.2.3 | 99.16% | 100.00% | 99.12% | 98.73% | 100.00% | 94.95% |
+| v3.3.1 | 96.79% | 98.33% | 98.74% | 94.38% | 97.99% | 94.95% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 100.00% | 87.50% | 100.00% |
-| Recall | 90.00% | 100.00% | 100.00% |
-| F1 | 94.74% | 93.33% | 100.00% |
-| Support | 10 | 7 | 220 |
+| Precision | 92.31% | 64.71% | 98.17% |
+| Recall | 92.31% | 68.75% | 97.73% |
+| F1 | 92.31% | 66.67% | 97.95% |
+| Support | 13 | 16 | 220 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 100.00% | 80.00% | 100.00% | 100.00% | 84.62% |
-| Recall | 90.00% | 100.00% | 100.00% | 99.04% | 100.00% |
-| F1 | 94.74% | 88.89% | 100.00% | 99.52% | 91.67% |
-| Support | 10 | 4 | 3 | 209 | 11 |
+| Precision | 92.31% | 83.33% | 54.55% | 98.09% | 70.00% |
+| Recall | 92.31% | 100.00% | 54.55% | 98.09% | 63.64% |
+| F1 | 92.31% | 90.91% | 54.55% | 98.09% | 66.67% |
+| Support | 13 | 5 | 11 | 209 | 11 |
+
+## Grade Distribution
+
+![Grade distribution by letter](release/grade_distribution_metrics.png)
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
@@ -166,12 +175,12 @@ Question coverage domain count: `15`
 Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
-Knowledge base schema version: `2`
+Knowledge base schema version: `3`
 Knowledge base file size: `78941` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`
-Semantic evaluation count: `237`
+Semantic evaluation count: `249`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.

@@ -7,6 +7,8 @@ import argparse
 import json
 from pathlib import Path
 
+from aws_certification_coach.config import current_schema_version
+
 
 DEFAULT_PATTERNS = (
     "curated_training_data.json",
@@ -76,14 +78,14 @@ def _curated_row(row: dict) -> dict:
     }
     curated = {key: value for key, value in row.items() if key in allowed_fields}
     
-    # if original_multiple_choice answer is present add correct_answer_text to schema and update a version to v2 otherwise leave field out.
+    # If original_multiple_choice is present, add correct_answer_text and default new rows to the configured feedback schema.
     original_mcq = row.get("original_multiple_choice", {})
     if isinstance(original_mcq, dict) and "correct_option_ids" in original_mcq:
         curated["correct_answer_id"] = original_mcq["correct_option_ids"]
         for option in original_mcq.get("options", []):
             if option["option_id"] in curated["correct_answer_id"]:
                 curated["correct_answer_text"] = option["text"]
-        curated["schema_version"] = 2
+        curated.setdefault("schema_version", current_schema_version("USER_FEEDBACK_VERSION"))
     #TODO: Add generated_answer feedback to json
     ordered_keys = [
         "schema_version",

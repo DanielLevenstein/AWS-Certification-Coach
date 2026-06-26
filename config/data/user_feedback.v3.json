@@ -1,6 +1,6 @@
 [
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
     "exam_code": "DVA-C02",
     "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
@@ -41,7 +41,7 @@
     "feedback_text": ""
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
     "exam_code": "SAA-C03",
     "reference_answer": "Use VPC security groups to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.",
@@ -91,7 +91,7 @@
     "feedback_text": "Correct answer was present but initial answer was definitely wrong."
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.",
     "exam_code": "CLF-C02",
     "reference_answer": "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
@@ -174,7 +174,7 @@
     ]
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.",
     "exam_code": "SAA-C03",
     "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
@@ -263,7 +263,7 @@
     ]
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.",
     "exam_code": "CLF-C02",
     "reference_answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
@@ -346,7 +346,7 @@
     ]
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "A Lambda function needs different non-secret configuration values in development and production. Which Lambda feature should the developer use to pass those values at runtime?",
     "exam_code": "DVA-C02",
     "reference_answer": "Use Lambda environment variables to provide non-secret function configuration values that can differ by deployment environment.",
@@ -425,7 +425,7 @@
     "do_not_claim_explanation": []
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.",
     "exam_code": "SAA-C03",
     "reference_answer": "Use Service Control Policies to set maximum available permissions across accounts in an AWS Organization.",
@@ -508,7 +508,7 @@
     ]
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.",
     "exam_code": "SAA-C03",
     "reference_answer": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
@@ -585,7 +585,7 @@
     ]
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.",
     "exam_code": "CLF-C02",
     "reference_answer": "Use AWS KMS to create and manage encryption keys used to protect data in AWS services.",
@@ -674,7 +674,7 @@
     ]
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?",
     "exam_code": "DVA-C02",
     "reference_answer": "The code calls list_objects_v2 once, so it can return only the first page when the bucket has more results. Use the SDK paginator for ListObjectsV2 and iterate over each page before collecting keys.",
@@ -753,7 +753,7 @@
     "do_not_claim_explanation": []
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to fan out messages to multiple subscribers using a managed pub/sub service.",
     "exam_code": "CLF-C02",
     "reference_answer": "Use Amazon SNS to fan out messages to multiple subscribers using a managed pub/sub service.",
@@ -836,7 +836,7 @@
     ]
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to review workloads against AWS best practices and identify improvement opportunities.",
     "exam_code": "CLF-C02",
     "reference_answer": "Use AWS Well-Architected Tool to review workloads against AWS best practices and identify improvement opportunities.",
@@ -919,7 +919,7 @@
     ]
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "An order workflow must update an inventory item and create an order item in DynamoDB, and either both writes must succeed or neither should be saved. Which DynamoDB API pattern should the developer use?",
     "exam_code": "DVA-C02",
     "reference_answer": "Use DynamoDB transactions with TransactWriteItems to perform atomic all-or-nothing updates across the required items.",
@@ -992,7 +992,7 @@
     "do_not_claim_explanation": []
   },
   {
-    "schema_version": 2,
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.",
     "exam_code": "SAA-C03",
     "reference_answer": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",

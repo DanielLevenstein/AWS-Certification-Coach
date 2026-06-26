@@ -14,9 +14,11 @@ from aws_certification_coach.model_evaluation.semantic_similarity import (
     semantic_similarity_score,
 )
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
+from aws_certification_coach.ratings import score_to_letter
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.release_metrics import render_release_metrics, update_release_notes
 from scripts.semantic_similarity_evaluation import (
+    plot_grade_distribution,
     plot_grade_band_metrics,
     plot_letter_distance_metrics,
     plot_per_grade_metrics,
@@ -129,6 +131,23 @@ def test_letter_distance_chart_decomposes_within_one_letter_accuracy(tmp_path: P
     }
 
     plot_letter_distance_metrics(evaluation, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
+def test_grade_distribution_chart_counts_expected_letters(tmp_path: Path):
+    output = tmp_path / "grade_distribution_metrics.png"
+    evaluation = {
+        "per_grade": {
+            "A": {"support": 10},
+            "B": {"support": 4},
+            "C": {"support": 3},
+            "D": {"support": 209},
+            "F": {"support": 11},
+        }
+    }
+
+    plot_grade_distribution(evaluation, output)
 
     assert output.read_bytes().startswith(b"\x89PNG")
 
@@ -289,6 +308,7 @@ def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
     assert "| v2.5 | 80.00% | 90.00% | 75.00% | 64.00% | 76.00% | N/A |" in markdown
     assert "## Per Grade Metrics" in markdown
     assert "## Grade Band Metrics" in markdown
+    assert "![Grade distribution by letter](release/grade_distribution_metrics.png)" in markdown
     assert "| Metric | A | BC | DF |" in markdown
     assert "| Precision | 85.00% | 70.00% | 92.00% |" in markdown
     assert "| Precision | 90.00% | 80.00% | 70.00% | 60.00% | 100.00% |" in markdown
@@ -441,7 +461,7 @@ def test_semantic_similarity_awards_adjacent_partial_credit_without_family_token
     secrets_question = _structured_question("database passwords")
     s3_question = _structured_question("transitions or expires S3 objects")
 
-    assert semantic_similarity_score(secrets_question, "AWS KMS Keys") < 60
+    assert score_to_letter(semantic_similarity_score(secrets_question, "AWS KMS Keys")) == "C"
     assert semantic_similarity_score(s3_question, "S3 version tracking") < 60
 
 def test_semantic_similarity_caps_question_rephrases_without_answer_detail():
@@ -470,6 +490,29 @@ def test_semantic_similarity_caps_hedged_and_ambiguous_service_mentions():
         "Use API Gateway or AWS WAF for token validation.",
     ) < 80
     assert semantic_similarity_score(sqs_question, "SQS FILO queue") < 80
+
+
+def test_semantic_similarity_caps_concept_only_answers_without_service_name():
+    project_root = Path(__file__).resolve().parents[2]
+    questions = JsonQuestionRepository(project_root / "data" / "questions" / "sample_questions.json").all()
+    question = next(
+        question
+        for question in questions
+        if "replicate tables across Regions" in question.question
+    )
+
+    assert score_to_letter(semantic_similarity_score(question, "Global Database Tables")) == "C"
+
+
+def test_semantic_similarity_does_not_cap_correct_requirement_or_wording():
+    question = _structured_question("track cost or usage thresholds")
+
+    assert score_to_letter(
+        semantic_similarity_score(
+            question,
+            "Use AWS Budgets to set alerts when production services exceed cost or usage thresholds.",
+        )
+    ) == "A"
 
 def test_correct_answer_text_uses_multiple_choice_value_without_answer_cue():
     question = Question(

@@ -99,7 +99,7 @@ Reject when the answer claims CloudFormation validates application code behavior
 
 - `A`: Identifies the concrete artifact issue, explains impact, and recommends a safe AWS fix.
 - `B`: Identifies the issue but gives limited reasoning or a less precise fix.
-- `C`: Recognizes the relevant AWS area but misses the exact root cause or the best remediation.
+- `C`: Recognizes the relevant AWS area, or names the strongest plausible wrong service/feature from the source options, but misses the exact root cause or the best remediation.
 - `D`: Mentions a related concept but fails the main artifact issue.
 - `F`: Points to the wrong service category, contradicts the artifact, recommends unsafe behavior, or provides no meaningful AWS reasoning.
 
@@ -114,4 +114,3 @@ Require these review notes when scoring generated artifact questions:
 - `matched_exam_style_pattern`
 - `source_safety_notes`
 - `review_recommendation`: `accept`, `revise`, or `reject`
-

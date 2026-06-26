@@ -28,6 +28,7 @@ GENERIC_TOKENS = {
     "managed",
     "manager",
     "service",
+    "services",
     "the",
     "to",
     "use",
@@ -50,10 +51,13 @@ AMBIGUOUS_ALIAS_TOKENS = {
     "data",
     "deny",
     "feature",
+    "global",
     "route",
     "rules",
     "s3",
     "service",
+    "table",
+    "tables",
 }
 UNCERTAIN_GUESS_PHRASES = (
     "i do not know",
@@ -236,7 +240,7 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
         return 95 if _has_explanatory_detail(answer, question) else 85
 
     if _matches_near_miss_option(question, answer):
-        return 65
+        return 75
 
     if _matches_incorrect_option(question, answer):
         return 35
@@ -262,8 +266,10 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
 
     reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
     if concept_coverage >= 0.5:
-        return round(63 + (18 * concept_coverage))
+        return round(63 + (16 * concept_coverage))
     if concept_coverage > 0 or _meaningful_reference_overlap(content_tokens, reference_tokens):
+        if _meaningful_reference_overlap(content_tokens, reference_tokens):
+            return 75
         return 65 if "aws" in answer_tokens or _meaningful_reference_overlap(content_tokens, reference_tokens) else 62
     if content_tokens & reference_tokens:
         return 58
@@ -323,7 +329,46 @@ def _has_uncertain_guess(answer: str) -> bool:
 
 
 def _offers_ambiguous_alternatives(answer: str) -> bool:
-    return " or " in f" {str(answer).casefold()} "
+    normalized = _normalized(answer)
+    if " or " not in f" {normalized} ":
+        return False
+    return len(_mentioned_service_ids(normalized)) >= 2 or _or_joins_service_like_terms(normalized)
+
+
+def _or_joins_service_like_terms(normalized_answer: str) -> bool:
+    service_tokens = _service_alternative_tokens()
+    tokens = normalized_answer.split()
+    for index, token in enumerate(tokens):
+        if token != "or":
+            continue
+        left = set(tokens[max(0, index - 4):index])
+        right = set(tokens[index + 1:index + 5])
+        if (left & service_tokens) or (right & service_tokens):
+            return True
+    return False
+
+
+def _service_alternative_tokens() -> set[str]:
+    tokens = {"aws", "amazon"}
+    for service in KNOWLEDGE_BASE.services:
+        for term in (service.name, *service.aliases, *service.tokens):
+            tokens.update(_tokens(term))
+    return tokens - GENERIC_TOKENS - {"cost", "threshold", "thresholds", "usage"}
+
+
+def _mentioned_service_ids(normalized_answer: str) -> set[str]:
+    service_ids = set()
+    for service in KNOWLEDGE_BASE.services:
+        terms = (service.name, *service.aliases, *service.tokens)
+        for term in terms:
+            normalized_term = _normalized(term)
+            term_tokens = set(normalized_term.split())
+            if not normalized_term or term_tokens <= GENERIC_TOKENS | AMBIGUOUS_ALIAS_TOKENS:
+                continue
+            if normalized_term in normalized_answer:
+                service_ids.add(service.id)
+                break
+    return service_ids
 
 
 def _has_explanatory_detail(answer: str, question: Question) -> bool:
@@ -443,7 +488,7 @@ def _matches_near_miss_option(question: Question, answer: str) -> bool:
             continue
         normalized_option = _normalized(option)
         if normalized_answer in {normalized_option, _strip_leading_use(option)} or answer_tokens <= option_tokens:
-            return bool(answer_tokens & set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS)
+            return True
     return False
 
 
