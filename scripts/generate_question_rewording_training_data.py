@@ -85,7 +85,7 @@ def _validate_question_row(question: object) -> None:
 
 def _curated_row(question: dict[str, object], reworded_answer: str) -> dict[str, object]:
     row = {
-        "schema_version": 2,
+        "schema_version": 3,
         "question": str(question["question"]),
         "exam_code": str(question.get("exam_code", "")),
         "reference_answer": str(question["reference_answer"]),

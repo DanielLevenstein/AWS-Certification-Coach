@@ -27,7 +27,6 @@ USER_FEEDBACK_PATH = Path(
         ROOT_DIR / "data" / "generated" / "user_feedback.v2.json",
     )
 )
-SHOW_SUGGESTED_IMPROVEMENTS_ENV = "SHOW_SUGGESTED_IMPROVEMENTS"
 
 author = "Daniel Levenstein"
 linked_in_url = "https://www.linkedin.com/in/daniel-aaron-levenstein/"
@@ -172,8 +171,7 @@ def _render_answer_feedback(score: int, feedback: str, suggest_improvements: str
         return
     if feedback:
         st.info(feedback)
-    if _env_enabled(SHOW_SUGGESTED_IMPROVEMENTS_ENV):
-        if suggest_improvements:
+    elif suggest_improvements:
             st.info(f"Here are some suggestions for improving your answer:")
             output = ""
             for suggestion in suggest_improvements:
