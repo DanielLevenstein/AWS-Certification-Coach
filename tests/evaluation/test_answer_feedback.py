@@ -28,6 +28,7 @@ class StaticProvider:
 
 
 QUESTION = Question(
+    schema_version=1,
     certification="Cloud Practitioner",
     domain="Security",
     difficulty="Easy",
@@ -75,6 +76,7 @@ def test_common_misconception_answer_gets_specific_feedback():
 
 def test_must_not_claim_answer_gets_stronger_feedback():
     question = Question(
+        schema_version=1,
         certification="Cloud Practitioner",
         domain="Security",
         difficulty="Easy",
@@ -94,6 +96,7 @@ def test_must_not_claim_answer_gets_stronger_feedback():
 
 def test_negated_misconception_does_not_trigger_feedback():
     question = Question(
+        schema_version=1,
         certification="Cloud Practitioner",
         domain="Billing",
         difficulty="Easy",
@@ -114,6 +117,7 @@ def test_negated_misconception_does_not_trigger_feedback():
 
 def test_framed_question_restatement_receives_restatement_feedback():
     question = Question(
+        schema_version=1,
         certification="Cloud Practitioner",
         domain="Security",
         difficulty="Easy",

@@ -473,6 +473,7 @@ def test_semantic_similarity_caps_hedged_and_ambiguous_service_mentions():
 
 def test_correct_answer_text_uses_multiple_choice_value_without_answer_cue():
     question = Question(
+        schema_version=1,
         certification="Cloud Practitioner",
         domain="Security",
         difficulty="Easy",

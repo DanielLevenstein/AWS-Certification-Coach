@@ -16,5 +16,8 @@ cp -p config/data/structured_answer_training_data.json data/curated/structured_a
 if [ ! -f data/generated/user_feedback.v2.json ]; then
   printf '[]\n' > data/generated/user_feedback.v2.json
 fi
+if [ ! -f data/generated/user_feedback.v3.json ]; then
+  printf '[]\n' > data/generated/user_feedback.v3.json
+fi
 
 "$PYTHON_BIN" scripts/combine_curated_training_data.py

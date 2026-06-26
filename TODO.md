@@ -27,14 +27,22 @@ Because the current accuracy metrics are stable, we are implementing these chang
 Implementing dedicated AWS knowledge based on a dedicated feature branch using tinyLLama for local training.
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
-I was attempting to remove the new curated answer feedback feature as it wasn't working as intended. 
-In doing so I accidentally broke the existing references to `common_misconceptions` and `must_not_claim` fields.
->       misconception_pattern = str(defaults["common_misconception_pattern"])
-For now the rubric metadata field has been removed completely from the code. 
-
-1) Add a `common_misconception` and section and `must_not_claim` section to knowledge base. 
-2) Use detect `common_misconceptions` and `must_not_claim` violations in user feedback.
-3) We also need to include the following flags from the question schema ["key_concepts", "common_misconceptions", "acceptable_answers", and "must_not_claim"] sections along with a source URL field.
+### v3.3 User Feedback Update:
+- Schema version should be pulled from config/schema_version.json
+```
+{
+  "KNOWLEDGE_BASE_VERSION": 3,
+  "USER_FEEDBACK_VERSION": 3,
+  "QUESTION_SCHEMA_VERSION": 3
+}
+```
+- Schema version should be set to 1 for legacy questions so unit tests pass.
+- Answers which list the best wrong service name for a service should receive a grade of C.
+  - Existing documentation rubric should be updated based on this new rule.
+- A new graph should be added to the release notes showing grade distribution by letter.
+- Rerun setup.sh after the first round of changes.
+- Manually go through feedback in curated_training_data.json and user_feedback.v3.json located in config. 
+- Write a new TODO list with any suggestions present in user feedback which weren't handled in the original change set. 
 
 # Phase 2 Code & Configuration Review
 IAM policy questions.
