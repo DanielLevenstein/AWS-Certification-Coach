@@ -14,7 +14,7 @@ The latest version of this project is deployed live on Render.
 
 ## Application Screenshot
 
-<img src="docs/images/aws-certification-coach3.png" alt="Certification Exam Screenshot" width="720">
+<img src="docs/images/aws-certification-coach.png" alt="Certification Exam Screenshot" width="720">
 
 *Figure: The coach scores a freeform Amazon answer and displays detailed feedback alongside the source multiple-choice question.*
 
@@ -50,7 +50,7 @@ The schema redesign branch starts the v3 release line. Use `v3.1.x` for new rele
 
 
 | Release | Description                                                                                        |
-| ------- | -------------------------------------------------------------------------------------------------- |
+|---------|----------------------------------------------------------------------------------------------------|
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions..             |
 | v1.1.0  | Separated the app-facing question bank from training labels.                                       |
 | v1.3.1  | Test framework redesign; initial curated grade-band accuracy was 44%.                              |
@@ -60,7 +60,9 @@ The schema redesign branch starts the v3 release line. Use `v3.1.x` for new rele
 | v2.1.1  | Added AWS Developer Certification practice questions                                               |
 | v2.3.6  | Improved answer evaluation model and added within one letter grade metric to release notes         |
 | v2.4.5  | Got exact letter accuracy metric over 87%                                                          |
-
+| v3.1.4  | Heuristic grading improvement                                                                      |
+| v3.2.1  | Added Semantic Similarity chart back                                                               |
+| v3.2.3  | Updated per letter grade screenshots.                                                              |
 #### Scope
 
 Certifications:
@@ -131,7 +133,7 @@ Refresh release-note Markdown and chart copies from the latest completed full me
 
 Set `RELEASE_METRICS_DIR=metrics/<timestamp>` to reuse a specific full run. Quick mode fails when the selected directory is incomplete instead of silently retraining.
 
-The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, and a combined four-panel chart as latest-only files in `release/`.
+The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, plus combined accuracy and question-coverage charts as latest-only files in `release/`.
 
 The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory.
 

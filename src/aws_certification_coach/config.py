@@ -1,4 +1,4 @@
-"""Configuration loading for model providers, hyperparameters, and schemas."""
+"""Configuration loading for model providers and hyperparameters."""
 
 from __future__ import annotations
 

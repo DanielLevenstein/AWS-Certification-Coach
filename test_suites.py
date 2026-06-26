@@ -16,15 +16,18 @@ QUICK_RELEASE_ARTIFACTS = (
     "question_fidelity.json",
     "question_coverage.json",
     "knowledge_base.json",
+    "semantic_accuracy.png",
     "per_grade_metrics.png",
     "grade_band_metrics.png",
-    "letter_distance_metrics.png",
     "grade_distribution_metrics.png",
     "question_domain_coverage.png",
     "question_intent_coverage.png",
     "question_certification_coverage.png",
     "curated_failure_report.md",
     "curated_rubric_review.md",
+)
+QUICK_RELEASE_SUMMARY_ARTIFACTS = (
+    "semantic_similarity.json",
 )
 
 
@@ -82,24 +85,26 @@ def run_release_metrics(extra_args: list[str] | None = None) -> None:
             str(metrics_dir / "curated_rubric_review.md"),
         ]
     )
-    _run(
-        [
-            sys.executable,
-            "scripts/semantic_similarity_evaluation.py",
-            "--output",
-            str(metrics_dir / "semantic_similarity.json"),
-            "--chart-output",
-            str(metrics_dir / "semantic_accuracy.png"),
-            "--per-grade-output",
-            str(metrics_dir / "per_grade_metrics.png"),
-            "--grade-band-output",
-            str(metrics_dir / "grade_band_metrics.png"),
-            "--letter-distance-output",
-            str(metrics_dir / "letter_distance_metrics.png"),
-            "--grade-distribution-output",
-            str(metrics_dir / "grade_distribution_metrics.png"),
-        ]
-    )
+    semantic_command = [
+        sys.executable,
+        "scripts/semantic_similarity_evaluation.py",
+        "--output",
+        str(metrics_dir / "semantic_similarity.json"),
+        "--chart-output",
+        str(metrics_dir / "semantic_accuracy.png"),
+    ]
+    if not args.summary_only:
+        semantic_command.extend(
+            [
+                "--per-grade-output",
+                str(metrics_dir / "per_grade_metrics.png"),
+                "--grade-band-output",
+                str(metrics_dir / "grade_band_metrics.png"),
+                "--grade-distribution-output",
+                str(metrics_dir / "grade_distribution_metrics.png"),
+            ]
+        )
+    _run(semantic_command)
     _run(
         [
             sys.executable,
@@ -137,7 +142,8 @@ def run_quick_release_metrics(extra_args: list[str] | None = None) -> None:
     args = _parse_release_args(extra_args)
     if args.metrics_dir is None:
         raise ValueError("Quick release metrics require --metrics-dir from a previous full run.")
-    missing = [name for name in QUICK_RELEASE_ARTIFACTS if not (args.metrics_dir / name).is_file()]
+    required_artifacts = QUICK_RELEASE_SUMMARY_ARTIFACTS if args.summary_only else QUICK_RELEASE_ARTIFACTS
+    missing = [name for name in required_artifacts if not (args.metrics_dir / name).is_file()]
     if missing:
         raise FileNotFoundError(f"Quick release metrics are missing artifacts: {missing}")
     _render_release_summary(args, args.metrics_dir)
@@ -150,6 +156,7 @@ def _parse_release_args(extra_args: list[str] | None) -> argparse.Namespace:
     parser.add_argument("--release-notes", default=None)
     parser.add_argument("--metrics-dir", type=Path, default=None)
     parser.add_argument("--strict-grading", action="store_true")
+    parser.add_argument("--summary-only", action="store_true")
     return parser.parse_args(extra_args or [])
 
 

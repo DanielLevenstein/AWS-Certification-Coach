@@ -19,12 +19,12 @@ from aws_certification_coach.questions.json_repository import JsonQuestionReposi
 from aws_certification_coach.quiz.session import QuizSession
 from aws_certification_coach.ratings import LETTER_RATINGS, score_to_letter
 
-
+# TODO move user_feedback version to schema_version.json
 QUESTIONS_PATH = ROOT_DIR / "data" / "questions" / "sample_questions.json"
 USER_FEEDBACK_PATH = Path(
     os.environ.get(
         "USER_FEEDBACK_PATH",
-        ROOT_DIR / "data" / "generated" / "user_feedback.v2.json",
+        ROOT_DIR / "data" / "generated" / "user_feedback.v3.json",
     )
 )
 

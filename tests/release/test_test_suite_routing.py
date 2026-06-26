@@ -77,6 +77,36 @@ def test_quick_release_reuses_complete_metrics_without_training(tmp_path, monkey
     assert "scripts/semantic_similarity_evaluation.py" not in commands[0]
 
 
+def test_summary_only_release_skips_precision_gated_chart_outputs(tmp_path, monkeypatch):
+    commands = []
+    monkeypatch.setattr(test_suites, "_run", commands.append)
+
+    test_suites.run_release_metrics(
+        ["--metrics-dir", str(tmp_path / "metrics"), "--release-label", "diagnostic", "--summary-only"]
+    )
+
+    semantic_commands = [command for command in commands if "scripts/semantic_similarity_evaluation.py" in command]
+    assert len(semantic_commands) == 1
+    assert "--per-grade-output" not in semantic_commands[0]
+    assert "--grade-band-output" not in semantic_commands[0]
+    assert any("scripts/release_metrics.py" in command for command in commands)
+
+
+def test_summary_only_quick_release_requires_only_semantic_metrics(tmp_path, monkeypatch):
+    metrics_dir = tmp_path / "metrics"
+    metrics_dir.mkdir()
+    (metrics_dir / "semantic_similarity.json").write_text("{}", encoding="utf-8")
+    commands = []
+    monkeypatch.setattr(test_suites, "_run", commands.append)
+
+    test_suites.run_quick_release_metrics(
+        ["--metrics-dir", str(metrics_dir), "--release-label", "diagnostic", "--summary-only"]
+    )
+
+    assert len(commands) == 1
+    assert "scripts/release_metrics.py" in commands[0]
+
+
 def test_quick_release_rejects_incomplete_metrics(tmp_path):
     with pytest.raises(FileNotFoundError, match="missing artifacts"):
         test_suites.run_quick_release_metrics(["--metrics-dir", str(tmp_path)])
