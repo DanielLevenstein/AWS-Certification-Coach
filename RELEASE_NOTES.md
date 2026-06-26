@@ -34,6 +34,7 @@
 | v3.1.4.1 | Added answer rewording to training data                                                                                                                                             |
 | v3.1.4.2 | Improved grade band precision for full answers                                                                                                                                      |
 | v3.1.4.3 | Improved grade band precision for partial answers                                                                                                                                   |
+| v3.1.4.4 | Remove low value user feedback |
 
 # Release Metrics
 

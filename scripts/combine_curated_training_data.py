@@ -84,6 +84,7 @@ def _curated_row(row: dict) -> dict:
             if option["option_id"] in curated["correct_answer_id"]:
                 curated["correct_answer_text"] = option["text"]
         curated["schema_version"] = 2
+    #TODO: Add generated_answer feedback to json
     ordered_keys = [
         "schema_version",
         "question",

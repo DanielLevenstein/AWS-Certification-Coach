@@ -149,10 +149,6 @@ def _rubric_metadata(
         "common_misconceptions": [f"{distractor} is the best fit for this scenario." for distractor in distractors],
         "acceptable_answers": [correct_option, reference_answer, service],
         "must_not_claim": [f"{distractor} satisfies the scenario better than {service}." for distractor in distractors],
-        "do_not_claim_explanation": [
-            f"{service} is a better option because it matches the scenario described in the reference answer: {reference_answer} {distractor} does not satisfy that requirement."
-            for distractor in distractors
-        ],
     }
 
 
