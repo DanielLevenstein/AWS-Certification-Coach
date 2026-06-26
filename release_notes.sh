@@ -43,17 +43,10 @@ if [ "$#" -ne 1 ]; then
 fi
 
 RELEASE_TAG="$1"
-TEST_STATUS=0
 
 if [ "$MODE" = "full" ]; then
-  if ! .venv/bin/python test_suites.py unit; then
-    echo "Unit tests failed; continuing so release metrics can still be generated." >&2
-    TEST_STATUS=1
-  fi
-  if ! .venv/bin/python test_suites.py model-smoke; then
-    echo "Model smoke tests failed; continuing so release metrics can still be generated." >&2
-    TEST_STATUS=1
-  fi
+  .venv/bin/python test_suites.py unit
+  .venv/bin/python test_suites.py model-smoke
   METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"
   RELEASE_SUITE="release"
 else
@@ -70,55 +63,17 @@ else
   RELEASE_SUITE="release-quick"
 fi
 
-if [ "$TEST_STATUS" -ne 0 ]; then
-  echo "Pre-release tests failed; generating metrics summary without updating release notes." >&2
-  if [ "$STRICT_GRADING" = "1" ]; then
-    .venv/bin/python test_suites.py "$RELEASE_SUITE" \
-      --release-label "$RELEASE_TAG" \
-      --metrics-dir "$METRICS_DIR" \
-      --strict-grading \
-      --summary-only
-  else
-    .venv/bin/python test_suites.py "$RELEASE_SUITE" \
-      --release-label "$RELEASE_TAG" \
-      --metrics-dir "$METRICS_DIR" \
-      --summary-only
-  fi
-  echo "Release metrics directory: $METRICS_DIR" >&2
-  echo "Release metrics were generated, but one or more pre-release test suites failed." >&2
-  exit "$TEST_STATUS"
-fi
-
-RELEASE_STATUS=0
 if [ "$STRICT_GRADING" = "1" ]; then
   .venv/bin/python test_suites.py "$RELEASE_SUITE" \
     --release-label "$RELEASE_TAG" \
     --release-notes RELEASE_NOTES.md \
     --metrics-dir "$METRICS_DIR" \
-    --strict-grading || RELEASE_STATUS=$?
+    --strict-grading
 else
   .venv/bin/python test_suites.py "$RELEASE_SUITE" \
     --release-label "$RELEASE_TAG" \
     --release-notes RELEASE_NOTES.md \
-    --metrics-dir "$METRICS_DIR" || RELEASE_STATUS=$?
-fi
-
-if [ "$RELEASE_STATUS" -ne 0 ]; then
-  echo "Release metrics failed; rerunning summary-only metrics without updating release notes." >&2
-  if [ "$STRICT_GRADING" = "1" ]; then
-    .venv/bin/python test_suites.py release-quick \
-      --release-label "$RELEASE_TAG" \
-      --metrics-dir "$METRICS_DIR" \
-      --strict-grading \
-      --summary-only
-  else
-    .venv/bin/python test_suites.py release-quick \
-      --release-label "$RELEASE_TAG" \
-      --metrics-dir "$METRICS_DIR" \
-      --summary-only
-  fi
-  echo "Release metrics directory: $METRICS_DIR" >&2
-  exit "$RELEASE_STATUS"
+    --metrics-dir "$METRICS_DIR"
 fi
 
 PER_GRADE_SOURCE="$METRICS_DIR/per_grade_metrics.png"
@@ -127,6 +82,8 @@ GRADE_BAND_SOURCE="$METRICS_DIR/grade_band_metrics.png"
 GRADE_BAND_OUTPUT="release/grade_band_metrics.png"
 SEMANTIC_ACCURACY_SOURCE="$METRICS_DIR/semantic_accuracy.png"
 SEMANTIC_ACCURACY_OUTPUT="release/semantic_accuracy.png"
+GRADE_DISTRIBUTION_SOURCE="$METRICS_DIR/grade_distribution_metrics.png"
+GRADE_DISTRIBUTION_OUTPUT="release/grade_distribution_metrics.png"
 DOMAIN_COVERAGE_SOURCE="$METRICS_DIR/question_domain_coverage.png"
 DOMAIN_COVERAGE_OUTPUT="release/question_domain_coverage.png"
 INTENT_COVERAGE_SOURCE="$METRICS_DIR/question_intent_coverage.png"
@@ -143,6 +100,7 @@ mkdir -p release
 cp -p "$PER_GRADE_SOURCE" "$PER_GRADE_OUTPUT"
 cp -p "$GRADE_BAND_SOURCE" "$GRADE_BAND_OUTPUT"
 cp -p "$SEMANTIC_ACCURACY_SOURCE" "$SEMANTIC_ACCURACY_OUTPUT"
+cp -p "$GRADE_DISTRIBUTION_SOURCE" "$GRADE_DISTRIBUTION_OUTPUT"
 cp -p "$DOMAIN_COVERAGE_SOURCE" "$DOMAIN_COVERAGE_OUTPUT"
 cp -p "$INTENT_COVERAGE_SOURCE" "$INTENT_COVERAGE_OUTPUT"
 cp -p "$CERTIFICATION_COVERAGE_SOURCE" "$CERTIFICATION_COVERAGE_OUTPUT"
@@ -162,6 +120,7 @@ cp -p "$ACCURACY_CHART_OUTPUT" "release/${RELEASE_TAG}"_accuracy_metrics_chart.p
 echo "Saved latest per-grade precision and recall chart: $PER_GRADE_OUTPUT"
 echo "Saved latest grade-band chart: $GRADE_BAND_OUTPUT"
 echo "Saved latest semantic similarity chart: $SEMANTIC_ACCURACY_OUTPUT"
+echo "Saved latest grade-distribution chart: $GRADE_DISTRIBUTION_OUTPUT"
 echo "Saved latest domain coverage chart: $DOMAIN_COVERAGE_OUTPUT"
 echo "Saved latest question intent coverage chart: $INTENT_COVERAGE_OUTPUT"
 echo "Saved latest certification coverage chart: $CERTIFICATION_COVERAGE_OUTPUT"
@@ -169,8 +128,3 @@ echo "Saved accuracy metrics chart: $ACCURACY_CHART_OUTPUT"
 echo "Saved question coverage chart: $QUESTION_COVERAGE_CHART_OUTPUT"
 echo "Saved latest release report $REPORT_OUTPUT"
 echo "Saved latest curated rubric review $RUBRIC_REVIEW_OUTPUT"
-
-if [ "$TEST_STATUS" -ne 0 ]; then
-  echo "Release metrics were generated, but one or more pre-release test suites failed." >&2
-  exit "$TEST_STATUS"
-fi

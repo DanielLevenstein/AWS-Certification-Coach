@@ -14,7 +14,7 @@ def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_b
     catalog = load_question_templates()
     template = catalog.get("service-selection-freeform")
 
-    assert catalog.schema_version == 2
+    assert catalog.schema_version == 3
     assert template.question_type == "service_selection"
     assert template.prompt_variants
     assert template.option_pattern == "Use {service_name}."

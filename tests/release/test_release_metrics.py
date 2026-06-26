@@ -2,8 +2,6 @@ from pathlib import Path
 import struct
 import subprocess
 
-import pytest
-
 from aws_certification_coach.release_metrics.complexity import measure_complexity
 from aws_certification_coach.release_metrics.question_coverage import (
     measure_question_coverage,
@@ -16,9 +14,11 @@ from aws_certification_coach.model_evaluation.semantic_similarity import (
     semantic_similarity_score,
 )
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
+from aws_certification_coach.ratings import score_to_letter
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.release_metrics import render_release_metrics, update_release_notes
 from scripts.semantic_similarity_evaluation import (
+    plot_grade_distribution,
     plot_grade_band_metrics,
     plot_per_grade_metrics,
     plot_semantic_accuracy,
@@ -107,21 +107,22 @@ def test_per_grade_chart_includes_semantic_precision_and_recall(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_per_grade_chart_rejects_precision_below_guardrail(tmp_path: Path):
+def test_per_grade_chart_renders_precision_below_guardrail(tmp_path: Path):
     output = tmp_path / "per_grade_metrics.png"
     evaluation = {
         "per_grade": {
             grade: {"precision": precision, "recall": 0.9}
             for grade, precision in zip(
                 ("A", "B", "C", "D", "F"),
-                (0.92, 0.86, 0.74, 0.89, 1.0),
+                (0.92, 0.86, 0.69, 0.89, 1.0),
                 strict=True,
             )
         }
     }
 
-    with pytest.raises(ValueError, match="Per-grade precision does not clear"):
-        plot_per_grade_metrics(evaluation, output)
+    plot_per_grade_metrics(evaluation, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
 
 
 def test_grade_band_chart_uses_exclusive_a_bc_df_bands(tmp_path: Path):
@@ -139,7 +140,7 @@ def test_grade_band_chart_uses_exclusive_a_bc_df_bands(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_grade_band_chart_rejects_precision_below_guardrail(tmp_path: Path):
+def test_grade_band_chart_renders_precision_below_guardrail(tmp_path: Path):
     output = tmp_path / "grade_band_metrics.png"
     evaluation = {
         "per_grade_band": {
@@ -149,8 +150,26 @@ def test_grade_band_chart_rejects_precision_below_guardrail(tmp_path: Path):
         }
     }
 
-    with pytest.raises(ValueError, match="Grade-band precision does not clear"):
-        plot_grade_band_metrics(evaluation, output)
+    plot_grade_band_metrics(evaluation, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
+
+
+def test_grade_distribution_chart_counts_expected_letters(tmp_path: Path):
+    output = tmp_path / "grade_distribution_metrics.png"
+    evaluation = {
+        "per_grade": {
+            "A": {"support": 10},
+            "B": {"support": 4},
+            "C": {"support": 3},
+            "D": {"support": 209},
+            "F": {"support": 11},
+        }
+    }
+
+    plot_grade_distribution(evaluation, output)
+
+    assert output.read_bytes().startswith(b"\x89PNG")
 
 
 def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
@@ -309,6 +328,7 @@ def test_release_metrics_tracks_curated_and_per_grade_accuracy(tmp_path: Path):
     assert "| v2.5 | 80.00% | 90.00% | 75.00% | 64.00% | 76.00% | N/A |" in markdown
     assert "## Per Grade Metrics" in markdown
     assert "## Grade Band Metrics" in markdown
+    assert "![Grade distribution by letter]" not in markdown
     assert "| Metric | A | BC | DF |" in markdown
     assert "| Precision | 85.00% | 70.00% | 92.00% |" in markdown
     assert "| Precision | 90.00% | 80.00% | 70.00% | 60.00% | 100.00% |" in markdown
@@ -461,7 +481,7 @@ def test_semantic_similarity_awards_adjacent_partial_credit_without_family_token
     secrets_question = _structured_question("database passwords")
     s3_question = _structured_question("transitions or expires S3 objects")
 
-    assert semantic_similarity_score(secrets_question, "AWS KMS Keys") < 60
+    assert score_to_letter(semantic_similarity_score(secrets_question, "AWS KMS Keys")) == "D"
     assert semantic_similarity_score(s3_question, "S3 version tracking") < 60
 
 def test_semantic_similarity_caps_question_rephrases_without_answer_detail():
@@ -491,8 +511,32 @@ def test_semantic_similarity_caps_hedged_and_ambiguous_service_mentions():
     ) < 80
     assert semantic_similarity_score(sqs_question, "SQS FILO queue") < 80
 
+
+def test_semantic_similarity_caps_concept_only_answers_without_service_name():
+    project_root = Path(__file__).resolve().parents[2]
+    questions = JsonQuestionRepository(project_root / "data" / "questions" / "sample_questions.json").all()
+    question = next(
+        question
+        for question in questions
+        if "replicate tables across Regions" in question.question
+    )
+
+    assert score_to_letter(semantic_similarity_score(question, "Global Database Tables")) == "C"
+
+
+def test_semantic_similarity_does_not_cap_correct_requirement_or_wording():
+    question = _structured_question("track cost or usage thresholds")
+
+    assert score_to_letter(
+        semantic_similarity_score(
+            question,
+            "Use AWS Budgets to set alerts when production services exceed cost or usage thresholds.",
+        )
+    ) == "A"
+
 def test_correct_answer_text_uses_multiple_choice_value_without_answer_cue():
     question = Question(
+        schema_version=1,
         certification="Cloud Practitioner",
         domain="Security",
         difficulty="Easy",

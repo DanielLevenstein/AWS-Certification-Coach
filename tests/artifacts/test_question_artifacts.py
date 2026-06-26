@@ -65,14 +65,15 @@ def test_sample_question_artifact_includes_answer_rubric_contract():
         "must_not_claim",
         "do_not_claim_explanation",
     }
-
     assert rows
     for row in rows:
         assert row.get("question_type") in allowed_question_types
-        assert rubric_fields <= set(row)
+        assert rubric_fields - {"do_not_claim_explanation"} <= set(row)
         assert row["required_concepts"]
         assert row["acceptable_answers"]
-        assert len(row["do_not_claim_explanation"]) == len(row["must_not_claim"])
+        assert len(row["must_not_claim"])>=1
+        if "do_not_claim_explanation" in row:
+            assert len(row["do_not_claim_explanation"]) <= len(row["must_not_claim"])
 
 
 def test_existing_question_rows_load_without_rubric_metadata():
@@ -88,8 +89,16 @@ def test_existing_question_rows_load_without_rubric_metadata():
     )
 
     assert question.question_type == "service_selection"
+    assert question.schema_version == 1
     assert question.required_concepts == ["AWS KMS", "encryption keys"]
     assert question.acceptable_answers == []
+
+
+def test_sample_question_artifact_uses_configured_schema_version():
+    questions = JsonQuestionRepository(QUESTION_ARTIFACT).all()
+
+    assert questions
+    assert {question.schema_version for question in questions} == {3}
 
 
 def test_original_multiple_choice_options_preserve_metadata():

@@ -1,8 +1,8 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 244
+- Curated examples reviewed: 255
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 11, 'B': 6, 'C': 5, 'D': 211, 'F': 11}`
+- Current grade distribution: `{'A': 14, 'B': 7, 'C': 8, 'D': 218, 'F': 8}`
 - Suggested label updates: 7
 
 ## Suggested Answer Updates
@@ -23,7 +23,7 @@
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
-### Row 26: A -> B
+### Row 25: A -> B
 
 - Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
 - Answer: `AWS Code Build`
@@ -32,7 +32,7 @@
 - Reviewer feedback: Again my answer is correct. Are you sure you are using the semantic evaluation logic?
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 28: B -> D
+### Row 27: B -> D
 
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
 - Answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. `
@@ -40,7 +40,7 @@
 - Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 29: A -> B
+### Row 28: A -> B
 
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
 - Answer: `AWS Kinesis`
@@ -49,7 +49,7 @@
 - Reviewer feedback: This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 32: C -> D
+### Row 31: C -> D
 
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
 - Answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. `
@@ -57,14 +57,13 @@
 - Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 35: C -> D
+### Row 32: F -> D
 
-- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
-- Answer: `RDS read replicas can be used for low-latency data synchronization across multiple availability zones.`
-- Reference: DynamoDB global tables
-- Semantic score: `62`
-- Reviewer feedback: We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+- Question: A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?
+- Answer: `Which API Gateway feature should be used to run token validation on requests? `
+- Reference: an API Gateway Lambda authorizer
+- Semantic score: `65`
+- Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
 
 ## Release Table Recommendation
 

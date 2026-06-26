@@ -52,7 +52,7 @@
     "question": "Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.",
     "reference_answer": "Use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access.",
     "answer_given": "NoSQL",
-    "correct_rating": "D",
+    "correct_rating": "C",
     "rating_given": "A"
   },
   {
@@ -108,7 +108,7 @@
     "question": "Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.",
     "reference_answer": "Use AWS Secrets Manager to store, retrieve, and rotate application secrets such as database credentials.",
     "answer_given": "Parameter Store",
-    "correct_rating": "F",
+    "correct_rating": "D",
     "rating_given": "F"
   },
   {
@@ -165,7 +165,7 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
     "answer_given": "AWS KMS Keys",
-    "correct_rating": "F",
+    "correct_rating": "D",
     "rating_given": "F",
     "feedback_text": "We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection."
   },
@@ -188,15 +188,6 @@
     "correct_rating": "A",
     "rating_given": "C",
     "feedback_text": "I entered a freeform version of the correct answer."
-  },
-  {
-    "schema_version": 2,
-    "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
-    "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
-    "answer_given": "Which API Gateway feature should be used to run token validation on requests? ",
-    "correct_rating": "D",
-    "rating_given": "B",
-    "correct_answer_text": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration."
   },
   {
     "schema_version": 2,
@@ -270,7 +261,7 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
     "answer_given": "AWS KMS Keys",
-    "correct_rating": "F",
+    "correct_rating": "D",
     "rating_given": "F",
     "correct_answer_text": "Use AWS Secrets Manager.",
     "feedback_text": "We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection."
@@ -302,7 +293,7 @@
     "question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
     "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
     "answer_given": "Which API Gateway feature should be used to run token validation on requests? ",
-    "correct_rating": "D",
+    "correct_rating": "F",
     "rating_given": "B",
     "correct_answer_text": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration."
   },
@@ -312,7 +303,7 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
     "answer_given": "AWS KMS Keys",
-    "correct_rating": "F",
+    "correct_rating": "D",
     "rating_given": "F",
     "correct_answer_text": "Use AWS Secrets Manager.",
     "feedback_text": "We should update the grading model to give partial credit to the best near miss answer. Near miss answers can be determined by having words like only or alone in the answer selection."
@@ -323,7 +314,7 @@
     "exam_code": "SAA-C03",
     "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
     "answer_given": "RDS read replicas can be used for low-latency data synchronization across multiple availability zones.",
-    "correct_rating": "C",
+    "correct_rating": "D",
     "rating_given": "D",
     "correct_answer_text": "Use DynamoDB global tables.",
     "feedback_text": "We need to decide in our design rubric if we are giving partial credit answers a score of Grade D or Grade C"

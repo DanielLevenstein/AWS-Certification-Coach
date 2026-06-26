@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import re
 import threading
 from typing import Any
 
+from aws_certification_coach.config import current_schema_version
 from aws_certification_coach.domain import MultipleChoiceQuestion, Question
 from aws_certification_coach.ratings import letter_to_numeric
 
@@ -18,7 +18,7 @@ class UserFeedbackRepository:
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self._lock = threading.Lock()
-        self.schema_version = _schema_version_from_path(self.path)
+        self.schema_version = _feedback_schema_version(self.path)
 
     def submit(
         self,
@@ -106,15 +106,15 @@ def _question_source_url(question: Question) -> str:
     return ""
 
 
-def _schema_version_from_path(path: Path) -> int | float:
+def _feedback_schema_version(path: Path) -> int:
     name = path.name
-    match = re.search(r"\.v(\d+(?:\.\d+)?)\.", name)
-    if match:
-        version = match.group(1)
-        return float(version) if "." in version else int(version)
+    if ".v1." in name:
+        return 1
+    if ".v2." in name:
+        return 2
     if name.startswith("generated_feedback"):
         return 0
-    return 1
+    return current_schema_version("USER_FEEDBACK_VERSION")
 
 
 def _multiple_choice_to_json(original: MultipleChoiceQuestion | None) -> dict[str, Any] | None:

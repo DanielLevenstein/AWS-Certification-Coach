@@ -50,6 +50,7 @@ Multiple-choice grading should use the distractor meaning, not only right or wro
 | Option Type | Default Grade | Notes |
 |:------------|:--------------|:------|
 | Best answer | A | The selected answer satisfies the stated requirements better than the alternatives. |
+| Best wrong service-name distractor | C | The selected answer names the strongest plausible wrong AWS service or feature, such as a near-miss option marked by wording like `only` or `alone`, but it misses the best service boundary for the scenario. |
 | Plausible but suboptimal distractor | C | The selected answer is technically related, but misses a key requirement or tradeoff. |
 | Over-engineered distractor | C or D | Use C when it would work but is unnecessarily complex. Use D when complexity creates operational or cost concerns that conflict with the scenario. |
 | Under-engineered distractor | D | The answer addresses part of the problem but fails an important requirement such as durability, security, scaling, or operational control. |
@@ -114,6 +115,7 @@ A B answer should:
 
 A C answer should:
 
+- Name the best wrong service or feature from the source options while missing the best-fit AWS service boundary.
 - Identify a plausible adjacent service, feature, or pattern.
 - Show partial understanding of the domain.
 - Miss the best-fit reasoning or one central requirement.

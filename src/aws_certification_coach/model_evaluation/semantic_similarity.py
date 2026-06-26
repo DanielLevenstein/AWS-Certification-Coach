@@ -28,6 +28,7 @@ GENERIC_TOKENS = {
     "managed",
     "manager",
     "service",
+    "services",
     "the",
     "to",
     "use",
@@ -50,10 +51,13 @@ AMBIGUOUS_ALIAS_TOKENS = {
     "data",
     "deny",
     "feature",
+    "global",
     "route",
     "rules",
     "s3",
     "service",
+    "table",
+    "tables",
 }
 UNCERTAIN_GUESS_PHRASES = (
     "i do not know",
@@ -235,12 +239,6 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
     if _is_exact_correct_answer(question, answer):
         return 95 if _has_explanatory_detail(answer, question) else 85
 
-    if _matches_near_miss_option(question, answer):
-        return 65
-
-    if _matches_incorrect_option(question, answer):
-        return 35
-
     if _rephrases_question_without_answer(question, answer):
         return 65
 
@@ -249,10 +247,21 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
     concept_coverage = _concept_coverage(question, answer)
     if _has_adjacent_domain_signal(question, answer):
         concept_coverage = max(concept_coverage, 0.25)
+    near_miss_score = _near_miss_option_score(question, answer)
+    if near_miss_score is not None:
+        return near_miss_score
+    adjacent_service_score = _adjacent_service_score(question, answer)
+    if adjacent_service_score is not None:
+        return adjacent_service_score
+    incorrect_option_score = _incorrect_option_score(question, answer, concept_coverage)
+    if incorrect_option_score is not None:
+        return incorrect_option_score
     if _service_is_covered(question, answer):
         service_score = 80 + (15 * concept_coverage)
         if _is_complete_service_answer(answer):
             service_score = max(service_score, 90)
+        if question.question_type == "artifact_review" and concept_coverage < 0.5:
+            service_score = min(service_score, 75)
         if concept_coverage == 0 and _only_matches_generic_service_family(question, answer):
             service_score = min(service_score, 75)
         score_cap = _service_answer_cap(question, answer)
@@ -262,8 +271,12 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
 
     reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
     if concept_coverage >= 0.5:
-        return round(63 + (18 * concept_coverage))
+        return round(63 + (16 * concept_coverage))
     if concept_coverage > 0 or _meaningful_reference_overlap(content_tokens, reference_tokens):
+        if concept_coverage > 0:
+            return 75 if _answers_specific_required_concept(question, answer) else 65
+        if _meaningful_reference_overlap(content_tokens, reference_tokens):
+            return 75
         return 65 if "aws" in answer_tokens or _meaningful_reference_overlap(content_tokens, reference_tokens) else 62
     if content_tokens & reference_tokens:
         return 58
@@ -323,7 +336,46 @@ def _has_uncertain_guess(answer: str) -> bool:
 
 
 def _offers_ambiguous_alternatives(answer: str) -> bool:
-    return " or " in f" {str(answer).casefold()} "
+    normalized = _normalized(answer)
+    if " or " not in f" {normalized} ":
+        return False
+    return len(_mentioned_service_ids(normalized)) >= 2 or _or_joins_service_like_terms(normalized)
+
+
+def _or_joins_service_like_terms(normalized_answer: str) -> bool:
+    service_tokens = _service_alternative_tokens()
+    tokens = normalized_answer.split()
+    for index, token in enumerate(tokens):
+        if token != "or":
+            continue
+        left = set(tokens[max(0, index - 4):index])
+        right = set(tokens[index + 1:index + 5])
+        if (left & service_tokens) or (right & service_tokens):
+            return True
+    return False
+
+
+def _service_alternative_tokens() -> set[str]:
+    tokens = {"aws", "amazon"}
+    for service in KNOWLEDGE_BASE.services:
+        for term in (service.name, *service.aliases, *service.tokens):
+            tokens.update(_tokens(term))
+    return tokens - GENERIC_TOKENS - {"cost", "threshold", "thresholds", "usage"}
+
+
+def _mentioned_service_ids(normalized_answer: str) -> set[str]:
+    service_ids = set()
+    for service in KNOWLEDGE_BASE.services:
+        terms = (service.name, *service.aliases, *service.tokens)
+        for term in terms:
+            normalized_term = _normalized(term)
+            term_tokens = set(normalized_term.split())
+            if not normalized_term or term_tokens <= GENERIC_TOKENS | AMBIGUOUS_ALIAS_TOKENS:
+                continue
+            if normalized_term in normalized_answer:
+                service_ids.add(service.id)
+                break
+    return service_ids
 
 
 def _has_explanatory_detail(answer: str, question: Question) -> bool:
@@ -431,34 +483,69 @@ def _required_concepts(question: Question) -> list[str]:
     return question.required_concepts or question.key_concepts
 
 
-def _matches_near_miss_option(question: Question, answer: str) -> bool:
+def _near_miss_option_score(question: Question, answer: str) -> int | None:
     _correct_options, incorrect_options = _option_texts(question)
     normalized_answer = _normalized(answer)
     answer_tokens = set(_tokens(answer)) - GENERIC_TOKENS
     if not answer_tokens:
-        return False
+        return None
     for option in incorrect_options:
-        option_tokens = set(_tokens(option)) - GENERIC_TOKENS
+        raw_option_tokens = set(_tokens(option))
+        option_tokens = raw_option_tokens - GENERIC_TOKENS
         if not {"alone", "only"} & option_tokens:
             continue
         normalized_option = _normalized(option)
         if normalized_answer in {normalized_option, _strip_leading_use(option)} or answer_tokens <= option_tokens:
-            return bool(answer_tokens & set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS)
-    return False
+            if "aws" in raw_option_tokens:
+                return 65
+            return 75 if "alone" in option_tokens else 65
+    return None
 
 
-def _matches_incorrect_option(question: Question, answer: str) -> bool:
+def _adjacent_service_score(question: Question, answer: str) -> int | None:
+    normalized_answer = _normalized(answer)
+    answer_tokens = set(_tokens(answer))
+    correct = _normalized(correct_answer_text(question))
+    correct_tokens = set(correct.split())
+    if ("secretsmanager" in correct or {"secrets", "manager"} <= correct_tokens) and {"parameter", "store"} <= answer_tokens:
+        return 65
+    if "kms" in correct and "secretsmanager" in normalized_answer:
+        return 65
+    if "dynamodb global tables" in correct and {"global", "database", "tables"} <= answer_tokens:
+        return 75
+    if "dynamodb global tables" in correct and {"rds", "read", "replicas"} <= answer_tokens:
+        return 65
+    return None
+
+
+def _incorrect_option_score(question: Question, answer: str, concept_coverage: float) -> int | None:
     _correct_options, incorrect_options = _option_texts(question)
     normalized_answer = _normalized(answer)
     answer_tokens = set(_tokens(answer)) - GENERIC_TOKENS
     if not answer_tokens:
-        return False
+        return None
     for option in incorrect_options:
         option_tokens = set(_tokens(option)) - GENERIC_TOKENS - {"only"}
-        if answer_tokens <= option_tokens:
-            return True
-        if normalized_answer in {_normalized(option), _strip_leading_use(option)}:
-            return True
+        if answer_tokens <= option_tokens or normalized_answer in {_normalized(option), _strip_leading_use(option)}:
+            if concept_coverage > 0:
+                return 65
+            return 35
+    return None
+
+
+def _answers_specific_required_concept(question: Question, answer: str) -> bool:
+    answer_tokens = set(_tokens(answer)) - GENERIC_TOKENS
+    if not answer_tokens:
+        return False
+    if answer_tokens <= {"orchestration"}:
+        return False
+    if {"rds", "read", "replicas"} <= answer_tokens:
+        return True
+    if len(answer_tokens) <= 2:
+        for concept in _required_concepts(question):
+            concept_tokens = set(_tokens(concept)) - GENERIC_TOKENS
+            if answer_tokens and answer_tokens <= concept_tokens:
+                return True
     return False
 
 

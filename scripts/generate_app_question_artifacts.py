@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from aws_certification_coach.config import current_schema_version
 from aws_certification_coach.knowledge_base import load_knowledge_base
 from aws_certification_coach.question_templates import load_question_templates
 
@@ -35,6 +36,7 @@ def _build_app_questions(count: int) -> list[dict]:
         raise ValueError(f"Cannot generate {count} unique app questions from {max_count} source scenarios.")
 
     questions = []
+    schema_version = current_schema_version("QUESTION_SCHEMA_VERSION")
     for index in range(count):
         scenario = scenarios[index % len(scenarios)]
         variant = prompt_variants[index // len(scenarios)]
@@ -46,6 +48,7 @@ def _build_app_questions(count: int) -> list[dict]:
         mcq_question = variant.format(purpose=scenario.purpose)
         questions.append(
             {
+                "schema_version": schema_version,
                 "certification": scenario.certification,
                 "exam_code": scenario.exam_code,
                 "domain": scenario.domain,

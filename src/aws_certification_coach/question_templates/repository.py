@@ -133,7 +133,7 @@ def _validate_payload(payload: object, source: Path) -> None:
     missing = required - payload.keys()
     if missing:
         raise ValueError(f"Question templates are missing fields {sorted(missing)}: {source}")
-    if payload["schema_version"] != 2:
+    if payload["schema_version"] < 2:
         raise ValueError(f"Unsupported question-template schema version: {payload['schema_version']}")
     forbidden = _find_forbidden_keys(payload)
     if forbidden:
