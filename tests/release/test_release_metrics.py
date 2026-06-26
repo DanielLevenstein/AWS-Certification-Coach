@@ -2,6 +2,8 @@ from pathlib import Path
 import struct
 import subprocess
 
+import pytest
+
 from aws_certification_coach.release_metrics.complexity import measure_complexity
 from aws_certification_coach.release_metrics.question_coverage import (
     measure_question_coverage,
@@ -18,7 +20,6 @@ from aws_certification_coach.training.features import AnswerFeatureExtractor, co
 from scripts.release_metrics import render_release_metrics, update_release_notes
 from scripts.semantic_similarity_evaluation import (
     plot_grade_band_metrics,
-    plot_letter_distance_metrics,
     plot_per_grade_metrics,
     plot_semantic_accuracy,
 )
@@ -94,7 +95,7 @@ def test_per_grade_chart_includes_semantic_precision_and_recall(tmp_path: Path):
             grade: {"precision": precision, "recall": recall}
             for grade, precision, recall in zip(
                 ("A", "B", "C", "D", "F"),
-                (0.92, 0.84, 0.56, 0.79, 1.0),
+                (0.92, 0.86, 0.87, 0.89, 1.0),
                 (0.88, 0.76, 0.64, 0.71, 0.95),
                 strict=True,
             )
@@ -106,12 +107,29 @@ def test_per_grade_chart_includes_semantic_precision_and_recall(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
+def test_per_grade_chart_rejects_precision_below_guardrail(tmp_path: Path):
+    output = tmp_path / "per_grade_metrics.png"
+    evaluation = {
+        "per_grade": {
+            grade: {"precision": precision, "recall": 0.9}
+            for grade, precision in zip(
+                ("A", "B", "C", "D", "F"),
+                (0.92, 0.86, 0.74, 0.89, 1.0),
+                strict=True,
+            )
+        }
+    }
+
+    with pytest.raises(ValueError, match="Per-grade precision does not clear"):
+        plot_per_grade_metrics(evaluation, output)
+
+
 def test_grade_band_chart_uses_exclusive_a_bc_df_bands(tmp_path: Path):
     output = tmp_path / "grade_band_metrics.png"
     evaluation = {
         "per_grade_band": {
-            "A": {"precision": 0.82, "recall": 0.91},
-            "BC": {"precision": 0.56, "recall": 0.64},
+            "A": {"precision": 0.88, "recall": 0.91},
+            "BC": {"precision": 0.86, "recall": 0.64},
             "DF": {"precision": 0.93, "recall": 0.88},
         }
     }
@@ -121,16 +139,18 @@ def test_grade_band_chart_uses_exclusive_a_bc_df_bands(tmp_path: Path):
     assert output.read_bytes().startswith(b"\x89PNG")
 
 
-def test_letter_distance_chart_decomposes_within_one_letter_accuracy(tmp_path: Path):
-    output = tmp_path / "letter_distance_metrics.png"
+def test_grade_band_chart_rejects_precision_below_guardrail(tmp_path: Path):
+    output = tmp_path / "grade_band_metrics.png"
     evaluation = {
-        "semantic_exact_letter_accuracy": 0.59,
-        "semantic_within_one_letter_accuracy": 0.98,
+        "per_grade_band": {
+            "A": {"precision": 0.88, "recall": 0.91},
+            "BC": {"precision": 0.84, "recall": 0.64},
+            "DF": {"precision": 0.93, "recall": 0.88},
+        }
     }
 
-    plot_letter_distance_metrics(evaluation, output)
-
-    assert output.read_bytes().startswith(b"\x89PNG")
+    with pytest.raises(ValueError, match="Grade-band precision does not clear"):
+        plot_grade_band_metrics(evaluation, output)
 
 
 def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
@@ -205,10 +225,10 @@ def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
 def test_combined_release_charts_split_accuracy_from_question_coverage(tmp_path: Path):
     paths = {}
     for index, title in enumerate([
+        "Semantic Similarity",
         "Certification Split",
         "Per-Grade Precision & Recall",
         "Grade Bands",
-        "Letter Distance",
         "Domain Coverage",
         "Question Intent Mix",
     ]):
@@ -221,7 +241,7 @@ def test_combined_release_charts_split_accuracy_from_question_coverage(tmp_path:
     combine_accuracy_charts(
         [
             (title, paths[title])
-            for title in ("Letter Distance", "Grade Bands", "Per-Grade Precision & Recall")
+            for title in ("Semantic Similarity", "Grade Bands", "Per-Grade Precision & Recall")
         ],
         accuracy_output,
     )

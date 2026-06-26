@@ -131,7 +131,7 @@ Refresh release-note Markdown and chart copies from the latest completed full me
 
 Set `RELEASE_METRICS_DIR=metrics/<timestamp>` to reuse a specific full run. Quick mode fails when the selected directory is incomplete instead of silently retraining.
 
-The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, and a combined four-panel chart as latest-only files in `release/`.
+The release helper saves the `semantic_similarity` diagnostic chart, separate question coverage charts for domain, intent, and certification split, plus combined accuracy and question-coverage charts as latest-only files in `release/`.
 
 The pandas/Matplotlib graphs are written to a timestamped root-level `metrics/<timestamp>/` directory.
 
