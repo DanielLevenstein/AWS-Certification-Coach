@@ -32,6 +32,16 @@ GENERIC_TOKENS = {
     "to",
     "use",
 }
+QUESTION_RESTATEMENT_FRAME_TOKENS = {
+    "answer",
+    "asks",
+    "asking",
+    "identify",
+    "learner",
+    "question",
+    "should",
+    "this",
+}
 SERVICE_FAMILY_TOKENS = set(KNOWLEDGE_BASE.service_tokens)
 AMBIGUOUS_ALIAS_TOKENS = {
     "allow",
@@ -45,6 +55,16 @@ AMBIGUOUS_ALIAS_TOKENS = {
     "s3",
     "service",
 }
+UNCERTAIN_GUESS_PHRASES = (
+    "i do not know",
+    "i don't know",
+    "i dont know",
+    "i would be guessing",
+    "not sure",
+    "possibly",
+    "it's possible",
+    "it is possible",
+)
 LEGACY_ACCEPTED_GRADES = frozenset({"A", "B", "C", "D"})
 GRADES = ("A", "B", "C", "D", "F")
 
@@ -213,7 +233,7 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
     """Score an answer using service-alias recognition plus concept coverage."""
 
     if _is_exact_correct_answer(question, answer):
-        return 95
+        return 95 if _has_explanatory_detail(answer, question) else 85
 
     if _matches_near_miss_option(question, answer):
         return 65
@@ -233,6 +253,11 @@ def semantic_similarity_score(question: Question, answer: str) -> int:
         service_score = 80 + (15 * concept_coverage)
         if _is_complete_service_answer(answer):
             service_score = max(service_score, 90)
+        if concept_coverage == 0 and _only_matches_generic_service_family(question, answer):
+            service_score = min(service_score, 75)
+        score_cap = _service_answer_cap(question, answer)
+        if score_cap is not None:
+            service_score = min(service_score, score_cap)
         return round(service_score)
 
     reference_tokens = set(_tokens(correct_answer_text(question))) - GENERIC_TOKENS
@@ -250,10 +275,15 @@ def _rephrases_question_without_answer(question: Question, answer: str) -> bool:
     if len(answer_tokens) < 4:
         return False
     normalized_answer = _normalized(answer)
-    if not normalized_answer.startswith(("which ", "what ", "how ", "why ", "when ", "where ")):
+    if not normalized_answer.startswith(("which ", "what ", "how ", "why ", "when ", "where ")) and not (
+        "question" in answer_tokens or {"asks", "asking"} & answer_tokens
+    ):
         return False
     question_tokens = set(_tokens(question.question)) - GENERIC_TOKENS
+    comparison_tokens = answer_tokens - QUESTION_RESTATEMENT_FRAME_TOKENS
     question_overlap = len(answer_tokens & question_tokens) / max(1, len(answer_tokens))
+    framed_overlap = len(comparison_tokens & question_tokens) / max(1, len(comparison_tokens))
+    question_overlap = max(question_overlap, framed_overlap)
     if question_overlap < 0.5:
         return False
 
@@ -267,6 +297,44 @@ def _rephrases_question_without_answer(question: Question, answer: str) -> bool:
 def _service_is_covered(question: Question, answer: str) -> bool:
     normalized_answer = _normalized(answer)
     return any(alias in normalized_answer for alias in _service_aliases(question))
+
+
+def _only_matches_generic_service_family(question: Question, answer: str) -> bool:
+    normalized_answer = _normalized(answer)
+    matched_aliases = [alias for alias in _service_aliases(question) if alias in normalized_answer]
+    if not matched_aliases:
+        return False
+    return all(set(alias.split()) <= SERVICE_FAMILY_TOKENS for alias in matched_aliases)
+
+
+def _service_answer_cap(question: Question, answer: str) -> int | None:
+    if _has_uncertain_guess(answer):
+        return 65
+    if _offers_ambiguous_alternatives(answer):
+        return 79
+    if not _has_explanatory_detail(answer, question):
+        return 85
+    return None
+
+
+def _has_uncertain_guess(answer: str) -> bool:
+    normalized = " ".join(str(answer).casefold().replace("’", "'").split())
+    return any(phrase in normalized for phrase in UNCERTAIN_GUESS_PHRASES)
+
+
+def _offers_ambiguous_alternatives(answer: str) -> bool:
+    return " or " in f" {str(answer).casefold()} "
+
+
+def _has_explanatory_detail(answer: str, question: Question) -> bool:
+    answer_tokens = set(_tokens(answer)) - GENERIC_TOKENS
+    if len(answer_tokens) >= 5:
+        return True
+    required_without_service = set()
+    for concept in _required_concepts(question)[1:]:
+        required_without_service.update(_tokens(concept))
+    required_without_service -= GENERIC_TOKENS | SERVICE_FAMILY_TOKENS
+    return len(answer_tokens & required_without_service) >= 2
 
 
 def _is_complete_service_answer(answer: str) -> bool:

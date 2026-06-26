@@ -53,6 +53,17 @@ CLAIM_FILLER_TOKENS = {
     "use",
 }
 NEGATION_TOKENS = {"avoid", "cannot", "don't", "doesnt", "doesn't", "incorrect", "not", "wrong"}
+QUESTION_RESTATEMENT_FRAME_TOKENS = {
+    "answer",
+    "asks",
+    "asking",
+    "identify",
+    "learner",
+    "question",
+    "should",
+    "this",
+    "to",
+}
 
 
 @dataclass(frozen=True)
@@ -104,7 +115,7 @@ def _evaluation_response(
     curated_feedback: str = "",
 ) -> str:
     if _is_exact_correct_option(question, user_answer):
-        model_score = max(model_score, EXACT_CORRECT_OPTION_SCORE)
+        model_score = max(model_score, _exact_correct_option_score(question, user_answer))
     prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
     if _is_question_restatement(question, user_answer):
         missing = _missing_concepts(question, user_answer)
@@ -297,7 +308,23 @@ def _is_question_restatement(question: Question, user_answer: str) -> bool:
         if identifying_tokens & answer_tokens:
             continue
         return True
+    if _is_framed_question_restatement(question, answer_tokens):
+        return True
     return False
+
+
+def _is_framed_question_restatement(question: Question, answer_tokens: set[str]) -> bool:
+    if "question" not in answer_tokens and not {"asks", "asking"} & answer_tokens:
+        return False
+    answer_content_tokens = answer_tokens - QUESTION_RESTATEMENT_FRAME_TOKENS - GENERIC_SERVICE_TOKENS
+    if len(answer_content_tokens) < 3:
+        return False
+    prompt_tokens = set(TOKEN_PATTERN.findall(question.question.casefold())) - GENERIC_SERVICE_TOKENS
+    overlap = _token_containment(answer_content_tokens, prompt_tokens)
+    if overlap < 0.55:
+        return False
+    identifying_tokens = _expected_service_tokens(question) - prompt_tokens - GENERIC_SERVICE_TOKENS
+    return not bool(identifying_tokens & answer_tokens)
 
 
 def _is_exact_correct_option(question: Question, user_answer: str) -> bool:
@@ -311,6 +338,21 @@ def _is_exact_correct_option(question: Question, user_answer: str) -> bool:
         for option in original.options
         if option.option_id in correct_ids
     }
+
+
+def _exact_correct_option_score(question: Question, user_answer: str) -> int:
+    return EXACT_CORRECT_OPTION_SCORE if _has_explanatory_detail(question, user_answer) else 85
+
+
+def _has_explanatory_detail(question: Question, user_answer: str) -> bool:
+    answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold())) - GENERIC_SERVICE_TOKENS
+    if len(answer_tokens) >= 5:
+        return True
+    required_without_service = set()
+    for concept in _required_concepts(question)[1:]:
+        required_without_service.update(TOKEN_PATTERN.findall(concept.casefold()))
+    required_without_service -= GENERIC_SERVICE_TOKENS
+    return len(answer_tokens & required_without_service) >= 2
 
 
 def _token_containment(required: set[str], candidate: set[str]) -> float:

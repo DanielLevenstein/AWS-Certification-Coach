@@ -31,6 +31,9 @@
 | v3.1.1   | Split question and knowledge base schema                                                                                                                                            |
 | v3.1.2   | Added documentation links for all services and displayed suggested_improvements in UI                                                                                               |
 | v3.1.3   | Show must_not_claim sections in feedback.                                                                                                                                           |
+| v3.1.4.1 | Added answer rewording to training data                                                                                                                                             |
+| v3.1.4.2 | Improved grade band precision for full answers                                                                                                                                      |
+| v3.1.4.3 | Improved grade band precision for partial answers                                                                                                                                   |
 
 # Release Metrics
 
@@ -66,25 +69,24 @@
 | v2.4.6   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v2.5.2   |            90.62% |            100.00% |          90.91% |                87.50% |          98.08% |            94.95% |
 | v3.0.3   |            90.62% |            100.00% |          90.91% |                87.50% |          96.15% |            94.95% |
-| v3.1.1 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
-| v3.1.2 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
+| v3.1.1   |            91.89% |            100.00% |          92.31% |                89.19% |         100.00% |            94.95% |
+| v3.1.2   |            91.89% |            100.00% |          92.31% |                89.19% |         100.00% |            94.95% |
+| v3.1.3   |            91.89% |            100.00% |          92.31% |                89.19% |         100.00% |            94.95% |
+| v3.1.4   |            97.89% |            100.00% |          99.12% |                97.47% |          99.16% |            94.95% |
+| v3.1.4.3 |            99.16% |            100.00% |          99.12% |                98.73% |         100.00% |            94.95% |
 
-## Grade Band Precision
-| Release |      A |    B&C |     D&F |
-|:--------|-------:|-------:|--------:|
-| v2.5.5  | 46.51% | 60.71% | 100.00% |
-| v3.0.1  | 50.00% | 69.70% | 100.00% |
-| v3.0.4  | 90.00% | 100.00% | 100.00% |
 
 ## Grade Precision
-| Release |      A |      B |      C |       D |      F |
-|:--------|-------:|-------:|-------:|--------:|-------:|
-| v2.5.5  | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
-| v3.0.1  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
-| v3.0.3  | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
-| v3.0.4  | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
-| v3.1.1  | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
-| v3.1.2  | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
+| Release  |      A |      B |      C |       D |      F |
+|:---------|-------:|-------:|-------:|--------:|-------:|
+| v2.5.5   | 46.51% | 50.00% | 35.71% | 100.00% | 85.71% |
+| v3.0.1   | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
+| v3.0.3   | 50.00% | 70.59% | 50.00% | 100.00% | 85.71% |
+| v3.0.4   | 90.00% | 66.67% | N/A | 100.00% | 83.33% |
+| v3.1.1   | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
+| v3.1.4.1 | 76.92% | 75.00% | 100.00% | 100.00% | 84.62% |
+| v3.1.4.2 | 100.00% | 66.67% | 100.00% | 100.00% | 84.62% |
+| v3.1.4.3 | 100.00% | 80.00% | 100.00% | 100.00% | 84.62% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -125,25 +127,25 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.1.3 | 91.89% | 100.00% | 92.31% | 89.19% | 100.00% | 94.95% |
+| v3.1.4 | 99.16% | 100.00% | 99.12% | 98.73% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 90.91% | 100.00% | 100.00% |
-| Recall | 100.00% | 83.33% | 100.00% |
-| F1 | 95.24% | 90.91% | 100.00% |
-| Support | 10 | 6 | 21 |
+| Precision | 100.00% | 87.50% | 100.00% |
+| Recall | 90.00% | 100.00% | 100.00% |
+| F1 | 94.74% | 93.33% | 100.00% |
+| Support | 10 | 7 | 220 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 90.91% | 75.00% | 100.00% | 100.00% | 84.62% |
-| Recall | 100.00% | 75.00% | 50.00% | 80.00% | 100.00% |
-| F1 | 95.24% | 75.00% | 66.67% | 88.89% | 91.67% |
-| Support | 10 | 4 | 2 | 10 | 11 |
+| Precision | 100.00% | 80.00% | 100.00% | 100.00% | 84.62% |
+| Recall | 90.00% | 100.00% | 100.00% | 99.04% | 100.00% |
+| F1 | 94.74% | 88.89% | 100.00% | 99.52% | 91.67% |
+| Support | 10 | 4 | 3 | 209 | 11 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
@@ -158,7 +160,7 @@ Knowledge base file size: `78941` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`
-Semantic evaluation count: `37`
+Semantic evaluation count: `237`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
