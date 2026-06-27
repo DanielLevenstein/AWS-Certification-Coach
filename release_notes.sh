@@ -45,6 +45,17 @@ fi
 RELEASE_TAG="$1"
 
 if [ "$MODE" = "full" ]; then
+  if [ "${AWS_COACH_CONTENT_BACKEND:-}" != "json" ]; then
+    if [ -z "${MONGODB_URI:-}" ]; then
+      echo "Full release requires MONGODB_URI so metrics use the migrated generated_questions collection." >&2
+      echo "Set AWS_COACH_CONTENT_BACKEND=json only when intentionally measuring the legacy JSON artifact." >&2
+      exit 2
+    fi
+    if [ -z "${AWS_COACH_MONGODB_DATABASE:-}" ]; then
+      echo "Full release requires AWS_COACH_MONGODB_DATABASE so metrics use the intended MongoDB database." >&2
+      exit 2
+    fi
+  fi
   .venv/bin/python test_suites.py unit
   .venv/bin/python test_suites.py model-smoke
   METRICS_DIR="metrics/$(date '+%Y%m%d_%H%M%S')"

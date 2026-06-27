@@ -16,6 +16,8 @@ from aws_certification_coach.release_metrics.question_coverage import (
     plot_question_coverage,
     plot_question_coverage_artifacts,
 )
+from aws_certification_coach.mongodb import get_mongodb_database, mongodb_content_enabled, mongodb_database_name, mongodb_uri
+from aws_certification_coach.questions.json_repository import DEFAULT_GENERATED_QUESTIONS_PATH
 
 
 def main() -> None:
@@ -26,7 +28,7 @@ def main() -> None:
     parser.add_argument("--chart-output-dir", type=Path, default=Path("release/metrics"))
     args = parser.parse_args()
 
-    rows = json.loads(args.questions.read_text(encoding="utf-8"))
+    rows = _question_rows(args.questions)
     if not isinstance(rows, list):
         raise ValueError(f"Question file must contain a list: {args.questions}")
     metrics = measure_question_coverage([row for row in rows if isinstance(row, dict)])
@@ -40,6 +42,14 @@ def main() -> None:
         print(f"Question {name} coverage chart: {path}")
     if args.chart_output is not None:
         print(f"Question coverage chart: {args.chart_output}")
+
+def _question_rows(path: Path) -> list[object]:
+    if path.resolve() == DEFAULT_GENERATED_QUESTIONS_PATH.resolve() and mongodb_content_enabled():
+        database = get_mongodb_database(mongodb_uri(), mongodb_database_name())
+        rows = list(database["generated_questions"].find({}, {"_id": False}))
+        if rows:
+            return rows
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

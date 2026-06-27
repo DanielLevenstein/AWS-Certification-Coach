@@ -48,3 +48,4 @@ services:
 
 volumes:
   mongo_data:
+    name: aws_certification_coach_mongo_data

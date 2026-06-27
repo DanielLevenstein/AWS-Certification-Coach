@@ -7,6 +7,9 @@ from pathlib import Path
 from typing import Iterable
 
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question, QuestionFilter
+from aws_certification_coach.mongodb import get_mongodb_database, mongodb_content_enabled, mongodb_database_name, mongodb_uri
+
+DEFAULT_GENERATED_QUESTIONS_PATH = Path(__file__).resolve().parents[3] / "data" / "questions" / "sample_questions.json"
 
 
 class JsonQuestionRepository:
@@ -41,6 +44,11 @@ class JsonQuestionRepository:
         return _unique_sorted(q.difficulty for q in self.all())
 
     def _load_questions(self) -> list[Question]:
+        if self.path.resolve() == DEFAULT_GENERATED_QUESTIONS_PATH.resolve() and mongodb_content_enabled():
+            database = get_mongodb_database(mongodb_uri(), mongodb_database_name())
+            rows = list(database["generated_questions"].find({}, {"_id": False}))
+            if rows:
+                return [question_from_json(row) for row in rows]
         with self.path.open("r", encoding="utf-8") as f:
             rows = json.load(f)
         if not isinstance(rows, list):

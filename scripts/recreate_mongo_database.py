@@ -10,16 +10,20 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import sys
 from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 CONFIG_DIR = PROJECT_ROOT / "config"
 KNOWLEDGE_BASE_PATH = CONFIG_DIR / "knowledge_base" / "knowledge_base.json"
 QUESTION_TEMPLATE_PATH = CONFIG_DIR / "question_templates" / "question_template.json"
 SCHEMA_VERSION_PATH = CONFIG_DIR / "schema_version.json"
 USER_FEEDBACK_PATH = CONFIG_DIR / "data" / "user_feedback.v3.json"
 STRUCTURED_ANSWER_TRAINING_PATH = CONFIG_DIR / "data" / "structured_answer_training_data.json"
+DEVELOPER_QUESTION_SOURCES_PATH = PROJECT_ROOT / "data" / "original_questions" / "developer_associate_sources.json"
 
 MIGRATED_SCHEMA_VERSION = 4.1
 DEFAULT_MONGODB_URI = "mongodb://localhost:27017"
@@ -33,6 +37,7 @@ class SourceFiles:
     schema_version: Path = SCHEMA_VERSION_PATH
     user_feedback: Path = USER_FEEDBACK_PATH
     structured_answer_training: Path = STRUCTURED_ANSWER_TRAINING_PATH
+    developer_question_sources: Path = DEVELOPER_QUESTION_SOURCES_PATH
 
 
 def main() -> None:
@@ -64,6 +69,8 @@ def build_collection_documents(sources: SourceFiles) -> dict[str, list[dict[str,
     schema_versions = _read_json_object(sources.schema_version)
     user_feedback = _read_json_array(sources.user_feedback)
     structured_answer_training = _read_json_array(sources.structured_answer_training)
+    developer_question_sources = _read_json_array(sources.developer_question_sources)
+    generated_questions = _build_generated_questions_from_raw_sources(developer_question_sources)
 
     _validate_identical_misconception_sources(knowledge_base)
 
@@ -76,6 +83,7 @@ def build_collection_documents(sources: SourceFiles) -> dict[str, list[dict[str,
         "question_templates": _documents_with_ids(question_template["templates"], "id"),
         "service_scenarios": _documents_with_ids(question_template["service_scenarios"], "id"),
         "developer_question_scenarios": _documents_with_ids(question_template["developer_question_scenarios"], "id"),
+        "generated_questions": _documents_with_stable_hash_ids(generated_questions),
         "user_feedback": _documents_with_stable_hash_ids(user_feedback),
         "structured_answer_training_examples": _documents_with_stable_hash_ids(structured_answer_training),
     }
@@ -124,6 +132,11 @@ def _create_indexes(database: Any, *, ascending: int, text: str) -> None:
     database["service_scenarios"].create_index([("service_id", ascending)])
     database["service_scenarios"].create_index([("certification", ascending), ("exam_code", ascending), ("difficulty", ascending)])
     database["developer_question_scenarios"].create_index([("id", ascending)], unique=True)
+    database["generated_questions"].create_index([("certification", ascending)])
+    database["generated_questions"].create_index([("domain", ascending)])
+    database["generated_questions"].create_index([("difficulty", ascending)])
+    database["generated_questions"].create_index([("exam_code", ascending)])
+    database["generated_questions"].create_index([("question_type", ascending)])
     database["user_feedback"].create_index([("schema_version", ascending)])
     database["user_feedback"].create_index([("exam_code", ascending)])
     database["user_feedback"].create_index([("correct_rating", ascending), ("rating_given", ascending)])
@@ -170,7 +183,31 @@ def _content_manifests(
             "Curated structured-answer training and evaluation examples.",
             imported_at,
         ),
+        _manifest(
+            "generated_questions",
+            sources.developer_question_sources,
+            schema_versions.get("QUESTION_SCHEMA_VERSION"),
+            "Generated app-facing question bank.",
+            imported_at,
+        ),
     ]
+
+
+def _build_generated_questions_from_raw_sources(developer_question_sources: list[Any]) -> list[dict[str, Any]]:
+    previous_backend = os.environ.get("AWS_COACH_CONTENT_BACKEND")
+    os.environ["AWS_COACH_CONTENT_BACKEND"] = "json"
+    try:
+        from scripts.generate_app_question_artifacts import _build_app_questions
+        from scripts.generate_developer_question_artifacts import build_questions
+
+        app_questions = _build_app_questions(160)
+        developer_questions = build_questions([dict(row) for row in developer_question_sources])
+        return [*app_questions, *developer_questions]
+    finally:
+        if previous_backend is None:
+            os.environ.pop("AWS_COACH_CONTENT_BACKEND", None)
+        else:
+            os.environ["AWS_COACH_CONTENT_BACKEND"] = previous_backend
 
 
 def _manifest(source: str, path: Path, source_schema_version: Any, description: str, imported_at: str) -> dict[str, Any]:

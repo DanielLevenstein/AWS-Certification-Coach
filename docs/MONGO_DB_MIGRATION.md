@@ -432,6 +432,63 @@ training data currently stored under `config/data`. These files are not part of
 the knowledge base or question-template root schema, but they are closely tied
 to evaluation, calibration, and future model quality workflows.
 
+### `generated_questions`
+
+Derived from the generated app question pipeline:
+
+- `scripts/generate_app_question_artifacts.py`
+- `scripts/generate_developer_question_artifacts.py`
+- `data/original_questions/developer_associate_sources.json`
+
+This collection stores app-facing generated questions. It is intentionally
+separate from `question_templates`, `service_scenarios`, and
+`developer_question_scenarios`.
+
+Rationale:
+
+- `question_templates` contains reusable generation rules.
+- `service_scenarios` and `developer_question_scenarios` contain source inputs
+  for generation.
+- `generated_questions` contains the rendered question bank consumed by the app.
+
+Current generated-question fields include:
+
+- `schema_version`
+- `certification`
+- `exam_code`
+- `domain`
+- `difficulty`
+- `question_type`
+- `question`
+- `reference_answer`
+- `key_concepts`
+- `required_concepts`
+- `bonus_concepts`
+- `common_misconceptions`
+- `acceptable_answers`
+- `must_not_claim`
+- `do_not_claim_explanation`
+- `original_multiple_choice`
+- optional Developer metadata such as `source_examples`, `exam_calibration`,
+  `question_fidelity`, and artifact-review fields
+
+Indexes:
+
+- Index on `certification`
+- Index on `domain`
+- Index on `difficulty`
+- Index on `exam_code`
+- Index on `question_type`
+
+Management guidance:
+
+- Recreate this collection from the raw JSON/template sources during database
+  rebuilds.
+- Do not merge generated question documents into `question_templates`; generated
+  rows are runtime content, while templates are source rules.
+- Keep generated question documents exportable to the current
+  `data/questions/sample_questions.json` shape for compatibility checks.
+
 ### `user_feedback`
 
 Derived from versioned user feedback files:

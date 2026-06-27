@@ -24,6 +24,8 @@ def test_build_collection_documents_preserves_source_payload_fields() -> None:
     assert len(collections["question_templates"]) == 1
     assert len(collections["service_scenarios"]) == 40
     assert len(collections["developer_question_scenarios"]) == 38
+    assert len(collections["generated_questions"]) >= 198
+    assert len([row for row in collections["generated_questions"] if row.get("exam_code") == "DVA-C02"]) == 38
 
     service = collections["services"][0]
     assert service["_id"] == service["id"]

@@ -152,8 +152,12 @@ Run the release suite and save the latest release chart artifacts:
 Refresh semantic metrics, curated diagnostics, knowledge metrics, and tagged charts:
 
 ```bash
-./release_notes.sh --full v3.1.0
+MONGODB_URI="mongodb://localhost:27017" AWS_COACH_MONGODB_DATABASE="aws_certification_coach" ./release_notes.sh --full v3.1.0
 ```
+
+Full release metrics use the migrated `generated_questions` MongoDB collection.
+Set `AWS_COACH_CONTENT_BACKEND=json` only when intentionally measuring the
+legacy JSON artifact.
 
 Refresh release-note Markdown and chart copies from the latest completed full metrics run without rerunning tests:
 

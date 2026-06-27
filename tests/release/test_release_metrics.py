@@ -14,6 +14,8 @@ from aws_certification_coach.model_evaluation.semantic_similarity import (
     semantic_similarity_score,
 )
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
+from aws_certification_coach.questions.json_repository import question_from_json
+from scripts.recreate_mongo_database import SourceFiles, build_collection_documents
 from aws_certification_coach.ratings import score_to_letter
 from aws_certification_coach.training.features import AnswerFeatureExtractor, correct_answer_text
 from scripts.release_metrics import render_release_metrics, update_release_notes
@@ -426,7 +428,7 @@ def test_semantic_accuracy_uses_grade_bands_and_reports_exact_letter_match(tmp_p
 
 def test_curated_semantic_metrics_keep_grade_a_precision_high():
     project_root = Path(__file__).resolve().parents[2]
-    questions = JsonQuestionRepository(project_root / "data" / "questions" / "sample_questions.json").all()
+    questions = [question_from_json(row) for row in build_collection_documents(SourceFiles())["generated_questions"]]
 
     metrics = evaluate_semantic_curated_answers(
         project_root / "data" / "curated" / "curated_training_data.json",
