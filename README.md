@@ -122,6 +122,10 @@ Then run the app:
 ./run_app.sh
 ```
 
+When `MONGODB_URI` is set, the application loads migrated knowledge-base and
+question-template content from MongoDB. Set `AWS_COACH_CONTENT_BACKEND=json` to
+force the legacy JSON-backed content path during development.
+
 ### Application Tests and Release Notes
 
 Run the fast unit and contract tests:

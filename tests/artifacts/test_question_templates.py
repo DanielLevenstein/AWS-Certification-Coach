@@ -7,9 +7,11 @@ from aws_certification_coach.question_templates import (
     DEFAULT_QUESTION_TEMPLATE_PATH,
     load_question_templates,
 )
+import aws_certification_coach.question_templates.repository as question_template_repository
 from scripts.generate_app_question_artifacts import _build_app_questions
 from scripts.generate_developer_question_artifacts import build_questions
 from scripts.download_developer_original_questions import SOURCE_ROWS
+from scripts.recreate_mongo_database import SourceFiles, build_collection_documents
 
 
 def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_base():
@@ -56,6 +58,23 @@ def test_question_templates_own_developer_question_details_without_aws_source_fi
     assert not hasattr(scenario, "source_url")
     assert not hasattr(scenario, "services")
     assert not hasattr(scenario, "key_concepts")
+
+
+def test_question_templates_can_load_default_content_from_mongodb(monkeypatch):
+    collections = build_collection_documents(SourceFiles())
+    database = _FakeDatabase(collections)
+    monkeypatch.setenv("MONGODB_URI", "mongodb://example")
+    monkeypatch.setenv("AWS_COACH_MONGODB_DATABASE", "aws_certification_coach_test")
+    monkeypatch.setattr(question_template_repository, "get_mongodb_database", lambda _uri, _database_name: database)
+    question_template_repository._load_question_templates_from_mongodb.cache_clear()
+
+    catalog = load_question_templates()
+
+    assert catalog.schema_version == 3
+    assert len(catalog.templates) == 1
+    assert len(catalog.service_scenarios) == 40
+    assert len(catalog.developer_question_scenarios) == 38
+    assert catalog.developer_question_scenarios[0].generated_question
 
 
 def test_developer_generator_uses_question_template_details_before_source_overrides():
@@ -119,3 +138,30 @@ def test_generated_app_questions_include_template_source_and_normalized_option_m
             "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
         )
     }
+
+
+class _FakeDatabase:
+    def __init__(self, collections: dict[str, list[dict]]) -> None:
+        self.collections = collections
+
+    def __getitem__(self, name: str):
+        return _FakeCollection(self.collections[name])
+
+
+class _FakeCollection:
+    def __init__(self, rows: list[dict]) -> None:
+        self.rows = rows
+
+    def find(self, _filter: dict, projection: dict | None = None):
+        for row in self.rows:
+            yield _without_id(row) if projection and projection.get("_id") is False else dict(row)
+
+    def find_one(self, filter_value: dict):
+        for row in self.rows:
+            if all(row.get(key) == value for key, value in filter_value.items()):
+                return dict(row)
+        return None
+
+
+def _without_id(row: dict) -> dict:
+    return {key: value for key, value in row.items() if key != "_id"}

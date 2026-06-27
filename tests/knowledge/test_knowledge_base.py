@@ -7,8 +7,10 @@ from aws_certification_coach.knowledge_base import (
     DEFAULT_KNOWLEDGE_BASE_PATH,
     load_knowledge_base,
 )
+import aws_certification_coach.knowledge_base.repository as knowledge_repository
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.training.features import AnswerFeatureExtractor
+from scripts.recreate_mongo_database import SourceFiles, build_collection_documents
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -80,6 +82,23 @@ def test_knowledge_base_loader_is_cached():
     assert load_knowledge_base() is load_knowledge_base(DEFAULT_KNOWLEDGE_BASE_PATH)
 
 
+def test_knowledge_base_can_load_default_content_from_mongodb(monkeypatch):
+    collections = build_collection_documents(SourceFiles())
+    database = _FakeDatabase(collections)
+    monkeypatch.setenv("MONGODB_URI", "mongodb://example")
+    monkeypatch.setenv("AWS_COACH_MONGODB_DATABASE", "aws_certification_coach_test")
+    monkeypatch.setattr(knowledge_repository, "get_mongodb_database", lambda _uri, _database_name: database)
+    knowledge_repository._load_knowledge_base_from_mongodb.cache_clear()
+
+    knowledge = load_knowledge_base()
+
+    assert knowledge.schema_version == 3
+    assert len(knowledge.services) == 42
+    assert len(knowledge.concepts) == 161
+    assert len(knowledge.common_misconceptions) == 6
+    assert knowledge.common_misconceptions == knowledge.must_not_claim
+
+
 def test_knowledge_base_rejects_answer_labels(tmp_path: Path):
     payload = json.loads(DEFAULT_KNOWLEDGE_BASE_PATH.read_text(encoding="utf-8"))
     payload["concepts"][0]["rating"] = 0.95
@@ -99,3 +118,30 @@ def test_classifier_features_use_knowledge_base_syntax_aliases():
     spaced_name_features = extractor.extract(question, "Use AWS Code Build.")
 
     assert spaced_name_features == joined_name_features
+
+
+class _FakeDatabase:
+    def __init__(self, collections: dict[str, list[dict]]) -> None:
+        self.collections = collections
+
+    def __getitem__(self, name: str):
+        return _FakeCollection(self.collections[name])
+
+
+class _FakeCollection:
+    def __init__(self, rows: list[dict]) -> None:
+        self.rows = rows
+
+    def find(self, _filter: dict, projection: dict | None = None):
+        for row in self.rows:
+            yield _without_id(row) if projection and projection.get("_id") is False else dict(row)
+
+    def find_one(self, filter_value: dict):
+        for row in self.rows:
+            if all(row.get(key) == value for key, value in filter_value.items()):
+                return dict(row)
+        return None
+
+
+def _without_id(row: dict) -> dict:
+    return {key: value for key, value in row.items() if key != "_id"}

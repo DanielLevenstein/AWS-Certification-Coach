@@ -1,0 +1,50 @@
+services:
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  migrate:
+    image: ${COMPOSE_APP_IMAGE:-aws-certification-coach:compose}
+    build: .
+    profiles:
+      - tools
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017
+      AWS_COACH_MONGODB_DATABASE: aws_certification_coach
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    command:
+      - python
+      - scripts/recreate_mongo_database.py
+      - --uri
+      - mongodb://mongodb:27017
+      - --database
+      - aws_certification_coach
+      - --drop-existing
+      - --yes
+
+  app:
+    image: ${COMPOSE_APP_IMAGE:-aws-certification-coach:compose}
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      PORT: "8501"
+      MONGODB_URI: mongodb://mongodb:27017
+      AWS_COACH_MONGODB_DATABASE: aws_certification_coach
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+volumes:
+  mongo_data:

@@ -8,11 +8,12 @@ WORKDIR /app
 
 COPY pyproject.toml README.md requirements.txt ./
 COPY src ./src
-RUN pip install --no-cache-dir -e .
+RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir -e .
 
 COPY app.py ./
 COPY config ./config
 COPY data ./data
+COPY scripts/recreate_mongo_database.py ./scripts/recreate_mongo_database.py
 
 EXPOSE 8501
 

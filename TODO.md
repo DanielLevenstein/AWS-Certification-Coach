@@ -27,26 +27,33 @@ Because the current accuracy metrics are stable, we are implementing these chang
 Implementing dedicated AWS knowledge based on a dedicated feature branch using tinyLLama for local training.
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
-### v3.3 User Feedback Update
+## MongoDB database migration
+- The initial knowledge base is stable, so it's time to migrate it into a structured database
+Mongo Database Migration schema documented in MONGO_DB_MIGRATION.md
 
-Handled in the v3.3 feedback implementation:
-
-- Pull current schema versions from `config/schema_version.json`.
-- Keep missing question schema versions as legacy `1` while generated question rows use the configured question schema.
-- Grade strongest wrong-service near misses as `C`.
-- Update the answer rubric for the wrong-service near-miss rule.
-- Add a release-note chart for expected grade distribution by letter.
-- Refresh setup-generated artifacts after implementation.
-- Review `config/data/curated_training_data.json` and `config/data/user_feedback.v3.json`.
+## Post Migration Improvements
 
 ### User Feedback Follow-Ups
 
+Expand service-selection-template questions so there is more than one question type present.
+- Example categories:
+- cost_tradeoff
+- operational_complexity_tradeoff
+- latency_tradeoff
+- durability_availability_tradeoff
+- managed_vs_self_managed_tradeoff
+- event_driven_vs_batch_tradeoff
+- security_boundary_tradeoff
+
+Specific question suggestions
 - Add an explanatory question or feedback note contrasting S3 lifecycle policies with S3 bucket policies.
 - Add a major SNS vs. SQS comparison question that teaches pub/sub fan-out versus queue-based polling/worker processing.
 - Add a vertical-scaling versus horizontal-scaling question for EC2 and Auto Scaling concepts.
 - Review artifact-review prompts that may give away the expected issue in the question wording, especially SDK pagination examples.
 - Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
 - Fix duplicate DynamoDB documentation links in the documentation/source section.
+
+Add service-oriented questions that directly ask the user to compare the pros and cons of two different services. 
 
 # Phase 2 Code & Configuration Review
 IAM policy questions.

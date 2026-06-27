@@ -9,6 +9,8 @@ from pathlib import Path
 import re
 from typing import Iterable
 
+from aws_certification_coach.mongodb import get_mongodb_database, mongodb_content_enabled, mongodb_database_name, mongodb_uri
+
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 DEFAULT_KNOWLEDGE_BASE_PATH = (
@@ -173,14 +175,50 @@ class KnowledgeBase:
 def load_knowledge_base(path: str | Path = DEFAULT_KNOWLEDGE_BASE_PATH) -> KnowledgeBase:
     """Load a knowledge document once per resolved path."""
 
-    return _load_knowledge_base(str(Path(path).resolve()))
+    resolved = Path(path).resolve()
+    if resolved == DEFAULT_KNOWLEDGE_BASE_PATH.resolve() and mongodb_content_enabled():
+        return _load_knowledge_base_from_mongodb(mongodb_uri(), mongodb_database_name())
+    return _load_knowledge_base(str(resolved))
 
 
 @lru_cache(maxsize=8)
 def _load_knowledge_base(resolved_path: str) -> KnowledgeBase:
     source = Path(resolved_path)
     payload = json.loads(source.read_text(encoding="utf-8"))
+    return _knowledge_base_from_payload(payload, source)
+
+
+@lru_cache(maxsize=8)
+def _load_knowledge_base_from_mongodb(uri: str, database_name: str) -> KnowledgeBase:
+    database = get_mongodb_database(uri, database_name)
+    payload = _knowledge_base_payload_from_mongodb(database)
+    return _knowledge_base_from_payload(payload, Path(f"mongodb://{database_name}/knowledge_base"))
+
+
+def _knowledge_base_payload_from_mongodb(database: object) -> dict[str, object]:
+    manifest = database["content_manifests"].find_one({"_id": "knowledge_base"}) or {}
+    misconceptions = _collection_rows(database, "misconceptions")
+    return {
+        "schema_version": manifest.get("source_schema_version", 3),
+        "description": manifest.get("description", ""),
+        "syntax_aliases": _collection_rows(database, "syntax_aliases"),
+        "services": _collection_rows(database, "services"),
+        "concepts": _collection_rows(database, "concepts"),
+        "common_misconceptions": misconceptions,
+        "must_not_claim": misconceptions,
+    }
+
+
+def _collection_rows(database: object, collection_name: str) -> list[dict[str, object]]:
+    rows = []
+    for row in database[collection_name].find({}, {"_id": False}):
+        rows.append(dict(row))
+    return rows
+
+
+def _knowledge_base_from_payload(payload: object, source: Path) -> KnowledgeBase:
     _validate_payload(payload, source)
+    assert isinstance(payload, dict)
     services = tuple(
         Service(
             id=str(row["id"]),

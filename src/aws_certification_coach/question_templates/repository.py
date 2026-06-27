@@ -7,6 +7,8 @@ from functools import lru_cache
 import json
 from pathlib import Path
 
+from aws_certification_coach.mongodb import get_mongodb_database, mongodb_content_enabled, mongodb_database_name, mongodb_uri
+
 
 DEFAULT_QUESTION_TEMPLATE_PATH = (
     Path(__file__).resolve().parents[3]
@@ -87,14 +89,47 @@ class QuestionTemplateCatalog:
 def load_question_templates(path: str | Path = DEFAULT_QUESTION_TEMPLATE_PATH) -> QuestionTemplateCatalog:
     """Load question templates once per resolved path."""
 
-    return _load_question_templates(str(Path(path).resolve()))
+    resolved = Path(path).resolve()
+    if resolved == DEFAULT_QUESTION_TEMPLATE_PATH.resolve() and mongodb_content_enabled():
+        return _load_question_templates_from_mongodb(mongodb_uri(), mongodb_database_name())
+    return _load_question_templates(str(resolved))
 
 
 @lru_cache(maxsize=8)
 def _load_question_templates(resolved_path: str) -> QuestionTemplateCatalog:
     source = Path(resolved_path)
     payload = json.loads(source.read_text(encoding="utf-8"))
+    return _question_template_catalog_from_payload(payload, source)
+
+
+@lru_cache(maxsize=8)
+def _load_question_templates_from_mongodb(uri: str, database_name: str) -> QuestionTemplateCatalog:
+    database = get_mongodb_database(uri, database_name)
+    payload = _question_template_payload_from_mongodb(database)
+    return _question_template_catalog_from_payload(payload, Path(f"mongodb://{database_name}/question_template"))
+
+
+def _question_template_payload_from_mongodb(database: object) -> dict[str, object]:
+    manifest = database["content_manifests"].find_one({"_id": "question_template"}) or {}
+    return {
+        "schema_version": manifest.get("source_schema_version", 3),
+        "description": manifest.get("description", ""),
+        "templates": _collection_rows(database, "question_templates"),
+        "service_scenarios": _collection_rows(database, "service_scenarios"),
+        "developer_question_scenarios": _collection_rows(database, "developer_question_scenarios"),
+    }
+
+
+def _collection_rows(database: object, collection_name: str) -> list[dict[str, object]]:
+    rows = []
+    for row in database[collection_name].find({}, {"_id": False}):
+        rows.append(dict(row))
+    return rows
+
+
+def _question_template_catalog_from_payload(payload: object, source: Path) -> QuestionTemplateCatalog:
     _validate_payload(payload, source)
+    assert isinstance(payload, dict)
     return QuestionTemplateCatalog(
         schema_version=int(payload["schema_version"]),
         description=str(payload["description"]),
