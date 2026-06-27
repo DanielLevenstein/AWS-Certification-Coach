@@ -872,5 +872,425 @@
         "AWS Budgets"
       ]
     }
+  ],
+  "developer_question_scenarios": [
+    {
+      "id": "dva-lambda-sqs-dlq",
+      "generated_question": "A Lambda function processes messages from an SQS queue. A few messages repeatedly fail and delay later processing. Which configuration should the developer use to isolate failed messages while allowing successful messages to continue?",
+      "correct_option": "Configure an SQS dead-letter queue.",
+      "reference_answer": "Configure the Lambda event source mapping with an SQS dead-letter queue so failed messages can be isolated after retries.",
+      "distractors": [
+        "Configure an SNS topic subscription.",
+        "Add a CloudWatch alarm only.",
+        "Use Lambda provisioned concurrency."
+      ]
+    },
+    {
+      "id": "dva-api-gateway-lambda-auth",
+      "generated_question": "A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?",
+      "correct_option": "Use an API Gateway Lambda authorizer.",
+      "reference_answer": "Use an API Gateway Lambda authorizer to run custom authorization logic before invoking the backend Lambda integration.",
+      "distractors": [
+        "Attach an EC2 security group.",
+        "Create an AWS WAF rate-based rule only.",
+        "Store the token in AWS Secrets Manager."
+      ]
+    },
+    {
+      "id": "dva-dynamodb-conditional-write",
+      "generated_question": "Two application instances may try to create the same DynamoDB item at the same time. Which DynamoDB write approach should the developer use to prevent replacing an existing item?",
+      "correct_option": "Use a DynamoDB conditional write.",
+      "reference_answer": "Use a DynamoDB conditional write with a condition expression such as attribute_not_exists to avoid overwriting an existing item.",
+      "distractors": [
+        "Run a table scan before each write.",
+        "Increase write capacity units.",
+        "Replicate the table with global tables."
+      ]
+    },
+    {
+      "id": "dva-codepipeline-codebuild",
+      "generated_question": "A development team wants its release pipeline to compile code and run unit tests automatically before deployment. Which AWS service should be added as the build action?",
+      "correct_option": "Use AWS CodeBuild.",
+      "reference_answer": "Add AWS CodeBuild as a CodePipeline build stage to compile the application and run tests automatically.",
+      "distractors": [
+        "Use CodeDeploy lifecycle hooks only.",
+        "Run commands manually on an EC2 instance.",
+        "Create a CloudWatch dashboard."
+      ]
+    },
+    {
+      "id": "dva-xray-tracing",
+      "generated_question": "A serverless application has intermittent latency across several downstream calls. Which AWS service should the developer use to trace each request through the distributed workflow?",
+      "correct_option": "Use AWS X-Ray.",
+      "reference_answer": "Use AWS X-Ray distributed tracing and service maps to follow requests and identify latency across downstream calls.",
+      "distractors": [
+        "Use CloudTrail event history.",
+        "Use AWS Config resource history.",
+        "Increase Lambda memory without tracing."
+      ]
+    },
+    {
+      "id": "dva-lambda-env-vars",
+      "generated_question": "A Lambda function needs different non-secret configuration values in development and production. Which Lambda feature should the developer use to pass those values at runtime?",
+      "correct_option": "Use Lambda environment variables.",
+      "reference_answer": "Use Lambda environment variables to provide non-secret function configuration values that can differ by deployment environment.",
+      "distractors": [
+        "Store the values in CloudWatch Logs.",
+        "Create an IAM role for each value.",
+        "Use Lambda provisioned concurrency."
+      ]
+    },
+    {
+      "id": "dva-secrets-manager-rotation",
+      "generated_question": "A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?",
+      "correct_option": "Use AWS Secrets Manager.",
+      "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
+      "distractors": [
+        "Store the password in a Lambda environment variable.",
+        "Use AWS KMS keys alone.",
+        "Place the value in a CloudFormation output."
+      ]
+    },
+    {
+      "id": "dva-sqs-visibility-timeout",
+      "generated_question": "An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?",
+      "correct_option": "Adjust the SQS visibility timeout.",
+      "reference_answer": "Adjust the SQS visibility timeout so a message remains hidden from other consumers while the current worker processes it.",
+      "distractors": [
+        "Increase the message retention period.",
+        "Configure a delay queue only.",
+        "Add an SNS topic subscription."
+      ]
+    },
+    {
+      "id": "dva-dynamodb-streams-lambda",
+      "generated_question": "An application must run code whenever items in a DynamoDB table are inserted, updated, or deleted. Which event-driven pattern should the developer configure?",
+      "correct_option": "Use DynamoDB Streams with Lambda.",
+      "reference_answer": "Enable DynamoDB Streams and configure a Lambda event source mapping so item changes invoke the function.",
+      "distractors": [
+        "Schedule a table scan from EventBridge.",
+        "Read CloudTrail management events.",
+        "Increase DynamoDB write capacity."
+      ]
+    },
+    {
+      "id": "dva-api-gateway-throttling",
+      "generated_question": "A public API must protect its backend from sudden request spikes by limiting client request rates. Which API Gateway feature should the developer configure?",
+      "correct_option": "Configure API Gateway throttling.",
+      "reference_answer": "Configure API Gateway throttling with rate and burst limits to protect backend integrations from request spikes.",
+      "distractors": [
+        "Set Lambda environment variables.",
+        "Create a CloudWatch alarm only.",
+        "Use an SQS visibility timeout."
+      ]
+    },
+    {
+      "id": "dva-codebuild-buildspec",
+      "generated_question": "A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?",
+      "correct_option": "Use a CodeBuild buildspec file.",
+      "reference_answer": "Define the install, build, and test command phases in an AWS CodeBuild buildspec file for the managed build project.",
+      "distractors": [
+        "Define the phases in a CodeDeploy AppSpec file.",
+        "Put commands in an IAM policy.",
+        "Create an API Gateway stage variable."
+      ]
+    },
+    {
+      "id": "dva-eventbridge-schedule-lambda",
+      "generated_question": "A serverless maintenance task needs to invoke a Lambda function every hour. Which AWS service feature should the developer configure?",
+      "correct_option": "Use an EventBridge scheduled rule.",
+      "reference_answer": "Create an EventBridge scheduled rule with the Lambda function as the target for recurring serverless execution.",
+      "distractors": [
+        "Configure an SQS dead-letter queue only.",
+        "Use CloudTrail event history.",
+        "Run the function from a local cron job."
+      ]
+    },
+    {
+      "id": "dva-lambda-reserved-concurrency",
+      "generated_question": "A production Lambda function can overwhelm a downstream database during traffic spikes, but the team also wants guaranteed capacity for that function. Which Lambda setting should the developer configure?",
+      "correct_option": "Configure Lambda reserved concurrency.",
+      "reference_answer": "Configure Lambda reserved concurrency to reserve capacity for the function and cap its concurrent executions to protect downstream systems.",
+      "distractors": [
+        "Configure Lambda provisioned concurrency only.",
+        "Increase the function memory size.",
+        "Add an API Gateway usage plan only."
+      ]
+    },
+    {
+      "id": "dva-lambda-async-destination",
+      "generated_question": "An asynchronously invoked Lambda function must send successful results to one target and failed invocation records to another target for follow-up processing. Which feature should the developer use?",
+      "correct_option": "Configure Lambda destinations.",
+      "reference_answer": "Configure Lambda destinations for asynchronous invocations so success and failure records are routed to the appropriate targets.",
+      "distractors": [
+        "Enable Lambda provisioned concurrency.",
+        "Create a CloudWatch metric alarm only.",
+        "Return a custom HTTP response from the function."
+      ]
+    },
+    {
+      "id": "dva-api-gateway-canary-release",
+      "generated_question": "A REST API release should expose a new deployment to 10 percent of callers while most clients continue using the current API stage. Which API Gateway deployment feature fits this rollout?",
+      "correct_option": "Use an API Gateway canary release.",
+      "reference_answer": "Use an API Gateway canary release on the stage to send a configured percentage of traffic to the new deployment.",
+      "distractors": [
+        "Configure an SQS FIFO queue.",
+        "Increase the Lambda timeout.",
+        "Create a CloudWatch Logs metric filter only."
+      ]
+    },
+    {
+      "id": "dva-api-gateway-usage-plan-api-key",
+      "generated_question": "A partner-facing API needs different request quotas for each client application, and callers will include API keys. Which API Gateway configuration should the developer create?",
+      "correct_option": "Create an API Gateway usage plan with API keys.",
+      "reference_answer": "Create an API Gateway usage plan, associate API keys with it, and configure quota and throttling limits for those clients.",
+      "distractors": [
+        "Create a Lambda layer.",
+        "Enable DynamoDB TTL.",
+        "Configure an S3 bucket policy only."
+      ]
+    },
+    {
+      "id": "dva-dynamodb-ttl",
+      "generated_question": "A session table in DynamoDB stores an expiration time for each item and should remove old sessions without a scheduled cleanup job. Which feature should the developer enable?",
+      "correct_option": "Enable DynamoDB Time to Live.",
+      "reference_answer": "Enable DynamoDB TTL on the expiration timestamp attribute so DynamoDB automatically deletes expired table items.",
+      "distractors": [
+        "Configure S3 Lifecycle rules.",
+        "Run a full table scan from EventBridge.",
+        "Increase read capacity units."
+      ]
+    },
+    {
+      "id": "dva-dynamodb-transact-write",
+      "generated_question": "An order workflow must update an inventory item and create an order item in DynamoDB, and either both writes must succeed or neither should be saved. Which DynamoDB API pattern should the developer use?",
+      "correct_option": "Use DynamoDB TransactWriteItems.",
+      "reference_answer": "Use DynamoDB transactions with TransactWriteItems to perform atomic all-or-nothing updates across the required items.",
+      "distractors": [
+        "Use BatchWriteItem without conditions.",
+        "Enable DynamoDB Streams only.",
+        "Increase table write capacity."
+      ]
+    },
+    {
+      "id": "dva-dynamodb-query-index",
+      "generated_question": "A DynamoDB table is keyed by customer ID, but the application now needs fast lookups by order status without scanning every item. What should the developer add to support this access pattern?",
+      "correct_option": "Add a DynamoDB secondary index.",
+      "reference_answer": "Add a DynamoDB secondary index with the alternate partition key so the application can use efficient Query operations and avoid table scans.",
+      "distractors": [
+        "Enable point-in-time recovery.",
+        "Increase Lambda memory.",
+        "Create a CloudTrail trail."
+      ]
+    },
+    {
+      "id": "dva-sqs-fifo-deduplication",
+      "generated_question": "A payment workflow uses SQS and must preserve message order for each account while reducing duplicate processing attempts. Which queue type and message metadata should the developer use?",
+      "correct_option": "Use an SQS FIFO queue with message group and deduplication IDs.",
+      "reference_answer": "Use an SQS FIFO queue with message group IDs for ordering and deduplication IDs to reduce duplicate processing within the deduplication interval.",
+      "distractors": [
+        "Use a standard SQS queue with no grouping.",
+        "Configure an SNS fanout topic only.",
+        "Shorten the queue retention period."
+      ]
+    },
+    {
+      "id": "dva-sns-filter-policy",
+      "generated_question": "An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?",
+      "correct_option": "Configure SNS subscription filter policies.",
+      "reference_answer": "Configure SNS subscription filter policies that match message attributes so each subscriber receives only the relevant fanout messages.",
+      "distractors": [
+        "Configure Lambda reserved concurrency.",
+        "Enable S3 versioning.",
+        "Use an SQS delay queue only."
+      ]
+    },
+    {
+      "id": "dva-s3-presigned-url",
+      "generated_question": "A web application must let an authenticated user download one private S3 object for a limited time without changing the bucket to public access. What should the developer generate?",
+      "correct_option": "Generate an S3 presigned URL.",
+      "reference_answer": "Generate an S3 presigned URL with an expiration to provide temporary access to the private object without making the bucket public.",
+      "distractors": [
+        "Disable S3 Block Public Access.",
+        "Create a public-read bucket ACL.",
+        "Use DynamoDB TTL."
+      ]
+    },
+    {
+      "id": "dva-s3-multipart-upload",
+      "generated_question": "A client application uploads multi-gigabyte files to S3 over an unreliable network and needs to retry only the failed pieces instead of restarting the whole upload. Which S3 upload method should it use?",
+      "correct_option": "Use S3 multipart upload.",
+      "reference_answer": "Use S3 multipart upload to split a large object into parts, upload them independently, and retry failed parts without restarting the full upload.",
+      "distractors": [
+        "Enable S3 object lock.",
+        "Use S3 Lifecycle expiration.",
+        "Configure CloudTrail data events only."
+      ]
+    },
+    {
+      "id": "dva-kms-envelope-encryption",
+      "generated_question": "An application needs to encrypt large payloads locally while using AWS KMS to protect the key material. Which encryption pattern should the developer implement?",
+      "correct_option": "Use KMS envelope encryption.",
+      "reference_answer": "Use KMS envelope encryption: generate a data key, encrypt the data locally, and store the encrypted data key protected by a customer managed key.",
+      "distractors": [
+        "Store plaintext keys in Lambda environment variables.",
+        "Use an API Gateway Lambda authorizer.",
+        "Enable S3 static website hosting."
+      ]
+    },
+    {
+      "id": "dva-ssm-parameter-store-config",
+      "generated_question": "Several Lambda functions need to read shared non-rotating configuration values organized by application and environment path. Which AWS service should the developer use?",
+      "correct_option": "Use Systems Manager Parameter Store.",
+      "reference_answer": "Use AWS Systems Manager Parameter Store to keep hierarchical application configuration parameters and retrieve them at runtime.",
+      "distractors": [
+        "Use CloudWatch Logs Insights.",
+        "Use CodeBuild reports.",
+        "Create an SQS FIFO queue."
+      ]
+    },
+    {
+      "id": "dva-cognito-user-pool-auth",
+      "generated_question": "A mobile application needs managed sign-up, sign-in, password recovery, and tokens for its end users. Which Cognito feature should the developer configure?",
+      "correct_option": "Configure an Amazon Cognito user pool.",
+      "reference_answer": "Configure an Amazon Cognito user pool to provide managed user registration, authentication, password recovery, and token issuance.",
+      "distractors": [
+        "Create an IAM group for the users.",
+        "Use an S3 presigned URL.",
+        "Enable DynamoDB Streams."
+      ]
+    },
+    {
+      "id": "dva-codedeploy-lambda-canary",
+      "generated_question": "A team releases a new Lambda version and wants 10 percent of alias traffic to move first, with automatic rollback if CloudWatch alarms fire. Which deployment service should the developer use?",
+      "correct_option": "Use CodeDeploy for Lambda traffic shifting.",
+      "reference_answer": "Use AWS CodeDeploy for a Lambda deployment that shifts alias traffic gradually and rolls back when configured alarms are triggered.",
+      "distractors": [
+        "Use CodeBuild batch builds.",
+        "Use DynamoDB transactions.",
+        "Configure SQS long polling only."
+      ]
+    },
+    {
+      "id": "dva-codebuild-report-group",
+      "generated_question": "A CodeBuild project runs unit tests and the team wants test case results visible in CodeBuild instead of only raw log output. What should the developer configure?",
+      "correct_option": "Configure a CodeBuild report group.",
+      "reference_answer": "Configure a CodeBuild report group and buildspec report file paths so CodeBuild collects and displays structured unit test results.",
+      "distractors": [
+        "Create a CodeDeploy AppSpec file.",
+        "Enable S3 Transfer Acceleration.",
+        "Configure API Gateway throttling."
+      ]
+    },
+    {
+      "id": "dva-cloudwatch-logs-insights",
+      "generated_question": "A Lambda application writes JSON logs to CloudWatch Logs, and a developer needs to search recent log groups for common error codes and counts. Which CloudWatch capability should be used?",
+      "correct_option": "Use CloudWatch Logs Insights.",
+      "reference_answer": "Use CloudWatch Logs Insights to run queries against selected log groups and analyze error patterns in application logs.",
+      "distractors": [
+        "Use AWS Config rules.",
+        "Use an SQS dead-letter queue.",
+        "Use CodePipeline manual approval."
+      ]
+    },
+    {
+      "id": "dva-xray-annotations-filtering",
+      "generated_question": "A developer instruments an application with X-Ray and needs to filter traces by tenant ID in the X-Ray console. Which kind of trace data should the code add?",
+      "correct_option": "Add X-Ray annotations.",
+      "reference_answer": "Add X-Ray annotations to segments because annotations are indexed metadata that can be used in trace filter expressions.",
+      "distractors": [
+        "Add unindexed X-Ray metadata only.",
+        "Create an API Gateway usage plan.",
+        "Enable S3 multipart upload."
+      ]
+    },
+    {
+      "id": "dva-eventbridge-custom-bus",
+      "generated_question": "Several services publish domain events, and the platform team wants rules to route matching custom events to different Lambda targets without direct service-to-service calls. Which EventBridge resource should be used?",
+      "correct_option": "Use a custom EventBridge event bus with rules.",
+      "reference_answer": "Use a custom EventBridge event bus and rules to receive custom application events, match event patterns, and route them to targets.",
+      "distractors": [
+        "Use S3 Lifecycle policies.",
+        "Use a CodeBuild report group.",
+        "Use Lambda environment variables only."
+      ]
+    },
+    {
+      "id": "dva-step-functions-error-retry",
+      "generated_question": "A Step Functions workflow calls several Lambda tasks and should retry transient errors, then move to a compensating path when retries are exhausted. What should the developer define in the state machine?",
+      "correct_option": "Define Step Functions Retry and Catch handlers.",
+      "reference_answer": "Define Retry and Catch handlers in the Step Functions state machine to retry transient errors and transition to fallback states when failures persist.",
+      "distractors": [
+        "Configure an S3 presigned URL.",
+        "Enable DynamoDB TTL.",
+        "Use CodeBuild environment variables."
+      ]
+    },
+    {
+      "id": "dva-lambda-layer-shared-dependencies",
+      "generated_question": "Multiple Lambda functions use the same internal utility library, and the team wants to manage that library separately from each function package. Which Lambda feature should the developer use?",
+      "correct_option": "Use a Lambda layer.",
+      "reference_answer": "Use a Lambda layer to package shared libraries separately and attach the layer to each function that needs those dependencies.",
+      "distractors": [
+        "Use Lambda environment variables.",
+        "Use API Gateway throttling.",
+        "Use DynamoDB conditional writes."
+      ]
+    },
+    {
+      "id": "dva-ecr-image-scanning",
+      "generated_question": "A CI pipeline pushes application container images to Amazon ECR, and security wants vulnerability findings before promotion to production. Which ECR capability should be enabled?",
+      "correct_option": "Enable Amazon ECR image scanning.",
+      "reference_answer": "Enable Amazon ECR image scanning on the repository so container images are scanned for known vulnerabilities before deployment.",
+      "distractors": [
+        "Enable DynamoDB point-in-time recovery.",
+        "Configure an API Gateway Lambda authorizer.",
+        "Create a CloudWatch dashboard only."
+      ]
+    },
+    {
+      "id": "dva-artifact-iam-s3-least-privilege",
+      "generated_question": "Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?",
+      "correct_option": "Restrict the Resource to arn:aws:s3:::example-bucket/reports/*.",
+      "reference_answer": "The policy allows s3:GetObject on every resource with Resource \"*\". For least privilege, scope the permission to the required object ARN pattern, such as arn:aws:s3:::example-bucket/reports/*.",
+      "distractors": [
+        "Add s3:PutObject to the same policy statement.",
+        "Replace the execution role with an IAM user access key.",
+        "Move the bucket name into a Lambda environment variable."
+      ]
+    },
+    {
+      "id": "dva-artifact-lambda-hardcoded-secret",
+      "generated_question": "Review the Lambda handler. What security problem should the developer fix before deployment, and what AWS service is the best fit?",
+      "correct_option": "Store the credential in AWS Secrets Manager and retrieve it at runtime.",
+      "reference_answer": "The password is hard-coded in the Lambda deployment package. Store the credential in AWS Secrets Manager, grant the execution role permission to read it, and retrieve it at runtime instead of shipping the secret in code.",
+      "distractors": [
+        "Keep the password in the source file and encrypt the zip file manually.",
+        "Put the password in CloudWatch Logs for auditability.",
+        "Use provisioned concurrency to protect the password."
+      ]
+    },
+    {
+      "id": "dva-artifact-sdk-pagination",
+      "generated_question": "Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?",
+      "correct_option": "Use an S3 ListObjectsV2 paginator and iterate through every page.",
+      "reference_answer": "The code calls list_objects_v2 once, so it can return only the first page when the bucket has more results. Use the SDK paginator for ListObjectsV2 and iterate over each page before collecting keys.",
+      "distractors": [
+        "Store static access keys in the source file.",
+        "Disable S3 versioning on the bucket.",
+        "Increase Lambda memory to force more results into one response."
+      ]
+    },
+    {
+      "id": "dva-artifact-sam-missing-policy",
+      "generated_question": "Review the SAM template. The function deploys but receives AccessDenied when it calls GetItem. What is missing from the template?",
+      "correct_option": "Add a least-privilege DynamoDB read policy for the Sessions table to the function.",
+      "reference_answer": "The template passes the table name but does not grant the Lambda execution role permission to read the table. Add a least-privilege SAM policy, such as DynamoDBReadPolicy scoped to SessionsTable, or an equivalent IAM policy on the function role.",
+      "distractors": [
+        "Output the table name as plaintext to fix AccessDenied.",
+        "Change the Lambda runtime to Node.js.",
+        "Add a CloudWatch dashboard for the table."
+      ]
+    }
   ]
 }

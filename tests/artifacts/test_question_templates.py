@@ -8,6 +8,8 @@ from aws_certification_coach.question_templates import (
     load_question_templates,
 )
 from scripts.generate_app_question_artifacts import _build_app_questions
+from scripts.generate_developer_question_artifacts import build_questions
+from scripts.download_developer_original_questions import SOURCE_ROWS
 
 
 def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_base():
@@ -25,6 +27,7 @@ def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_b
     assert "source_url" not in template.required_slots
     assert set(template.required_slots) >= {"service_id", "service_name", "purpose"}
     assert len(catalog.service_scenarios) == 40
+    assert len(catalog.developer_question_scenarios) == 38
     assert not hasattr(catalog.service_scenarios[0], "answer_rubric_defaults")
 
 
@@ -36,6 +39,41 @@ def test_question_templates_own_service_scenarios():
     assert scenario.purpose == "create and manage encryption keys used to protect data in AWS services"
     assert scenario.key_concepts == ("AWS KMS", "encryption keys", "data protection", "key management")
     assert len(scenario.distractors) == 3
+
+
+def test_question_templates_own_developer_question_details_without_aws_source_fields():
+    catalog = load_question_templates()
+    scenario = next(
+        scenario
+        for scenario in catalog.developer_question_scenarios
+        if scenario.id == "dva-secrets-manager-rotation"
+    )
+
+    assert scenario.generated_question.startswith("A developer must keep application database passwords")
+    assert scenario.correct_option == "Use AWS Secrets Manager."
+    assert scenario.reference_answer.startswith("Use AWS Secrets Manager to store database credentials")
+    assert len(scenario.distractors) == 3
+    assert not hasattr(scenario, "source_url")
+    assert not hasattr(scenario, "services")
+    assert not hasattr(scenario, "key_concepts")
+
+
+def test_developer_generator_uses_question_template_details_before_source_overrides():
+    source = dict(SOURCE_ROWS[12])
+    source["generated_question"] = "Source override should not win."
+    source["correct_option"] = "Source correct option should not win."
+    source["reference_answer"] = "Source reference answer should not win."
+    source["distractors"] = [
+        "Source distractor one.",
+        "Source distractor two.",
+        "Source distractor three.",
+    ]
+
+    row = build_questions([source])[0]
+
+    assert row["question"].startswith("A production Lambda function can overwhelm")
+    assert row["reference_answer"].startswith("Configure Lambda reserved concurrency")
+    assert row["original_multiple_choice"]["options"][0]["text"] == "Configure Lambda reserved concurrency."
 
 
 def test_question_template_loader_rejects_answer_labels(tmp_path: Path):
