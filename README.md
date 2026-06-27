@@ -63,6 +63,7 @@ The schema redesign branch starts the v3 release line. Use `v3.1.x` for new rele
 | v3.1.4  | Heuristic grading improvement                                                                      |
 | v3.2.1  | Added Semantic Similarity chart back                                                               |
 | v3.2.3  | Updated per letter grade screenshots.                                                              |
+| v3.3.4 | Setting the best wrong answer back to D in answer rubric. |
 #### Scope
 
 Certifications:
