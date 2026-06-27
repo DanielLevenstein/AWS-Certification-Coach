@@ -13,7 +13,6 @@ RUN pip install --no-cache-dir -e .
 COPY app.py ./
 COPY config ./config
 COPY data ./data
-COPY models ./models
 
 EXPOSE 8501
 
