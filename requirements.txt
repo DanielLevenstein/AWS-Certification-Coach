@@ -3,3 +3,4 @@ openai>=1.0
 pytest>=9.0.3
 pandas>=2.0
 matplotlib>=3.8
+pymongo[srv]>=4.6

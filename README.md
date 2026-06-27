@@ -91,6 +91,31 @@ Create the virtual environment, install dependencies, and generate local data:
 ./setup.sh
 ```
 
+Start the local MongoDB service with Docker Compose:
+
+```bash
+docker compose up -d mongodb
+```
+
+Recreate the local database from the committed raw JSON files:
+
+```bash
+docker compose run --rm migrate
+```
+
+For local Python development outside Compose, the recreate helper defaults to
+`mongodb://localhost:27017` and database `aws_certification_coach`:
+
+```bash
+./recreate_database.sh
+```
+
+Override those values when needed:
+
+```bash
+MONGODB_URI="mongodb://localhost:27017" AWS_COACH_MONGODB_DATABASE="aws_certification_coach" ./recreate_database.sh
+```
+
 Then run the app:
 
 ```bash
@@ -159,19 +184,34 @@ Print a single release-note-friendly model performance summary:
 
 ## Docker
 
-Build the container image:
+Use Docker Compose for the local app and database stack:
+
+```bash
+docker compose up -d mongodb
+docker compose run --rm migrate
+docker compose up --build app
+```
+
+The app is available at `http://localhost:8501`.
+
+Build the app image directly when you only need the app container:
 
 ```bash
 docker build -t aws-certification-coach:latest .
 ```
 
-Run the app on port 8501:
+Run the app container directly against a local MongoDB service:
 
 ```bash
-docker run --rm -p 8501:8501 aws-certification-coach:latest
+docker run --rm -p 8501:8501 \
+  -e MONGODB_URI="mongodb://host.docker.internal:27017" \
+  -e AWS_COACH_MONGODB_DATABASE="aws_certification_coach" \
+  aws-certification-coach:latest
 ```
 
-The image includes generated sample questions and local scoring code. The default app path is fully local.
+The image includes generated sample questions and local scoring code. MongoDB is
+required for the migrated content database path and should be available before
+deploying the app service.
 
 ## Render Deployment
 
@@ -180,6 +220,14 @@ The image includes generated sample questions and local scoring code. The defaul
 - Health check path: `/_stcore/health`
 - Default evaluator: local `semantic_similarity` scoring
 - API key requirement: none for the default local path.
+- Database: configure a MongoDB service separately and set `MONGODB_URI` plus
+  `AWS_COACH_MONGODB_DATABASE` for the app service. The deploy helper fails
+  when `MONGODB_URI` is not set so the app image is not pushed as a database-less
+  deployment by accident.
+- Database image: `deploy.sh` publishes a MongoDB image tag before pushing the
+  app image. It defaults to retagging `mongo:7` into
+  `daniellevenstein/aws-certification-coach-mongodb:<tag>`. Override with
+  `DATABASE_IMAGE` or `DATABASE_IMAGE_REPOSITORY` when needed.
 
 ## Evaluator Configuration
 
