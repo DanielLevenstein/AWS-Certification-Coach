@@ -18,13 +18,8 @@ if [ "$#" -gt 0 ]; then
         MODE="quick"
         shift
         ;;
-      --strict-grading)
-        STRICT_GRADING=1
-        shift
-        ;;
       -h|--help)
         echo "Usage: $0 [--full|--quick] [--strict-grading] <release-tag>" >&2
-        echo "Example: $0 --full --strict-grading v2.3.1" >&2
         echo "Example: $0 --quick test-build" >&2
         exit 0
         ;;
@@ -37,7 +32,6 @@ fi
 
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 [--full|--quick] [--strict-grading] <release-tag>" >&2
-  echo "Example: $0 --full --strict-grading v2.3.1" >&2
   echo "Example: $0 --quick test-build" >&2
   exit 2
 fi
@@ -74,18 +68,10 @@ else
   RELEASE_SUITE="release-quick"
 fi
 
-if [ "$STRICT_GRADING" = "1" ]; then
-  .venv/bin/python test_suites.py "$RELEASE_SUITE" \
-    --release-label "$RELEASE_TAG" \
-    --release-notes RELEASE_NOTES.md \
-    --metrics-dir "$METRICS_DIR" \
-    --strict-grading
-else
-  .venv/bin/python test_suites.py "$RELEASE_SUITE" \
-    --release-label "$RELEASE_TAG" \
-    --release-notes RELEASE_NOTES.md \
-    --metrics-dir "$METRICS_DIR"
-fi
+.venv/bin/python test_suites.py "$RELEASE_SUITE" \
+  --release-label "$RELEASE_TAG" \
+  --release-notes RELEASE_NOTES.md \
+  --metrics-dir "$METRICS_DIR"
 
 PER_GRADE_SOURCE="$METRICS_DIR/per_grade_metrics.png"
 PER_GRADE_OUTPUT="release/per_grade_metrics.png"

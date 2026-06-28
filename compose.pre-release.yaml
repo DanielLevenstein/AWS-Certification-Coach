@@ -1,0 +1,7 @@
+services:
+  mongodb:
+    ports: !reset []
+    volumes: !reset []
+
+  app:
+    ports: !reset []

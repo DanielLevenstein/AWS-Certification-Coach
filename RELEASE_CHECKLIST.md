@@ -11,7 +11,7 @@ For each merge ensure the following.
 - Get all unit tests passing, adding comments for updated tests.
 - Run `./run_model_smoke_tests.sh` for the read-only model contract gate.
 - Run `./release_notes.sh --full <tag>` for semantic, knowledge-base, and question-quality metrics.
-- Run `DOCKER_IMAGE=<candidate> ./run_deployment_tests.sh` for candidate images.
+- Run `./deploy.sh --pre_release <tag>` to validate the Docker Compose app stack before publishing images.
 - Files ending in _COPY which do not have local copies should be used as templates to create missing files
 - Files ending in COPY should not be committed to source control.
 - For agent skill changes, follow `docs/AGENT_SKILL_RELEASE_INSTRUCTIONS.md`.

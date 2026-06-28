@@ -202,6 +202,21 @@ docker compose up --build app
 
 The app is available at `http://localhost:8501`.
 
+Run the deployment pre-release guardrail and push pre-release images:
+
+```bash
+./deploy.sh --pre_release v3.1.x
+```
+
+The pre-release mode builds the app through Docker Compose, starts the Compose
+database and app services, verifies the Streamlit health and root endpoints from
+inside the Compose app service, tags the local app image as
+`daniellevenstein/aws-certification-coach:pre_release`, and then tears down the
+Compose containers. After the Compose check passes, it pushes
+`daniellevenstein/aws-certification-coach:pre_release` and
+`daniellevenstein/aws-certification-coach-mongodb:pre_release`. It uses
+`compose.pre-release.yaml` to avoid binding local host ports during the check.
+
 Build the app image directly when you only need the app container:
 
 ```bash
@@ -236,6 +251,9 @@ deploying the app service.
   app image. It defaults to retagging `mongo:7` into
   `daniellevenstein/aws-certification-coach-mongodb:<tag>`. Override with
   `DATABASE_IMAGE` or `DATABASE_IMAGE_REPOSITORY` when needed.
+- Pre-release guardrail: the deploy helper runs the Docker Compose pre-release
+  check before publishing images. Use `./deploy.sh --pre_release <tag>` to push
+  only the app and database `:pre_release` images when validating local changes.
 
 ## Evaluator Configuration
 
