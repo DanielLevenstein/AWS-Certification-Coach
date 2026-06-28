@@ -173,6 +173,27 @@
       ]
     },
     {
+      "id": "s3-lifecycle-vs-bucket-policy",
+      "service_id": "s3-lifecycle-policies",
+      "domain": "Storage",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "transition old S3 objects to lower-cost storage classes and expire them after a retention period without changing bucket access permissions",
+      "key_concepts": [
+        "S3 Lifecycle",
+        "bucket policies",
+        "storage class transitions",
+        "object expiration",
+        "access permissions"
+      ],
+      "distractors": [
+        "S3 bucket policy only",
+        "S3 Block Public Access only",
+        "IAM permissions boundary only"
+      ]
+    },
+    {
       "id": "amazon-rds-multi-az",
       "service_id": "amazon-rds-multi-az",
       "domain": "Database",
@@ -290,6 +311,27 @@
         "manual instance launch",
         "Elastic IP",
         "AMI copy"
+      ]
+    },
+    {
+      "id": "auto-scaling-horizontal-vs-vertical",
+      "service_id": "auto-scaling-groups",
+      "domain": "Compute",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type",
+      "key_concepts": [
+        "Auto Scaling",
+        "EC2",
+        "horizontal scaling",
+        "vertical scaling",
+        "instance replacement"
+      ],
+      "distractors": [
+        "manual vertical scaling to a larger instance type",
+        "Elastic IP reassociation only",
+        "AMI copy to another Region"
       ]
     },
     {
@@ -530,6 +572,48 @@
         "SQS queue polling only",
         "AWS Batch",
         "Amazon RDS"
+      ]
+    },
+    {
+      "id": "amazon-sns-fanout-vs-sqs-polling",
+      "service_id": "amazon-sns",
+      "domain": "Integration",
+      "certification": "AWS Certified Developer",
+      "exam_code": "DVA-C02",
+      "difficulty": "Medium",
+      "purpose": "publish the same event to multiple independent subscribers without requiring each subscriber to poll a shared work queue",
+      "key_concepts": [
+        "SNS",
+        "pub/sub",
+        "fanout",
+        "subscribers",
+        "SQS queue polling"
+      ],
+      "distractors": [
+        "Amazon SQS worker queue only",
+        "AWS Batch job queue",
+        "DynamoDB Streams only"
+      ]
+    },
+    {
+      "id": "amazon-sqs-workers-vs-sns-fanout",
+      "service_id": "sqs",
+      "domain": "Integration",
+      "certification": "AWS Certified Developer",
+      "exam_code": "DVA-C02",
+      "difficulty": "Medium",
+      "purpose": "buffer units of work so competing worker processes can poll, process, and delete messages at their own pace",
+      "key_concepts": [
+        "SQS",
+        "message queue",
+        "queue polling",
+        "worker processing",
+        "decoupling"
+      ],
+      "distractors": [
+        "Amazon SNS fanout topic only",
+        "Amazon EventBridge scheduled rule only",
+        "AWS Step Functions workflow only"
       ]
     },
     {
