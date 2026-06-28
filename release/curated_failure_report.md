@@ -536,7 +536,9 @@
 - User answer: `Use S3 bucket policies.`
 - Correct answer: S3 lifecycle policies
 - Raw model score: `49.00`; runtime score: `49`
-- Runtime feedback: S3 lifecycle policies is a better option because it is designed to automatically transition or expire objects based on age and access patterns, while S3 bucket policies does not satisfy that requirement.
+- Runtime feedback: S3 lifecycle policies is a better option because it is designed to automatically transition or expire objects based on age and access patterns.
+
+Amazon S3 addresses a different AWS need: the AWS object storage family for buckets, objects, and their lifecycle controls, so it does not satisfy this scenario requirement.
 - Reviewer feedback: Can you help me understand the difference between lifecycle policies and bucket policies?
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.

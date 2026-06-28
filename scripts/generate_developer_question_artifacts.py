@@ -10,9 +10,13 @@ from pathlib import Path
 from aws_certification_coach.config import current_schema_version
 from aws_certification_coach.question_fidelity.model import QuestionFidelityModel
 try:
-    from generate_app_question_artifacts import documentation_url_for_option, service_metadata_for_option
+    from generate_app_question_artifacts import documentation_url_for_option, distractor_feedback, service_metadata_for_option
 except ModuleNotFoundError:  # Imported as scripts.generate_developer_question_artifacts in tests.
-    from scripts.generate_app_question_artifacts import documentation_url_for_option, service_metadata_for_option
+    from scripts.generate_app_question_artifacts import (
+        distractor_feedback,
+        documentation_url_for_option,
+        service_metadata_for_option,
+    )
 
 
 QUESTION_TEMPLATES = {
@@ -152,6 +156,10 @@ def _rubric_metadata(
         "common_misconceptions": [f"{distractor} is the best fit for this scenario." for distractor in distractors],
         "acceptable_answers": [correct_option, reference_answer, service],
         "must_not_claim": [f"{distractor} satisfies the scenario better than {service}." for distractor in distractors],
+        "do_not_claim_explanation": [
+            distractor_feedback(service, distractor, _scenario_purpose(source, reference_answer))
+            for distractor in distractors
+        ],
     }
 
 
@@ -191,6 +199,14 @@ def _reference_answer(source: dict[str, object], source_id: str, service: str) -
         "dva-eventbridge-schedule-lambda": "Create an EventBridge scheduled rule with the Lambda function as the target for recurring serverless execution.",
     }
     return answers[source_id] if source_id in answers else f"Use {service} for this developer workflow."
+
+
+def _scenario_purpose(source: dict[str, object], reference_answer: str) -> str:
+    if source.get("expected_issue"):
+        return str(source["expected_issue"]).strip().rstrip(".")
+    if source.get("reasoning_pattern"):
+        return str(source["reasoning_pattern"]).strip().rstrip(".")
+    return reference_answer.strip().rstrip(".") or "satisfy the developer workflow"
 
 
 def _artifact_metadata(source: dict[str, object]) -> dict[str, object]:

@@ -23,7 +23,7 @@ def test_default_knowledge_base_has_expected_first_version_sections():
     assert len(knowledge.services) == 42
     assert len(knowledge.concepts) == 161
     assert len(knowledge.common_misconceptions) >= 1
-    assert len(knowledge.must_not_claim) >= 1
+    assert knowledge.must_not_claim == knowledge.common_misconceptions
     assert not hasattr(knowledge, "rubric_profiles")
 
 
@@ -47,7 +47,14 @@ def test_knowledge_base_exposes_feedback_flag_sections_with_sources():
     assert row.must_not_claim
     assert row.do_not_claim_explanation
     assert row.source_url.startswith("https://docs.aws.amazon.com/")
-    assert row in knowledge.flag_sets_for_source_url(row.source_url)
+    assert knowledge.flag_sets_for_source_url(row.source_url) == (row,)
+
+
+def test_knowledge_base_source_merges_feedback_flag_sections():
+    payload = json.loads(DEFAULT_KNOWLEDGE_BASE_PATH.read_text(encoding="utf-8"))
+
+    assert "common_misconceptions" in payload
+    assert "must_not_claim" not in payload
 
 
 def test_knowledge_base_normalizes_syntax_and_exposes_service_aliases():

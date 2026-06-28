@@ -31,11 +31,12 @@
 | v3.1.1   | Split question and knowledge base schema                                                                                                                                            |
 | v3.1.2   | Added documentation links for all services and displayed suggested_improvements in UI                                                                                               |
 | v3.1.3   | Show must_not_claim sections in feedback.                                                                                                                                           |
-| v3.2.1   | Added Semantic Similary chart back. |
-| v3.2.2   | Added Guradrail lines to all charts |
- | v3.3.2   | Applies v3 feedback schema configuration, C-grade near-miss service handling, and grade distribution release charting.                                                              |
-
-
+| v3.2.1   | Added Semantic Similarity chart back.                                                                                                                                               |
+| v3.2.2   | Added Guardrail lines to all charts                                                                                                                                                 |
+| v3.3.2   | Applies v3 feedback schema configuration, C-grade near-miss service handling, and grade distribution release charting.                                                              |
+| v3.3.4   | Setting the best wrong answer back to D in answer rubric.                                                                                                                           |
+| v3.4.1   | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                                                                            |
+| v3.4.2 | Update feedback explanations for wrong service selection |  
 # Release Metrics
 
 ## Metric Definitions:
@@ -75,23 +76,25 @@
 | v3.1.3   |            91.89% |            100.00% |          92.31% |                89.19% |         100.00% |            94.95% |
 | v3.1.4   |            97.89% |            100.00% |          99.12% |                97.47% |          99.16% |            94.95% |
 | v3.1.4.3 |            99.16% |            100.00% |          99.12% |                98.73% |         100.00% |            94.95% |
-| v3.2.2 | 99.16% | 100.00% | 99.12% | 98.73% | 100.00% | 94.95% |
+| v3.2.2   |            99.16% |            100.00% |          99.12% |                98.73% |         100.00% |            94.95% |
 | v3.2.2   |            99.16% |            100.00% |          99.12% |                98.73% |         100.00% |            94.95% |
 | v3.3.0   |            96.79% |            100.00% |          97.90% |                94.78% |          98.80% |            94.95% |
-| v3.3.1 | 96.79% | 98.33% | 98.74% | 94.38% | 97.99% | 94.95% |
-| v3.3.2 | 96.79% | 98.33% | 98.74% | 94.38% | 97.99% | 94.95% |
-| v3.3.4 | 99.20% | 100.00% | 99.17% | 98.80% | 100.00% | 94.95% |
+| v3.3.1   |            96.79% |             98.33% |          98.74% |                94.38% |          97.99% |            94.95% |
+| v3.3.2   |            96.79% |             98.33% |          98.74% |                94.38% |          97.99% |            94.95% |
+| v3.3.4   |            99.20% |            100.00% |          99.17% |                98.80% |         100.00% |            94.95% |
+| v3.4.1   |            99.20% |            100.00% |          99.17% |                98.80% |         100.00% |            94.95% |
 
 ## Grade Band Precision
-| Release |      A |    B&C |     D&F |
-|:--------|-------:|-------:|--------:|
-| v2.5.5  | 46.51% | 60.71% | 100.00% |
-| v3.0.1  | 50.00% | 69.70% | 100.00% |
-| v3.0.4  | 90.00% | 100.00% | 100.00% |
-| v3.3.0  | 90.00% | 84.62% | 97.79% |
-| v3.3.1  | 92.31% | 64.71% | 98.17% |
-| v3.3.2  | 92.31% | 64.71% | 98.17% |
-| v3.3.4  | 100.00% | 92.31% | 100.00% |
+| Release |       A |     B&C |     D&F |
+|:--------|--------:|--------:|--------:|
+| v2.5.5  |  46.51% |  60.71% | 100.00% |
+| v3.0.1  |  50.00% |  69.70% | 100.00% |
+| v3.0.4  |  90.00% | 100.00% | 100.00% |
+| v3.3.0  |  90.00% |  84.62% |  97.79% |
+| v3.3.1  |  92.31% |  64.71% |  98.17% |
+| v3.3.2  |  92.31% |  64.71% |  98.17% |
+| v3.3.4  | 100.00% |  92.31% | 100.00% |
+| v3.4.1  | 100.00% |  92.31% | 100.00% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |       D |      F |
@@ -105,10 +108,11 @@
 | v3.1.4.2 | 100.00% | 66.67% | 100.00% | 100.00% | 84.62% |
 | v3.1.4.3 | 100.00% | 80.00% | 100.00% | 100.00% | 84.62% |
 | v3.2.2   | 100.00% | 80.00% | 100.00% | 100.00% | 84.62% |
-| v3.3.0   | 90.00% | 71.43% | 83.33% | 98.10% | 68.75% |
-| v3.3.1   | 92.31% | 83.33% | 54.55% | 98.09% | 70.00% |
-| v3.3.2   | 92.31% | 83.33% | 54.55% | 98.09% | 70.00% |
+| v3.3.0   |  90.00% | 71.43% |  83.33% |  98.10% | 68.75% |
+| v3.3.1   |  92.31% | 83.33% |  54.55% |  98.09% | 70.00% |
+| v3.3.2   |  92.31% | 83.33% |  54.55% |  98.09% | 70.00% |
 | v3.3.4   | 100.00% | 83.33% | 100.00% | 100.00% | 77.78% |
+| v3.4.1   | 100.00% | 83.33% | 100.00% | 100.00% | 77.78% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -149,7 +153,7 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.3.4 | 99.20% | 100.00% | 99.17% | 98.80% | 100.00% | 94.95% |
+| v3.4.2 | 99.20% | 100.00% | 99.17% | 98.80% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 
@@ -178,7 +182,7 @@ Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
 Knowledge base schema version: `3`
-Knowledge base file size: `78941` bytes
+Knowledge base file size: `70127` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`

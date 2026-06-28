@@ -8,6 +8,7 @@ from pathlib import Path
 from dataclasses import dataclass
 
 from aws_certification_coach.domain import Question
+from aws_certification_coach.knowledge_base import load_knowledge_base
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.ratings import letter_to_numeric
@@ -276,7 +277,7 @@ def _claim_subject_tokens(claim: str) -> set[str]:
             normalized = normalized.split(separator, 1)[0]
             break
     tokens = set(TOKEN_PATTERN.findall(normalized))
-    subject_tokens = tokens - CLAIM_FILLER_TOKENS
+    subject_tokens = tokens - CLAIM_FILLER_TOKENS - GENERIC_SERVICE_TOKENS
     return subject_tokens or tokens
 
 
@@ -371,6 +372,8 @@ def _is_too_generic_service_answer(question: Question, user_answer: str) -> bool
 def _has_bad_service_spelling(question: Question, user_answer: str) -> bool:
     expected_tokens = _expected_service_tokens(question) - GENERIC_SERVICE_TOKENS
     answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold()))
+    if _contains_known_service_name(user_answer):
+        return False
     for expected in expected_tokens - answer_tokens:
         if any(
             not _is_singular_plural_variant(expected, candidate)
@@ -379,6 +382,18 @@ def _has_bad_service_spelling(question: Question, user_answer: str) -> bool:
             if len(candidate) >= 3
         ):
             return True
+    return False
+
+
+def _contains_known_service_name(user_answer: str) -> bool:
+    knowledge = load_knowledge_base()
+    normalized_answer = knowledge.canonicalize(_normalized_service_answer(user_answer))
+    for service in knowledge.services:
+        terms = (service.name, *service.aliases, *service.tokens)
+        for term in terms:
+            normalized_term = knowledge.canonicalize(term)
+            if normalized_term and re.search(rf"\b{re.escape(normalized_term)}\b", normalized_answer):
+                return True
     return False
 
 
