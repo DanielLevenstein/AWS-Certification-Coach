@@ -2,6 +2,7 @@
 
 from aws_certification_coach.question_templates.repository import (
     DEFAULT_QUESTION_TEMPLATE_PATH,
+    DeveloperQuestionScenario,
     QuestionTemplate,
     QuestionTemplateCatalog,
     ServiceScenario,
@@ -10,6 +11,7 @@ from aws_certification_coach.question_templates.repository import (
 
 __all__ = [
     "DEFAULT_QUESTION_TEMPLATE_PATH",
+    "DeveloperQuestionScenario",
     "QuestionTemplate",
     "QuestionTemplateCatalog",
     "ServiceScenario",
