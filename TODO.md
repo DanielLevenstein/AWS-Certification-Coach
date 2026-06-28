@@ -49,7 +49,7 @@ Expand service-selection-template questions, so there is more than one question 
 - Added grading guard so service-identification answers that describe the concept but omit the required AWS service or feature name do not receive a B-level grade.
 - Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
 - Improve `suggested_improvements` wording so it gives concrete next steps instead of generic "explain improvements" style feedback.
-- Fix duplicate DynamoDB documentation links in the documentation/source section.
+- Fixed repeated DynamoDB documentation labels in the documentation/source section by using option-specific labels when multiple links share the same service name.
 
 Add service-oriented questions that directly ask the user to compare the pros and cons of two different services. 
 

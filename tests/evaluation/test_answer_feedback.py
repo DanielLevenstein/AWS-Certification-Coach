@@ -291,3 +291,36 @@ def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
         "- [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html)\n",
     ) in rendered
     assert ("write", "C. Configure an Amazon Cognito user pool.") in rendered
+
+
+def test_app_disambiguates_repeated_service_documentation_labels(monkeypatch):
+    rendered = []
+    monkeypatch.setattr(app.st, "write", lambda value: rendered.append(("write", value)))
+    monkeypatch.setattr(app.st, "success", lambda value: rendered.append(("success", value)))
+    monkeypatch.setattr(app.st, "markdown", lambda value: rendered.append(("markdown", value)))
+    original = MultipleChoiceQuestion(
+        question="Which DynamoDB API pattern should the developer use?",
+        options=[
+            MultipleChoiceOption(
+                "A",
+                "Use DynamoDB TransactWriteItems.",
+                "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transactions.html",
+                {"service_name": "Amazon DynamoDB"},
+            ),
+            MultipleChoiceOption(
+                "B",
+                "Enable DynamoDB Streams only.",
+                "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html",
+                {"service_name": "Amazon DynamoDB"},
+            ),
+        ],
+        correct_option_ids=["A"],
+    )
+
+    app._render_multiple_choice_source_documentation(original)
+
+    assert (
+        "markdown",
+        "- [DynamoDB TransactWriteItems](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transactions.html)\n"
+        "- [Enable DynamoDB Streams only](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)\n",
+    ) in rendered

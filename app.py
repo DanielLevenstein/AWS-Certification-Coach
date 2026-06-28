@@ -10,7 +10,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 
 import streamlit as st
 
-from aws_certification_coach.domain import MultipleChoiceQuestion, Question, QuestionFilter
+from aws_certification_coach.domain import MultipleChoiceQuestion, Question, QuestionFilter, MultipleChoiceOption
 from aws_certification_coach.config import load_evaluator_config
 from aws_certification_coach.evaluation.factory import build_evaluation_service
 from aws_certification_coach.evaluation.service import EvaluationService
@@ -299,16 +299,28 @@ def _render_multiple_choice_source_documentation(original: MultipleChoiceQuestio
     st.markdown("### Documentation")
     seen_urls: set[str] = set()
     documentation_links = ""
+    source_label_counts = _source_label_counts(options_with_sources)
     for option in original.options:
         if not option.source_url or option.source_url in seen_urls:
             continue
         seen_urls.add(option.source_url)
-        documentation_links += f"- [{_source_label(option)}]({option.source_url})\n"
+        documentation_links += f"- [{_source_label(option, source_label_counts)}]({option.source_url})\n"
     st.markdown(documentation_links )
 
-def _source_label(option) -> str:
+
+def _source_label_counts(options: list[MultipleChoiceOption]) -> dict[str, int]:
+    labels: dict[str, int] = {}
+    for option in options:
+        label = option.metadata.get("service_name", "").strip()
+        if not label:
+            continue
+        labels[label] = labels.get(label, 0) + 1
+    return labels
+
+
+def _source_label(option: MultipleChoiceOption, source_label_counts: dict[str, int] | None = None) -> str:
     service_name = option.metadata.get("service_name", "").strip()
-    if service_name:
+    if service_name and (source_label_counts or {}).get(service_name, 0) <= 1:
         return service_name
     return option.text.removeprefix("Use ").rstrip(".")
 

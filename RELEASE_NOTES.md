@@ -36,7 +36,9 @@
 | v3.3.2   | Applies v3 feedback schema configuration, C-grade near-miss service handling, and grade distribution release charting.                                                              |
 | v3.3.4   | Setting the best wrong answer back to D in answer rubric.                                                                                                                           |
 | v3.4.1   | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                                                                            |
-| v3.4.2 | Update feedback explanations for wrong service selection |  
+| v3.4.2   | Update feedback explanations for wrong service selection |  
+| v3.5.2 | Grade tuning based on user feedback|
+| v3.5.2.1 | Fix duplicate DynamoDB documentation links in the documentation/source section. |
 # Release Metrics
 
 ## Metric Definitions:
