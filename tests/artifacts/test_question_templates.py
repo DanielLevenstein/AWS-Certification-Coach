@@ -12,6 +12,17 @@ from scripts.generate_developer_question_artifacts import build_questions
 from scripts.download_developer_original_questions import SOURCE_ROWS
 
 
+EXPECTED_SELECTION_CATEGORIES = {
+    "cost_tradeoff",
+    "operational_complexity_tradeoff",
+    "latency_tradeoff",
+    "durability_availability_tradeoff",
+    "managed_vs_self_managed_tradeoff",
+    "event_driven_vs_batch_tradeoff",
+    "security_boundary_tradeoff",
+}
+
+
 def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_base():
     catalog = load_question_templates()
     template = catalog.get("service-selection-freeform")
@@ -32,6 +43,10 @@ def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_b
     assert all(scenario.purpose for scenario in catalog.service_scenarios)
     assert all(scenario.key_concepts for scenario in catalog.service_scenarios)
     assert all(len(scenario.distractors) >= 3 for scenario in catalog.service_scenarios)
+    assert EXPECTED_SELECTION_CATEGORIES <= {
+        scenario.selection_category
+        for scenario in catalog.service_scenarios
+    }
     assert len(catalog.developer_question_scenarios) == 38
     assert not hasattr(catalog.service_scenarios[0], "answer_rubric_defaults")
 
@@ -134,6 +149,15 @@ def test_generated_app_questions_include_template_source_and_normalized_option_m
         for row in lambda_rows
         for feedback in row["do_not_claim_explanation"]
     )
+
+
+def test_generated_app_questions_include_service_selection_categories():
+    questions = _build_app_questions(len(load_question_templates().service_scenarios))
+
+    assert EXPECTED_SELECTION_CATEGORIES <= {
+        row["selection_category"]
+        for row in questions
+    }
 
 
 def test_generated_app_questions_expand_sns_sqs_boundary_cases():

@@ -54,6 +54,7 @@ def _build_app_questions(count: int) -> list[dict]:
                 "domain": scenario.domain,
                 "difficulty": scenario.difficulty,
                 "question_type": template.question_type,
+                "selection_category": scenario.selection_category,
                 "question": template.question_pattern.format(purpose=scenario.purpose),
                 "reference_answer": explanation,
                 "key_concepts": concepts,

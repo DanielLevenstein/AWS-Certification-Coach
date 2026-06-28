@@ -21,6 +21,16 @@ KNOWN_TEMPLATE_SLOTS = {
     "service_id",
     "service_name",
 }
+KNOWN_SELECTION_CATEGORIES = {
+    "general",
+    "cost_tradeoff",
+    "operational_complexity_tradeoff",
+    "latency_tradeoff",
+    "durability_availability_tradeoff",
+    "managed_vs_self_managed_tradeoff",
+    "event_driven_vs_batch_tradeoff",
+    "security_boundary_tradeoff",
+}
 FORBIDDEN_TEMPLATE_KEYS = {
     "answer",
     "correct_rating",
@@ -58,6 +68,7 @@ class ServiceScenario:
     purpose: str
     key_concepts: tuple[str, ...]
     distractors: tuple[str, ...]
+    selection_category: str = "general"
 
 
 @dataclass(frozen=True)
@@ -130,6 +141,7 @@ def _load_question_templates(resolved_path: str) -> QuestionTemplateCatalog:
                 purpose=str(row["purpose"]),
                 key_concepts=tuple(str(value) for value in row["key_concepts"]),
                 distractors=tuple(str(value) for value in row["distractors"]),
+                selection_category=str(row.get("selection_category", "general")),
             )
             for row in payload["service_scenarios"]
         ),
@@ -242,6 +254,11 @@ def _validate_service_scenario_row(row: object, index: int, source: Path) -> Non
             raise ValueError(f"Service-scenario row {index} has invalid {list_field}: {source}")
     if len(row["distractors"]) < 3:
         raise ValueError(f"Service-scenario row {index} needs at least three distractors: {source}")
+    selection_category = str(row.get("selection_category", "general"))
+    if selection_category not in KNOWN_SELECTION_CATEGORIES:
+        raise ValueError(
+            f"Service-scenario row {index} has unknown selection_category {selection_category!r}: {source}"
+        )
 
 
 def _validate_developer_question_scenario_row(row: object, index: int, source: Path) -> None:

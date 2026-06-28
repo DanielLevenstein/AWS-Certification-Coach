@@ -28,8 +28,8 @@ Implementing dedicated AWS knowledge based on a dedicated feature branch using t
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
 ## Question Expansion
-Expand service-selection-template questions, so there is more than one question type present.
-- Example categories:
+Expanded service-selection-template questions so generated rows include multiple selection categories.
+Implemented categories:
 - cost_tradeoff
 - operational_complexity_tradeoff
 - latency_tradeoff
@@ -40,16 +40,10 @@ Expand service-selection-template questions, so there is more than one question 
 
 ### Specific question suggestions
 - Add an explanatory question or feedback note contrasting S3 lifecycle policies with S3 bucket policies.
-- Added initial SNS vs. SQS service-selection boundary cases that teach pub/sub fan-out versus queue-based polling/worker processing; revisit later for a dedicated service-comparison question type.
-- Added an initial EC2 Auto Scaling service-selection boundary case for horizontal scaling versus vertical scaling; revisit later for richer scaling tradeoff questions.
 - Add a Lambda environment variables wording case so answers that say "environmental variables" are recognized when the intended concept is Lambda environment variables.
 - Review artifact-review prompts that may give away the expected issue in the question wording, especially SDK pagination examples.
-- Added grading guard for answers that name the correct service but include materially wrong reasoning; the grade now reflects both the correct service hit and the incorrect claim.
-- Added regression coverage so correct paraphrases are not downgraded merely because they reword the original question.
-- Added grading guard so service-identification answers that describe the concept but omit the required AWS service or feature name do not receive a B-level grade.
 - Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
 - Improve `suggested_improvements` wording so it gives concrete next steps instead of generic "explain improvements" style feedback.
-- Fixed repeated DynamoDB documentation labels in the documentation/source section by using option-specific labels when multiple links share the same service name.
 
 Add service-oriented questions that directly ask the user to compare the pros and cons of two different services. 
 

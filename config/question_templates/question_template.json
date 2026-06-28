@@ -79,6 +79,7 @@
       "certification": "Cloud Practitioner",
       "exam_code": "CLF-C02",
       "difficulty": "Easy",
+      "selection_category": "security_boundary_tradeoff",
       "purpose": "grant temporary credentials to trusted AWS resources without storing long-term access keys",
       "key_concepts": [
         "IAM",
@@ -99,6 +100,7 @@
       "certification": "Cloud Practitioner",
       "exam_code": "CLF-C02",
       "difficulty": "Easy",
+      "selection_category": "cost_tradeoff",
       "purpose": "track cost or usage thresholds and send alerts for actual or forecasted spending",
       "key_concepts": [
         "AWS Budgets",
@@ -200,6 +202,7 @@
       "certification": "Solutions Architect Associate",
       "exam_code": "SAA-C03",
       "difficulty": "Medium",
+      "selection_category": "durability_availability_tradeoff",
       "purpose": "provide synchronous standby replication and automatic failover for relational databases",
       "key_concepts": [
         "Amazon RDS",
@@ -260,6 +263,7 @@
       "certification": "Solutions Architect Associate",
       "exam_code": "SAA-C03",
       "difficulty": "Medium",
+      "selection_category": "latency_tradeoff",
       "purpose": "replicate tables across Regions for low-latency multi-Region access and resilience",
       "key_concepts": [
         "DynamoDB global tables",
@@ -280,6 +284,7 @@
       "certification": "Cloud Practitioner",
       "exam_code": "CLF-C02",
       "difficulty": "Easy",
+      "selection_category": "managed_vs_self_managed_tradeoff",
       "purpose": "run event-driven code without managing servers and scale per request",
       "key_concepts": [
         "AWS Lambda",
@@ -320,6 +325,7 @@
       "certification": "Solutions Architect Associate",
       "exam_code": "SAA-C03",
       "difficulty": "Medium",
+      "selection_category": "operational_complexity_tradeoff",
       "purpose": "horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type",
       "key_concepts": [
         "Auto Scaling",
@@ -581,6 +587,7 @@
       "certification": "AWS Certified Developer",
       "exam_code": "DVA-C02",
       "difficulty": "Medium",
+      "selection_category": "event_driven_vs_batch_tradeoff",
       "purpose": "publish the same event to multiple independent subscribers without requiring each subscriber to poll a shared work queue",
       "key_concepts": [
         "SNS",

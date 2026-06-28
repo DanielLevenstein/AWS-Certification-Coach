@@ -36,9 +36,10 @@
 | v3.3.2   | Applies v3 feedback schema configuration, C-grade near-miss service handling, and grade distribution release charting.                                                              |
 | v3.3.4   | Setting the best wrong answer back to D in answer rubric.                                                                                                                           |
 | v3.4.1   | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                                                                            |
-| v3.4.2   | Update feedback explanations for wrong service selection |  
-| v3.5.2 | Grade tuning based on user feedback|
-| v3.5.2.1 | Fix duplicate DynamoDB documentation links in the documentation/source section. |
+| v3.4.2   | Update feedback explanations for wrong service selection                                                                                                                            |  
+| v3.5.2 | Grade tuning based on user feedback                                                                                                                                                 |
+| v3.5.2.1 | Fix duplicate DynamoDB documentation links in the documentation/source section.                                                                                                     |
+| v3.5.3 | Added selection_category to service-selection category questions.                                                                                                                   |
 # Release Metrics
 
 ## Metric Definitions:
@@ -118,6 +119,7 @@
 | v3.3.4   | 100.00% | 83.33% | 100.00% | 100.00% | 77.78% |
 | v3.4.1   | 100.00% | 83.33% | 100.00% | 100.00% | 77.78% |
 | v3.4.2   | 100.00% | 80.00% | 100.00% | 98.17% | 77.78% |
+
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
 For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
@@ -157,7 +159,7 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.5.2 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 94.95% |
+| v3.5.3 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 94.95% |
 
 ## Grade Band Metrics
 
