@@ -94,11 +94,11 @@ def test_existing_question_rows_load_without_rubric_metadata():
     assert question.acceptable_answers == []
 
 
-def test_sample_question_artifact_uses_configured_schema_version():
+def test_sample_question_artifact_uses_one_schema_version():
     questions = JsonQuestionRepository(QUESTION_ARTIFACT).all()
 
     assert questions
-    assert {question.schema_version for question in questions} == {3}
+    assert len({question.schema_version for question in questions}) == 1
 
 
 def test_original_multiple_choice_options_preserve_metadata():

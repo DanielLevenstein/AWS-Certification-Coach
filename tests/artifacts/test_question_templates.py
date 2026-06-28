@@ -119,3 +119,13 @@ def test_generated_app_questions_include_template_source_and_normalized_option_m
             "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
         )
     }
+    assert any(
+        "AWS Lambda addresses a different AWS need" in feedback
+        for row in lambda_rows
+        for feedback in row["do_not_claim_explanation"]
+    )
+    assert any(
+        "\n\nAWS Lambda addresses a different AWS need" in feedback
+        for row in lambda_rows
+        for feedback in row["do_not_claim_explanation"]
+    )

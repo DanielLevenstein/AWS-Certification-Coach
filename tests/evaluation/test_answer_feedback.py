@@ -53,6 +53,32 @@ def test_non_a_answer_preserves_specific_provider_feedback():
     assert result.feedback == "The service name is misspelled."
 
 
+def test_valid_wrong_service_name_is_not_reported_as_misspelled():
+    question = Question(
+        schema_version=1,
+        certification="Developer Associate",
+        domain="Development with AWS Services",
+        difficulty="Easy",
+        question="Which service queues messages for asynchronous processing?",
+        reference_answer="Use Amazon SQS.",
+        key_concepts=["Amazon SQS", "message queue"],
+        acceptable_answers=["Amazon SQS"],
+        original_multiple_choice=MultipleChoiceQuestion(
+            question="Which service queues messages for asynchronous processing?",
+            options=[
+                MultipleChoiceOption("A", "Use Amazon SQS."),
+                MultipleChoiceOption("B", "Use Amazon SNS."),
+            ],
+            correct_option_ids=["A"],
+        ),
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(question, "Use Amazon SNS.")
+
+    assert result.score <= 49
+    assert result.feedback == "This exact service answer is not in the question's correct answer list."
+
+
 def test_common_misconception_answer_gets_specific_feedback():
     question = Question(
         certification="Cloud Practitioner",
@@ -92,6 +118,32 @@ def test_must_not_claim_answer_gets_stronger_feedback():
 
     assert result.score <= 49
     assert result.feedback == "AWS KMS is a better option because it is designed to manage encryption keys."
+
+
+def test_must_not_claim_matches_short_service_answer_without_aws_prefix():
+    question = Question(
+        schema_version=1,
+        certification="Cloud Practitioner",
+        domain="Management and Governance",
+        difficulty="Easy",
+        question="Explain which service tracks resource configuration history and evaluates compliance.",
+        reference_answer="Use AWS Config.",
+        key_concepts=["AWS Config", "configuration history", "compliance rules"],
+        must_not_claim=["AWS CloudTrail satisfies the scenario better than AWS Config."],
+        do_not_claim_explanation=[
+            (
+                "AWS Config is a better option because it tracks resource configuration history.\n\n"
+                "AWS CloudTrail records API activity, so it does not satisfy this scenario requirement."
+            )
+        ],
+        acceptable_answers=["AWS Config"],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(question, "CloudTrail")
+
+    assert result.score <= 49
+    assert result.feedback == question.do_not_claim_explanation[0]
+    assert "\n\nAWS CloudTrail" in result.feedback
 
 
 def test_negated_misconception_does_not_trigger_feedback():

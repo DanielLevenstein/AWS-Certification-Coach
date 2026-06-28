@@ -35,7 +35,8 @@
 | v3.2.2   | Added Guardrail lines to all charts                                                                                                                                                 |
 | v3.3.2   | Applies v3 feedback schema configuration, C-grade near-miss service handling, and grade distribution release charting.                                                              |
 | v3.3.4   | Setting the best wrong answer back to D in answer rubric.                                                                                                                           |
-| 3.4.1    | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                                                                            |
+| v3.4.1   | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                                                                            |
+| v3.4.2 | Update feedback explanations for wrong service selection |  
 # Release Metrics
 
 ## Metric Definitions:
@@ -152,7 +153,7 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.4.1 | 99.20% | 100.00% | 99.17% | 98.80% | 100.00% | 94.95% |
+| v3.4.2 | 99.20% | 100.00% | 99.17% | 98.80% | 100.00% | 94.95% |
 
 ## Grade Band Metrics
 
@@ -181,7 +182,7 @@ Question coverage concept count: `288`
 Question coverage intent count: `5`
 Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
 Knowledge base schema version: `3`
-Knowledge base file size: `78941` bytes
+Knowledge base file size: `70127` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`
