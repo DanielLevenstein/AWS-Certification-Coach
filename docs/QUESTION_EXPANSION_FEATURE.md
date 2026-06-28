@@ -15,7 +15,7 @@ This design supports the roadmap in `docs/QUESTION_IMPROVEMENT_ROADMAP.md` and t
 - Generate self-authored freeform questions from source concepts without copying restricted exam text.
 - Train a separate local semantic model for question fidelity scoring.
 - Report a `question fidelity` metric as a percentage in release notes.
-- Keep question-fidelity scoring independent from answer semantic evaluation.
+- Keep question-fidelity scoring independent of answer semantic evaluation.
 - Maintain train, validation, and test separation for all model work.
 
 ## Standard Language
@@ -26,18 +26,38 @@ Use these terms consistently across the question-expansion architecture, answer 
 - `question fidelity`: release-facing score for generated question quality. It may combine `concept fidelity`, `exam-style fidelity`, distractor quality, technical correctness, and source safety.
 - `concept fidelity`: whether the generated question preserves the intended AWS concept, service boundary, decision point, and reasoning pattern.
 - `exam-style fidelity`: whether the generated question resembles permitted Developer Associate calibration patterns and requires applied exam reasoning.
-- `learner-answer grading`: A/B/C/D/F grading of a learner response. This is separate from question fidelity.
-- `AWS-valid`: the question and reference answer are technically accurate according to AWS documentation.
+- `learner-answer grading`: A/B/C/D/F grading of a learner response. This is separated from the question of fidelity.
+- `AWS-valid`: the question and reference answer are technically accurate, according to AWS documentation.
 - `exam-valid`: the question resembles a permitted Developer Associate exam-style calibration pattern and tests the expected domain reasoning.
 
-Use A/B/C/D/F only for learner-answer grades. Use 0-100 percentages or accept/revise/reject decisions for generated-question review.
+Use A/B/C/D/F only for learner-answer grades. 
 
-## Non-Goals
+## Question Expansion
+Expand service-selection-template questions, so there is more than one question type present.
+- Example categories:
+- cost_tradeoff
+- operational_complexity_tradeoff
+- latency_tradeoff
+- durability_availability_tradeoff
+- managed_vs_self_managed_tradeoff
+- event_driven_vs_batch_tradeoff
+- security_boundary_tradeoff
 
-- Do not ingest real exam dumps, paid practice-test content, or restricted AWS Skill Builder material.
-- Do not replace the existing `semantic_similarity` answer evaluator.
-- Do not link question-fidelity model weights to answer-grading model weights.
-- Do not push Docker images or create GitHub tags before human review.
+### Specific question suggestions
+- Add an explanatory question or feedback note contrasting S3 lifecycle policies with S3 bucket policies.
+- Add a major SNS vs. SQS comparison question that teaches pub/sub fan-out versus queue-based polling/worker processing.
+- Add a vertical-scaling versus horizontal-scaling question for EC2 and Auto Scaling concepts.
+- Add a Lambda environment variables wording case so answers that say "environmental variables" are recognized when the intended concept is Lambda environment variables.
+- Review artifact-review prompts that may give away the expected issue in the question wording, especially SDK pagination examples.
+- Tune grading for answers that mention the correct service but begin with or include materially wrong reasoning; the grade should reflect both the correct concept hit and the incorrect claim.
+- Tune grading for correct paraphrases so answers are not downgraded merely because they reword the original question.
+- Tune grading for service-identification questions so answers that describe the concept but omit the required AWS service or feature name do not receive a B-level grade.
+- Tune grading for answers that include the best wrong answer alongside the correct or target concept; use C or D depending on how much the wrong concept dominates the response.
+- Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
+- Improve `suggested_improvements` wording so it gives concrete next steps instead of generic "explain improvements" style feedback.
+- Fix duplicate DynamoDB documentation links in the documentation/source section.
+
+Add service-oriented questions that directly ask the user to compare the pros and cons of two different services. 
 
 ## Data Flow
 
