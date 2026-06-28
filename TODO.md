@@ -44,9 +44,9 @@ Expand service-selection-template questions, so there is more than one question 
 - Added an initial EC2 Auto Scaling service-selection boundary case for horizontal scaling versus vertical scaling; revisit later for richer scaling tradeoff questions.
 - Add a Lambda environment variables wording case so answers that say "environmental variables" are recognized when the intended concept is Lambda environment variables.
 - Review artifact-review prompts that may give away the expected issue in the question wording, especially SDK pagination examples.
-- Tune grading for answers that mention the correct service but begin with or include materially wrong reasoning; the grade should reflect both the correct concept hit and the incorrect claim.
-- Tune grading for correct paraphrases so answers are not downgraded merely because they reword the original question.
-- Tune grading for service-identification questions so answers that describe the concept but omit the required AWS service or feature name do not receive a B-level grade.
+- Added grading guard for answers that name the correct service but include materially wrong reasoning; the grade now reflects both the correct service hit and the incorrect claim.
+- Added regression coverage so correct paraphrases are not downgraded merely because they reword the original question.
+- Added grading guard so service-identification answers that describe the concept but omit the required AWS service or feature name do not receive a B-level grade.
 - Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
 - Improve `suggested_improvements` wording so it gives concrete next steps instead of generic "explain improvements" style feedback.
 - Fix duplicate DynamoDB documentation links in the documentation/source section.

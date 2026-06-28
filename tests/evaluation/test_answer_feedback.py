@@ -187,6 +187,76 @@ def test_framed_question_restatement_receives_restatement_feedback():
     assert result.feedback == "This answer restates the question without identifying and explaining the solution."
 
 
+def test_correct_paraphrase_is_not_downgraded_as_question_rewording():
+    question = Question(
+        schema_version=1,
+        certification="Cloud Practitioner",
+        domain="Billing",
+        difficulty="Easy",
+        question="Explain which AWS service should track cost or usage thresholds and send alerts.",
+        reference_answer="Use AWS Budgets to track cost or usage thresholds and send alerts.",
+        key_concepts=["AWS Budgets", "cost thresholds", "usage thresholds", "alerts"],
+        acceptable_answers=["AWS Budgets"],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(
+        question,
+        "AWS Budgets alerts teams when actual or forecasted spending crosses cost or usage thresholds.",
+    )
+
+    assert result.score >= 90
+    assert result.feedback == ""
+
+
+def test_correct_service_with_wrong_reasoning_is_capped_below_a_b_band():
+    question = Question(
+        schema_version=1,
+        certification="Cloud Practitioner",
+        domain="Billing",
+        difficulty="Easy",
+        question="Explain which AWS service should track cost or usage thresholds and send alerts.",
+        reference_answer="Use AWS Budgets to track cost or usage thresholds and send alerts.",
+        key_concepts=["AWS Budgets", "cost thresholds", "usage thresholds", "alerts"],
+        acceptable_answers=["AWS Budgets"],
+        common_misconceptions=["AWS CloudTrail is the best fit for this requirement."],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(
+        question,
+        "Use AWS Budgets because it records API activity and audits account events.",
+    )
+
+    assert 60 <= result.score <= 79
+    assert result.feedback == "The answer names the correct service but includes reasoning for a different AWS concept."
+
+
+def test_service_description_without_required_service_name_does_not_receive_b_level_score():
+    question = Question(
+        schema_version=1,
+        certification="Solutions Architect Associate",
+        domain="Database",
+        difficulty="Medium",
+        question=(
+            "Explain which AWS service or feature should replicate tables across Regions "
+            "for low-latency multi-Region access and resilience."
+        ),
+        reference_answer=(
+            "Use DynamoDB global tables to replicate tables across Regions for low-latency "
+            "multi-Region access and resilience."
+        ),
+        key_concepts=["DynamoDB global tables", "multi-Region", "replication", "low latency"],
+        acceptable_answers=["DynamoDB global tables"],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(
+        question,
+        "Use a global table replication feature across Regions for low latency.",
+    )
+
+    assert result.score <= 79
+    assert result.feedback == "Name the specific AWS service or feature required by the question."
+
+
 def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
     rendered = []
     monkeypatch.setattr(app.st, "write", lambda value: rendered.append(("write", value)))

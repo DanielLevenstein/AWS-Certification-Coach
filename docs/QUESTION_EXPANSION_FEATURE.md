@@ -43,20 +43,6 @@ Expand service-selection-template questions, so there is more than one question 
 - event_driven_vs_batch_tradeoff
 - security_boundary_tradeoff
 
-### Specific question suggestions
-- Add an explanatory question or feedback note contrasting S3 lifecycle policies with S3 bucket policies.
-- Add a major SNS vs. SQS comparison question that teaches pub/sub fan-out versus queue-based polling/worker processing.
-- Add a vertical-scaling versus horizontal-scaling question for EC2 and Auto Scaling concepts.
-- Add a Lambda environment variables wording case so answers that say "environmental variables" are recognized when the intended concept is Lambda environment variables.
-- Review artifact-review prompts that may give away the expected issue in the question wording, especially SDK pagination examples.
-- Tune grading for answers that mention the correct service but begin with or include materially wrong reasoning; the grade should reflect both the correct concept hit and the incorrect claim.
-- Tune grading for correct paraphrases so answers are not downgraded merely because they reword the original question.
-- Tune grading for service-identification questions so answers that describe the concept but omit the required AWS service or feature name do not receive a B-level grade.
-- Tune grading for answers that include the best wrong answer alongside the correct or target concept; use C or D depending on how much the wrong concept dominates the response.
-- Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
-- Improve `suggested_improvements` wording so it gives concrete next steps instead of generic "explain improvements" style feedback.
-- Fix duplicate DynamoDB documentation links in the documentation/source section.
-
 Add service-oriented questions that directly ask the user to compare the pros and cons of two different services. 
 
 ## Data Flow
