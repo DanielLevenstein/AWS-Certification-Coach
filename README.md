@@ -31,9 +31,24 @@ The app question bank is generated offline from self-authored, exam-style AWS sc
 ![Release Metrics Chart](release/question_coverage_metrics_chart.png)
 
 ## Accuracy Metrics
+Semantic Accuracy Chart:
+- “Semantic Accuracy” was a grade-band agreement: A/B, C/D, or F.
+- "Semantic Precision" and "Semantic Recall" define A–D are accepted and F is rejected.
+
+
 ![Accuracy Metrics Chart](release/accuracy_metrics_chart.png)
 
-### To regenerate local data:
+### Grading Rubric:
+
+| Grade | Description                                                                           |
+|-------|---------------------------------------------------------------------------------------|
+| A     | Answers that name the correct service and provide a full-sentence explanation.        |
+| B     | Answers that name the correct service as a one or two-word answer.                    |
+| C     | Answers which describe pieces of the problem but do not specify the service involved. |
+| D     | Answers which name the best wrong answer.                                             |
+| F     | Answers which have no relation to the correct answer.                                 |
+
+# Local Build:
 
 ```bash
 ./setup.sh
@@ -45,7 +60,7 @@ The schema redesign branch starts the v3 release line. Use `v3.1.x` for new rele
 
 
 | Release | Description                                                                                        |
-|---------|----------------------------------------------------------------------------------------------------|
+| ------- | -------------------------------------------------------------------------------------------------- |
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions..             |
 | v1.1.0  | Separated the app-facing question bank from training labels.                                       |
 | v1.3.1  | Test framework redesign; initial curated grade-band accuracy was 44%.                              |
@@ -58,7 +73,8 @@ The schema redesign branch starts the v3 release line. Use `v3.1.x` for new rele
 | v3.1.4  | Heuristic grading improvement                                                                      |
 | v3.2.1  | Added Semantic Similarity chart back                                                               |
 | v3.2.3  | Updated per letter grade screenshots.                                                              |
-| v3.3.4 | Setting the best wrong answer back to D in answer rubric. |
+| v3.3.4  | Setting the best wrong answer back to D in answer rubric.                                          |
+
 #### Scope
 
 Certifications:
