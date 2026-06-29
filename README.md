@@ -56,11 +56,12 @@ Semantic Accuracy Chart:
 
 ## Releases
 
-The schema redesign branch starts the v3 release line. Use `v3.1.x` for new releases from this branch forward so earlier `v3.0.x` and `v3.0.0` space remains available for any future migration/backfill tags. Historical v1 and v2 release numbers are intentionally left as-is.
-
+Release versions in Docker and GitHub should match, but not all builds are tagged. 
+Release notes are summarized for readability, and some version numbers may be lost in the summarization. 
+See RELEASE_NOTES.md for more in-depth release notes. 
 
 | Release | Description                                                                                        |
-| ------- | -------------------------------------------------------------------------------------------------- |
+|---------|----------------------------------------------------------------------------------------------------|
 | v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions..             |
 | v1.1.0  | Separated the app-facing question bank from training labels.                                       |
 | v1.3.1  | Test framework redesign; initial curated grade-band accuracy was 44%.                              |
@@ -70,10 +71,9 @@ The schema redesign branch starts the v3 release line. Use `v3.1.x` for new rele
 | v2.1.1  | Added AWS Developer Certification practice questions                                               |
 | v2.3.6  | Improved answer evaluation model and added within one letter grade metric to release notes         |
 | v2.4.5  | Got exact letter accuracy metric over 87%                                                          |
-| v3.1.4  | Heuristic grading improvement                                                                      |
-| v3.2.1  | Added Semantic Similarity chart back                                                               |
-| v3.2.3  | Updated per letter grade screenshots.                                                              |
 | v3.3.4  | Setting the best wrong answer back to D in answer rubric.                                          |
+| v3.4.1  | Moving literal constants out of code and into question_template.json                               |
+| v3.6.1  | Added Show Option selections to UI, Grade tuning based on user feedback.                           |
 
 #### Scope
 
