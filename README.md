@@ -56,9 +56,9 @@ Semantic Accuracy Chart:
 
 ## Releases
 
-Release versions in Docker and GitHub should match, but not all builds are tagged. 
-Release notes are summarized for readability, and some version numbers may be lost in the summarization. 
-See RELEASE_NOTES.md for more in-depth release notes. 
+- Release versions in Docker and GitHub should match, but not all builds are tagged. 
+- Release notes are summarized for readability, and some version numbers may be lost in the summarization. 
+- See RELEASE_NOTES.md for more in-depth release notes. 
 
 | Release | Description                                                                                        |
 |---------|----------------------------------------------------------------------------------------------------|
