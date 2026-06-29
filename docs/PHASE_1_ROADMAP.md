@@ -58,7 +58,7 @@ Purpose: introduce the data shape needed for consistent answer grading without c
   - `multiple_choice`
   - `scenario_multiple_choice`
   - `multi_select_source`
-  - `service_selection`
+  - `question_category`
   - `service_comparison`
   - `architecture_tradeoff`
 - Add rubric metadata fields to generated question artifacts.

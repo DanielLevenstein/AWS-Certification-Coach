@@ -142,11 +142,14 @@ class KnowledgeBase:
     def flag_sets_for_source_url(self, source_url: str) -> tuple[QuestionFlagSet, ...]:
         if not source_url:
             return ()
-        return tuple(
-            row
-            for row in (*self.common_misconceptions, *self.must_not_claim)
-            if row.source_url == source_url
-        )
+        matched: list[QuestionFlagSet] = []
+        seen_ids: set[str] = set()
+        for row in (*self.common_misconceptions, *self.must_not_claim):
+            if row.source_url != source_url or row.id in seen_ids:
+                continue
+            matched.append(row)
+            seen_ids.add(row.id)
+        return tuple(matched)
 
     def select(self, concept_names: Iterable[str], answer: str = "") -> KnowledgeSelection:
         """Select exact requested concepts, then relevant alias matches from the answer."""
@@ -203,7 +206,10 @@ def _load_knowledge_base(resolved_path: str) -> KnowledgeBase:
         for row in payload["concepts"]
     )
     common_misconceptions = tuple(_flag_set_from_json(row) for row in payload["common_misconceptions"])
-    must_not_claim = tuple(_flag_set_from_json(row) for row in payload["must_not_claim"])
+    must_not_claim = tuple(
+        _flag_set_from_json(row)
+        for row in payload.get("must_not_claim", payload["common_misconceptions"])
+    )
     knowledge = KnowledgeBase(
         schema_version=int(payload["schema_version"]),
         description=str(payload["description"]),
@@ -230,7 +236,6 @@ def _validate_payload(payload: object, source: Path) -> None:
         "services",
         "concepts",
         "common_misconceptions",
-        "must_not_claim",
     }
     missing = required - payload.keys()
     if missing:
@@ -263,7 +268,8 @@ def _validate_payload(payload: object, source: Path) -> None:
         "source_url",
     }
     _require_rows(payload["common_misconceptions"], flag_fields, "common_misconceptions", source)
-    _require_rows(payload["must_not_claim"], flag_fields, "must_not_claim", source)
+    if "must_not_claim" in payload:
+        _require_rows(payload["must_not_claim"], flag_fields, "must_not_claim", source)
 
 
 def _flag_set_from_json(row: dict[str, object]) -> QuestionFlagSet:

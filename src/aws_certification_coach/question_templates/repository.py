@@ -21,6 +21,23 @@ KNOWN_TEMPLATE_SLOTS = {
     "service_id",
     "service_name",
 }
+KNOWN_QUESTION_CATEGORIES = {
+    "cost_tradeoff",
+    "operational_complexity_tradeoff",
+    "latency_tradeoff",
+    "durability_availability_tradeoff",
+    "managed_vs_self_managed_tradeoff",
+    "event_driven_vs_batch_tradeoff",
+    "security_boundary_tradeoff",
+    "resilience_recovery",
+    "scaling_performance",
+    "networking_delivery",
+    "security_identity",
+    "observability_governance",
+    "integration_workflows",
+    "data_analytics",
+    "storage_data_management",
+}
 FORBIDDEN_TEMPLATE_KEYS = {
     "answer",
     "correct_rating",
@@ -58,6 +75,16 @@ class ServiceScenario:
     purpose: str
     key_concepts: tuple[str, ...]
     distractors: tuple[str, ...]
+    question_category: str
+
+
+@dataclass(frozen=True)
+class DeveloperQuestionScenario:
+    id: str
+    generated_question: str
+    correct_option: str
+    reference_answer: str
+    distractors: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -66,6 +93,7 @@ class QuestionTemplateCatalog:
     description: str
     templates: tuple[QuestionTemplate, ...]
     service_scenarios: tuple[ServiceScenario, ...]
+    developer_question_scenarios: tuple[DeveloperQuestionScenario, ...]
 
     def get(self, template_id: str) -> QuestionTemplate:
         for template in self.templates:
@@ -120,8 +148,19 @@ def _load_question_templates(resolved_path: str) -> QuestionTemplateCatalog:
                 purpose=str(row["purpose"]),
                 key_concepts=tuple(str(value) for value in row["key_concepts"]),
                 distractors=tuple(str(value) for value in row["distractors"]),
+                question_category=str(row["question_category"]),
             )
             for row in payload["service_scenarios"]
+        ),
+        developer_question_scenarios=tuple(
+            DeveloperQuestionScenario(
+                id=str(row["id"]),
+                generated_question=str(row["generated_question"]),
+                correct_option=str(row["correct_option"]),
+                reference_answer=str(row["reference_answer"]),
+                distractors=tuple(str(value) for value in row["distractors"]),
+            )
+            for row in payload["developer_question_scenarios"]
         ),
     )
 
@@ -129,7 +168,7 @@ def _load_question_templates(resolved_path: str) -> QuestionTemplateCatalog:
 def _validate_payload(payload: object, source: Path) -> None:
     if not isinstance(payload, dict):
         raise ValueError(f"Question templates must be a JSON object: {source}")
-    required = {"schema_version", "description", "templates", "service_scenarios"}
+    required = {"schema_version", "description", "templates", "service_scenarios", "developer_question_scenarios"}
     missing = required - payload.keys()
     if missing:
         raise ValueError(f"Question templates are missing fields {sorted(missing)}: {source}")
@@ -156,6 +195,15 @@ def _validate_payload(payload: object, source: Path) -> None:
         scenario_ids.append(str(row["id"]))
     if len(scenario_ids) != len(set(scenario_ids)):
         raise ValueError(f"Duplicate service-scenario IDs in {source}")
+    developer_scenarios = payload["developer_question_scenarios"]
+    if not isinstance(developer_scenarios, list) or not developer_scenarios:
+        raise ValueError(f"Question-template section 'developer_question_scenarios' must be a non-empty list: {source}")
+    developer_scenario_ids: list[str] = []
+    for index, row in enumerate(developer_scenarios):
+        _validate_developer_question_scenario_row(row, index, source)
+        developer_scenario_ids.append(str(row["id"]))
+    if len(developer_scenario_ids) != len(set(developer_scenario_ids)):
+        raise ValueError(f"Duplicate developer-question scenario IDs in {source}")
 
 
 def _validate_template_row(row: object, index: int, source: Path) -> None:
@@ -201,6 +249,7 @@ def _validate_service_scenario_row(row: object, index: int, source: Path) -> Non
         "purpose",
         "key_concepts",
         "distractors",
+        "question_category",
     }
     if not isinstance(row, dict) or required - row.keys():
         raise ValueError(f"Invalid service-scenario row {index}: {source}")
@@ -213,6 +262,31 @@ def _validate_service_scenario_row(row: object, index: int, source: Path) -> Non
             raise ValueError(f"Service-scenario row {index} has invalid {list_field}: {source}")
     if len(row["distractors"]) < 3:
         raise ValueError(f"Service-scenario row {index} needs at least three distractors: {source}")
+    question_category = str(row["question_category"])
+    if question_category not in KNOWN_QUESTION_CATEGORIES:
+        raise ValueError(
+            f"Service-scenario row {index} has unknown question_category {question_category!r}: {source}"
+        )
+
+
+def _validate_developer_question_scenario_row(row: object, index: int, source: Path) -> None:
+    required = {
+        "id",
+        "generated_question",
+        "correct_option",
+        "reference_answer",
+        "distractors",
+    }
+    if not isinstance(row, dict) or required - row.keys():
+        raise ValueError(f"Invalid developer-question scenario row {index}: {source}")
+    for text_field in ("id", "generated_question", "correct_option", "reference_answer"):
+        if not str(row[text_field]).strip():
+            raise ValueError(f"Developer-question scenario row {index} has invalid {text_field}: {source}")
+    value = row["distractors"]
+    if not isinstance(value, list) or not all(str(item).strip() for item in value):
+        raise ValueError(f"Developer-question scenario row {index} has invalid distractors: {source}")
+    if len(value) < 3:
+        raise ValueError(f"Developer-question scenario row {index} needs at least three distractors: {source}")
 
 
 def _find_forbidden_keys(value: object) -> set[str]:

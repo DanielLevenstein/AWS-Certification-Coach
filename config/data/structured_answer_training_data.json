@@ -55,7 +55,8 @@
     ],
     "do_not_claim_explanation": [
       "AWS Code Build is a better option because Define the install, build, and test command phases in an AWS CodeBuild buildspec file for the managed build project. CodeDeploy AppSpec is the build command file. does not satisfy the same scenario requirement."
-    ]
+    ],
+    "question_category": "operational_complexity_tradeoff"
   },
   {
     "certification": "Cloud Practitioner",
@@ -107,7 +108,8 @@
         "rating": 0.65,
         "source": "structured_answer_test_case"
       }
-    ]
+    ],
+    "question_category": "cost_tradeoff"
   },
   {
     "certification": "Cloud Practitioner",
@@ -159,7 +161,8 @@
         "rating": 0.25,
         "source": "structured_answer_test_case"
       }
-    ]
+    ],
+    "question_category": "observability_governance"
   },
   {
     "certification": "AWS Certified Developer",
@@ -222,7 +225,8 @@
         "rating": 0.25,
         "source": "structured_answer_test_case"
       }
-    ]
+    ],
+    "question_category": "security_identity"
   },
   {
     "certification": "AWS Certified Developer",
@@ -274,7 +278,8 @@
         "rating": 0.75,
         "source": "structured_answer_test_case"
       }
-    ]
+    ],
+    "question_category": "integration_workflows"
   },
   {
     "certification": "Cloud Practitioner",
@@ -324,7 +329,8 @@
         "rating": 0.25,
         "source": "structured_answer_test_case"
       }
-    ]
+    ],
+    "question_category": "security_identity"
   },
   {
     "certification": "Cloud Practitioner",
@@ -375,7 +381,8 @@
         "rating": 0.25,
         "source": "structured_answer_test_case"
       }
-    ]
+    ],
+    "question_category": "observability_governance"
   },
   {
     "certification": "Cloud Practitioner",
@@ -424,7 +431,8 @@
         "rating": 0.25,
         "source": "structured_answer_test_case"
       }
-    ]
+    ],
+    "question_category": "cost_tradeoff"
   },
   {
     "certification": "AWS Certified Developer",
@@ -476,6 +484,7 @@
         "rating": 0.25,
         "source": "structured_answer_test_case"
       }
-    ]
+    ],
+    "question_category": "security_identity"
   }
 ]

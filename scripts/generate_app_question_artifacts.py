@@ -54,6 +54,7 @@ def _build_app_questions(count: int) -> list[dict]:
                 "domain": scenario.domain,
                 "difficulty": scenario.difficulty,
                 "question_type": template.question_type,
+                "question_category": scenario.question_category,
                 "question": template.question_pattern.format(purpose=scenario.purpose),
                 "reference_answer": explanation,
                 "key_concepts": concepts,
@@ -94,7 +95,7 @@ def _rubric_metadata(
         "acceptable_answers": [correct_option, explanation, service_name],
         "must_not_claim": [f"{distractor} satisfies the scenario better than {service_name}." for distractor in distractors],
         "do_not_claim_explanation": [
-            f"{service_name} is a better option because it is designed to {purpose}, while {distractor} does not satisfy that requirement."
+            distractor_feedback(service_name, distractor, purpose)
             for distractor in distractors
         ],
     }
@@ -142,6 +143,29 @@ def service_name_for_source_url(source_url: str) -> str:
         if source_url == service.source_url:
             return service.name
     return ""
+
+
+def distractor_feedback(service_name: str, distractor: str, purpose: str) -> str:
+    distractor_context = distractor_service_context(distractor)
+    if distractor_context:
+        return (
+            f"{service_name} is a better option because it is designed to {purpose}.\n\n"
+            f"{distractor_context}, so it does not satisfy this scenario requirement."
+        )
+    return (
+        f"{service_name} is a better option because it is designed to {purpose}, "
+        f"while {distractor} does not satisfy that requirement."
+    )
+
+
+def distractor_service_context(distractor: str) -> str:
+    service = _knowledge_service_for_option(distractor)
+    if service is None:
+        return ""
+    description = service.description.strip().rstrip(".")
+    if not description:
+        return f"{service.name} addresses a different AWS need"
+    return f"{service.name} addresses a different AWS need: {description[0].casefold()}{description[1:]}"
 
 
 def _knowledge_service_metadata(service_name: str, source_url: str = "") -> dict[str, str]:

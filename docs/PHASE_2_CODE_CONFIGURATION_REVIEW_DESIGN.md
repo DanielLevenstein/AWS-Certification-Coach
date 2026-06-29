@@ -158,6 +158,7 @@ Recommended fields:
 - `artifact_language`
 - `artifact_body`
 - `artifact_context`
+- `artifact_corrected`
 - `expected_issue`
 - `reference_answer`
 - `required_concepts`
@@ -169,7 +170,7 @@ Recommended fields:
 - `question_fidelity`
 - `exam_calibration`
 
-`artifact_body` should contain only short, self-authored snippets. Keep snippets compact enough for learners to inspect without scrolling through large files. Prefer one primary issue per question, with optional secondary observations as bonus concepts.
+`artifact_body` should contain only short, self-authored snippets. `artifact_corrected` should contain the corrected full artifact shown after evaluation for questions with code or configuration examples; changed lines should be highlightable by comparing it with `artifact_body`. Keep snippets compact enough for learners to inspect without scrolling through large files. Prefer one primary issue per question, with optional secondary observations as bonus concepts.
 
 ## Artifact Authoring Rules
 

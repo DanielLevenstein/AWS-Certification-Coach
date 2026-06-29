@@ -28,6 +28,7 @@ def test_service_comparison_service_builds_near_miss_question():
     assert len(questions) == 1
     question = questions[0]
     assert question["question_type"] == "service_comparison"
+    assert question["question_category"] == "latency_tradeoff"
     assert question["best_choice"] == "Use DynamoDB global tables."
     assert question["near_miss_choice"] == "Use an RDS read replica."
     assert question["compared_services"] == ["Use DynamoDB global tables.", "Use an RDS read replica."]

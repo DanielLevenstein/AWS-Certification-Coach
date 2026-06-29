@@ -135,6 +135,7 @@ class HeuristicTransformationProvider:
             "domain": source_item["domain"],
             "difficulty": source_item["difficulty"],
             "question_type": "service_selection",
+            "question_category": source_item.get("question_category", "operational_complexity_tradeoff"),
             "question": _freeform_question(original["question"]),
             "reference_answer": reference_answer,
             "key_concepts": key_concepts,

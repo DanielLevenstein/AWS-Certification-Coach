@@ -66,7 +66,7 @@ def render_release_metrics(
             f"App question count: `{question_coverage.get('question_count', 0)}`",
             f"Question coverage domain count: `{question_coverage.get('domain_count', 0)}`",
             f"Question coverage concept count: `{question_coverage.get('concept_count', 0)}`",
-            f"Question coverage intent count: `{question_coverage.get('question_intent_count', 0)}`",
+            f"Question coverage question-category count: `{question_coverage.get('question_category_count', 0)}`",
             f"Top covered concepts: `{_coverage_names(question_coverage, 'top_concepts', limit=12)}`",
             f"Knowledge base schema version: `{knowledge_base.get('schema_version', 'not-run')}`",
             f"Knowledge base file size: `{knowledge_base.get('file_size_bytes', 0)}` bytes",

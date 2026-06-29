@@ -29,7 +29,7 @@ DEFAULT_CHARTS = (
     ("Grade Bands", Path("release/grade_band_metrics.png")),
     ("Certification Split", Path("release/question_certification_coverage.png")),
     ("Domain Coverage", Path("release/question_domain_coverage.png")),
-    ("Question Intent Mix", Path("release/question_intent_coverage.png")),
+    ("Question Category", Path("release/question_intent_coverage.png")),
 )
 
 
@@ -41,7 +41,7 @@ def combine_accuracy_charts(charts: list[tuple[str, Path]], output: Path) -> Non
 
 
 def combine_question_coverage_charts(charts: list[tuple[str, Path]], output: Path) -> None:
-    _validate_charts(charts, {"Certification Split", "Domain Coverage", "Question Intent Mix"})
+    _validate_charts(charts, {"Certification Split", "Domain Coverage", "Question Category"})
     figure, axes = plt.subplots(1, 3, figsize=(24, 8), constrained_layout=True)
     _render_panels(figure, list(axes), charts, "AWS Certification Coach Question Coverage")
     _save(figure, output)
@@ -98,7 +98,7 @@ def main() -> None:
         [
             ("Certification Split", args.certification_coverage),
             ("Domain Coverage", args.domain_coverage),
-            ("Question Intent Mix", args.intent_coverage),
+            ("Question Category", args.intent_coverage),
         ],
         args.coverage_output,
     )

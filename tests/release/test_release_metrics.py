@@ -179,6 +179,7 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
             "domain": "Development with AWS Services",
             "difficulty": "Medium",
             "question_type": "service_comparison",
+            "question_category": "integration_workflows",
             "question": "Compare Lambda with SQS for this retry scenario.",
             "key_concepts": ["Lambda", "SQS", "dead-letter queue"],
             "original_multiple_choice": {"source_name": "AWS Documentation: Lambda"},
@@ -187,6 +188,7 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
             "certification": "AWS Certified Developer",
             "domain": "Development with AWS Services",
             "difficulty": "Medium",
+            "question_category": "integration_workflows",
             "question": "Which service should run code when a schedule fires?",
             "key_concepts": ["Lambda", "EventBridge"],
             "original_multiple_choice": {"source_name": "AWS Documentation: EventBridge"},
@@ -195,6 +197,7 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
             "certification": "Solutions Architect Associate",
             "domain": "Storage",
             "difficulty": "Easy",
+            "question_category": "cost_tradeoff",
             "question": "Which lifecycle policy configuration should transition older objects?",
             "key_concepts": ["Amazon S3", "replication"],
             "original_multiple_choice": {"source_name": "AWS Documentation: S3"},
@@ -208,15 +211,50 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
     assert metrics["question_count"] == 3
     assert metrics["domain_count"] == 2
     assert metrics["concept_count"] == 6
-    assert {"name": "Comparison tradeoff", "count": 1} in metrics["question_intents"]
-    assert {"name": "Service or feature selection", "count": 1} in metrics["question_intents"]
-    assert {"name": "Configuration decision", "count": 1} in metrics["question_intents"]
-    assert set(outputs) == {"domain", "intent", "certification"}
+    assert metrics["question_category_count"] == 2
+    assert {"name": "integration_workflows", "count": 2} in metrics["question_categories"]
+    assert {"name": "cost_tradeoff", "count": 1} in metrics["question_categories"]
+    assert set(outputs) == {"domain", "question_category", "certification"}
     for output in outputs.values():
         assert output.read_bytes().startswith(b"\x89PNG")
         width, height = _png_dimensions(output)
         assert width >= 1500
         assert height >= 1000
+
+
+def test_question_coverage_metrics_exclude_disabled_artifact_review_questions(monkeypatch):
+    rows = [
+        {
+            "certification": "AWS Certified Developer",
+            "domain": "Development with AWS Services",
+            "difficulty": "Medium",
+            "question_type": "service_selection",
+            "question_category": "integration_workflows",
+            "question": "Which service should run code when a schedule fires?",
+            "key_concepts": ["Lambda", "EventBridge"],
+        },
+        {
+            "certification": "AWS Certified Developer",
+            "domain": "Security",
+            "difficulty": "Medium",
+            "question_type": "artifact_review",
+            "question_category": "security_identity",
+            "question": "Review this policy.",
+            "key_concepts": ["IAM policy", "least privilege"],
+        },
+    ]
+
+    monkeypatch.delenv("SHOW_ARTIFACT_REVIEW", raising=False)
+    metrics = measure_question_coverage(rows)
+
+    assert metrics["question_count"] == 1
+    assert {"name": "security_identity", "count": 1} not in metrics["question_categories"]
+
+    monkeypatch.setenv("SHOW_ARTIFACT_REVIEW", "1")
+    metrics = measure_question_coverage(rows)
+
+    assert metrics["question_count"] == 2
+    assert {"name": "security_identity", "count": 1} in metrics["question_categories"]
 
 
 def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
@@ -249,7 +287,7 @@ def test_combined_release_charts_split_accuracy_from_question_coverage(tmp_path:
         "Per-Grade Precision & Recall",
         "Grade Bands",
         "Domain Coverage",
-        "Question Intent Mix",
+        "Question Category",
     ]):
         path = tmp_path / f"chart_{index}.png"
         _write_sample_chart(path, title)
@@ -265,7 +303,7 @@ def test_combined_release_charts_split_accuracy_from_question_coverage(tmp_path:
         accuracy_output,
     )
     combine_question_coverage_charts(
-        [(title, paths[title]) for title in ("Certification Split", "Domain Coverage", "Question Intent Mix")],
+        [(title, paths[title]) for title in ("Certification Split", "Domain Coverage", "Question Category")],
         coverage_output,
     )
 
