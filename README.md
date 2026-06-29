@@ -28,17 +28,27 @@ This version intentionally removes the runtime RAG stack from the earlier protot
 
 The app question bank is generated offline from self-authored, exam-style AWS scenarios. The project does not copy real exam dumps, paid practice-test text, or restricted AWS Skill Builder content. AWS exam guides and documentation are used as style and scope references, while the local artifacts are generated specifically for this project.
 
-The generation flow starts with `config/knowledge_base/knowledge_base.json` for canonical service, source URL, concept, and scenario facts, applies reusable mechanics from `config/question_templates/question_template.json`, and uses `config/answer_rubric/answer_rubric.json` for learner-answer rubric defaults. `scripts/generate_app_question_artifacts.py` renders 160 app-facing questions by default, then the Developer Associate generator appends its reviewed set.
+![Release Metrics Chart](release/question_coverage_metrics_chart.png)
 
-Each generated question keeps its source-style multiple-choice item in the same JSON row under `original_multiple_choice`. Curated answer feedback and the structured knowledge-base seed remain separate from the app question bank.
+## Accuracy Metrics
+Semantic Accuracy Chart:
+- “Semantic Accuracy” was a grade-band agreement: A/B, C/D, or F.
+- "Semantic Precision" and "Semantic Recall" define A–D are accepted and F is rejected.
 
-`config/knowledge_base/knowledge_base.json` is committed curated configuration, not an auto-generated artifact. `./setup.sh` and the question generators read scoring and question sources but do not rewrite the knowledge base. Make manual knowledge-base changes in `config/knowledge_base/` and commit them; generated local outputs live under `data/` and release metrics under `metrics/`.
-
-Artifacts keep letter grades for readability. Curated release metrics compare the three grade bands `A/B`, `C`, and `D/F`.
 
 ![Accuracy Metrics Chart](release/accuracy_metrics_chart.png)
 
-### To regenerate local data:
+### Grading Rubric:
+
+| Grade | Description                                                                           |
+|-------|---------------------------------------------------------------------------------------|
+| A     | Answers that name the correct service and provide a full-sentence explanation.        |
+| B     | Answers that name the correct service as a one or two-word answer.                    |
+| C     | Answers which describe pieces of the problem but do not specify the service involved. |
+| D     | Answers which name the best wrong answer.                                             |
+| F     | Answers which have no relation to the correct answer.                                 |
+
+# Local Build:
 
 ```bash
 ./setup.sh
@@ -46,8 +56,9 @@ Artifacts keep letter grades for readability. Curated release metrics compare th
 
 ## Releases
 
-The schema redesign branch starts the v3 release line. Use `v3.1.x` for new releases from this branch forward so earlier `v3.0.x` and `v3.0.0` space remains available for any future migration/backfill tags. Historical v1 and v2 release numbers are intentionally left as-is.
-
+Release versions in Docker and GitHub should match, but not all builds are tagged. 
+Release notes are summarized for readability, and some version numbers may be lost in the summarization. 
+See RELEASE_NOTES.md for more in-depth release notes. 
 
 | Release | Description                                                                                        |
 |---------|----------------------------------------------------------------------------------------------------|
@@ -60,10 +71,10 @@ The schema redesign branch starts the v3 release line. Use `v3.1.x` for new rele
 | v2.1.1  | Added AWS Developer Certification practice questions                                               |
 | v2.3.6  | Improved answer evaluation model and added within one letter grade metric to release notes         |
 | v2.4.5  | Got exact letter accuracy metric over 87%                                                          |
-| v3.1.4  | Heuristic grading improvement                                                                      |
-| v3.2.1  | Added Semantic Similarity chart back                                                               |
-| v3.2.3  | Updated per letter grade screenshots.                                                              |
-| v3.3.4 | Setting the best wrong answer back to D in answer rubric. |
+| v3.3.4  | Setting the best wrong answer back to D in answer rubric.                                          |
+| v3.4.1  | Moving literal constants out of code and into question_template.json                               |
+| v3.6.1  | Added Show Option selections to UI, Grade tuning based on user feedback.                           |
+
 #### Scope
 
 Certifications:
