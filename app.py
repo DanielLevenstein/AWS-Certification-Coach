@@ -122,7 +122,7 @@ def main() -> None:
         return
 
     result = st.session_state.get("last_result")
-    st.caption(f"{question.certification} | {question.domain} | {question.difficulty}")
+    st.caption(f"{question.certification} | {question.domain} | {question.difficulty} | {question.question_category}")
     st.subheader(question.question)
     _render_artifact(question, show_corrected=bool(result))
 
