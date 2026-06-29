@@ -8,39 +8,23 @@
 | v2.1.2   | Expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture.                  |
 | v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table. |
 | v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.   |
-| v2.3.4   | Added a syntax alias list to improve model accuracy                                                                                |
 | v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                    |
-| v2.4.4.1 | Updated feedback file to show 1 digit schema version rather than 2                                                                 |
 | v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
-| v2.4.5.2 | Added contact info to app                                                                                                          |
-| v2.4.5.4 | Updated TODO.md to check off tasks which are finished and moved existing content to PHASE_1_ROADMAP.md                             |
-| v2.4.6   | Clean up release notes and documentation                                                                                           |
-| V2.4.5.5 | Updated RELEASE_NOTES.md to show metric definitions                                                                                |
 | v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                        | 
-| v2.5.2   | Restored the legacy Semantic Precision and Recall definition.                                                                      |
 | v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                   |
-| v2.5.5   | Added back exact match and off by one graph for release metrics.                                                                   |
 | v3.0.0   | Tag v2.6.x has been retagged as v3.0.x since it's a major schema change.                                                           |
 | v3.0.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.           |
 | v3.0.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                           |
 | v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
-| v3.0.3.1 | Fixed deployment tests                                                                                                             |
 | v3.0.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation.        |
-| v3.1.0   | Design documentation for splitting knowledge_base and question_template.json                                                       |
-| v3.1.1   | Split question and knowledge base schema                                                                                           |
+| v3.1.1   | Split question and knowledge base schema (knowledge_base and question_template.json)                                               |
 | v3.1.2   | Added documentation links for all services and displayed suggested_improvements in UI                                              |
-| v3.1.3   | Show must_not_claim sections in feedback.                                                                                          |
-| v3.2.1   | Added Semantic Similarity chart back.                                                                                              |
-| v3.2.2   | Added Guardrail lines to all charts                                                                                                |
 | v3.3.2   | Applies v3 feedback schema configuration, C-grade near-miss service handling, and grade distribution release charting.             |
 | v3.3.4   | Setting the best wrong answer back to D in answer rubric.                                                                          |
 | v3.4.1   | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                           |
 | v3.4.2   | Update feedback explanations for wrong service selection                                                                           |  
-| v3.5.2   | Grade tuning based on user feedback                                                                                                |
-| v3.5.2.1 | Fix duplicate DynamoDB documentation links in the documentation/source section.                                                    |
 | v3.6.0   | Added question_category taxonomy coverage to generated app questions.                                                              |
-| v3.6.1   | Added Show Option selections to UI                                                                                                 |
-| v3.6.2.1 | Added Question Category to UI                                                                                                      |
+| v3.6.1   | Added Show Option selections to UI, Grade tuning based on user feedback.                                                           |
 
 # Release Metrics
 
