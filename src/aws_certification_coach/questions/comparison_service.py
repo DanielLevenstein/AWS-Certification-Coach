@@ -86,6 +86,7 @@ class ServiceComparisonQuestionService:
             "domain": source.get("domain", ""),
             "difficulty": source.get("difficulty", ""),
             "question_type": "service_comparison",
+            "question_category": _question_category(source, concepts, scenario),
             "question": comparison_prompt,
             "reference_answer": reference_answer,
             "key_concepts": concepts,
@@ -196,6 +197,24 @@ def _tradeoff_concepts(concepts: list[str], scenario: str) -> list[str]:
             if scenario_tokens & keywords:
                 tradeoffs.append(label)
     return tradeoffs or concepts[:3]
+
+
+def _question_category(source: dict[str, object], concepts: list[str], scenario: str) -> str:
+    explicit_category = str(source.get("question_category", "")).strip()
+    if explicit_category:
+        return explicit_category
+    haystack = f"{source.get('domain', '')} {scenario} {' '.join(concepts)}".casefold()
+    if any(keyword in haystack for keyword in ["secret", "credential", "policy", "permission", "security", "iam"]):
+        return "security_identity"
+    if any(keyword in haystack for keyword in ["queue", "event", "stream", "workflow", "fanout", "message"]):
+        return "integration_workflows"
+    if any(keyword in haystack for keyword in ["latency", "read replica", "global table", "edge", "cache"]):
+        return "latency_tradeoff"
+    if any(keyword in haystack for keyword in ["failover", "recovery", "durability", "availability", "replication"]):
+        return "durability_availability_tradeoff"
+    if any(keyword in haystack for keyword in ["cost", "lifecycle", "archive", "retention"]):
+        return "cost_tradeoff"
+    return "operational_complexity_tradeoff"
 
 
 def _comparison_rationale(source: dict[str, object], candidate: ComparisonCandidate) -> str:

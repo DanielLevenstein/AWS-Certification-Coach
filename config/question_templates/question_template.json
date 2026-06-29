@@ -79,6 +79,7 @@
       "certification": "Cloud Practitioner",
       "exam_code": "CLF-C02",
       "difficulty": "Easy",
+      "question_category": "security_identity",
       "purpose": "grant temporary credentials to trusted AWS resources without storing long-term access keys",
       "key_concepts": [
         "IAM",
@@ -99,6 +100,7 @@
       "certification": "Cloud Practitioner",
       "exam_code": "CLF-C02",
       "difficulty": "Easy",
+      "question_category": "cost_tradeoff",
       "purpose": "track cost or usage thresholds and send alerts for actual or forecasted spending",
       "key_concepts": [
         "AWS Budgets",
@@ -130,7 +132,8 @@
         "single Availability Zone deployment",
         "larger instance",
         "root volume backups"
-      ]
+      ],
+      "question_category": "resilience_recovery"
     },
     {
       "id": "amazon-s3-versioning",
@@ -150,7 +153,8 @@
         "S3 Transfer Acceleration",
         "Amazon EFS",
         "S3 static website hosting"
-      ]
+      ],
+      "question_category": "resilience_recovery"
     },
     {
       "id": "s3-lifecycle-policies",
@@ -170,7 +174,30 @@
         "S3 bucket policies",
         "AWS Organizations",
         "Amazon GuardDuty"
-      ]
+      ],
+      "question_category": "cost_tradeoff"
+    },
+    {
+      "id": "s3-lifecycle-vs-bucket-policy",
+      "service_id": "s3-lifecycle-policies",
+      "domain": "Storage",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "purpose": "transition old S3 objects to lower-cost storage classes and expire them after a retention period without changing bucket access permissions",
+      "key_concepts": [
+        "S3 Lifecycle",
+        "bucket policies",
+        "storage class transitions",
+        "object expiration",
+        "access permissions"
+      ],
+      "distractors": [
+        "S3 bucket policy only",
+        "S3 Block Public Access only",
+        "IAM permissions boundary only"
+      ],
+      "question_category": "cost_tradeoff"
     },
     {
       "id": "amazon-rds-multi-az",
@@ -179,6 +206,7 @@
       "certification": "Solutions Architect Associate",
       "exam_code": "SAA-C03",
       "difficulty": "Medium",
+      "question_category": "durability_availability_tradeoff",
       "purpose": "provide synchronous standby replication and automatic failover for relational databases",
       "key_concepts": [
         "Amazon RDS",
@@ -210,7 +238,8 @@
         "Multi-AZ failover",
         "AWS Backup",
         "vertical scaling only"
-      ]
+      ],
+      "question_category": "scaling_performance"
     },
     {
       "id": "amazon-dynamodb",
@@ -230,7 +259,8 @@
         "Amazon Redshift",
         "Amazon EFS",
         "AWS Glue"
-      ]
+      ],
+      "question_category": "scaling_performance"
     },
     {
       "id": "dynamodb-global-tables",
@@ -239,6 +269,7 @@
       "certification": "Solutions Architect Associate",
       "exam_code": "SAA-C03",
       "difficulty": "Medium",
+      "question_category": "latency_tradeoff",
       "purpose": "replicate tables across Regions for low-latency multi-Region access and resilience",
       "key_concepts": [
         "DynamoDB global tables",
@@ -259,6 +290,7 @@
       "certification": "Cloud Practitioner",
       "exam_code": "CLF-C02",
       "difficulty": "Easy",
+      "question_category": "managed_vs_self_managed_tradeoff",
       "purpose": "run event-driven code without managing servers and scale per request",
       "key_concepts": [
         "AWS Lambda",
@@ -290,6 +322,29 @@
         "manual instance launch",
         "Elastic IP",
         "AMI copy"
+      ],
+      "question_category": "scaling_performance"
+    },
+    {
+      "id": "auto-scaling-horizontal-vs-vertical",
+      "service_id": "auto-scaling-groups",
+      "domain": "Compute",
+      "certification": "Solutions Architect Associate",
+      "exam_code": "SAA-C03",
+      "difficulty": "Medium",
+      "question_category": "operational_complexity_tradeoff",
+      "purpose": "horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type",
+      "key_concepts": [
+        "Auto Scaling",
+        "EC2",
+        "horizontal scaling",
+        "vertical scaling",
+        "instance replacement"
+      ],
+      "distractors": [
+        "manual vertical scaling to a larger instance type",
+        "Elastic IP reassociation only",
+        "AMI copy to another Region"
       ]
     },
     {
@@ -310,7 +365,8 @@
         "AWS Direct Connect",
         "Amazon Route 53 only",
         "Amazon EBS"
-      ]
+      ],
+      "question_category": "scaling_performance"
     },
     {
       "id": "amazon-cloudfront",
@@ -330,7 +386,8 @@
         "AWS Transit Gateway",
         "NAT gateway",
         "Amazon FSx"
-      ]
+      ],
+      "question_category": "networking_delivery"
     },
     {
       "id": "amazon-route-53",
@@ -350,7 +407,8 @@
         "Amazon CloudWatch Logs",
         "AWS Config",
         "Amazon Inspector"
-      ]
+      ],
+      "question_category": "networking_delivery"
     },
     {
       "id": "vpc-security-groups",
@@ -370,7 +428,8 @@
         "network ACL only",
         "AWS WAF for subnets",
         "IAM policy"
-      ]
+      ],
+      "question_category": "security_identity"
     },
     {
       "id": "network-acls",
@@ -390,7 +449,8 @@
         "security group only",
         "AWS Shield",
         "Route 53"
-      ]
+      ],
+      "question_category": "security_identity"
     },
     {
       "id": "aws-cloudtrail",
@@ -410,7 +470,8 @@
         "CloudWatch metrics",
         "AWS Budgets",
         "Amazon Macie"
-      ]
+      ],
+      "question_category": "observability_governance"
     },
     {
       "id": "amazon-cloudwatch",
@@ -430,7 +491,8 @@
         "AWS Artifact",
         "AWS Organizations",
         "AWS Marketplace"
-      ]
+      ],
+      "question_category": "observability_governance"
     },
     {
       "id": "aws-config",
@@ -450,7 +512,8 @@
         "CloudTrail only",
         "Trusted Advisor only",
         "AWS Shield"
-      ]
+      ],
+      "question_category": "observability_governance"
     },
     {
       "id": "aws-kms",
@@ -470,7 +533,8 @@
         "AWS Secrets Manager rotation only",
         "IAM roles",
         "AWS WAF"
-      ]
+      ],
+      "question_category": "security_identity"
     },
     {
       "id": "aws-secrets-manager",
@@ -490,7 +554,8 @@
         "Parameter Store only",
         "AWS Certificate Manager",
         "Amazon Cognito"
-      ]
+      ],
+      "question_category": "security_identity"
     },
     {
       "id": "amazon-sqs",
@@ -510,7 +575,8 @@
         "Amazon SNS only",
         "Amazon EBS",
         "AWS CloudFormation"
-      ]
+      ],
+      "question_category": "integration_workflows"
     },
     {
       "id": "amazon-sns",
@@ -530,7 +596,52 @@
         "SQS queue polling only",
         "AWS Batch",
         "Amazon RDS"
+      ],
+      "question_category": "integration_workflows"
+    },
+    {
+      "id": "amazon-sns-fanout-vs-sqs-polling",
+      "service_id": "amazon-sns",
+      "domain": "Integration",
+      "certification": "AWS Certified Developer",
+      "exam_code": "DVA-C02",
+      "difficulty": "Medium",
+      "question_category": "event_driven_vs_batch_tradeoff",
+      "purpose": "publish the same event to multiple independent subscribers without requiring each subscriber to poll a shared work queue",
+      "key_concepts": [
+        "SNS",
+        "pub/sub",
+        "fanout",
+        "subscribers",
+        "SQS queue polling"
+      ],
+      "distractors": [
+        "Amazon SQS worker queue only",
+        "AWS Batch job queue",
+        "DynamoDB Streams only"
       ]
+    },
+    {
+      "id": "amazon-sqs-workers-vs-sns-fanout",
+      "service_id": "sqs",
+      "domain": "Integration",
+      "certification": "AWS Certified Developer",
+      "exam_code": "DVA-C02",
+      "difficulty": "Medium",
+      "purpose": "buffer units of work so competing worker processes can poll, process, and delete messages at their own pace",
+      "key_concepts": [
+        "SQS",
+        "message queue",
+        "queue polling",
+        "worker processing",
+        "decoupling"
+      ],
+      "distractors": [
+        "Amazon SNS fanout topic only",
+        "Amazon EventBridge scheduled rule only",
+        "AWS Step Functions workflow only"
+      ],
+      "question_category": "integration_workflows"
     },
     {
       "id": "amazon-eventbridge",
@@ -550,7 +661,8 @@
         "CloudFront",
         "Amazon EFS",
         "AWS Artifact"
-      ]
+      ],
+      "question_category": "integration_workflows"
     },
     {
       "id": "aws-step-functions",
@@ -570,7 +682,8 @@
         "Lambda alone",
         "Amazon S3 Glacier",
         "NAT gateway"
-      ]
+      ],
+      "question_category": "integration_workflows"
     },
     {
       "id": "amazon-api-gateway",
@@ -590,7 +703,8 @@
         "CloudFront only",
         "AWS Config",
         "Amazon EBS"
-      ]
+      ],
+      "question_category": "networking_delivery"
     },
     {
       "id": "amazon-efs",
@@ -610,7 +724,8 @@
         "Amazon EBS single volume",
         "S3 object storage only",
         "DynamoDB"
-      ]
+      ],
+      "question_category": "storage_data_management"
     },
     {
       "id": "amazon-ebs-snapshots",
@@ -630,7 +745,8 @@
         "S3 lifecycle",
         "CloudTrail event",
         "Route 53 health check"
-      ]
+      ],
+      "question_category": "resilience_recovery"
     },
     {
       "id": "s3-glacier-storage-classes",
@@ -650,7 +766,8 @@
         "S3 Standard only",
         "Amazon EFS",
         "Amazon ElastiCache"
-      ]
+      ],
+      "question_category": "cost_tradeoff"
     },
     {
       "id": "amazon-redshift",
@@ -670,7 +787,8 @@
         "DynamoDB",
         "Amazon SQS",
         "AWS Lambda"
-      ]
+      ],
+      "question_category": "data_analytics"
     },
     {
       "id": "aws-glue",
@@ -690,7 +808,8 @@
         "AWS Config",
         "Amazon Route 53",
         "AWS Shield"
-      ]
+      ],
+      "question_category": "data_analytics"
     },
     {
       "id": "amazon-athena",
@@ -710,7 +829,8 @@
         "Amazon RDS",
         "Amazon EBS",
         "AWS WAF"
-      ]
+      ],
+      "question_category": "data_analytics"
     },
     {
       "id": "amazon-kinesis-data-streams",
@@ -730,7 +850,8 @@
         "AWS Glue crawler",
         "S3 Glacier",
         "CloudTrail Lake only"
-      ]
+      ],
+      "question_category": "data_analytics"
     },
     {
       "id": "aws-organizations",
@@ -750,7 +871,8 @@
         "IAM groups only",
         "AWS Budgets only",
         "Amazon Cognito"
-      ]
+      ],
+      "question_category": "observability_governance"
     },
     {
       "id": "service-control-policies",
@@ -770,7 +892,8 @@
         "resource policies only",
         "security groups",
         "CloudWatch alarms"
-      ]
+      ],
+      "question_category": "security_identity"
     },
     {
       "id": "aws-trusted-advisor",
@@ -790,7 +913,8 @@
         "CloudTrail",
         "AWS Glue",
         "Amazon SQS"
-      ]
+      ],
+      "question_category": "observability_governance"
     },
     {
       "id": "aws-well-architected-tool",
@@ -810,7 +934,8 @@
         "AWS Artifact",
         "AWS Backup only",
         "Route 53"
-      ]
+      ],
+      "question_category": "observability_governance"
     },
     {
       "id": "aws-backup",
@@ -830,7 +955,8 @@
         "CloudFront",
         "Amazon SNS",
         "AWS Config only"
-      ]
+      ],
+      "question_category": "resilience_recovery"
     },
     {
       "id": "amazon-cognito",
@@ -850,7 +976,8 @@
         "IAM role for EC2",
         "AWS KMS",
         "CloudTrail"
-      ]
+      ],
+      "question_category": "security_identity"
     },
     {
       "id": "aws-waf",
@@ -870,7 +997,8 @@
         "security groups only",
         "Amazon Inspector",
         "AWS Budgets"
-      ]
+      ],
+      "question_category": "security_identity"
     }
   ],
   "developer_question_scenarios": [

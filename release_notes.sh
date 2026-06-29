@@ -116,6 +116,7 @@ cp -p "$LATEST_RUBRIC_REVIEW" "$RUBRIC_REVIEW_OUTPUT"
   --accuracy-output "$ACCURACY_CHART_OUTPUT" \
   --coverage-output "$QUESTION_COVERAGE_CHART_OUTPUT"
 cp -p "$ACCURACY_CHART_OUTPUT" "release/${RELEASE_TAG}"_accuracy_metrics_chart.png
+cp -p "$QUESTION_COVERAGE_CHART_OUTPUT" "release/${RELEASE_TAG}"_question_coverage_metrics_chart.png
 
 echo "Saved latest per-grade precision and recall chart: $PER_GRADE_OUTPUT"
 echo "Saved latest grade-band chart: $GRADE_BAND_OUTPUT"

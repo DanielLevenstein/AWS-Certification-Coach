@@ -12,6 +12,24 @@ from scripts.generate_developer_question_artifacts import build_questions
 from scripts.download_developer_original_questions import SOURCE_ROWS
 
 
+EXPECTED_QUESTION_CATEGORIES = {
+    "cost_tradeoff",
+    "operational_complexity_tradeoff",
+    "latency_tradeoff",
+    "durability_availability_tradeoff",
+    "managed_vs_self_managed_tradeoff",
+    "event_driven_vs_batch_tradeoff",
+    "resilience_recovery",
+    "scaling_performance",
+    "networking_delivery",
+    "security_identity",
+    "observability_governance",
+    "integration_workflows",
+    "data_analytics",
+    "storage_data_management",
+}
+
+
 def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_base():
     catalog = load_question_templates()
     template = catalog.get("service-selection-freeform")
@@ -26,7 +44,16 @@ def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_b
     assert template.composition_rules["source_url"] == "knowledge_service_source_url"
     assert "source_url" not in template.required_slots
     assert set(template.required_slots) >= {"service_id", "service_name", "purpose"}
-    assert len(catalog.service_scenarios) == 40
+    assert catalog.service_scenarios
+    assert len({scenario.id for scenario in catalog.service_scenarios}) == len(catalog.service_scenarios)
+    assert all(scenario.service_id for scenario in catalog.service_scenarios)
+    assert all(scenario.purpose for scenario in catalog.service_scenarios)
+    assert all(scenario.key_concepts for scenario in catalog.service_scenarios)
+    assert all(len(scenario.distractors) >= 3 for scenario in catalog.service_scenarios)
+    assert EXPECTED_QUESTION_CATEGORIES <= {
+        scenario.question_category
+        for scenario in catalog.service_scenarios
+    }
     assert len(catalog.developer_question_scenarios) == 38
     assert not hasattr(catalog.service_scenarios[0], "answer_rubric_defaults")
 
@@ -72,6 +99,7 @@ def test_developer_generator_uses_question_template_details_before_source_overri
     row = build_questions([source])[0]
 
     assert row["question"].startswith("A production Lambda function can overwhelm")
+    assert row["question_category"] == "integration_workflows"
     assert row["reference_answer"].startswith("Configure Lambda reserved concurrency")
     assert row["original_multiple_choice"]["options"][0]["text"] == "Configure Lambda reserved concurrency."
 
@@ -128,4 +156,112 @@ def test_generated_app_questions_include_template_source_and_normalized_option_m
         "\n\nAWS Lambda addresses a different AWS need" in feedback
         for row in lambda_rows
         for feedback in row["do_not_claim_explanation"]
+    )
+
+
+def test_generated_app_questions_include_question_category_categories():
+    questions = _build_app_questions(len(load_question_templates().service_scenarios))
+
+    assert EXPECTED_QUESTION_CATEGORIES <= {
+        row["question_category"]
+        for row in questions
+    }
+    assert "general" not in {
+        row["question_category"]
+        for row in questions
+    }
+
+
+def test_developer_generated_questions_include_question_categories():
+    questions = build_questions(SOURCE_ROWS)
+
+    assert questions
+    assert all(row["question_category"] for row in questions)
+    assert {
+        "security_identity",
+        "integration_workflows",
+        "operational_complexity_tradeoff",
+    } <= {row["question_category"] for row in questions}
+
+
+def test_generated_app_questions_expand_sns_sqs_boundary_cases():
+    questions = _build_app_questions(len(load_question_templates().service_scenarios))
+    rows_by_concepts = {
+        tuple(row["key_concepts"]): row
+        for row in questions
+    }
+
+    sns_row = rows_by_concepts[
+        ("SNS", "pub/sub", "fanout", "subscribers", "SQS queue polling")
+    ]
+    sqs_row = rows_by_concepts[
+        ("SQS", "message queue", "queue polling", "worker processing", "decoupling")
+    ]
+
+    assert sns_row["certification"] == "AWS Certified Developer"
+    assert sns_row["exam_code"] == "DVA-C02"
+    assert "multiple independent subscribers" in sns_row["question"]
+    assert sns_row["reference_answer"].startswith("Use Amazon SNS")
+    assert any(
+        "Amazon SQS worker queue only is the best fit" in misconception
+        for misconception in sns_row["common_misconceptions"]
+    )
+
+    assert sqs_row["certification"] == "AWS Certified Developer"
+    assert sqs_row["exam_code"] == "DVA-C02"
+    assert "competing worker processes" in sqs_row["question"]
+    assert sqs_row["reference_answer"].startswith("Use Amazon SQS")
+    assert any(
+        "Amazon SNS fanout topic only is the best fit" in misconception
+        for misconception in sqs_row["common_misconceptions"]
+    )
+
+
+def test_generated_app_questions_expand_ec2_scaling_boundary_case():
+    questions = _build_app_questions(len(load_question_templates().service_scenarios))
+    rows_by_concepts = {
+        tuple(row["key_concepts"]): row
+        for row in questions
+    }
+
+    row = rows_by_concepts[
+        ("Auto Scaling", "EC2", "horizontal scaling", "vertical scaling", "instance replacement")
+    ]
+
+    assert row["certification"] == "Solutions Architect Associate"
+    assert row["exam_code"] == "SAA-C03"
+    assert "horizontally scale an EC2 application" in row["question"]
+    assert "larger instance type" in row["question"]
+    assert row["reference_answer"].startswith("Use Auto Scaling groups")
+    assert any(
+        "manual vertical scaling to a larger instance type is the best fit" in misconception
+        for misconception in row["common_misconceptions"]
+    )
+
+
+def test_generated_app_questions_expand_s3_lifecycle_bucket_policy_boundary_case():
+    questions = _build_app_questions(len(load_question_templates().service_scenarios))
+    rows_by_concepts = {
+        tuple(row["key_concepts"]): row
+        for row in questions
+    }
+
+    row = rows_by_concepts[
+        (
+            "S3 Lifecycle",
+            "bucket policies",
+            "storage class transitions",
+            "object expiration",
+            "access permissions",
+        )
+    ]
+
+    assert row["certification"] == "Solutions Architect Associate"
+    assert row["exam_code"] == "SAA-C03"
+    assert "lower-cost storage classes" in row["question"]
+    assert "without changing bucket access permissions" in row["question"]
+    assert row["reference_answer"].startswith("Use S3 lifecycle policies")
+    assert any(
+        "S3 bucket policy only is the best fit" in misconception
+        for misconception in row["common_misconceptions"]
     )

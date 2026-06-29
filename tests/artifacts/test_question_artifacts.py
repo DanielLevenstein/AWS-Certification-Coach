@@ -2,6 +2,7 @@ from pathlib import Path
 
 import json
 
+from aws_certification_coach.domain import QuestionFilter
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository, question_from_json
 
 
@@ -76,6 +77,14 @@ def test_sample_question_artifact_includes_answer_rubric_contract():
             assert len(row["do_not_claim_explanation"]) <= len(row["must_not_claim"])
 
 
+def test_sample_question_artifact_requires_question_category():
+    rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
+
+    assert rows
+    assert all(row.get("question_category") for row in rows)
+    assert all(row.get("question_category") != "general" for row in rows)
+
+
 def test_existing_question_rows_load_without_rubric_metadata():
     question = question_from_json(
         {
@@ -85,13 +94,50 @@ def test_existing_question_rows_load_without_rubric_metadata():
             "question": "Which service manages encryption keys?",
             "reference_answer": "Use AWS KMS to create and manage encryption keys.",
             "key_concepts": ["AWS KMS", "encryption keys"],
+            "question_category": "security_identity",
         }
     )
 
     assert question.question_type == "service_selection"
+    assert question.question_category == "security_identity"
     assert question.schema_version == 1
     assert question.required_concepts == ["AWS KMS", "encryption keys"]
     assert question.acceptable_answers == []
+
+
+def test_question_repository_filters_by_question_category(tmp_path: Path):
+    artifact = tmp_path / "questions.json"
+    artifact.write_text(
+        json.dumps(
+            [
+                {
+                    "certification": "Cloud Practitioner",
+                    "domain": "Security",
+                    "difficulty": "Easy",
+                    "question": "Which service manages encryption keys?",
+                    "reference_answer": "Use AWS KMS.",
+                    "key_concepts": ["AWS KMS"],
+                    "question_category": "security_identity",
+                },
+                {
+                    "certification": "Cloud Practitioner",
+                    "domain": "Billing",
+                    "difficulty": "Easy",
+                    "question": "Which service tracks thresholds?",
+                    "reference_answer": "Use AWS Budgets.",
+                    "key_concepts": ["AWS Budgets"],
+                    "question_category": "cost_tradeoff",
+                },
+            ]
+        ),
+        encoding="utf-8",
+    )
+    repository = JsonQuestionRepository(artifact)
+
+    questions = repository.filter_questions(QuestionFilter(question_category="cost_tradeoff"))
+
+    assert [question.question_category for question in questions] == ["cost_tradeoff"]
+    assert repository.available_question_categories() == ["cost_tradeoff", "security_identity"]
 
 
 def test_sample_question_artifact_uses_one_schema_version():
@@ -110,6 +156,7 @@ def test_original_multiple_choice_options_preserve_metadata():
             "question": "Which feature manages users?",
             "reference_answer": "Use Amazon Cognito.",
             "key_concepts": ["Cognito"],
+            "question_category": "security_identity",
             "original_multiple_choice": {
                 "question": "Which feature manages users?",
                 "options": [
@@ -132,6 +179,40 @@ def test_original_multiple_choice_options_preserve_metadata():
     assert question.original_multiple_choice.options[0].metadata["service_name"] == "Amazon Cognito"
 
 
+def test_original_multiple_choice_options_load_artifact_metadata():
+    question = question_from_json(
+        {
+            "certification": "AWS Certified Developer",
+            "exam_code": "DVA-C02",
+            "domain": "Security",
+            "difficulty": "Medium",
+            "question_type": "artifact_review",
+            "question": "Which policy is least privileged?",
+            "reference_answer": "Choose the scoped policy.",
+            "key_concepts": ["IAM policy", "least privilege"],
+            "question_category": "security_identity",
+            "original_multiple_choice": {
+                "question": "Which policy is least privileged?",
+                "options": [
+                    {
+                        "option_id": "A",
+                        "text": "Use the scoped policy.",
+                        "artifact_body": "{\"Resource\": \"arn:aws:s3:::example-bucket/reports/*\"}",
+                        "artifact_language": "json",
+                        "artifact_context": "Candidate policy A",
+                    }
+                ],
+                "correct_option_ids": ["A"],
+            },
+        }
+    )
+
+    option = question.original_multiple_choice.options[0]
+    assert option.artifact_body == "{\"Resource\": \"arn:aws:s3:::example-bucket/reports/*\"}"
+    assert option.artifact_language == "json"
+    assert option.artifact_context == "Candidate policy A"
+
+
 def test_artifact_review_question_rows_load_artifact_metadata():
     question = question_from_json(
         {
@@ -145,9 +226,11 @@ def test_artifact_review_question_rows_load_artifact_metadata():
             "artifact_language": "json",
             "artifact_body": "{\"Statement\": []}",
             "artifact_context": "A Lambda role needs narrow S3 read access.",
+            "artifact_corrected": "{\"Resource\": \"arn:aws:s3:::example-bucket/reports/*\"}",
             "expected_issue": "The policy is too broad.",
             "reference_answer": "Scope the policy to the required S3 object ARN.",
             "key_concepts": ["IAM policy", "least privilege"],
+            "question_category": "security_identity",
         }
     )
 
@@ -156,14 +239,15 @@ def test_artifact_review_question_rows_load_artifact_metadata():
     assert question.artifact_language == "json"
     assert question.artifact_body == "{\"Statement\": []}"
     assert question.artifact_context == "A Lambda role needs narrow S3 read access."
+    assert question.artifact_corrected == "{\"Resource\": \"arn:aws:s3:::example-bucket/reports/*\"}"
     assert question.expected_issue == "The policy is too broad."
 
 
 def test_sample_question_artifact_includes_developer_question_fidelity_metadata():
     rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
-    developer_rows = [row for row in rows if row.get("exam_code") == "DVA-C02"]
+    developer_rows = [row for row in rows if row.get("source_examples")]
 
-    assert len(developer_rows) >= 5
+    assert len(developer_rows) >= 38
     assert {row.get("certification") for row in developer_rows} == {"AWS Certified Developer"}
     assert all(row.get("source_examples") for row in developer_rows)
     assert all(row.get("question_fidelity", {}).get("question_fidelity_score", 0) >= 80 for row in developer_rows)
@@ -180,8 +264,12 @@ def test_sample_question_artifact_includes_phase_2_artifact_review_questions():
         "sam_template",
     }
     for row in artifact_rows:
+        assert row["difficulty"] == "Hard"
         assert row["artifact_body"]
         assert row["artifact_context"]
+        assert row["artifact_language"]
+        assert row["artifact_corrected"]
+        assert row["artifact_corrected"] != row["artifact_body"]
         assert row["expected_issue"]
         assert row["question_fidelity"]["question_fidelity_score"] >= 80
         assert row["original_multiple_choice"]["source_url"].startswith(("https://docs.aws.amazon.com/", "https://boto3.amazonaws.com/"))

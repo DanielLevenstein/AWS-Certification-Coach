@@ -252,6 +252,7 @@ The shared contract prevents the generator from saying one thing and the answer 
     {
       "id": "service-selection-freeform",
       "question_type": "service_selection",
+      "question_category": "security_identity",
       "certifications": ["Cloud Practitioner", "Solutions Architect Associate", "AWS Certified Developer"],
       "prompt_variants": [
         "Explain which AWS service or feature should be used to {purpose}.",

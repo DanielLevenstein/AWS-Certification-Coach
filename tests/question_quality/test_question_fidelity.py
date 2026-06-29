@@ -44,6 +44,27 @@ def test_question_fidelity_batch_reports_0_to_100_metric():
     assert metrics["model_name"] == "question_fidelity_heuristic_v1"
 
 
+def test_question_fidelity_batch_excludes_disabled_artifact_review_questions(monkeypatch):
+    service_source = SOURCE_ROWS[0]
+    artifact_source = next(row for row in SOURCE_ROWS if row["source_id"] == "dva-artifact-sdk-pagination")
+    sources = [service_source, artifact_source]
+    generated = build_questions(sources)
+
+    monkeypatch.delenv("SHOW_ARTIFACT_REVIEW", raising=False)
+    metrics = evaluate_question_batch(sources, generated)
+
+    assert metrics["sample_count"] == 1
+    assert metrics["source_count"] == 1
+    assert metrics["generated_question_count"] == 1
+
+    monkeypatch.setenv("SHOW_ARTIFACT_REVIEW", "1")
+    metrics = evaluate_question_batch(sources, generated)
+
+    assert metrics["sample_count"] == 2
+    assert metrics["source_count"] == 2
+    assert metrics["generated_question_count"] == 2
+
+
 def test_developer_question_artifact_preserves_source_examples(tmp_path: Path):
     sources = SOURCE_ROWS[:1]
     generated = build_questions(sources)
@@ -80,8 +101,10 @@ def test_artifact_review_generation_preserves_artifact_contract():
     row = build_questions([source])[0]
 
     assert row["question_type"] == "artifact_review"
+    assert row["difficulty"] == "Hard"
     assert row["artifact_type"] == "sdk_usage"
     assert row["artifact_language"] == "python"
     assert "list_objects_v2" in row["artifact_body"]
+    assert "get_paginator" in row["artifact_corrected"]
     assert row["expected_issue"]
     assert row["question_fidelity"]["question_fidelity_score"] >= 80

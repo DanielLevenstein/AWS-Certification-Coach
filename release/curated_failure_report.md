@@ -2,12 +2,12 @@
 
 - Curated examples: 255
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
-- Passing exact-letter predictions: 45
-- Failing exact-letter predictions: 210
-- Exact-letter accuracy: 17.65%
-- Unique failing question/answer/grade cases: 90
+- Passing exact-letter predictions: 36
+- Failing exact-letter predictions: 219
+- Exact-letter accuracy: 14.12%
+- Unique failing question/answer/grade cases: 101
 - Conflicting normalized label sets: 3
-- Actual letter grades among failures: {'B': 2, 'D': 3, 'F': 205}
+- Actual letter grades among failures: {'C': 8, 'D': 6, 'F': 205}
 
 ## Primary Findings
 
@@ -154,17 +154,17 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 11. Expected A, received B
+### 11. Expected A, received C
 
 - Rows: `25`; occurrences: `1`
 - Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
 - Expected rating: `0.95`
 - User answer: `AWS Code Build`
 - Correct answer: a CodeBuild buildspec file
-- Raw model score: `85.00`; runtime score: `85`
-- Runtime feedback: Please write full sentence answers for full credit.
+- Raw model score: `79.00`; runtime score: `79`
+- Runtime feedback: Name the specific AWS service or feature required by the question.
 - Reviewer feedback: Again my answer is correct. Are you sure you are using the semantic evaluation logic?
-- Largest feature contributions: `semantic_similarity_score` +0.850
+- Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
 ### 12. Expected D, received F
@@ -476,9 +476,22 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 36. Expected D, received F
+### 36. Expected C, received D
 
-- Rows: `71, 111, 151, 191`; occurrences: `4`
+- Rows: `44`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.
+- Expected rating: `0.75`
+- User answer: `AWF Shield or AWS Groups can be used as a stateful firewall to control inbound and outbound traffic.`
+- Correct answer: VPC security groups
+- Raw model score: `65.00`; runtime score: `65`
+- Runtime feedback: Name the specific AWS service or feature required by the question.
+- Reviewer feedback: Correct answer was present but initial answer was definitely wrong.
+- Largest feature contributions: `semantic_similarity_score` +0.650
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
+
+### 37. Expected D, received F
+
+- Rows: `73, 117, 161, 205`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.`
@@ -489,9 +502,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 37. Expected D, received F
+### 38. Expected D, received F
 
-- Rows: `95, 135, 175, 215`; occurrences: `4`
+- Rows: `99, 143, 187`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.`
@@ -502,9 +515,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 38. Expected D, received F
+### 39. Expected D, received F
 
-- Rows: `67, 107, 147, 187`; occurrences: `4`
+- Rows: `68, 112, 156, 200`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.`
@@ -515,9 +528,22 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 39. Expected D, received F
+### 40. Expected A, received D
 
-- Rows: `61, 101, 141, 181`; occurrences: `4`
+- Rows: `56`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
+- Expected rating: `0.95`
+- User answer: `Vertical scaling involves making the individual instances of the EC2 instance bigger while horizontal scaling makes more instances.`
+- Correct answer: Auto Scaling groups
+- Raw model score: `65.00`; runtime score: `65`
+- Runtime feedback: 
+- Reviewer feedback: We need to add a question about vertical scaling.
+- Largest feature contributions: `semantic_similarity_score` +0.650
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 41. Expected D, received F
+
+- Rows: `61, 105, 149, 193`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.`
@@ -528,7 +554,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 40. Expected D, received F
+### 42. Expected D, received F
 
 - Rows: `47`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
@@ -543,9 +569,22 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 41. Expected D, received F
+### 43. Expected D, received F
 
-- Rows: `69, 109, 149, 189`; occurrences: `4`
+- Rows: `83, 127, 171, 215`; occurrences: `4`
+- Question: Explain which AWS service or feature should be used to buffer units of work so competing worker processes can poll, process, and delete messages at their own pace.
+- Expected rating: `0.65`
+- User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to buffer units of work so competing worker processes can poll, process, and delete messages at their own pace.`
+- Correct answer: Amazon SQS
+- Raw model score: `25.00`; runtime score: `25`
+- Runtime feedback: This answer restates the question without identifying and explaining the solution.
+- Reviewer feedback: Generated question-restatement negative example: this answer rewords the prompt without identifying the correct AWS service, feature, or reasoning.
+- Largest feature contributions: `semantic_similarity_score` +0.250
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+
+### 44. Expected D, received F
+
+- Rows: `71, 115, 159, 203`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.`
@@ -556,9 +595,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 42. Expected D, received F
+### 45. Expected D, received F
 
-- Rows: `94, 134, 174, 214`; occurrences: `4`
+- Rows: `98, 142, 186`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to centralize and automate backup policies across supported AWS services.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to centralize and automate backup policies across supported AWS services.`
@@ -569,9 +608,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 43. Expected D, received F
+### 46. Expected D, received F
 
-- Rows: `90, 130, 170, 210`; occurrences: `4`
+- Rows: `94, 138, 182`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to centrally manage multiple AWS accounts and apply service control policies.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to centrally manage multiple AWS accounts and apply service control policies.`
@@ -582,9 +621,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 44. Expected D, received F
+### 47. Expected D, received F
 
-- Rows: `74, 114, 154, 194`; occurrences: `4`
+- Rows: `76, 120, 164, 208`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.`
@@ -595,7 +634,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 45. Expected C, received F
+### 48. Expected C, received F
 
 - Rows: `38`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -608,9 +647,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 46. Expected D, received F
+### 49. Expected D, received F
 
-- Rows: `76, 116, 156, 196`; occurrences: `4`
+- Rows: `78, 122, 166, 210`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.`
@@ -621,7 +660,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 47. Expected D, received F
+### 50. Expected D, received F
 
 - Rows: `51`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -634,9 +673,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Runtime exact-service guard treated the answer as a wrong option before partial-credit semantics were considered.
 
-### 48. Expected D, received F
+### 51. Expected D, received F
 
-- Rows: `84, 124, 164, 204`; occurrences: `4`
+- Rows: `88, 132, 176`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to create point-in-time backups of block storage volumes for recovery or copying.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to create point-in-time backups of block storage volumes for recovery or copying.`
@@ -647,9 +686,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 49. Expected D, received F
+### 52. Expected D, received F
 
-- Rows: `82, 122, 162, 202`; occurrences: `4`
+- Rows: `86, 130, 174`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to create, publish, secure, monitor, and throttle APIs for backend services.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to create, publish, secure, monitor, and throttle APIs for backend services.`
@@ -660,9 +699,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 50. Expected D, received F
+### 53. Expected D, received F
 
-- Rows: `78, 118, 158, 198`; occurrences: `4`
+- Rows: `80, 124, 168, 212`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to decouple application components with a managed message queue.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to decouple application components with a managed message queue.`
@@ -673,9 +712,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 51. Expected D, received F
+### 54. Expected D, received F
 
-- Rows: `68, 108, 148, 188`; occurrences: `4`
+- Rows: `70, 114, 158, 202`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.`
@@ -686,9 +725,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 52. Expected D, received F
+### 55. Expected D, received F
 
-- Rows: `79, 119, 159, 199`; occurrences: `4`
+- Rows: `81, 125, 169, 213`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to fan out messages to multiple subscribers using a managed pub/sub service.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to fan out messages to multiple subscribers using a managed pub/sub service.`
@@ -699,9 +738,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 53. Expected D, received F
+### 56. Expected D, received F
 
-- Rows: `57, 97, 137, 177`; occurrences: `4`
+- Rows: `57, 101, 145, 189`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.`
@@ -712,9 +751,22 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 54. Expected D, received F
+### 57. Expected D, received F
 
-- Rows: `59, 99, 139, 179`; occurrences: `4`
+- Rows: `69, 113, 157, 201`; occurrences: `4`
+- Question: Explain which AWS service or feature should be used to horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type.
+- Expected rating: `0.65`
+- User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type.`
+- Correct answer: Auto Scaling groups
+- Raw model score: `25.00`; runtime score: `25`
+- Runtime feedback: This answer restates the question without identifying and explaining the solution.
+- Reviewer feedback: Generated question-restatement negative example: this answer rewords the prompt without identifying the correct AWS service, feature, or reasoning.
+- Largest feature contributions: `semantic_similarity_score` +0.250
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+
+### 58. Expected D, received F
+
+- Rows: `59, 103, 147, 191`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.`
@@ -725,22 +777,34 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 55. Expected A, received B
+### 59. Expected B, received C
+
+- Rows: `4`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
+- Expected rating: `0.85`
+- User answer: `AWS Kinesis`
+- Correct answer: Amazon Kinesis Data Streams
+- Raw model score: `75.00`; runtime score: `75`
+- Runtime feedback: Name the specific AWS service or feature required by the question.
+- Largest feature contributions: `semantic_similarity_score` +0.750
+- Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
+
+### 60. Expected A, received C
 
 - Rows: `28`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
 - Expected rating: `0.95`
 - User answer: `AWS Kinesis`
 - Correct answer: Amazon Kinesis Data Streams
-- Raw model score: `84.00`; runtime score: `84`
-- Runtime feedback: Please write full sentence answers for full credit.
+- Raw model score: `75.00`; runtime score: `75`
+- Runtime feedback: Name the specific AWS service or feature required by the question.
 - Reviewer feedback: This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one.
-- Largest feature contributions: `semantic_similarity_score` +0.840
+- Largest feature contributions: `semantic_similarity_score` +0.750
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 56. Expected D, received F
+### 61. Expected D, received F
 
-- Rows: `89, 129, 169, 209`; occurrences: `4`
+- Rows: `93, 137, 181`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.`
@@ -751,9 +815,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 57. Expected D, received F
+### 62. Expected D, received F
 
-- Rows: `81, 121, 161, 201`; occurrences: `4`
+- Rows: `85, 129, 173`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to orchestrate multi-step workflows and coordinate distributed application components.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to orchestrate multi-step workflows and coordinate distributed application components.`
@@ -764,9 +828,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 58. Expected D, received F
+### 63. Expected D, received F
 
-- Rows: `87, 127, 167, 207`; occurrences: `4`
+- Rows: `91, 135, 179`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to perform serverless data integration, cataloging, and ETL jobs.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to perform serverless data integration, cataloging, and ETL jobs.`
@@ -777,9 +841,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 59. Expected D, received F
+### 64. Expected D, received F
 
-- Rows: `60, 100, 140, 180`; occurrences: `4`
+- Rows: `60, 104, 148, 192`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.`
@@ -790,9 +854,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 60. Expected D, received F
+### 65. Expected D, received F
 
-- Rows: `96, 136, 176, 216`; occurrences: `4`
+- Rows: `100, 144, 188`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to protect web applications from common web exploits using rules.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to protect web applications from common web exploits using rules.`
@@ -803,9 +867,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 61. Expected D, received F
+### 66. Expected D, received F
 
-- Rows: `64, 104, 144, 184`; occurrences: `4`
+- Rows: `65, 109, 153, 197`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.`
@@ -816,9 +880,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 62. Expected D, received F
+### 67. Expected D, received F
 
-- Rows: `92, 132, 172, 212`; occurrences: `4`
+- Rows: `96, 140, 184`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.`
@@ -829,9 +893,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 63. Expected D, received F
+### 68. Expected D, received F
 
-- Rows: `70, 110, 150, 190`; occurrences: `4`
+- Rows: `72, 116, 160, 204`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.`
@@ -842,9 +906,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 64. Expected D, received F
+### 69. Expected D, received F
 
-- Rows: `83, 123, 163, 203`; occurrences: `4`
+- Rows: `87, 131, 175`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to provide shared elastic file storage that can be mounted by multiple compute resources.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide shared elastic file storage that can be mounted by multiple compute resources.`
@@ -855,9 +919,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 65. Expected D, received F
+### 70. Expected D, received F
 
-- Rows: `72, 112, 152, 192`; occurrences: `4`
+- Rows: `74, 118, 162, 206`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.`
@@ -868,9 +932,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 66. Expected D, received F
+### 71. Expected D, received F
 
-- Rows: `62, 102, 142, 182`; occurrences: `4`
+- Rows: `63, 107, 151, 195`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.`
@@ -881,7 +945,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 67. Expected D, received F
+### 72. Expected D, received F
 
 - Rows: `50`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
@@ -893,9 +957,22 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 68. Expected D, received F
+### 73. Expected D, received F
 
-- Rows: `88, 128, 168, 208`; occurrences: `4`
+- Rows: `82, 126, 170, 214`; occurrences: `4`
+- Question: Explain which AWS service or feature should be used to publish the same event to multiple independent subscribers without requiring each subscriber to poll a shared work queue.
+- Expected rating: `0.65`
+- User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to publish the same event to multiple independent subscribers without requiring each subscriber to poll a shared work queue.`
+- Correct answer: Amazon SNS
+- Raw model score: `25.00`; runtime score: `25`
+- Runtime feedback: This answer restates the question without identifying and explaining the solution.
+- Reviewer feedback: Generated question-restatement negative example: this answer rewords the prompt without identifying the correct AWS service, feature, or reasoning.
+- Largest feature contributions: `semantic_similarity_score` +0.250
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+
+### 74. Expected D, received F
+
+- Rows: `92, 136, 180`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to query data in Amazon S3 using SQL without managing servers.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to query data in Amazon S3 using SQL without managing servers.`
@@ -906,9 +983,22 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 69. Expected D, received F
+### 75. Expected A, received C
 
-- Rows: `73, 113, 153, 193`; occurrences: `4`
+- Rows: `22, 23, 35`; occurrences: `3`
+- Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
+- Expected rating: `0.95`
+- User answer: `AWS Cloud trail is used to record AWS API activity for auditing.`
+- Correct answer: AWS CloudTrail
+- Raw model score: `79.00`; runtime score: `79`
+- Runtime feedback: Name the specific AWS service or feature required by the question.
+- Reviewer feedback: I entered a freeform version of the correct answer.
+- Largest feature contributions: `semantic_similarity_score` +0.790
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 76. Expected D, received F
+
+- Rows: `75, 119, 163, 207`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.`
@@ -919,9 +1009,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 70. Expected D, received F
+### 77. Expected D, received F
 
-- Rows: `65, 105, 145, 185`; occurrences: `4`
+- Rows: `66, 110, 154, 198`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.`
@@ -932,9 +1022,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 71. Expected D, received F
+### 78. Expected D, received F
 
-- Rows: `93, 133, 173, 213`; occurrences: `4`
+- Rows: `97, 141, 185`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to review workloads against AWS best practices and identify improvement opportunities.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to review workloads against AWS best practices and identify improvement opportunities.`
@@ -945,9 +1035,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 72. Expected D, received F
+### 79. Expected D, received F
 
-- Rows: `80, 120, 160, 200`; occurrences: `4`
+- Rows: `84, 128, 172, 216`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.`
@@ -958,7 +1048,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 73. Expected D, received F
+### 80. Expected D, received F
 
 - Rows: `5`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
@@ -970,9 +1060,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 74. Expected D, received F
+### 81. Expected D, received F
 
-- Rows: `86, 126, 166, 206`; occurrences: `4`
+- Rows: `90, 134, 178`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to run analytical queries against a managed petabyte-scale data warehouse.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to run analytical queries against a managed petabyte-scale data warehouse.`
@@ -983,9 +1073,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 75. Expected D, received F
+### 82. Expected D, received F
 
-- Rows: `66, 106, 146, 186`; occurrences: `4`
+- Rows: `67, 111, 155, 199`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.`
@@ -996,9 +1086,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 76. Expected D, received F
+### 83. Expected D, received F
 
-- Rows: `63, 103, 143, 183`; occurrences: `4`
+- Rows: `64, 108, 152, 196`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.`
@@ -1009,9 +1099,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 77. Expected D, received F
+### 84. Expected D, received F
 
-- Rows: `91, 131, 171, 211`; occurrences: `4`
+- Rows: `95, 139, 183`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.`
@@ -1022,9 +1112,21 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 78. Expected D, received F
+### 85. Expected B, received C
 
-- Rows: `85, 125, 165, 205`; occurrences: `4`
+- Rows: `3`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.
+- Expected rating: `0.85`
+- User answer: `AWS Glacier`
+- Correct answer: S3 Glacier storage classes
+- Raw model score: `79.00`; runtime score: `79`
+- Runtime feedback: Name the specific AWS service or feature required by the question.
+- Largest feature contributions: `semantic_similarity_score` +0.790
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
+
+### 86. Expected D, received F
+
+- Rows: `89, 133, 177`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.`
@@ -1035,7 +1137,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 79. Expected D, received F
+### 87. Expected D, received F
 
 - Rows: `2`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -1047,9 +1149,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 80. Expected D, received F
+### 88. Expected D, received F
 
-- Rows: `77, 117, 157, 197`; occurrences: `4`
+- Rows: `79, 123, 167, 211`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.`
@@ -1060,9 +1162,21 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 81. Expected D, received F
+### 89. Expected B, received C
 
-- Rows: `58, 98, 138, 178`; occurrences: `4`
+- Rows: `9`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
+- Expected rating: `0.85`
+- User answer: `AWS Cost Center`
+- Correct answer: AWS Budgets
+- Raw model score: `79.00`; runtime score: `79`
+- Runtime feedback: Name the specific AWS service or feature required by the question.
+- Largest feature contributions: `semantic_similarity_score` +0.790
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
+
+### 90. Expected D, received F
+
+- Rows: `58, 102, 146, 190`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.`
@@ -1073,9 +1187,9 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 82. Expected D, received F
+### 91. Expected D, received F
 
-- Rows: `75, 115, 155, 195`; occurrences: `4`
+- Rows: `77, 121, 165, 209`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.`
@@ -1086,7 +1200,20 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 83. Expected D, received F
+### 92. Expected D, received F
+
+- Rows: `62, 106, 150, 194`; occurrences: `4`
+- Question: Explain which AWS service or feature should be used to transition old S3 objects to lower-cost storage classes and expire them after a retention period without changing bucket access permissions.
+- Expected rating: `0.65`
+- User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to transition old S3 objects to lower-cost storage classes and expire them after a retention period without changing bucket access permissions.`
+- Correct answer: S3 lifecycle policies
+- Raw model score: `25.00`; runtime score: `25`
+- Runtime feedback: This answer restates the question without identifying and explaining the solution.
+- Reviewer feedback: Generated question-restatement negative example: this answer rewords the prompt without identifying the correct AWS service, feature, or reasoning.
+- Largest feature contributions: `semantic_similarity_score` +0.250
+- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
+
+### 93. Expected D, received F
 
 - Rows: `249`; occurrences: `1`
 - Question: Multiple Lambda functions use the same internal utility library, and the team wants to manage that library separately from each function package. Which Lambda feature should the developer use?
@@ -1099,7 +1226,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 84. Expected D, received F
+### 94. Expected D, received F
 
 - Rows: `251`; occurrences: `1`
 - Question: Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?
@@ -1112,7 +1239,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 85. Expected D, received F
+### 95. Expected D, received F
 
 - Rows: `252`; occurrences: `1`
 - Question: Review the Lambda handler. What security problem should the developer fix before deployment, and what AWS service is the best fit?
@@ -1125,7 +1252,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 86. Expected D, received F
+### 96. Expected D, received F
 
 - Rows: `254`; occurrences: `1`
 - Question: Review the SAM template. The function deploys but receives AccessDenied when it calls GetItem. What is missing from the template?
@@ -1138,7 +1265,20 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 87. Expected D, received F
+### 97. Expected C, received D
+
+- Rows: `52`; occurrences: `1`
+- Question: Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?
+- Expected rating: `0.75`
+- User answer: `The bucket contains more objects than a single ListObjectsV2 response can return.`
+- Correct answer: an S3 ListObjectsV2 paginator and iterate through every page
+- Raw model score: `65.00`; runtime score: `65`
+- Runtime feedback: 
+- Reviewer feedback: -- I think you gave away the answer in the question.
+- Largest feature contributions: `semantic_similarity_score` +0.650
+- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
+
+### 98. Expected D, received F
 
 - Rows: `253`; occurrences: `1`
 - Question: Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?
@@ -1151,7 +1291,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 88. Expected D, received F
+### 99. Expected D, received F
 
 - Rows: `241`; occurrences: `1`
 - Question: Several Lambda functions need to read shared non-rotating configuration values organized by application and environment path. Which AWS service should the developer use?
@@ -1164,7 +1304,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 89. Expected D, received F
+### 100. Expected D, received F
 
 - Rows: `247`; occurrences: `1`
 - Question: Several services publish domain events, and the platform team wants rules to route matching custom events to different Lambda targets without direct service-to-service calls. Which EventBridge resource should be used?
@@ -1177,7 +1317,7 @@ Amazon S3 addresses a different AWS need: the AWS object storage family for buck
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 90. Expected D, received F
+### 101. Expected D, received F
 
 - Rows: `219`; occurrences: `1`
 - Question: Two application instances may try to create the same DynamoDB item at the same time. Which DynamoDB write approach should the developer use to prevent replacing an existing item?

@@ -12,6 +12,8 @@ import re
 from statistics import mean
 from typing import Iterable
 
+from aws_certification_coach.questions.visibility import visible_question_rows
+
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 DEFAULT_WEIGHTS = {
@@ -116,10 +118,20 @@ class QuestionFidelityModel:
 
 
 def evaluate_question_batch(sources: Iterable[dict[str, object]], generated_questions: Iterable[dict[str, object]]) -> dict[str, object]:
-    source_by_id = {str(source["source_id"]): source for source in sources}
+    generated_rows = visible_question_rows(generated for generated in generated_questions if isinstance(generated, dict))
+    visible_source_ids = {
+        source_id
+        for generated in generated_rows
+        for source_id in _string_list(generated.get("source_examples", []))
+    }
+    source_by_id = {
+        str(source["source_id"]): source
+        for source in sources
+        if isinstance(source, dict) and str(source.get("source_id", "")) in visible_source_ids
+    }
     model = QuestionFidelityModel()
     scored_rows = []
-    for generated in generated_questions:
+    for generated in generated_rows:
         source_ids = _string_list(generated.get("source_examples", []))
         if not source_ids:
             raise ValueError("Generated question is missing source_examples.")

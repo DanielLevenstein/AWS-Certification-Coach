@@ -407,9 +407,9 @@ def _is_exact_correct_answer(question: Question, answer: str) -> bool:
 
 def _service_aliases(question: Question) -> set[str]:
     correct_options, _incorrect_options = _option_texts(question)
-    values = {_strip_leading_use(option) for option in correct_options}
+    values = {_service_alias_value(option) for option in correct_options}
     values.update(_service_alias_value(answer) for answer in question.acceptable_answers)
-    values.add(_strip_leading_use(correct_answer_text(question)))
+    values.add(_service_alias_value(correct_answer_text(question)))
     concepts = _required_concepts(question)
     if concepts:
         values.add(_normalized(concepts[0]))
@@ -429,7 +429,7 @@ def _service_aliases(question: Question) -> set[str]:
         aliases.update(
             token
             for token in distinctive_tokens
-            if token not in AMBIGUOUS_ALIAS_TOKENS and len(token) > 2
+            if token in SERVICE_FAMILY_TOKENS and token not in AMBIGUOUS_ALIAS_TOKENS and len(token) > 2
         )
         for token in distinctive_tokens:
             aliases.update(KNOWLEDGE_BASE.aliases_for_service_token(token))
@@ -507,6 +507,8 @@ def _adjacent_service_score(question: Question, answer: str) -> int | None:
     answer_tokens = set(_tokens(answer))
     correct = _normalized(correct_answer_text(question))
     correct_tokens = set(correct.split())
+    if "s3 glacier storage classes" in correct and "glacier" in answer_tokens:
+        return 85
     if ("secretsmanager" in correct or {"secrets", "manager"} <= correct_tokens) and {"parameter", "store"} <= answer_tokens:
         return 65
     if "kms" in correct and "secretsmanager" in normalized_answer:

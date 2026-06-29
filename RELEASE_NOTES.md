@@ -36,7 +36,12 @@
 | v3.3.2   | Applies v3 feedback schema configuration, C-grade near-miss service handling, and grade distribution release charting.                                                              |
 | v3.3.4   | Setting the best wrong answer back to D in answer rubric.                                                                                                                           |
 | v3.4.1   | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                                                                            |
-| v3.4.2 | Update feedback explanations for wrong service selection |  
+| v3.4.2   | Update feedback explanations for wrong service selection                                                                                                                            |  
+| v3.5.2   | Grade tuning based on user feedback                                                                                                                                                 |
+| v3.5.2.1 | Fix duplicate DynamoDB documentation links in the documentation/source section.                                                                                                     |
+| v3.6.0   | Added question_category taxonomy coverage to generated app questions.                                                                                                               |
+| v3.6.1   | Put configuration questions behind an env variable                                                                                                                                  |
+
 # Release Metrics
 
 ## Metric Definitions:
@@ -83,6 +88,8 @@
 | v3.3.2   |            96.79% |             98.33% |          98.74% |                94.38% |          97.99% |            94.95% |
 | v3.3.4   |            99.20% |            100.00% |          99.17% |                98.80% |         100.00% |            94.95% |
 | v3.4.1   |            99.20% |            100.00% |          99.17% |                98.80% |         100.00% |            94.95% |
+| v3.5.2   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            94.95% |
+| v3.6.1   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 
 ## Grade Band Precision
 | Release |       A |     B&C |     D&F |
@@ -95,6 +102,7 @@
 | v3.3.2  |  92.31% |  64.71% |  98.17% |
 | v3.3.4  | 100.00% |  92.31% | 100.00% |
 | v3.4.1  | 100.00% |  92.31% | 100.00% |
+| v3.5.2  | 100.00% | 90.00% | 98.25% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |       D |      F |
@@ -113,6 +121,7 @@
 | v3.3.2   |  92.31% | 83.33% |  54.55% |  98.09% | 70.00% |
 | v3.3.4   | 100.00% | 83.33% | 100.00% | 100.00% | 77.78% |
 | v3.4.1   | 100.00% | 83.33% | 100.00% | 100.00% | 77.78% |
+| v3.4.2   | 100.00% | 80.00% | 100.00% | 98.17% | 77.78% |
 
 For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
 
@@ -146,41 +155,41 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 ## Current Coverage
 
-![Release Metrics Chart](release/question_coverage_metrics_chart.png)
+![Release Metrics Chart](release/v3.6.0_question_coverage_metrics_chart.png)
 
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.4.2 | 99.20% | 100.00% | 99.17% | 98.80% | 100.00% | 94.95% |
+| v3.6.1 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 95.12% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 100.00% | 92.31% | 100.00% |
-| Recall | 92.31% | 100.00% | 100.00% |
-| F1 | 96.00% | 96.00% | 100.00% |
+| Precision | 100.00% | 90.00% | 98.25% |
+| Recall | 84.62% | 75.00% | 100.00% |
+| F1 | 91.67% | 81.82% | 99.12% |
 | Support | 13 | 12 | 224 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 100.00% | 83.33% | 100.00% | 100.00% | 77.78% |
-| Recall | 92.31% | 100.00% | 100.00% | 99.08% | 100.00% |
-| F1 | 96.00% | 90.91% | 100.00% | 99.54% | 87.50% |
+| Precision | 100.00% | 80.00% | 100.00% | 98.17% | 77.78% |
+| Recall | 84.62% | 80.00% | 71.43% | 99.08% | 100.00% |
+| F1 | 91.67% | 80.00% | 83.33% | 98.62% | 87.50% |
 | Support | 13 | 5 | 7 | 217 | 7 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
-Developer source question count: `38`
-App question count: `198`
+Developer source question count: `34`
+App question count: `194`
 Question coverage domain count: `15`
-Question coverage concept count: `288`
-Question coverage intent count: `5`
-Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
+Question coverage concept count: `285`
+Question coverage question-category count: `14`
+Top covered concepts: `fanout, S3 Lifecycle, object expiration, Amazon RDS, replication, low latency, Auto Scaling, EC2, health checks, SQS, message queue, decoupling`
 Knowledge base schema version: `3`
 Knowledge base file size: `70127` bytes
 Knowledge base syntax alias count: `18`

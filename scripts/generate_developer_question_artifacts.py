@@ -62,6 +62,7 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
             "domain": source["domain"],
             "difficulty": source["difficulty"],
             "question_type": str(source.get("question_type", "scenario_multiple_choice")),
+            "question_category": _question_category(source),
             "question": question_text,
             "reference_answer": reference_answer,
             "key_concepts": concepts,
@@ -172,6 +173,39 @@ def _scenario_purpose(source: dict[str, object], reference_answer: str) -> str:
     return reference_answer.strip().rstrip(".") or "satisfy the developer workflow"
 
 
+def _question_category(source: dict[str, object]) -> str:
+    text = " ".join(
+        str(source.get(field, ""))
+        for field in (
+            "domain",
+            "task_statement",
+            "exam_style_notes",
+            "distractor_pattern",
+            "reasoning_pattern",
+            "expected_issue",
+        )
+    ).casefold()
+    text = f"{text} {' '.join(str(concept) for concept in source.get('concepts', []))}".casefold()
+
+    if _has_any(text, ["secret", "credential", "authorizer", "permission", "policy", "least privilege", "kms"]):
+        return "security_identity"
+    if _has_any(text, ["queue", "sqs", "sns", "event", "stream", "async", "step functions", "lambda"]):
+        return "integration_workflows"
+    if _has_any(text, ["latency", "trace", "x-ray", "logs insights", "troubleshoot", "diagnose"]):
+        return "latency_tradeoff"
+    if _has_any(text, ["ttl", "lifecycle", "expiration", "retention", "archive"]):
+        return "cost_tradeoff"
+    if _has_any(text, ["dead-letter", "dlq", "fail", "retry", "rollback", "transaction"]):
+        return "durability_availability_tradeoff"
+    if _has_any(text, ["managed", "deployment", "build", "configuration", "throttling", "quota", "pagination"]):
+        return "operational_complexity_tradeoff"
+    return "integration_workflows"
+
+
+def _has_any(text: str, needles: list[str]) -> bool:
+    return any(needle in text for needle in needles)
+
+
 def _artifact_metadata(source: dict[str, object]) -> dict[str, object]:
     if source.get("question_type") != "artifact_review":
         return {}
@@ -180,6 +214,7 @@ def _artifact_metadata(source: dict[str, object]) -> dict[str, object]:
         "artifact_language": str(source.get("artifact_language", "")),
         "artifact_body": str(source.get("artifact_body", "")),
         "artifact_context": str(source.get("artifact_context", "")),
+        "artifact_corrected": str(source.get("artifact_corrected", "")),
         "expected_issue": str(source.get("expected_issue", "")),
     }
 

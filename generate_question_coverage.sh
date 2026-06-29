@@ -32,7 +32,7 @@ case "$1" in
     cp -p release/metrics/question_intent_coverage.png "release/question_intent_coverage.png"
     cp -p release/metrics/question_certification_coverage.png "release/question_certification_coverage.png"
     echo "Saved latest domain coverage chart: release/question_domain_coverage.png"
-    echo "Saved latest question intent coverage chart: release/question_intent_coverage.png"
+    echo "Saved latest question category coverage chart: release/question_intent_coverage.png"
     echo "Saved latest certification coverage chart: release/question_certification_coverage.png"
     ;;
 esac

@@ -29,7 +29,7 @@ def main() -> None:
     rows = json.loads(args.questions.read_text(encoding="utf-8"))
     if not isinstance(rows, list):
         raise ValueError(f"Question file must contain a list: {args.questions}")
-    metrics = measure_question_coverage([row for row in rows if isinstance(row, dict)])
+    metrics = measure_question_coverage(row for row in rows if isinstance(row, dict))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
     chart_outputs = plot_question_coverage_artifacts(metrics, args.chart_output_dir)

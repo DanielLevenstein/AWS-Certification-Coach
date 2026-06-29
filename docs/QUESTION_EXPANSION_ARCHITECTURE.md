@@ -420,7 +420,8 @@ These two flows can use similar evidence fields, such as covered concepts and mi
 
 The proposed question types should have an explicit schema before implementation. A useful minimum contract would include:
 
-- `question_type`: `multiple_choice`, `scenario_multiple_choice`, `multi_select_source`, `service_selection`, `service_comparison`, or `architecture_tradeoff`.
+- `question_type`: `multiple_choice`, `scenario_multiple_choice`, `multi_select_source`, `service_selection`, `service_comparison`, `architecture_tradeoff`, or `artifact_review`.
+- `question_category`: a graph/taxonomy category such as `security_identity`, `integration_workflows`, `observability_governance`, `cost_tradeoff`, `scaling_performance`, `resilience_recovery`, `data_analytics`, `networking_delivery`, or another configured category.
 - `certification` and `exam_code`.
 - `domain` and, when available, exam-guide task statement.
 - `difficulty`.

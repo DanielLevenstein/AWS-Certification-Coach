@@ -6,6 +6,7 @@ import json
 import re
 from pathlib import Path
 from dataclasses import dataclass
+from difflib import SequenceMatcher
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.knowledge_base import load_knowledge_base
@@ -117,6 +118,14 @@ def _evaluation_response(
 ) -> str:
     if _is_exact_correct_option(question, user_answer):
         model_score = max(model_score, _exact_correct_option_score(question, user_answer))
+    if _is_exact_corrected_artifact_answer(question, user_answer):
+        payload = {
+            "score": EXACT_CORRECT_OPTION_SCORE,
+            "missing_concepts": [],
+            "suggested_improvements": [],
+            "detailed_answer": question.reference_answer,
+        }
+        return json.dumps(payload)
     prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
     if _is_question_restatement(question, user_answer):
         missing = _missing_concepts(question, user_answer)
@@ -152,6 +161,17 @@ def _evaluation_response(
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
+    reasoning_issue = _correct_service_wrong_reasoning_issue(question, user_answer)
+    if reasoning_issue:
+        missing = _missing_concepts(question, user_answer)
+        payload = {
+            "score": min(int(model_score), 79),
+            "missing_concepts": missing,
+            "suggested_improvements": [f"Explain {concept}." for concept in missing],
+            "feedback": reasoning_issue,
+            "detailed_answer": question.reference_answer,
+        }
+        return json.dumps(payload)
     grading_issue = _incorrect_service_answer_issue(question, user_answer)
     if grading_issue:
         missing = _missing_concepts(question, user_answer)
@@ -160,6 +180,17 @@ def _evaluation_response(
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": grading_issue,
+            "detailed_answer": question.reference_answer,
+        }
+        return json.dumps(payload)
+    missing_service_issue = _missing_required_service_name_issue(question, user_answer, model_score)
+    if missing_service_issue:
+        missing = _missing_concepts(question, user_answer)
+        payload = {
+            "score": min(int(model_score), 79),
+            "missing_concepts": missing,
+            "suggested_improvements": [f"Explain {concept}." for concept in missing],
+            "feedback": missing_service_issue,
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -228,6 +259,22 @@ def _incorrect_service_answer_issue(question: Question, user_answer: str) -> str
     return None
 
 
+def _correct_service_wrong_reasoning_issue(question: Question, user_answer: str) -> str | None:
+    if not _answer_names_expected_service_or_feature(question, user_answer):
+        return None
+    if _answer_uses_wrong_service_reasoning(question, user_answer):
+        return "The answer names the correct service but includes reasoning for a different AWS concept."
+    return None
+
+
+def _missing_required_service_name_issue(question: Question, user_answer: str, model_score: float) -> str | None:
+    if _answer_names_expected_service_or_feature(question, user_answer):
+        return None
+    if model_score < 70 and not _answer_covers_required_nonservice_concepts(question, user_answer):
+        return None
+    return "Name the specific AWS service or feature required by the question."
+
+
 def _rubric_claim_issue(question: Question, user_answer: str) -> dict[str, str] | None:
     for index, claim in enumerate(question.must_not_claim):
         if _answer_affirms_claim(user_answer, claim):
@@ -250,6 +297,84 @@ def _do_not_claim_feedback(question: Question, index: int, claim: str) -> str:
         if explanation:
             return explanation
     return f"Do not claim this for this question: {claim}"
+
+
+def _answer_names_expected_service_or_feature(question: Question, user_answer: str) -> bool:
+    normalized_answer = _normalized_service_answer(user_answer)
+    for term in _expected_service_or_feature_terms(question):
+        normalized_term = _normalized_service_answer(term)
+        term_tokens = _service_term_tokens(normalized_term)
+        if not term_tokens:
+            continue
+        if normalized_term and re.search(rf"\b{re.escape(normalized_term)}\b", normalized_answer):
+            return True
+        answer_tokens = set(TOKEN_PATTERN.findall(normalized_answer))
+        if term_tokens <= answer_tokens:
+            return True
+    return False
+
+
+def _expected_service_or_feature_terms(question: Question) -> tuple[str, ...]:
+    terms = []
+    if _required_concepts(question):
+        terms.append(_required_concepts(question)[0])
+    terms.extend(question.acceptable_answers)
+    if question.original_multiple_choice:
+        correct_ids = set(question.original_multiple_choice.correct_option_ids)
+        terms.extend(
+            option.text
+            for option in question.original_multiple_choice.options
+            if option.option_id in correct_ids
+        )
+    return tuple(dict.fromkeys(term for term in terms if term.strip()))
+
+
+def _service_term_tokens(term: str) -> set[str]:
+    tokens = set(TOKEN_PATTERN.findall(term.casefold())) - GENERIC_SERVICE_TOKENS
+    return tokens
+
+
+def _answer_covers_required_nonservice_concepts(question: Question, user_answer: str) -> bool:
+    answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold()))
+    matched_tokens = set()
+    for concept in _required_concepts(question)[1:]:
+        concept_tokens = set(TOKEN_PATTERN.findall(concept.casefold())) - GENERIC_SERVICE_TOKENS
+        matched_tokens.update(answer_tokens & concept_tokens)
+    return len(matched_tokens) >= 2
+
+
+def _answer_uses_wrong_service_reasoning(question: Question, user_answer: str) -> bool:
+    answer_tokens = set(TOKEN_PATTERN.findall(user_answer.casefold())) - GENERIC_SERVICE_TOKENS
+    if not answer_tokens:
+        return False
+    for claim in (*question.common_misconceptions, *question.must_not_claim):
+        service = load_knowledge_base().service_for_name(_claim_subject(claim))
+        if service is None:
+            continue
+        service_name_tokens = set(TOKEN_PATTERN.findall(service.name.casefold()))
+        wrong_reasoning_tokens = (
+            set(TOKEN_PATTERN.findall(service.description.casefold()))
+            - GENERIC_SERVICE_TOKENS
+            - service_name_tokens
+        )
+        if len(answer_tokens & wrong_reasoning_tokens) >= 2:
+            return True
+    return False
+
+
+def _claim_subject(claim: str) -> str:
+    normalized = claim.strip()
+    lowered = normalized.casefold()
+    for separator in (
+        " satisfies ",
+        " is the best ",
+        " is best ",
+        " is the better ",
+        " is better ",
+    ):
+        if separator in lowered:
+            return normalized[: lowered.index(separator)].strip()
+    return normalized
 
 
 def _answer_affirms_claim(user_answer: str, claim: str) -> bool:
@@ -339,6 +464,41 @@ def _is_exact_correct_option(question: Question, user_answer: str) -> bool:
         for option in original.options
         if option.option_id in correct_ids
     }
+
+
+def _is_exact_corrected_artifact_answer(question: Question, user_answer: str) -> bool:
+    if question.question_type != "artifact_review" or not question.artifact_corrected:
+        return False
+    normalized_answer = _normalized_code_answer(user_answer)
+    if not normalized_answer:
+        return False
+    expected_answers = {
+        _normalized_code_answer(question.artifact_corrected),
+        _normalized_code_answer("\n".join(_changed_corrected_artifact_lines(question))),
+    }
+    return normalized_answer in {answer for answer in expected_answers if answer}
+
+
+def _changed_corrected_artifact_lines(question: Question) -> list[str]:
+    original_lines = question.artifact_body.splitlines()
+    corrected_lines = question.artifact_corrected.splitlines()
+    changed_lines: list[str] = []
+    matcher = SequenceMatcher(a=original_lines, b=corrected_lines)
+    for tag, _original_start, _original_end, corrected_start, corrected_end in matcher.get_opcodes():
+        if tag != "equal":
+            changed_lines.extend(corrected_lines[corrected_start:corrected_end])
+    return changed_lines
+
+
+def _normalized_code_answer(value: str) -> str:
+    normalized_lines = []
+    for line in value.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("+") and not stripped.startswith("++"):
+            stripped = stripped[1:].strip()
+        if stripped:
+            normalized_lines.append(stripped)
+    return "\n".join(normalized_lines)
 
 
 def _exact_correct_option_score(question: Question, user_answer: str) -> int:
