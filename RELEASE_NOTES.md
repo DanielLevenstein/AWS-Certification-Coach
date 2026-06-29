@@ -12,7 +12,6 @@
 | v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                              |
 | v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                        | 
 | v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                   |
-| v3.0.0   | Tag v2.6.x has been retagged as v3.0.x since it's a major schema change.                                                           |
 | v3.0.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.           |
 | v3.0.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                           |
 | v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
