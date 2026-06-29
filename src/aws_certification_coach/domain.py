@@ -27,6 +27,7 @@ class Question:
     key_concepts: list[str]
     source_url: str = ""
     question_type: str = "service_selection"
+    question_category: str = "operational_complexity_tradeoff"
     required_concepts: list[str] = field(default_factory=list)
     bonus_concepts: list[str] = field(default_factory=list)
     common_misconceptions: list[str] = field(default_factory=list)

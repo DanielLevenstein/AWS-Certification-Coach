@@ -76,6 +76,14 @@ def test_sample_question_artifact_includes_answer_rubric_contract():
             assert len(row["do_not_claim_explanation"]) <= len(row["must_not_claim"])
 
 
+def test_sample_question_artifact_requires_question_category():
+    rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
+
+    assert rows
+    assert all(row.get("question_category") for row in rows)
+    assert all(row.get("question_category") != "general" for row in rows)
+
+
 def test_existing_question_rows_load_without_rubric_metadata():
     question = question_from_json(
         {
@@ -85,10 +93,12 @@ def test_existing_question_rows_load_without_rubric_metadata():
             "question": "Which service manages encryption keys?",
             "reference_answer": "Use AWS KMS to create and manage encryption keys.",
             "key_concepts": ["AWS KMS", "encryption keys"],
+            "question_category": "security_identity",
         }
     )
 
     assert question.question_type == "service_selection"
+    assert question.question_category == "security_identity"
     assert question.schema_version == 1
     assert question.required_concepts == ["AWS KMS", "encryption keys"]
     assert question.acceptable_answers == []
@@ -110,6 +120,7 @@ def test_original_multiple_choice_options_preserve_metadata():
             "question": "Which feature manages users?",
             "reference_answer": "Use Amazon Cognito.",
             "key_concepts": ["Cognito"],
+            "question_category": "security_identity",
             "original_multiple_choice": {
                 "question": "Which feature manages users?",
                 "options": [
@@ -148,6 +159,7 @@ def test_artifact_review_question_rows_load_artifact_metadata():
             "expected_issue": "The policy is too broad.",
             "reference_answer": "Scope the policy to the required S3 object ARN.",
             "key_concepts": ["IAM policy", "least privilege"],
+            "question_category": "security_identity",
         }
     )
 
@@ -161,9 +173,9 @@ def test_artifact_review_question_rows_load_artifact_metadata():
 
 def test_sample_question_artifact_includes_developer_question_fidelity_metadata():
     rows = json.loads(QUESTION_ARTIFACT.read_text(encoding="utf-8"))
-    developer_rows = [row for row in rows if row.get("exam_code") == "DVA-C02"]
+    developer_rows = [row for row in rows if row.get("source_examples")]
 
-    assert len(developer_rows) >= 5
+    assert len(developer_rows) >= 38
     assert {row.get("certification") for row in developer_rows} == {"AWS Certified Developer"}
     assert all(row.get("source_examples") for row in developer_rows)
     assert all(row.get("question_fidelity", {}).get("question_fidelity_score", 0) >= 80 for row in developer_rows)

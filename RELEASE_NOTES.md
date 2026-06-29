@@ -37,9 +37,9 @@
 | v3.3.4   | Setting the best wrong answer back to D in answer rubric.                                                                                                                           |
 | v3.4.1   | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                                                                            |
 | v3.4.2   | Update feedback explanations for wrong service selection                                                                                                                            |  
-| v3.5.2 | Grade tuning based on user feedback                                                                                                                                                 |
+| v3.5.2   | Grade tuning based on user feedback                                                                                                                                                 |
 | v3.5.2.1 | Fix duplicate DynamoDB documentation links in the documentation/source section.                                                                                                     |
-| v3.5.3 | Added selection_category to service-selection category questions.                                                                                                                   |
+| v3.6.0   | Added question_category taxonomy coverage to generated app questions.                                                                                                               |
 # Release Metrics
 
 ## Metric Definitions:
@@ -152,14 +152,14 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 ## Current Coverage
 
-![Release Metrics Chart](release/question_coverage_metrics_chart.png)
+![Release Metrics Chart](release/v3.6.0_question_coverage_metrics_chart.png)
 
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.5.3 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 94.95% |
+| v3.6.0 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 94.95% |
 
 ## Grade Band Metrics
 
@@ -184,9 +184,9 @@ Question fidelity model: `question_fidelity_heuristic_v1`
 Developer source question count: `38`
 App question count: `198`
 Question coverage domain count: `15`
-Question coverage concept count: `288`
-Question coverage intent count: `5`
-Top covered concepts: `rules, Amazon S3, cost optimization, Amazon RDS, replication, low latency, serverless, health checks, AWS Organizations, SCPs, least privilege, Secrets Manager`
+Question coverage concept count: `297`
+Question coverage question-category count: `14`
+Top covered concepts: `fanout, S3 Lifecycle, object expiration, Amazon RDS, replication, low latency, Auto Scaling, EC2, health checks, SQS, message queue, decoupling`
 Knowledge base schema version: `3`
 Knowledge base file size: `70127` bytes
 Knowledge base syntax alias count: `18`

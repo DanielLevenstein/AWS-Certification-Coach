@@ -4,7 +4,7 @@
 
 This rubric defines a consistent answer-grading scale for AWS Certification Coach.
 
-The same grade language should apply across `multiple_choice`, `scenario_multiple_choice`, `multi_select_source`, `service_selection`, `service_comparison`, and `architecture_tradeoff` questions. Individual question types may use different evidence fields, but the final grade should mean the same thing to learners throughout the app.
+The same grade language should apply across `multiple_choice`, `scenario_multiple_choice`, `multi_select_source`, `service_selection`, `service_comparison`, `architecture_tradeoff`, and `artifact_review` questions. Individual question types may use different evidence fields, but the final grade should mean the same thing to learners throughout the app.
 
 This rubric evaluates learner answers. It is separate from question-fidelity scoring, which evaluates whether generated questions are safe, accurate, and exam-valid before release.
 
@@ -16,11 +16,10 @@ Use these terms consistently with `docs/QUESTION_EXPANSION_FEATURE.md` and `docs
 - `question fidelity`: release-facing score for generated question quality. It is not a learner grade.
 - `concept fidelity`: whether a generated question preserves the intended AWS concept, service boundary, decision point, and reasoning pattern.
 - `exam-style fidelity`: whether a generated question resembles permitted Developer Associate calibration patterns and requires applied exam reasoning.
-- `AWS-valid`: the question and reference answer are technically accurate according to AWS documentation.
+- `AWS-valid`: the question and reference answer are technically accurate, according to AWS documentation.
 - `exam-valid`: the question resembles a permitted Developer Associate exam-style calibration pattern and tests the expected domain reasoning.
 
-Use A/B/C/D/F only for learner answers. Generated-question review should use 0-100 fidelity scores, hard rejection rules, and accept/revise/reject decisions.
-
+Use A/B/C/D/F only for learner answers. 
 ## Grading Principles
 
 Grades should reflect conceptual distance from the best answer, not only whether the learner selected the exact expected option.

@@ -21,8 +21,7 @@ KNOWN_TEMPLATE_SLOTS = {
     "service_id",
     "service_name",
 }
-KNOWN_SELECTION_CATEGORIES = {
-    "general",
+KNOWN_QUESTION_CATEGORIES = {
     "cost_tradeoff",
     "operational_complexity_tradeoff",
     "latency_tradeoff",
@@ -30,6 +29,14 @@ KNOWN_SELECTION_CATEGORIES = {
     "managed_vs_self_managed_tradeoff",
     "event_driven_vs_batch_tradeoff",
     "security_boundary_tradeoff",
+    "resilience_recovery",
+    "scaling_performance",
+    "networking_delivery",
+    "security_identity",
+    "observability_governance",
+    "integration_workflows",
+    "data_analytics",
+    "storage_data_management",
 }
 FORBIDDEN_TEMPLATE_KEYS = {
     "answer",
@@ -68,7 +75,7 @@ class ServiceScenario:
     purpose: str
     key_concepts: tuple[str, ...]
     distractors: tuple[str, ...]
-    selection_category: str = "general"
+    question_category: str
 
 
 @dataclass(frozen=True)
@@ -141,7 +148,7 @@ def _load_question_templates(resolved_path: str) -> QuestionTemplateCatalog:
                 purpose=str(row["purpose"]),
                 key_concepts=tuple(str(value) for value in row["key_concepts"]),
                 distractors=tuple(str(value) for value in row["distractors"]),
-                selection_category=str(row.get("selection_category", "general")),
+                question_category=str(row["question_category"]),
             )
             for row in payload["service_scenarios"]
         ),
@@ -242,6 +249,7 @@ def _validate_service_scenario_row(row: object, index: int, source: Path) -> Non
         "purpose",
         "key_concepts",
         "distractors",
+        "question_category",
     }
     if not isinstance(row, dict) or required - row.keys():
         raise ValueError(f"Invalid service-scenario row {index}: {source}")
@@ -254,10 +262,10 @@ def _validate_service_scenario_row(row: object, index: int, source: Path) -> Non
             raise ValueError(f"Service-scenario row {index} has invalid {list_field}: {source}")
     if len(row["distractors"]) < 3:
         raise ValueError(f"Service-scenario row {index} needs at least three distractors: {source}")
-    selection_category = str(row.get("selection_category", "general"))
-    if selection_category not in KNOWN_SELECTION_CATEGORIES:
+    question_category = str(row["question_category"])
+    if question_category not in KNOWN_QUESTION_CATEGORIES:
         raise ValueError(
-            f"Service-scenario row {index} has unknown selection_category {selection_category!r}: {source}"
+            f"Service-scenario row {index} has unknown question_category {question_category!r}: {source}"
         )
 
 

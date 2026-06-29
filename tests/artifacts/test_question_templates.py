@@ -12,14 +12,21 @@ from scripts.generate_developer_question_artifacts import build_questions
 from scripts.download_developer_original_questions import SOURCE_ROWS
 
 
-EXPECTED_SELECTION_CATEGORIES = {
+EXPECTED_QUESTION_CATEGORIES = {
     "cost_tradeoff",
     "operational_complexity_tradeoff",
     "latency_tradeoff",
     "durability_availability_tradeoff",
     "managed_vs_self_managed_tradeoff",
     "event_driven_vs_batch_tradeoff",
-    "security_boundary_tradeoff",
+    "resilience_recovery",
+    "scaling_performance",
+    "networking_delivery",
+    "security_identity",
+    "observability_governance",
+    "integration_workflows",
+    "data_analytics",
+    "storage_data_management",
 }
 
 
@@ -43,8 +50,8 @@ def test_default_question_templates_keep_generation_mechanics_out_of_knowledge_b
     assert all(scenario.purpose for scenario in catalog.service_scenarios)
     assert all(scenario.key_concepts for scenario in catalog.service_scenarios)
     assert all(len(scenario.distractors) >= 3 for scenario in catalog.service_scenarios)
-    assert EXPECTED_SELECTION_CATEGORIES <= {
-        scenario.selection_category
+    assert EXPECTED_QUESTION_CATEGORIES <= {
+        scenario.question_category
         for scenario in catalog.service_scenarios
     }
     assert len(catalog.developer_question_scenarios) == 38
@@ -92,6 +99,7 @@ def test_developer_generator_uses_question_template_details_before_source_overri
     row = build_questions([source])[0]
 
     assert row["question"].startswith("A production Lambda function can overwhelm")
+    assert row["question_category"] == "integration_workflows"
     assert row["reference_answer"].startswith("Configure Lambda reserved concurrency")
     assert row["original_multiple_choice"]["options"][0]["text"] == "Configure Lambda reserved concurrency."
 
@@ -151,13 +159,29 @@ def test_generated_app_questions_include_template_source_and_normalized_option_m
     )
 
 
-def test_generated_app_questions_include_service_selection_categories():
+def test_generated_app_questions_include_question_category_categories():
     questions = _build_app_questions(len(load_question_templates().service_scenarios))
 
-    assert EXPECTED_SELECTION_CATEGORIES <= {
-        row["selection_category"]
+    assert EXPECTED_QUESTION_CATEGORIES <= {
+        row["question_category"]
         for row in questions
     }
+    assert "general" not in {
+        row["question_category"]
+        for row in questions
+    }
+
+
+def test_developer_generated_questions_include_question_categories():
+    questions = build_questions(SOURCE_ROWS)
+
+    assert questions
+    assert all(row["question_category"] for row in questions)
+    assert {
+        "security_identity",
+        "integration_workflows",
+        "operational_complexity_tradeoff",
+    } <= {row["question_category"] for row in questions}
 
 
 def test_generated_app_questions_expand_sns_sqs_boundary_cases():

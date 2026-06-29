@@ -58,6 +58,7 @@ def question_from_json(row: object) -> Question:
         "question",
         "reference_answer",
         "key_concepts",
+        "question_category",
     ]
     missing = [field for field in required if field not in row]
     if missing:
@@ -75,6 +76,7 @@ def question_from_json(row: object) -> Question:
         key_concepts=[str(concept) for concept in key_concepts],
         source_url=str(row.get("source_url", "")),
         question_type=str(row.get("question_type", "service_selection")),
+        question_category=str(row["question_category"]),
         required_concepts=_string_list_from_json(row.get("required_concepts", key_concepts)),
         bonus_concepts=_string_list_from_json(row.get("bonus_concepts", [])),
         common_misconceptions=_string_list_from_json(row.get("common_misconceptions", [])),
