@@ -40,7 +40,8 @@
 | v3.5.2   | Grade tuning based on user feedback                                                                                                                                                 |
 | v3.5.2.1 | Fix duplicate DynamoDB documentation links in the documentation/source section.                                                                                                     |
 | v3.6.0   | Added question_category taxonomy coverage to generated app questions.                                                                                                               |
-| v3.6.1   | Put configuration questions behind an env variable                                                                                                                                  |
+| v3.6.1   | Added Show Option selections to UI                                                                                                                                                  |
+| v3.6.2.1 | Added Question Category to UI                                                                                                                                                       |
 
 # Release Metrics
 
