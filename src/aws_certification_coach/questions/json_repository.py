@@ -29,6 +29,8 @@ class JsonQuestionRepository:
             questions = [q for q in questions if q.domain == filters.domain]
         if filters.difficulty:
             questions = [q for q in questions if q.difficulty == filters.difficulty]
+        if filters.question_category:
+            questions = [q for q in questions if q.question_category == filters.question_category]
         return questions
 
     def available_certifications(self) -> list[str]:
@@ -39,6 +41,9 @@ class JsonQuestionRepository:
 
     def available_difficulties(self) -> list[str]:
         return _unique_sorted(q.difficulty for q in self.all())
+
+    def available_question_categories(self) -> list[str]:
+        return _unique_sorted(q.question_category for q in self.all())
 
     def _load_questions(self) -> list[Question]:
         with self.path.open("r", encoding="utf-8") as f:
@@ -89,6 +94,7 @@ def question_from_json(row: object) -> Question:
         artifact_language=str(row.get("artifact_language", "")),
         artifact_body=str(row.get("artifact_body", "")),
         artifact_context=str(row.get("artifact_context", "")),
+        artifact_corrected=str(row.get("artifact_corrected", "")),
         expected_issue=str(row.get("expected_issue", "")),
     )
 
@@ -125,6 +131,9 @@ def _multiple_choice_from_json(value: object) -> MultipleChoiceQuestion | None:
                 text=str(option.get("text", "")),
                 source_url=str(option.get("source_url", "")),
                 metadata=_string_dict_from_json(option.get("metadata", {})),
+                artifact_body=str(option.get("artifact_body", "")),
+                artifact_language=str(option.get("artifact_language", "")),
+                artifact_context=str(option.get("artifact_context", "")),
             )
             for option in options
             if isinstance(option, dict)

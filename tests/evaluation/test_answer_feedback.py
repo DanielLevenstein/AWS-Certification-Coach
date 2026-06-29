@@ -2,7 +2,13 @@ import json
 
 import app
 
-from aws_certification_coach.domain import EvaluationResult, MultipleChoiceOption, MultipleChoiceQuestion, Question
+from aws_certification_coach.domain import (
+    EvaluationResult,
+    MultipleChoiceOption,
+    MultipleChoiceQuestion,
+    Question,
+    QuestionFilter,
+)
 from aws_certification_coach.evaluation.service import EvaluationService
 from aws_certification_coach.evaluation.trained_classifier_provider import SemanticSimilarityEvaluatorProvider
 
@@ -257,6 +263,164 @@ def test_service_description_without_required_service_name_does_not_receive_b_le
     assert result.feedback == "Name the specific AWS service or feature required by the question."
 
 
+def test_artifact_review_accepts_exact_corrected_config_as_correct_answer():
+    question = Question(
+        schema_version=1,
+        certification="AWS Certified Developer",
+        domain="Development with AWS Services",
+        difficulty="Medium",
+        question_type="artifact_review",
+        question="Review the SDK code.",
+        reference_answer="Use a paginator so the function reads every page of ListObjectsV2 results.",
+        key_concepts=["SDK pagination", "S3 ListObjectsV2", "paginator"],
+        required_concepts=["SDK pagination", "S3 ListObjectsV2", "paginator"],
+        artifact_type="sdk_usage",
+        artifact_language="python",
+        artifact_body=(
+            "import boto3\n\n"
+            "s3 = boto3.client(\"s3\")\n\n"
+            "def all_keys(bucket):\n"
+            "    response = s3.list_objects_v2(Bucket=bucket)\n"
+            "    return [item[\"Key\"] for item in response.get(\"Contents\", [])]"
+        ),
+        artifact_corrected=(
+            "import boto3\n\n"
+            "s3 = boto3.client(\"s3\")\n\n"
+            "def all_keys(bucket):\n"
+            "    paginator = s3.get_paginator(\"list_objects_v2\")\n"
+            "    keys = []\n"
+            "    for page in paginator.paginate(Bucket=bucket):\n"
+            "        keys.extend(item[\"Key\"] for item in page.get(\"Contents\", []))\n"
+            "    return keys"
+        ),
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(question, question.artifact_corrected)
+
+    assert result.score >= 90
+    assert result.feedback == ""
+
+
+def test_artifact_review_accepts_exact_changed_corrected_lines_as_correct_answer():
+    question = Question(
+        schema_version=1,
+        certification="AWS Certified Developer",
+        domain="Security",
+        difficulty="Medium",
+        question_type="artifact_review",
+        question="Review this policy.",
+        reference_answer="Scope the policy resource to the required S3 object ARN.",
+        key_concepts=["IAM policy", "least privilege", "S3 object ARN"],
+        required_concepts=["IAM policy", "least privilege", "S3 object ARN"],
+        artifact_type="iam_policy",
+        artifact_language="json",
+        artifact_body='{\n  "Resource": "*"\n}',
+        artifact_corrected='{\n  "Resource": "arn:aws:s3:::example-bucket/reports/*"\n}',
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(
+        question,
+        '+  "Resource": "arn:aws:s3:::example-bucket/reports/*"',
+    )
+
+    assert result.score >= 90
+    assert result.feedback == ""
+
+
+def test_app_hides_artifact_review_questions_unless_enabled(monkeypatch):
+    regular_question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Which service manages encryption keys?",
+        reference_answer="Use AWS KMS.",
+        key_concepts=["AWS KMS"],
+    )
+    artifact_question = Question(
+        certification="AWS Certified Developer",
+        domain="Security",
+        difficulty="Medium",
+        question_type="artifact_review",
+        question="Review this policy.",
+        reference_answer="Scope the policy.",
+        key_concepts=["IAM policy"],
+        artifact_body='{"Resource": "*"}',
+    )
+
+    monkeypatch.delenv("SHOW_ARTIFACT_REVIEW", raising=False)
+    assert app._visible_questions([regular_question, artifact_question]) == [regular_question]
+
+    monkeypatch.setenv("SHOW_ARTIFACT_REVIEW", "1")
+    assert app._visible_questions([regular_question, artifact_question]) == [regular_question, artifact_question]
+
+
+def test_app_filters_questions_by_question_category():
+    security_question = Question(
+        certification="Cloud Practitioner",
+        domain="Security",
+        difficulty="Easy",
+        question="Which service manages encryption keys?",
+        reference_answer="Use AWS KMS.",
+        key_concepts=["AWS KMS"],
+        question_category="security_identity",
+    )
+    cost_question = Question(
+        certification="Cloud Practitioner",
+        domain="Billing",
+        difficulty="Easy",
+        question="Which service tracks thresholds?",
+        reference_answer="Use AWS Budgets.",
+        key_concepts=["AWS Budgets"],
+        question_category="cost_tradeoff",
+    )
+
+    filtered = app._filter_questions(
+        [security_question, cost_question],
+        QuestionFilter(question_category="cost_tradeoff"),
+    )
+
+    assert filtered == [cost_question]
+
+
+def test_app_renders_original_and_corrected_config_after_answer(monkeypatch):
+    calls = []
+    question = Question(
+        certification="AWS Certified Developer",
+        domain="Security",
+        difficulty="Medium",
+        question_type="artifact_review",
+        question="Review this policy.",
+        reference_answer="Scope the policy.",
+        key_concepts=["IAM policy"],
+        artifact_type="iam_policy",
+        artifact_language="json",
+        artifact_body='{\n  "Resource": "*"\n}',
+        artifact_context="A Lambda role needs narrow S3 read access.",
+        artifact_corrected='{\n  "Resource": "arn:aws:s3:::example-bucket/reports/*"\n}',
+    )
+
+    monkeypatch.setattr(app.st, "caption", lambda value: calls.append(("caption", value)))
+    monkeypatch.setattr(
+        app,
+        "_render_artifact_block",
+        lambda *args, **kwargs: calls.append(("block", args, kwargs)),
+    )
+
+    app._render_artifact(question, show_corrected=True)
+
+    assert ("caption", "iam_policy | json") in calls
+    assert calls[1] == (
+        "block",
+        ("Original Config", question.artifact_body, question.artifact_language),
+        {"context": question.artifact_context, "expanded": False},
+    )
+    assert calls[2] == (
+        "block",
+        ("Corrected Config", question.artifact_corrected, question.artifact_language),
+        {"expanded": True, "original_body": question.artifact_body},
+    )
+
+
 def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
     rendered = []
     monkeypatch.setattr(app.st, "write", lambda value: rendered.append(("write", value)))
@@ -291,6 +455,50 @@ def test_app_lists_all_multiple_choice_source_links_under_answers(monkeypatch):
         "- [Amazon Cognito](https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html)\n",
     ) in rendered
     assert ("write", "C. Configure an Amazon Cognito user pool.") in rendered
+
+
+def test_app_can_render_multiple_choice_answers_without_highlighting_correct_option(monkeypatch):
+    rendered = []
+    monkeypatch.setattr(app.st, "write", lambda value: rendered.append(("write", value)))
+    monkeypatch.setattr(app.st, "success", lambda value: rendered.append(("success", value)))
+    monkeypatch.setattr(app.st, "markdown", lambda value: rendered.append(("markdown", value)))
+    original = MultipleChoiceQuestion(
+        question="Which service manages encryption keys?",
+        options=[
+            MultipleChoiceOption("A", "Use AWS KMS."),
+            MultipleChoiceOption("B", "Use Amazon S3."),
+        ],
+        correct_option_ids=["A"],
+    )
+
+    app._render_original_multiple_choice(original, highlight_correct=False)
+
+    assert ("write", "A. Use AWS KMS.") in rendered
+    assert ("write", "B. Use Amazon S3.") in rendered
+    assert not any(kind == "success" for kind, _value in rendered)
+
+
+def test_app_show_answers_path_omits_documentation_links(monkeypatch):
+    rendered = []
+    monkeypatch.setattr(app.st, "write", lambda value: rendered.append(("write", value)))
+    monkeypatch.setattr(app.st, "success", lambda value: rendered.append(("success", value)))
+    monkeypatch.setattr(app.st, "markdown", lambda value: rendered.append(("markdown", value)))
+    original = MultipleChoiceQuestion(
+        question="Which service manages encryption keys?",
+        options=[
+            MultipleChoiceOption("A", "Use AWS KMS.", "https://docs.aws.amazon.com/kms/"),
+            MultipleChoiceOption("B", "Use Amazon S3.", "https://docs.aws.amazon.com/AmazonS3/latest/userguide/"),
+        ],
+        correct_option_ids=["A"],
+        source_name="AWS Documentation: AWS KMS",
+        source_url="https://docs.aws.amazon.com/kms/",
+    )
+
+    app._render_original_multiple_choice(original, highlight_correct=False)
+
+    assert ("write", "A. Use AWS KMS.") in rendered
+    assert not any(value == "### Documentation" for _kind, value in rendered)
+    assert not any("https://docs.aws.amazon.com" in str(value) for _kind, value in rendered)
 
 
 def test_app_disambiguates_repeated_service_documentation_labels(monkeypatch):

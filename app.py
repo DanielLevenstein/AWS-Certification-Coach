@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import hashlib
+import html
 import os
+from difflib import SequenceMatcher
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent
@@ -16,6 +18,7 @@ from aws_certification_coach.evaluation.factory import build_evaluation_service
 from aws_certification_coach.evaluation.service import EvaluationService
 from aws_certification_coach.feedback import UserFeedbackRepository
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
+from aws_certification_coach.questions.visibility import visible_questions
 from aws_certification_coach.quiz.session import QuizSession
 from aws_certification_coach.ratings import LETTER_RATINGS, score_to_letter
 
@@ -48,35 +51,62 @@ def get_feedback_repository() -> UserFeedbackRepository:
     return UserFeedbackRepository(USER_FEEDBACK_PATH)
 
 
-def _selected_filter(repository: JsonQuestionRepository) -> QuestionFilter:
-    certification = st.sidebar.selectbox("Certification", ["All"] + repository.available_certifications())
-    domain = st.sidebar.selectbox("Domain", ["All"] + repository.available_domains())
-    difficulty = st.sidebar.selectbox("Difficulty", ["All"] + repository.available_difficulties())
+def _selected_filter(questions: list[Question]) -> QuestionFilter:
+    certification = st.sidebar.selectbox("Certification", ["All"] + _unique_sorted(q.certification for q in questions))
+    domain = st.sidebar.selectbox("Domain", ["All"] + _unique_sorted(q.domain for q in questions))
+    difficulty = st.sidebar.selectbox("Difficulty", ["All"] + _unique_sorted(q.difficulty for q in questions))
+    question_category = st.sidebar.selectbox(
+        "Question Category",
+        ["All"] + _unique_sorted(q.question_category for q in questions),
+    )
     return QuestionFilter(
         certification=None if certification == "All" else certification,
         domain=None if domain == "All" else domain,
         difficulty=None if difficulty == "All" else difficulty,
+        question_category=None if question_category == "All" else question_category,
     )
 
 
 def _reset_session(questions) -> None:
     st.session_state.quiz_session = QuizSession(questions)
     st.session_state.last_result = None
+    st.session_state.show_answers = False
     st.session_state.feedback_submitted = set()
+
+
+def _visible_questions(questions: list[Question]) -> list[Question]:
+    return visible_questions(questions)
+
+
+def _filter_questions(questions: list[Question], filters: QuestionFilter) -> list[Question]:
+    if filters.certification:
+        questions = [q for q in questions if q.certification == filters.certification]
+    if filters.domain:
+        questions = [q for q in questions if q.domain == filters.domain]
+    if filters.difficulty:
+        questions = [q for q in questions if q.difficulty == filters.difficulty]
+    if filters.question_category:
+        questions = [q for q in questions if q.question_category == filters.question_category]
+    return questions
+
+
+def _unique_sorted(values) -> list[str]:
+    return sorted(set(values))
 
 
 def main() -> None:
     st.title("🎓 AWS Certification Coach")
     repository = get_question_repository()
-    filters = _selected_filter(repository)
-    questions = repository.filter_questions(filters)
+    available_questions = _visible_questions(repository.all())
+    filters = _selected_filter(available_questions)
+    questions = _filter_questions(available_questions, filters)
 
     if "quiz_session" not in st.session_state:
         _reset_session(questions)
 
     _render_feedback_download()
 
-    if st.sidebar.button("Start / Reset"):
+    if st.sidebar.button("Next Question"):
         _reset_session(questions)
 
     session: QuizSession = st.session_state.quiz_session
@@ -91,30 +121,40 @@ def main() -> None:
         st.warning("No questions match the selected filters.")
         return
 
+    result = st.session_state.get("last_result")
     st.caption(f"{question.certification} | {question.domain} | {question.difficulty}")
     st.subheader(question.question)
-    _render_artifact(question)
+    _render_artifact(question, show_corrected=bool(result))
 
     user_answer = st.text_area("Your answer", key=f"answer_text_{session.current_index}", height=160)
-    evaluate_column, next_column = st.columns([1, 1])
+    evaluate_column, show_answers_column, next_column = st.columns([1, 1, 1])
     with evaluate_column:
-        evaluate_clicked = st.button("Evaluate Answer", disabled=not user_answer.strip())
+        evaluate_clicked = st.button("Evaluate Answer")
+    with show_answers_column:
+        show_answers_clicked = st.button("Show Options")
     with next_column:
         next_clicked = st.button("Next Question", disabled=not st.session_state.get("last_result"))
+
+    if show_answers_clicked:
+        st.session_state.show_answers = True
+        st.rerun()
 
     if evaluate_clicked:
         result = get_evaluation_service().evaluate(question, user_answer)
         session.record_answer(question, user_answer, result)
         st.session_state.last_result = result
+        st.session_state.show_answers = False
         st.rerun()
 
     if next_clicked:
         session.advance()
         st.session_state.last_result = None
+        st.session_state.show_answers = False
         st.rerun()
 
     _render_contact_info_link()
-    result = st.session_state.get("last_result")
+    if st.session_state.get("show_answers") and not result:
+        _render_original_multiple_choice(question.original_multiple_choice, highlight_correct=False)
     if result:
         feedback_column, source_column = st.columns([3, 2])
         with feedback_column:
@@ -125,7 +165,7 @@ def main() -> None:
             _render_source_documentation(question.original_multiple_choice)
             _render_feedback_link(question, user_answer, result.score)
         with source_column:
-            _render_original_multiple_choice(question.original_multiple_choice)
+            _render_original_multiple_choice(question.original_multiple_choice, highlight_correct=True)
             _render_multiple_choice_source_documentation(question.original_multiple_choice)
 
 
@@ -166,7 +206,7 @@ def _render_feedback_link(question: Question, user_answer: str, score: int) -> N
         _render_feedback_form(question, user_answer, score)
 
 
-def _render_answer_feedback(score: int, feedback: str, suggest_improvements: str) -> None:
+def _render_answer_feedback(score: int, feedback: str, suggest_improvements: list[str]) -> None:
     if score_to_letter(score) == "A":
         return
     if feedback:
@@ -223,10 +263,6 @@ def _render_feedback_download() -> None:
     )
 
 
-def _env_enabled(name: str) -> bool:
-    return os.environ.get(name, "").strip().lower() in {"1", "true", "yes", "on"}
-
-
 def _question_key(question: Question) -> str:
     original = question.original_multiple_choice
     raw_key = "\n".join(
@@ -249,15 +285,108 @@ def _render_source_documentation(original: MultipleChoiceQuestion | None) -> Non
     st.markdown(f"[{original.source_name or 'AWS Documentation'}]({original.source_url})")
 
 
-def _render_artifact(question: Question) -> None:
+def _render_artifact(question: Question, *, show_corrected: bool = False) -> None:
     if question.question_type != "artifact_review" or not question.artifact_body:
         return
-    if question.artifact_context:
-        st.write(question.artifact_context)
     caption_parts = [part for part in [question.artifact_type, question.artifact_language] if part]
     if caption_parts:
         st.caption(" | ".join(caption_parts))
-    st.code(question.artifact_body, language=_streamlit_code_language(question.artifact_language))
+    if show_corrected:
+        _render_artifact_block(
+            "Original Config",
+            question.artifact_body,
+            question.artifact_language,
+            context=question.artifact_context,
+            expanded=False,
+        )
+    if show_corrected and question.artifact_corrected:
+        _render_artifact_block(
+            "Corrected Config",
+            question.artifact_corrected,
+            question.artifact_language,
+            expanded=True,
+            original_body=question.artifact_body,
+        )
+        return
+    if show_corrected:
+        return
+    _render_artifact_block(
+        "Original Config",
+        question.artifact_body,
+        question.artifact_language,
+        context=question.artifact_context,
+        expanded=True,
+    )
+
+
+def _render_artifact_block(
+    label: str,
+    artifact_body: str,
+    artifact_language: str = "",
+    *,
+    context: str = "",
+    expanded: bool = False,
+    original_body: str = "",
+) -> None:
+    if not artifact_body:
+        return
+    with st.expander(label, expanded=expanded):
+        if artifact_language:
+            st.caption(artifact_language)
+        if context:
+            st.write(context)
+        if original_body:
+            _render_highlighted_code(artifact_body, original_body)
+            return
+        st.code(artifact_body, language=_streamlit_code_language(artifact_language))
+
+
+def _render_highlighted_code(corrected_body: str, original_body: str) -> None:
+    changed_lines = _changed_corrected_line_indexes(original_body, corrected_body)
+    rendered_lines = []
+    for index, line in enumerate(corrected_body.splitlines() or [""]):
+        escaped_line = html.escape(line) or " "
+        if index in changed_lines:
+            rendered_lines.append(f'<span class="corrected-code-line">{escaped_line}</span>')
+        else:
+            rendered_lines.append(escaped_line)
+    rendered_code = "\n".join(rendered_lines)
+    st.markdown(
+        f"""
+        <style>
+        .corrected-code-block {{
+            background: #0e1117;
+            border-radius: 0.45rem;
+            color: #fafafa;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+            font-size: 0.875rem;
+            line-height: 1.45;
+            margin: 0;
+            overflow-x: auto;
+            padding: 1rem;
+            white-space: pre;
+        }}
+        .corrected-code-line {{
+            background: rgba(61, 220, 132, 0.24);
+            border-left: 0.2rem solid #3ddc84;
+            display: block;
+            margin-left: -0.45rem;
+            padding-left: 0.25rem;
+        }}
+        </style>
+        <pre class="corrected-code-block"><code>{rendered_code}</code></pre>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _changed_corrected_line_indexes(original_body: str, corrected_body: str) -> set[int]:
+    changed_lines: set[int] = set()
+    matcher = SequenceMatcher(a=original_body.splitlines(), b=corrected_body.splitlines())
+    for tag, _original_start, _original_end, corrected_start, corrected_end in matcher.get_opcodes():
+        if tag != "equal":
+            changed_lines.update(range(corrected_start, corrected_end))
+    return changed_lines
 
 
 def _streamlit_code_language(artifact_language: str) -> str | None:
@@ -275,7 +404,11 @@ def _streamlit_code_language(artifact_language: str) -> str | None:
     return aliases.get(language)
 
 
-def _render_original_multiple_choice(original: MultipleChoiceQuestion | None) -> None:
+def _render_original_multiple_choice(
+    original: MultipleChoiceQuestion | None,
+    *,
+    highlight_correct: bool = True,
+) -> None:
     st.markdown("### Multiple-choice Answers")
     if original is None:
         st.write("No source multiple-choice item is attached.")
@@ -283,10 +416,17 @@ def _render_original_multiple_choice(original: MultipleChoiceQuestion | None) ->
     correct_ids = set(original.correct_option_ids)
     for option in original.options:
         option_text = f"{option.option_id}. {option.text}"
-        if option.option_id in correct_ids:
+        if highlight_correct and option.option_id in correct_ids:
             st.success(option_text)
         else:
             st.write(option_text)
+        _render_artifact_block(
+            f"Option {option.option_id} Artifact",
+            option.artifact_body,
+            option.artifact_language,
+            context=option.artifact_context,
+            expanded=False,
+        )
 
 
 def _render_multiple_choice_source_documentation(original: MultipleChoiceQuestion) -> None:
@@ -323,7 +463,6 @@ def _source_label(option: MultipleChoiceOption, source_label_counts: dict[str, i
     if service_name and (source_label_counts or {}).get(service_name, 0) <= 1:
         return service_name
     return option.text.removeprefix("Use ").rstrip(".")
-
 
 if __name__ == "__main__":
     main()

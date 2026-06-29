@@ -214,6 +214,7 @@ def _artifact_metadata(source: dict[str, object]) -> dict[str, object]:
         "artifact_language": str(source.get("artifact_language", "")),
         "artifact_body": str(source.get("artifact_body", "")),
         "artifact_context": str(source.get("artifact_context", "")),
+        "artifact_corrected": str(source.get("artifact_corrected", "")),
         "expected_issue": str(source.get("expected_issue", "")),
     }
 

@@ -40,6 +40,8 @@
 | v3.5.2   | Grade tuning based on user feedback                                                                                                                                                 |
 | v3.5.2.1 | Fix duplicate DynamoDB documentation links in the documentation/source section.                                                                                                     |
 | v3.6.0   | Added question_category taxonomy coverage to generated app questions.                                                                                                               |
+| v3.6.1   | Put configuration questions behind an env variable                                                                                                                                  |
+
 # Release Metrics
 
 ## Metric Definitions:
@@ -86,7 +88,8 @@
 | v3.3.2   |            96.79% |             98.33% |          98.74% |                94.38% |          97.99% |            94.95% |
 | v3.3.4   |            99.20% |            100.00% |          99.17% |                98.80% |         100.00% |            94.95% |
 | v3.4.1   |            99.20% |            100.00% |          99.17% |                98.80% |         100.00% |            94.95% |
-| v3.5.2 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 94.95% |
+| v3.5.2   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            94.95% |
+| v3.6.1   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 
 ## Grade Band Precision
 | Release |       A |     B&C |     D&F |
@@ -159,7 +162,7 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.6.0 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 94.95% |
+| v3.6.1 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 95.12% |
 
 ## Grade Band Metrics
 
@@ -181,10 +184,10 @@ For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
-Developer source question count: `38`
-App question count: `198`
+Developer source question count: `34`
+App question count: `194`
 Question coverage domain count: `15`
-Question coverage concept count: `297`
+Question coverage concept count: `285`
 Question coverage question-category count: `14`
 Top covered concepts: `fanout, S3 Lifecycle, object expiration, Amazon RDS, replication, low latency, Auto Scaling, EC2, health checks, SQS, message queue, decoupling`
 Knowledge base schema version: `3`

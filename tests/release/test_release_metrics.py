@@ -222,6 +222,41 @@ def test_question_coverage_metrics_and_chart_write_png(tmp_path: Path):
         assert height >= 1000
 
 
+def test_question_coverage_metrics_exclude_disabled_artifact_review_questions(monkeypatch):
+    rows = [
+        {
+            "certification": "AWS Certified Developer",
+            "domain": "Development with AWS Services",
+            "difficulty": "Medium",
+            "question_type": "service_selection",
+            "question_category": "integration_workflows",
+            "question": "Which service should run code when a schedule fires?",
+            "key_concepts": ["Lambda", "EventBridge"],
+        },
+        {
+            "certification": "AWS Certified Developer",
+            "domain": "Security",
+            "difficulty": "Medium",
+            "question_type": "artifact_review",
+            "question_category": "security_identity",
+            "question": "Review this policy.",
+            "key_concepts": ["IAM policy", "least privilege"],
+        },
+    ]
+
+    monkeypatch.delenv("SHOW_ARTIFACT_REVIEW", raising=False)
+    metrics = measure_question_coverage(rows)
+
+    assert metrics["question_count"] == 1
+    assert {"name": "security_identity", "count": 1} not in metrics["question_categories"]
+
+    monkeypatch.setenv("SHOW_ARTIFACT_REVIEW", "1")
+    metrics = measure_question_coverage(rows)
+
+    assert metrics["question_count"] == 2
+    assert {"name": "security_identity", "count": 1} in metrics["question_categories"]
+
+
 def test_question_coverage_shell_wrapper_accepts_release_tag(tmp_path: Path):
     project_root = Path(__file__).resolve().parents[2]
     latest_outputs = [

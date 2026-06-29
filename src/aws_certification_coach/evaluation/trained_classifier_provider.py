@@ -6,6 +6,7 @@ import json
 import re
 from pathlib import Path
 from dataclasses import dataclass
+from difflib import SequenceMatcher
 
 from aws_certification_coach.domain import Question
 from aws_certification_coach.knowledge_base import load_knowledge_base
@@ -117,6 +118,14 @@ def _evaluation_response(
 ) -> str:
     if _is_exact_correct_option(question, user_answer):
         model_score = max(model_score, _exact_correct_option_score(question, user_answer))
+    if _is_exact_corrected_artifact_answer(question, user_answer):
+        payload = {
+            "score": EXACT_CORRECT_OPTION_SCORE,
+            "missing_concepts": [],
+            "suggested_improvements": [],
+            "detailed_answer": question.reference_answer,
+        }
+        return json.dumps(payload)
     prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
     if _is_question_restatement(question, user_answer):
         missing = _missing_concepts(question, user_answer)
@@ -455,6 +464,41 @@ def _is_exact_correct_option(question: Question, user_answer: str) -> bool:
         for option in original.options
         if option.option_id in correct_ids
     }
+
+
+def _is_exact_corrected_artifact_answer(question: Question, user_answer: str) -> bool:
+    if question.question_type != "artifact_review" or not question.artifact_corrected:
+        return False
+    normalized_answer = _normalized_code_answer(user_answer)
+    if not normalized_answer:
+        return False
+    expected_answers = {
+        _normalized_code_answer(question.artifact_corrected),
+        _normalized_code_answer("\n".join(_changed_corrected_artifact_lines(question))),
+    }
+    return normalized_answer in {answer for answer in expected_answers if answer}
+
+
+def _changed_corrected_artifact_lines(question: Question) -> list[str]:
+    original_lines = question.artifact_body.splitlines()
+    corrected_lines = question.artifact_corrected.splitlines()
+    changed_lines: list[str] = []
+    matcher = SequenceMatcher(a=original_lines, b=corrected_lines)
+    for tag, _original_start, _original_end, corrected_start, corrected_end in matcher.get_opcodes():
+        if tag != "equal":
+            changed_lines.extend(corrected_lines[corrected_start:corrected_end])
+    return changed_lines
+
+
+def _normalized_code_answer(value: str) -> str:
+    normalized_lines = []
+    for line in value.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("+") and not stripped.startswith("++"):
+            stripped = stripped[1:].strip()
+        if stripped:
+            normalized_lines.append(stripped)
+    return "\n".join(normalized_lines)
 
 
 def _exact_correct_option_score(question: Question, user_answer: str) -> int:

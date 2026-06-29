@@ -40,6 +40,7 @@ class Question:
     artifact_language: str = ""
     artifact_body: str = ""
     artifact_context: str = ""
+    artifact_corrected: str = ""
     expected_issue: str = ""
     schema_version: int = 1
 
@@ -50,6 +51,9 @@ class MultipleChoiceOption:
     text: str
     source_url: str = ""
     metadata: dict[str, str] = field(default_factory=dict)
+    artifact_body: str = ""
+    artifact_language: str = ""
+    artifact_context: str = ""
 
 
 @dataclass(frozen=True)
@@ -68,6 +72,7 @@ class QuestionFilter:
     certification: str | None = None
     domain: str | None = None
     difficulty: str | None = None
+    question_category: str | None = None
 
 
 @dataclass(frozen=True)

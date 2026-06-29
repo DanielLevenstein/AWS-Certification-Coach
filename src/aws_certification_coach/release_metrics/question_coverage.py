@@ -6,6 +6,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Iterable
 
+from aws_certification_coach.questions.visibility import visible_question_rows
+
 
 CHART_FONT_SIZES = {
     "title": 20,
@@ -18,7 +20,7 @@ CHART_FONT_SIZES = {
 
 
 def measure_question_coverage(rows: Iterable[dict[str, object]]) -> dict[str, object]:
-    questions = list(rows)
+    questions = visible_question_rows(rows)
     domains = Counter(_text(row.get("domain"), "Unknown") for row in questions)
     certifications = Counter(_text(row.get("certification"), "Unknown") for row in questions)
     difficulties = Counter(_text(row.get("difficulty"), "Unknown") for row in questions)
