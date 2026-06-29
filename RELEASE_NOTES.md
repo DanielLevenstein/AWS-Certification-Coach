@@ -123,36 +123,6 @@
 | v3.4.1   | 100.00% | 83.33% | 100.00% |  100.00% | 77.78% |
 | v3.4.2   | 100.00% | 80.00% | 100.00% | 98.17%   | 77.78% |
 
-For v2.1.1, the answer-scoring metrics are expected to match v1.5.4 because the generated answer benchmark and curated answer benchmark did not change. The regenerated Developer Associate question expansion is measured by the new Question Fidelity metric.
-
-For v2.1.2, generated Developer Associate source questions remove multiple-choice-only instructions from freeform prompts. The Developer Associate source metadata expanded from 5 to 12 source rows and now produces 12 generated Developer questions in the app question set. Feedback submissions now capture the expected letter grade plus optional freeform grader context, and supplemental generated feedback rows cover question-rephrasing answers.
-Developer questions use `AWS Certified Developer` as the display certification label and keep `DVA-C02` as internal exam-code metadata.
-
-For v2.1.1 - v2.1.2,
-I noticed a huge update to Semantic Accuracy and Semantic Recall after the latest update, but Training Accuracy is still in the 60s.
-Also, I am worried about why Saved Accuracy is so much higher than Semantic Accuracy.
-
-For v2.2.0 design planning, comparison-style freeform questions should ask learners to explain why the best service or feature beats the strongest near-miss distractor. The design is documented in [V2_2_ENHANCED_SERVICES_COMPARISON_DESIGN.md](docs/PHASE_1_ENHANCED_SERVICES_COMPARISON_DESIGN.md). The release metrics run now generates domain, intent, and certification question coverage charts for the release notes.
-
-For v2.2.4 and later, the maintained release metrics table is `Release`, `Semantic Accuracy`, `Semantic Precision`, `Semantic Recall`, `Exact Letter Accuracy`, `Within 1 Letter`, and `Question Fidelity`.
-
-`Training Accuracy` and `Saved Accuracy` have been removed from the release table because they no longer reflect the actual heuristic used in the app. `Semantic Accuracy` uses grade-band agreement, while `Exact Letter Accuracy` reports strict A/B/C/D/F agreement.
-
-For v2.3.1, generated question artifacts now include `question_type`, rubric concept metadata, acceptable answers, misconception notes, and `must_not_claim` guardrails. 
-The held-out exact-letter grade dataset is generated from the test split for rubric verification.
-
-For v2.3.2 the strict-grading parameter was deprecated and a new column added for `Exact Letter Accuracy`. Exact-letter accuracy is below the 90% precision guardrail because several curated A/B/C boundary cases are intentionally counted as strict calibration misses.
-
-For v2.3.6, `Within 1 Letter` comes from `scripts/evaluate_answer_model.py` and reports the generated answer model test split. It accepts adjacent `A/B/C/D/F` predictions while `Exact Letter Accuracy` still requires the exact expected letter.
-
-For v2.4.1, the first Phase 2 implementation adds generated `artifact_review` questions for IAM policy review, Lambda code review, SDK pagination review, and SAM template permission review. The app now preserves artifact metadata and renders self-authored code/configuration snippets in the learner question flow.
-
-For v2.6.1, answer evaluation loads a validated 13,214-byte local knowledge document containing 18 syntax aliases, 16 service families, and natural-language descriptions for all 27 concepts in the structured answer-training seed. Semantic grade-band accuracy, precision, recall, and exact-letter accuracy remain unchanged from the previous release baseline. The retrained regressor reports 96.15% test within-one-letter accuracy and 67.31% test exact-letter accuracy; exact-answer calibration removal remains deferred to a later knowledge-base iteration.
-
-For v2.6.2, routine model smoke checks are read-only and complete without training, while full held-out model training and candidate-artifact generation have separate documented commands. Tests are grouped into review-oriented directories with no loose root-level test modules. Unit tests exclude model-smoke and deployment directories, the existing Docker/HTTP guardrail runs through its own deployment suite, and full release-note generation performs only one release-training pass. The ambiguous `run_model_tests.sh` wrapper was removed, and Playwright remains a documented later iteration. Model and release metrics are unchanged from v2.knowledgeBase1.1.
-
-For v2.6.3, `release_notes.sh --quick` validates and reuses the latest completed full metrics directory, or the directory selected through `RELEASE_METRICS_DIR`. It performs no model training, evaluation, coverage, unit, or smoke run. The verified quick refresh completed in 1.57 seconds and preserved the v2.knowledgeBase1.2 metrics.
-
 ## Current Coverage
 
 ![Release Metrics Chart](release/v3.6.0_question_coverage_metrics_chart.png)
