@@ -31,6 +31,8 @@
 | v3.7.0 | Increase test data so there is a more even number of example cases for each grade level.                                           |
 | v3.7.1 | Updated curated_training_balanced_grade_examples.json based on performance.                                                        |
 | v3.7.2 | Removed Duplicate D grades from training data.                                                                                     |
+| v3.7.3 | Revert v3.6.4 Generate common_misconceptions and must_not_claim fields during question generation time.  |
+
 # Release Metrics
 
 ## Metric Definitions:

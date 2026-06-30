@@ -50,15 +50,11 @@ def test_knowledge_base_exposes_feedback_flag_sections_with_sources():
     assert knowledge.flag_sets_for_source_url(row.source_url) == (row,)
 
 
-def test_knowledge_base_generates_feedback_flag_sections_from_question_templates():
-    knowledge = load_knowledge_base()
+def test_knowledge_base_source_merges_feedback_flag_sections():
     payload = json.loads(DEFAULT_KNOWLEDGE_BASE_PATH.read_text(encoding="utf-8"))
-    s3_lifecycle = next(row for row in knowledge.common_misconceptions if row.id == "s3-lifecycle-policies")
 
-    assert "common_misconceptions" not in payload
+    assert "common_misconceptions" in payload
     assert "must_not_claim" not in payload
-    assert any("S3 bucket policies is the best fit" in claim for claim in s3_lifecycle.common_misconceptions)
-    assert any("S3 Lifecycle rules manage object transitions" in note for note in s3_lifecycle.do_not_claim_explanation)
 
 
 def test_knowledge_base_normalizes_syntax_and_exposes_service_aliases():

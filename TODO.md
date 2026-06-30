@@ -41,6 +41,7 @@ F: wrong domain/service, contradicted requirement, or no meaningful answer.
 
 ## Question Expansion
 - Move download_developer_original_questions.py into question_template
+- Generate common_misconceptions and must_not_claim fields during question generation time.
 - Increase test data so there is a more even number of example cases for each grade level.
 
 ### Specific question suggestions

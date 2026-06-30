@@ -2146,5 +2146,187 @@
       ],
       "description": "workload review is a reusable concept for scenarios about AWS Well-Architected Tool."
     }
+  ],
+  "common_misconceptions": [
+    {
+      "id": "iam",
+      "key_concepts": [
+        "IAM",
+        "temporary credentials",
+        "least privilege",
+        "trusted entities"
+      ],
+      "common_misconceptions": [
+        "IAM user access keys is the best fit for this requirement.",
+        "AWS Shield Advanced is the best fit for this requirement.",
+        "hard-coded credentials is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use IAM roles.",
+        "Use IAM roles to grant temporary credentials to trusted AWS resources without storing long-term access keys.",
+        "IAM roles"
+      ],
+      "must_not_claim": [
+        "IAM user access keys satisfies the scenario better than IAM roles.",
+        "AWS Shield Advanced satisfies the scenario better than IAM roles.",
+        "hard-coded credentials satisfies the scenario better than IAM roles."
+      ],
+      "source_url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
+      "do_not_claim_explanation": [
+        "IAM roles is a better option for this scenario. IAM user access keys does not satisfy the same requirement.",
+        "IAM roles is a better option for this scenario. AWS Shield Advanced does not satisfy the same requirement.",
+        "IAM roles is a better option for this scenario. hard-coded credentials does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "aws-budgets",
+      "key_concepts": [
+        "AWS Budgets",
+        "cost thresholds",
+        "usage thresholds",
+        "alerts"
+      ],
+      "common_misconceptions": [
+        "AWS CloudTrail is the best fit for this requirement.",
+        "AWS Artifact is the best fit for this requirement.",
+        "Elastic Load Balancing is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use AWS Budgets.",
+        "Use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending.",
+        "AWS Budgets"
+      ],
+      "must_not_claim": [
+        "AWS CloudTrail satisfies the scenario better than AWS Budgets.",
+        "AWS Artifact satisfies the scenario better than AWS Budgets.",
+        "Elastic Load Balancing satisfies the scenario better than AWS Budgets."
+      ],
+      "source_url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
+      "do_not_claim_explanation": [
+        "AWS Budgets is a better option for this scenario. AWS CloudTrail does not satisfy the same requirement.",
+        "AWS Budgets is a better option for this scenario. AWS Artifact does not satisfy the same requirement.",
+        "AWS Budgets is a better option for this scenario. Elastic Load Balancing does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "availability-zones",
+      "key_concepts": [
+        "Availability Zones",
+        "high availability",
+        "fault tolerance",
+        "load balancing"
+      ],
+      "common_misconceptions": [
+        "single Availability Zone deployment is the best fit for this requirement.",
+        "larger instance is the best fit for this requirement.",
+        "root volume backups is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use multiple Availability Zones.",
+        "Use multiple Availability Zones to improve high availability and fault tolerance during an Availability Zone impairment.",
+        "multiple Availability Zones"
+      ],
+      "must_not_claim": [
+        "single Availability Zone deployment satisfies the scenario better than multiple Availability Zones.",
+        "larger instance satisfies the scenario better than multiple Availability Zones.",
+        "root volume backups satisfies the scenario better than multiple Availability Zones."
+      ],
+      "source_url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html",
+      "do_not_claim_explanation": [
+        "multiple Availability Zones is a better option for this scenario. single Availability Zone deployment does not satisfy the same requirement.",
+        "multiple Availability Zones is a better option for this scenario. larger instance does not satisfy the same requirement.",
+        "multiple Availability Zones is a better option for this scenario. root volume backups does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "amazon-s3",
+      "key_concepts": [
+        "Amazon S3",
+        "versioning",
+        "object recovery",
+        "overwrite protection"
+      ],
+      "common_misconceptions": [
+        "S3 Transfer Acceleration is the best fit for this requirement.",
+        "Amazon EFS is the best fit for this requirement.",
+        "S3 static website hosting is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use Amazon S3 versioning.",
+        "Use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.",
+        "Amazon S3 versioning"
+      ],
+      "must_not_claim": [
+        "S3 Transfer Acceleration satisfies the scenario better than Amazon S3 versioning.",
+        "Amazon EFS satisfies the scenario better than Amazon S3 versioning.",
+        "S3 static website hosting satisfies the scenario better than Amazon S3 versioning."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html",
+      "do_not_claim_explanation": [
+        "Amazon S3 versioning is a better option for this scenario. S3 Transfer Acceleration does not satisfy the same requirement.",
+        "Amazon S3 versioning is a better option for this scenario. Amazon EFS does not satisfy the same requirement.",
+        "Amazon S3 versioning is a better option for this scenario. S3 static website hosting does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "s3-lifecycle",
+      "key_concepts": [
+        "S3 Lifecycle",
+        "storage classes",
+        "object expiration",
+        "cost optimization"
+      ],
+      "common_misconceptions": [
+        "S3 bucket policies is the best fit for this requirement.",
+        "AWS Organizations is the best fit for this requirement.",
+        "Amazon GuardDuty is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use S3 lifecycle policies.",
+        "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+        "S3 lifecycle policies"
+      ],
+      "must_not_claim": [
+        "S3 bucket policies satisfies the scenario better than S3 lifecycle policies.",
+        "AWS Organizations satisfies the scenario better than S3 lifecycle policies.",
+        "Amazon GuardDuty satisfies the scenario better than S3 lifecycle policies."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html",
+      "do_not_claim_explanation": [
+        "S3 lifecycle policies is a better option for this scenario. S3 Lifecycle rules manage object transitions and expiration over time; S3 bucket policies are resource-based access policies that allow or deny requests to the bucket and objects.",
+        "S3 lifecycle policies is a better option for this scenario. AWS Organizations does not satisfy the same requirement.",
+        "S3 lifecycle policies is a better option for this scenario. Amazon GuardDuty does not satisfy the same requirement."
+      ]
+    },
+    {
+      "id": "amazon-rds",
+      "key_concepts": [
+        "Amazon RDS",
+        "Multi-AZ",
+        "automatic failover",
+        "standby replica"
+      ],
+      "common_misconceptions": [
+        "read replica only is the best fit for this requirement.",
+        "DynamoDB global table is the best fit for this requirement.",
+        "manual snapshot is the best fit for this requirement."
+      ],
+      "acceptable_answers": [
+        "Use Amazon RDS Multi-AZ.",
+        "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+        "Amazon RDS Multi-AZ"
+      ],
+      "must_not_claim": [
+        "read replica only satisfies the scenario better than Amazon RDS Multi-AZ.",
+        "DynamoDB global table satisfies the scenario better than Amazon RDS Multi-AZ.",
+        "manual snapshot satisfies the scenario better than Amazon RDS Multi-AZ."
+      ],
+      "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "do_not_claim_explanation": [
+        "Amazon RDS Multi-AZ is a better option for this scenario. read replica only does not satisfy the same requirement.",
+        "Amazon RDS Multi-AZ is a better option for this scenario. DynamoDB global table does not satisfy the same requirement.",
+        "Amazon RDS Multi-AZ is a better option for this scenario. manual snapshot does not satisfy the same requirement."
+      ]
+    }
   ]
 }
