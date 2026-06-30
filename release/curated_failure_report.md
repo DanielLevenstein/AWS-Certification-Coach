@@ -2,12 +2,12 @@
 
 - Curated examples: 300
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
-- Passing exact-letter predictions: 64
-- Failing exact-letter predictions: 236
-- Exact-letter accuracy: 21.33%
-- Unique failing question/answer/grade cases: 118
+- Passing exact-letter predictions: 79
+- Failing exact-letter predictions: 221
+- Exact-letter accuracy: 26.33%
+- Unique failing question/answer/grade cases: 103
 - Conflicting normalized label sets: 3
-- Actual letter grades among failures: {'A': 1, 'C': 10, 'D': 14, 'F': 211}
+- Actual letter grades among failures: {'C': 8, 'D': 8, 'F': 205}
 
 ## Primary Findings
 
@@ -76,20 +76,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 5. Expected B, received C
-
-- Rows: `10`; occurrences: `1`
-- Question: A Lambda function needs different non-secret configuration values in development and production. Which Lambda feature should the developer use to pass those values at runtime?
-- Expected rating: `0.85`
-- User answer: `Environment variables.`
-- Correct answer: Lambda environment variables
-- Raw model score: `75.00`; runtime score: `75`
-- Runtime feedback: Name the specific AWS service or feature required by the question.
-- Reviewer feedback: Balanced grade example: names the intended feature but does not explain the Lambda or non-secret constraint.
-- Largest feature contributions: `semantic_similarity_score` +0.750
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 6. Expected D, received F
+### 5. Expected D, received F
 
 - Rows: `265`; occurrences: `1`
 - Question: A Lambda function needs different non-secret configuration values in development and production. Which Lambda feature should the developer use to pass those values at runtime?
@@ -102,20 +89,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 7. Expected C, received F
-
-- Rows: `18`; occurrences: `1`
-- Question: A Lambda function needs different non-secret configuration values in development and production. Which Lambda feature should the developer use to pass those values at runtime?
-- Expected rating: `0.75`
-- User answer: `Use AWS Systems Manager Parameter Store for application settings.`
-- Correct answer: Lambda environment variables
-- Raw model score: `25.00`; runtime score: `25`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: related configuration service, but not the direct Lambda runtime feature requested.
-- Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
-
-### 8. Expected B, received F
+### 6. Expected B, received F
 
 - Rows: `91`; occurrences: `1`
 - Question: A Lambda function needs different non-secret configuration values in development and production. Which Lambda feature should the developer use to pass those values at runtime?
@@ -128,7 +102,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Runtime exact-service guard treated the answer as a wrong option before partial-credit semantics were considered.
 
-### 9. Expected D, received F
+### 7. Expected D, received F
 
 - Rows: `260`; occurrences: `1`
 - Question: A Lambda function processes messages from an SQS queue. A few messages repeatedly fail and delay later processing. Which configuration should the developer use to isolate failed messages while allowing successful messages to continue?
@@ -141,7 +115,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 10. Expected D, received F
+### 8. Expected D, received F
 
 - Rows: `274`; occurrences: `1`
 - Question: A REST API release should expose a new deployment to 10 percent of callers while most clients continue using the current API stage. Which API Gateway deployment feature fits this rollout?
@@ -154,7 +128,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 11. Expected D, received F
+### 9. Expected D, received F
 
 - Rows: `291`; occurrences: `1`
 - Question: A Step Functions workflow calls several Lambda tasks and should retry transient errors, then move to a compensating path when retries are exhausted. What should the developer define in the state machine?
@@ -167,7 +141,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 12. Expected D, received F
+### 10. Expected D, received F
 
 - Rows: `282`; occurrences: `1`
 - Question: A client application uploads multi-gigabyte files to S3 over an unreliable network and needs to retry only the failed pieces instead of restarting the whole upload. Which S3 upload method should it use?
@@ -180,7 +154,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 13. Expected A, received C
+### 11. Expected A, received C
 
 - Rows: `68`; occurrences: `1`
 - Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
@@ -193,7 +167,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 14. Expected D, received F
+### 12. Expected D, received F
 
 - Rows: `270`; occurrences: `1`
 - Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
@@ -206,7 +180,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 15. Expected D, received F
+### 13. Expected D, received F
 
 - Rows: `289`; occurrences: `1`
 - Question: A developer instruments an application with X-Ray and needs to filter traces by tenant ID in the X-Ray console. Which kind of trace data should the code add?
@@ -219,7 +193,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 16. Expected D, received F
+### 14. Expected D, received F
 
 - Rows: `266`; occurrences: `1`
 - Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
@@ -232,20 +206,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 17. Expected C, received D
-
-- Rows: `17`; occurrences: `1`
-- Question: A developer must keep application database passwords out of code and periodically replace them without a manual handoff. Which AWS service should manage this credential lifecycle?
-- Expected rating: `0.75`
-- User answer: `Use Systems Manager Parameter Store to keep configuration values out of code.`
-- Correct answer: AWS Secrets Manager
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: related configuration storage, but misses the scheduled secret rotation requirement.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 18. Expected D, received F
+### 15. Expected D, received F
 
 - Rows: `263`; occurrences: `1`
 - Question: A development team wants its release pipeline to compile code and run unit tests automatically before deployment. Which AWS service should be added as the build action?
@@ -258,7 +219,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 19. Expected D, received F
+### 16. Expected D, received F
 
 - Rows: `285`; occurrences: `1`
 - Question: A mobile application needs managed sign-up, sign-in, password recovery, and tokens for its end users. Which Cognito feature should the developer configure?
@@ -271,7 +232,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 20. Expected D, received F
+### 17. Expected D, received F
 
 - Rows: `275`; occurrences: `1`
 - Question: A partner-facing API needs different request quotas for each client application, and callers will include API keys. Which API Gateway configuration should the developer create?
@@ -284,7 +245,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 21. Expected D, received F
+### 18. Expected D, received F
 
 - Rows: `279`; occurrences: `1`
 - Question: A payment workflow uses SQS and must preserve message order for each account while reducing duplicate processing attempts. Which queue type and message metadata should the developer use?
@@ -297,7 +258,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 22. Expected D, received F
+### 19. Expected D, received F
 
 - Rows: `272`; occurrences: `1`
 - Question: A production Lambda function can overwhelm a downstream database during traffic spikes, but the team also wants guaranteed capacity for that function. Which Lambda setting should the developer configure?
@@ -310,20 +271,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 23. Expected C, received D
-
-- Rows: `19`; occurrences: `1`
-- Question: A public API must protect its backend from sudden request spikes by limiting client request rates. Which API Gateway feature should the developer configure?
-- Expected rating: `0.75`
-- User answer: `Configure a CloudWatch alarm when request counts are high.`
-- Correct answer: Configure API Gateway throttling
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: recognizes traffic monitoring but does not enforce client request limits.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 24. Expected D, received F
+### 20. Expected D, received F
 
 - Rows: `269`; occurrences: `1`
 - Question: A public API must protect its backend from sudden request spikes by limiting client request rates. Which API Gateway feature should the developer configure?
@@ -336,7 +284,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 25. Expected D, received F
+### 21. Expected D, received F
 
 - Rows: `264`; occurrences: `1`
 - Question: A serverless application has intermittent latency across several downstream calls. Which AWS service should the developer use to trace each request through the distributed workflow?
@@ -349,20 +297,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 26. Expected B, received C
-
-- Rows: `12`; occurrences: `1`
-- Question: A serverless maintenance task needs to invoke a Lambda function every hour. Which AWS service feature should the developer configure?
-- Expected rating: `0.85`
-- User answer: `EventBridge schedule.`
-- Correct answer: an EventBridge scheduled rule
-- Raw model score: `75.00`; runtime score: `75`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: correct feature name with minimal reasoning.
-- Largest feature contributions: `semantic_similarity_score` +0.750
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 27. Expected D, received F
+### 22. Expected D, received F
 
 - Rows: `271`; occurrences: `1`
 - Question: A serverless maintenance task needs to invoke a Lambda function every hour. Which AWS service feature should the developer configure?
@@ -375,20 +310,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 28. Expected C, received D
-
-- Rows: `20`; occurrences: `1`
-- Question: A serverless maintenance task needs to invoke a Lambda function every hour. Which AWS service feature should the developer configure?
-- Expected rating: `0.75`
-- User answer: `Use an SQS delay queue to run the task later.`
-- Correct answer: an EventBridge scheduled rule
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: related asynchronous timing concept, but not recurring scheduling.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 29. Expected D, received F
+### 23. Expected D, received F
 
 - Rows: `276`; occurrences: `1`
 - Question: A session table in DynamoDB stores an expiration time for each item and should remove old sessions without a scheduled cleanup job. Which feature should the developer enable?
@@ -401,20 +323,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 30. Expected C, received F
-
-- Rows: `21`; occurrences: `1`
-- Question: A session table in DynamoDB stores an expiration time for each item and should remove old sessions without a scheduled cleanup job. Which feature should the developer enable?
-- Expected rating: `0.75`
-- User answer: `Use S3 lifecycle rules to expire old objects.`
-- Correct answer: Enable DynamoDB Time to Live
-- Raw model score: `25.00`; runtime score: `25`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: recognizes lifecycle expiration, but applies the S3 feature instead of DynamoDB TTL.
-- Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
-
-### 31. Expected D, received F
+### 24. Expected D, received F
 
 - Rows: `261`; occurrences: `1`
 - Question: A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?
@@ -427,7 +336,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 32. Expected F, received D
+### 25. Expected F, received D
 
 - Rows: `75`; occurrences: `1`
 - Question: A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?
@@ -439,7 +348,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 33. Expected D, received F
+### 26. Expected D, received F
 
 - Rows: `286`; occurrences: `1`
 - Question: A team releases a new Lambda version and wants 10 percent of alias traffic to move first, with automatic rollback if CloudWatch alarms fire. Which deployment service should the developer use?
@@ -452,7 +361,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 34. Expected D, received F
+### 27. Expected D, received F
 
 - Rows: `281`; occurrences: `1`
 - Question: A web application must let an authenticated user download one private S3 object for a limited time without changing the bucket to public access. What should the developer generate?
@@ -465,7 +374,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 35. Expected C, received D
+### 28. Expected C, received D
 
 - Rows: `74`; occurrences: `1`
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
@@ -477,7 +386,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 36. Expected B, received D
+### 29. Expected B, received D
 
 - Rows: `70`; occurrences: `1`
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
@@ -489,7 +398,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 37. Expected D, received F
+### 30. Expected D, received F
 
 - Rows: `280`; occurrences: `1`
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
@@ -502,20 +411,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 38. Expected C, received F
-
-- Rows: `22`; occurrences: `1`
-- Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
-- Expected rating: `0.75`
-- User answer: `Use separate SQS queues for each order type.`
-- Correct answer: Configure SNS subscription filter policies
-- Raw model score: `25.00`; runtime score: `25`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: understands subscriber separation but misses SNS message attribute filtering.
-- Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
-
-### 39. Expected D, received F
+### 31. Expected D, received F
 
 - Rows: `267`; occurrences: `1`
 - Question: An SQS consumer sometimes needs several minutes to finish processing a message. Which queue setting should the developer adjust so another worker does not immediately receive the same message?
@@ -528,7 +424,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 40. Expected D, received F
+### 32. Expected D, received F
 
 - Rows: `268`; occurrences: `1`
 - Question: An application must run code whenever items in a DynamoDB table are inserted, updated, or deleted. Which event-driven pattern should the developer configure?
@@ -541,7 +437,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 41. Expected D, received F
+### 33. Expected D, received F
 
 - Rows: `283`; occurrences: `1`
 - Question: An application needs to encrypt large payloads locally while using AWS KMS to protect the key material. Which encryption pattern should the developer implement?
@@ -554,7 +450,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 42. Expected D, received F
+### 34. Expected D, received F
 
 - Rows: `273`; occurrences: `1`
 - Question: An asynchronously invoked Lambda function must send successful results to one target and failed invocation records to another target for follow-up processing. Which feature should the developer use?
@@ -567,7 +463,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 43. Expected D, received F
+### 35. Expected D, received F
 
 - Rows: `277`; occurrences: `1`
 - Question: An order workflow must update an inventory item and create an order item in DynamoDB, and either both writes must succeed or neither should be saved. Which DynamoDB API pattern should the developer use?
@@ -580,7 +476,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 44. Expected C, received D
+### 36. Expected C, received D
 
 - Rows: `87`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.
@@ -593,7 +489,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 45. Expected D, received F
+### 37. Expected D, received F
 
 - Rows: `116, 160, 204, 248`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.
@@ -606,7 +502,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 46. Expected D, received F
+### 38. Expected D, received F
 
 - Rows: `142, 186, 230`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.
@@ -619,7 +515,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 47. Expected C, received D
+### 39. Expected C, received D
 
 - Rows: `299`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
@@ -632,7 +528,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 48. Expected D, received F
+### 40. Expected D, received F
 
 - Rows: `111, 155, 199, 243`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
@@ -645,7 +541,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 49. Expected A, received D
+### 41. Expected A, received D
 
 - Rows: `99`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
@@ -658,7 +554,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 50. Expected D, received F
+### 42. Expected D, received F
 
 - Rows: `104, 148, 192, 236`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
@@ -671,7 +567,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 51. Expected D, received F
+### 43. Expected D, received F
 
 - Rows: `90`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
@@ -684,20 +580,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 52. Expected C, received D
-
-- Rows: `15`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
-- Expected rating: `0.75`
-- User answer: `Use S3 storage classes to move older objects to cheaper tiers.`
-- Correct answer: S3 lifecycle policies
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: Name the specific AWS service or feature required by the question.
-- Reviewer feedback: Balanced grade example: identifies the storage-class domain but omits Lifecycle rules and expiration.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 53. Expected D, received F
+### 44. Expected D, received F
 
 - Rows: `126, 170, 214, 258`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to buffer units of work so competing worker processes can poll, process, and delete messages at their own pace.
@@ -710,7 +593,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 54. Expected D, received F
+### 45. Expected D, received F
 
 - Rows: `114, 158, 202, 246`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.
@@ -723,20 +606,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 55. Expected C, received F
-
-- Rows: `35`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.
-- Expected rating: `0.75`
-- User answer: `Use Route 53 because it routes users to endpoints.`
-- Correct answer: Amazon CloudFront
-- Raw model score: `25.00`; runtime score: `25`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: related edge/networking idea, but misses CDN caching.
-- Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
-
-### 56. Expected D, received F
+### 46. Expected D, received F
 
 - Rows: `141, 185, 229`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to centralize and automate backup policies across supported AWS services.
@@ -749,7 +619,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 57. Expected D, received F
+### 47. Expected D, received F
 
 - Rows: `137, 181, 225`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to centrally manage multiple AWS accounts and apply service control policies.
@@ -762,7 +632,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 58. Expected D, received F
+### 48. Expected D, received F
 
 - Rows: `119, 163, 207, 251`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.
@@ -775,7 +645,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 59. Expected C, received F
+### 49. Expected C, received F
 
 - Rows: `81`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -788,7 +658,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 60. Expected D, received F
+### 50. Expected D, received F
 
 - Rows: `121, 165, 209, 253`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -801,7 +671,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 61. Expected D, received F
+### 51. Expected D, received F
 
 - Rows: `94`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -814,7 +684,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Runtime exact-service guard treated the answer as a wrong option before partial-credit semantics were considered.
 
-### 62. Expected D, received F
+### 52. Expected D, received F
 
 - Rows: `131, 175, 219`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to create point-in-time backups of block storage volumes for recovery or copying.
@@ -827,7 +697,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 63. Expected D, received F
+### 53. Expected D, received F
 
 - Rows: `129, 173, 217`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to create, publish, secure, monitor, and throttle APIs for backend services.
@@ -840,7 +710,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 64. Expected D, received F
+### 54. Expected D, received F
 
 - Rows: `123, 167, 211, 255`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to decouple application components with a managed message queue.
@@ -853,20 +723,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 65. Expected C, received F
-
-- Rows: `13`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to decouple application components with a managed message queue.
-- Expected rating: `0.75`
-- User answer: `Use Amazon SNS because it sends messages between parts of an application.`
-- Correct answer: Amazon SQS
-- Raw model score: `25.00`; runtime score: `25`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: recognizes messaging but selects publish-subscribe instead of a queue.
-- Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
-
-### 66. Expected D, received F
+### 55. Expected D, received F
 
 - Rows: `113, 157, 201, 245`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.
@@ -879,7 +736,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 67. Expected D, received F
+### 56. Expected D, received F
 
 - Rows: `124, 168, 212, 256`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to fan out messages to multiple subscribers using a managed pub/sub service.
@@ -892,7 +749,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 68. Expected D, received F
+### 57. Expected D, received F
 
 - Rows: `100, 144, 188, 232`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.
@@ -905,7 +762,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 69. Expected D, received F
+### 58. Expected D, received F
 
 - Rows: `112, 156, 200, 244`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type.
@@ -918,7 +775,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 70. Expected D, received F
+### 59. Expected D, received F
 
 - Rows: `102, 146, 190, 234`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.
@@ -931,7 +788,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 71. Expected B, received C
+### 60. Expected B, received C
 
 - Rows: `47`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
@@ -943,7 +800,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.750
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 72. Expected A, received C
+### 61. Expected A, received C
 
 - Rows: `71`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
@@ -956,7 +813,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.750
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 73. Expected D, received F
+### 62. Expected D, received F
 
 - Rows: `136, 180, 224`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
@@ -969,7 +826,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 74. Expected D, received F
+### 63. Expected D, received F
 
 - Rows: `128, 172, 216`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to orchestrate multi-step workflows and coordinate distributed application components.
@@ -982,7 +839,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 75. Expected D, received F
+### 64. Expected D, received F
 
 - Rows: `134, 178, 222`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to perform serverless data integration, cataloging, and ETL jobs.
@@ -995,7 +852,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 76. Expected D, received F
+### 65. Expected D, received F
 
 - Rows: `103, 147, 191, 235`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.
@@ -1008,7 +865,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 77. Expected D, received F
+### 66. Expected D, received F
 
 - Rows: `143, 187, 231`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to protect web applications from common web exploits using rules.
@@ -1021,7 +878,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 78. Expected D, received F
+### 67. Expected D, received F
 
 - Rows: `108, 152, 196, 240`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.
@@ -1034,7 +891,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 79. Expected D, received F
+### 68. Expected D, received F
 
 - Rows: `139, 183, 227`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.
@@ -1047,7 +904,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 80. Expected D, received F
+### 69. Expected D, received F
 
 - Rows: `115, 159, 203, 247`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
@@ -1060,7 +917,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 81. Expected D, received F
+### 70. Expected D, received F
 
 - Rows: `130, 174, 218`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to provide shared elastic file storage that can be mounted by multiple compute resources.
@@ -1073,7 +930,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 82. Expected D, received F
+### 71. Expected D, received F
 
 - Rows: `117, 161, 205, 249`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
@@ -1086,7 +943,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 83. Expected D, received F
+### 72. Expected D, received F
 
 - Rows: `106, 150, 194, 238`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
@@ -1099,7 +956,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 84. Expected D, received F
+### 73. Expected D, received F
 
 - Rows: `93`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
@@ -1111,7 +968,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 85. Expected D, received F
+### 74. Expected D, received F
 
 - Rows: `125, 169, 213, 257`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to publish the same event to multiple independent subscribers without requiring each subscriber to poll a shared work queue.
@@ -1124,7 +981,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 86. Expected D, received F
+### 75. Expected D, received F
 
 - Rows: `135, 179, 223`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to query data in Amazon S3 using SQL without managing servers.
@@ -1137,7 +994,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 87. Expected A, received C
+### 76. Expected A, received C
 
 - Rows: `65, 66, 78`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
@@ -1150,20 +1007,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 88. Expected B, received A
-
-- Rows: `6`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
-- Expected rating: `0.85`
-- User answer: `CloudTrail records AWS API activity.`
-- Correct answer: AWS CloudTrail
-- Raw model score: `90.00`; runtime score: `90`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: correct service and basic purpose, but limited explanation.
-- Largest feature contributions: `semantic_similarity_score` +0.900
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 89. Expected D, received F
+### 77. Expected D, received F
 
 - Rows: `118, 162, 206, 250`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
@@ -1176,20 +1020,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 90. Expected C, received F
-
-- Rows: `14`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
-- Expected rating: `0.75`
-- User answer: `Use CloudWatch Logs for operational logs and troubleshooting.`
-- Correct answer: AWS CloudTrail
-- Raw model score: `25.00`; runtime score: `25`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: adjacent observability service but misses API activity audit history.
-- Largest feature contributions: `semantic_similarity_score` +0.250
-- Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
-
-### 91. Expected D, received F
+### 78. Expected D, received F
 
 - Rows: `109, 153, 197, 241`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
@@ -1202,20 +1033,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 92. Expected C, received D
-
-- Rows: `16`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
-- Expected rating: `0.75`
-- User answer: `Use RDS read replicas for low-latency reads in another location.`
-- Correct answer: DynamoDB global tables
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: Name the specific AWS service or feature required by the question.
-- Reviewer feedback: Balanced grade example: understands read replication but chooses the wrong database boundary.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 93. Expected D, received F
+### 79. Expected D, received F
 
 - Rows: `140, 184, 228`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to review workloads against AWS best practices and identify improvement opportunities.
@@ -1228,7 +1046,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 94. Expected D, received F
+### 80. Expected D, received F
 
 - Rows: `127, 171, 215, 259`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
@@ -1241,7 +1059,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 95. Expected D, received F
+### 81. Expected D, received F
 
 - Rows: `48`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
@@ -1253,7 +1071,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 96. Expected D, received F
+### 82. Expected D, received F
 
 - Rows: `133, 177, 221`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to run analytical queries against a managed petabyte-scale data warehouse.
@@ -1266,7 +1084,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 97. Expected D, received F
+### 83. Expected D, received F
 
 - Rows: `110, 154, 198, 242`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.
@@ -1279,20 +1097,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 98. Expected C, received D
-
-- Rows: `36`; occurrences: `1`
-- Question: Explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.
-- Expected rating: `0.75`
-- User answer: `Use AWS Fargate for serverless container compute.`
-- Correct answer: AWS Lambda
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: 
-- Reviewer feedback: Balanced grade example: recognizes managed compute but misses the event-driven Lambda service boundary.
-- Largest feature contributions: `semantic_similarity_score` +0.650
-- Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
-
-### 99. Expected D, received F
+### 84. Expected D, received F
 
 - Rows: `107, 151, 195, 239`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.
@@ -1305,7 +1110,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 100. Expected D, received F
+### 85. Expected D, received F
 
 - Rows: `138, 182, 226`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to set maximum available permissions across accounts in an AWS Organization.
@@ -1318,7 +1123,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 101. Expected B, received C
+### 86. Expected B, received C
 
 - Rows: `46`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.
@@ -1330,7 +1135,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 102. Expected D, received F
+### 87. Expected D, received F
 
 - Rows: `132, 176, 220`; occurrences: `3`
 - Question: Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.
@@ -1343,7 +1148,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 103. Expected D, received F
+### 88. Expected D, received F
 
 - Rows: `45`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -1355,7 +1160,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 104. Expected D, received F
+### 89. Expected D, received F
 
 - Rows: `122, 166, 210, 254`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -1368,7 +1173,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 105. Expected B, received C
+### 90. Expected B, received C
 
 - Rows: `52`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
@@ -1380,7 +1185,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 106. Expected D, received F
+### 91. Expected D, received F
 
 - Rows: `101, 145, 189, 233`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
@@ -1393,7 +1198,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 107. Expected D, received F
+### 92. Expected D, received F
 
 - Rows: `120, 164, 208, 252`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to track resource configuration history and evaluate compliance against rules.
@@ -1406,7 +1211,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 108. Expected D, received F
+### 93. Expected D, received F
 
 - Rows: `105, 149, 193, 237`; occurrences: `4`
 - Question: Explain which AWS service or feature should be used to transition old S3 objects to lower-cost storage classes and expire them after a retention period without changing bucket access permissions.
@@ -1419,7 +1224,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 109. Expected D, received F
+### 94. Expected D, received F
 
 - Rows: `292`; occurrences: `1`
 - Question: Multiple Lambda functions use the same internal utility library, and the team wants to manage that library separately from each function package. Which Lambda feature should the developer use?
@@ -1432,7 +1237,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 110. Expected A, received D
+### 95. Expected A, received D
 
 - Rows: `298`; occurrences: `1`
 - Question: Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?
@@ -1446,7 +1251,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 111. Expected D, received F
+### 96. Expected D, received F
 
 - Rows: `294`; occurrences: `1`
 - Question: Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?
@@ -1459,7 +1264,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 112. Expected D, received F
+### 97. Expected D, received F
 
 - Rows: `295`; occurrences: `1`
 - Question: Review the Lambda handler. What security problem should the developer fix before deployment, and what AWS service is the best fit?
@@ -1472,7 +1277,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 113. Expected D, received F
+### 98. Expected D, received F
 
 - Rows: `297`; occurrences: `1`
 - Question: Review the SAM template. The function deploys but receives AccessDenied when it calls GetItem. What is missing from the template?
@@ -1485,7 +1290,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 114. Expected C, received D
+### 99. Expected C, received D
 
 - Rows: `95`; occurrences: `1`
 - Question: Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?
@@ -1498,7 +1303,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 115. Expected D, received F
+### 100. Expected D, received F
 
 - Rows: `296`; occurrences: `1`
 - Question: Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?
@@ -1511,7 +1316,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 116. Expected D, received F
+### 101. Expected D, received F
 
 - Rows: `284`; occurrences: `1`
 - Question: Several Lambda functions need to read shared non-rotating configuration values organized by application and environment path. Which AWS service should the developer use?
@@ -1524,7 +1329,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 117. Expected D, received F
+### 102. Expected D, received F
 
 - Rows: `290`; occurrences: `1`
 - Question: Several services publish domain events, and the platform team wants rules to route matching custom events to different Lambda targets without direct service-to-service calls. Which EventBridge resource should be used?
@@ -1537,7 +1342,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 118. Expected D, received F
+### 103. Expected D, received F
 
 - Rows: `262`; occurrences: `1`
 - Question: Two application instances may try to create the same DynamoDB item at the same time. Which DynamoDB write approach should the developer use to prevent replacing an existing item?

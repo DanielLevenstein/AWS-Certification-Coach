@@ -71,10 +71,10 @@
     "exam_code": "CLF-C02",
     "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
     "answer_given": "CloudTrail records AWS API activity.",
-    "correct_rating": "B",
-    "rating_given": "B",
+    "correct_rating": "A",
+    "rating_given": "A",
     "correct_answer_text": "Use AWS CloudTrail.",
-    "feedback_text": "Balanced grade example: correct service and basic purpose, but limited explanation."
+    "feedback_text": "Balanced grade example: correct service and core API activity purpose, so this should receive A."
   },
   {
     "schema_version": 3,
@@ -115,10 +115,10 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use Lambda environment variables to provide non-secret function configuration values that can differ by deployment environment.",
     "answer_given": "Environment variables.",
-    "correct_rating": "B",
-    "rating_given": "B",
+    "correct_rating": "C",
+    "rating_given": "C",
     "correct_answer_text": "Use Lambda environment variables.",
-    "feedback_text": "Balanced grade example: names the intended feature but does not explain the Lambda or non-secret constraint."
+    "feedback_text": "Balanced grade example: names the generic configuration feature but misses explicit Lambda context and constraints."
   },
   {
     "schema_version": 3,
@@ -137,10 +137,10 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Create an EventBridge scheduled rule with the Lambda function as the target for recurring serverless execution.",
     "answer_given": "EventBridge schedule.",
-    "correct_rating": "B",
-    "rating_given": "B",
+    "correct_rating": "C",
+    "rating_given": "C",
     "correct_answer_text": "Use an EventBridge scheduled rule.",
-    "feedback_text": "Balanced grade example: correct feature name with minimal reasoning."
+    "feedback_text": "Balanced grade example: names an adjacent scheduling concept but misses the scheduled rule and Lambda target detail."
   },
   {
     "schema_version": 3,
@@ -148,10 +148,10 @@
     "exam_code": "CLF-C02",
     "reference_answer": "Use Amazon SQS to decouple application components with a managed message queue.",
     "answer_given": "Use Amazon SNS because it sends messages between parts of an application.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "F",
+    "rating_given": "F",
     "correct_answer_text": "Use Amazon SQS.",
-    "feedback_text": "Balanced grade example: recognizes messaging but selects publish-subscribe instead of a queue."
+    "feedback_text": "Balanced grade example: selects the wrong messaging pattern for a managed queue requirement."
   },
   {
     "schema_version": 3,
@@ -159,10 +159,10 @@
     "exam_code": "CLF-C02",
     "reference_answer": "Use AWS CloudTrail to record AWS API activity for auditing, governance, and operational troubleshooting.",
     "answer_given": "Use CloudWatch Logs for operational logs and troubleshooting.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "F",
+    "rating_given": "F",
     "correct_answer_text": "Use AWS CloudTrail.",
-    "feedback_text": "Balanced grade example: adjacent observability service but misses API activity audit history."
+    "feedback_text": "Balanced grade example: selects a logging service instead of API activity audit history."
   },
   {
     "schema_version": 3,
@@ -170,10 +170,10 @@
     "exam_code": "CLF-C02",
     "reference_answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
     "answer_given": "Use S3 storage classes to move older objects to cheaper tiers.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "D",
+    "rating_given": "D",
     "correct_answer_text": "Use S3 lifecycle policies.",
-    "feedback_text": "Balanced grade example: identifies the storage-class domain but omits Lifecycle rules and expiration."
+    "feedback_text": "Balanced grade example: mentions related storage-class behavior but misses Lifecycle rules and expiration."
   },
   {
     "schema_version": 3,
@@ -181,10 +181,10 @@
     "exam_code": "SAA-C03",
     "reference_answer": "Use DynamoDB global tables to replicate tables across Regions for low-latency multi-Region access and resilience.",
     "answer_given": "Use RDS read replicas for low-latency reads in another location.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "D",
+    "rating_given": "D",
     "correct_answer_text": "Use DynamoDB global tables.",
-    "feedback_text": "Balanced grade example: understands read replication but chooses the wrong database boundary."
+    "feedback_text": "Balanced grade example: mentions read replication but uses the wrong database service boundary."
   },
   {
     "schema_version": 3,
@@ -192,10 +192,10 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use AWS Secrets Manager to store database credentials and configure scheduled rotation for the secret.",
     "answer_given": "Use Systems Manager Parameter Store to keep configuration values out of code.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "D",
+    "rating_given": "D",
     "correct_answer_text": "Use AWS Secrets Manager.",
-    "feedback_text": "Balanced grade example: related configuration storage, but misses the scheduled secret rotation requirement."
+    "feedback_text": "Balanced grade example: mentions related configuration storage but misses managed secret rotation."
   },
   {
     "schema_version": 3,
@@ -203,10 +203,10 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Use Lambda environment variables to provide non-secret function configuration values that can differ by deployment environment.",
     "answer_given": "Use AWS Systems Manager Parameter Store for application settings.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "F",
+    "rating_given": "F",
     "correct_answer_text": "Use Lambda environment variables.",
-    "feedback_text": "Balanced grade example: related configuration service, but not the direct Lambda runtime feature requested."
+    "feedback_text": "Balanced grade example: selects a different configuration service instead of the direct Lambda feature."
   },
   {
     "schema_version": 3,
@@ -214,10 +214,10 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Configure API Gateway throttling with rate and burst limits to protect backend integrations from request spikes.",
     "answer_given": "Configure a CloudWatch alarm when request counts are high.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "D",
+    "rating_given": "D",
     "correct_answer_text": "Configure API Gateway throttling.",
-    "feedback_text": "Balanced grade example: recognizes traffic monitoring but does not enforce client request limits."
+    "feedback_text": "Balanced grade example: mentions monitoring traffic but does not configure request limiting."
   },
   {
     "schema_version": 3,
@@ -225,10 +225,10 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Create an EventBridge scheduled rule with the Lambda function as the target for recurring serverless execution.",
     "answer_given": "Use an SQS delay queue to run the task later.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "D",
+    "rating_given": "D",
     "correct_answer_text": "Use an EventBridge scheduled rule.",
-    "feedback_text": "Balanced grade example: related asynchronous timing concept, but not recurring scheduling."
+    "feedback_text": "Balanced grade example: mentions asynchronous timing but misses recurring EventBridge scheduling."
   },
   {
     "schema_version": 3,
@@ -236,10 +236,10 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Enable DynamoDB TTL on the expiration timestamp attribute so DynamoDB automatically deletes expired table items.",
     "answer_given": "Use S3 lifecycle rules to expire old objects.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "F",
+    "rating_given": "F",
     "correct_answer_text": "Enable DynamoDB Time to Live.",
-    "feedback_text": "Balanced grade example: recognizes lifecycle expiration, but applies the S3 feature instead of DynamoDB TTL."
+    "feedback_text": "Balanced grade example: applies an S3 expiration feature to a DynamoDB TTL requirement."
   },
   {
     "schema_version": 3,
@@ -247,10 +247,10 @@
     "exam_code": "DVA-C02",
     "reference_answer": "Configure SNS subscription filter policies that match message attributes so each subscriber receives only the relevant fanout messages.",
     "answer_given": "Use separate SQS queues for each order type.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "F",
+    "rating_given": "F",
     "correct_answer_text": "Configure SNS subscription filter policies.",
-    "feedback_text": "Balanced grade example: understands subscriber separation but misses SNS message attribute filtering."
+    "feedback_text": "Balanced grade example: changes the queue topology instead of using SNS attribute filtering."
   },
   {
     "schema_version": 3,
@@ -390,10 +390,10 @@
     "exam_code": "CLF-C02",
     "reference_answer": "Use Amazon CloudFront to cache and deliver content from edge locations to reduce latency for users.",
     "answer_given": "Use Route 53 because it routes users to endpoints.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "F",
+    "rating_given": "F",
     "correct_answer_text": "Use Amazon CloudFront.",
-    "feedback_text": "Balanced grade example: related edge/networking idea, but misses CDN caching."
+    "feedback_text": "Balanced grade example: selects DNS routing instead of CDN edge caching."
   },
   {
     "schema_version": 3,
@@ -401,10 +401,10 @@
     "exam_code": "CLF-C02",
     "reference_answer": "Use AWS Lambda to run event-driven code without managing servers and scale per request.",
     "answer_given": "Use AWS Fargate for serverless container compute.",
-    "correct_rating": "C",
-    "rating_given": "C",
+    "correct_rating": "D",
+    "rating_given": "D",
     "correct_answer_text": "Use AWS Lambda.",
-    "feedback_text": "Balanced grade example: recognizes managed compute but misses the event-driven Lambda service boundary."
+    "feedback_text": "Balanced grade example: recognizes managed compute but misses Lambda event-driven execution."
   },
   {
     "schema_version": 3,

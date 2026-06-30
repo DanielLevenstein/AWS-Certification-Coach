@@ -42,8 +42,10 @@
 | v3.6.1   | Added Show Option selections to UI                                                                                                 |
 | v3.6.2.1 | Added Question Category to UI                                                                                                      |
 | v3.6.3   | Handling final instances of manual feedback in TODO.md                                                                             |
-| v3.6.4 | Generate common_misconceptions and must_not_claim fields during question generation time. |
-| v3.7.0 | Increase test data so there is a more even number of example cases for each grade level. |
+| v3.6.4 | Generate common_misconceptions and must_not_claim fields during question generation time.                                          |
+| v3.7.0 | Increase test data so there is a more even number of example cases for each grade level.                                           |
+| v3.7.1 | Updated curated_training_balanced_grade_examples.json based on performance.                                                        |
+
 # Release Metrics
 
 ## Metric Definitions:
@@ -95,6 +97,7 @@
 | v3.6.3   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 | v3.6.4   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 | v3.7.0   |            95.92% |            100.00% |          97.09% |                92.18% |          97.28% |            95.12% |
+| v3.7.1   |            98.64% |            100.00% |          99.26% |                97.28% |          99.32% |            95.12% |
 
 ## Grade Band Precision
 | Release |       A |     B&C |     D&F |
@@ -109,6 +112,7 @@
 | v3.4.1  | 100.00% |  92.31% | 100.00% |
 | v3.5.2  | 100.00% |  90.00% |  98.25% |
 | v3.7.0  | 94.44% | 95.65% | 93.28% |
+| v3.7.1  | 100.00% | 95.65% | 98.02% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |        D |      F |
@@ -129,6 +133,8 @@
 | v3.4.1   | 100.00% | 83.33% | 100.00% |  100.00% | 77.78% |
 | v3.4.2   | 100.00% | 80.00% | 100.00% | 98.17%   | 77.78% |
 | v3.7.0   | 94.44% | 93.75% | 71.43% | 95.13% | 70.37% |
+| v3.7.1   | 100.00% | 93.75% | 100.00% | 97.79% | 92.59% |
+
 ## Current Coverage
 
 ![Release Metrics Chart](release/v3.6.0_question_coverage_metrics_chart.png)
@@ -136,27 +142,27 @@
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
-| Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.7.0 | 95.92% | 100.00% | 97.09% | 92.18% | 97.28% | 95.12% |
+| v3.7.1 | 98.64% | 100.00% | 99.26% | 97.28% | 99.32% | 95.12% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 94.44% | 95.65% | 93.28% |
-| Recall | 85.00% | 57.89% | 100.00% |
-| F1 | 89.47% | 72.13% | 96.52% |
-| Support | 20 | 38 | 236 |
+| Precision | 100.00% | 95.65% | 98.02% |
+| Recall | 85.71% | 88.00% | 100.00% |
+| F1 | 92.31% | 91.67% | 99.00% |
+| Support | 21 | 25 | 248 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 94.44% | 93.75% | 71.43% | 95.13% | 70.37% |
-| Recall | 85.00% | 83.33% | 25.00% | 99.08% | 100.00% |
-| F1 | 89.47% | 88.24% | 37.04% | 97.07% | 82.61% |
-| Support | 20 | 18 | 20 | 217 | 19 |
+| Precision | 100.00% | 93.75% | 100.00% | 97.79% | 92.59% |
+| Recall | 85.71% | 100.00% | 70.00% | 99.10% | 100.00% |
+| F1 | 92.31% | 96.77% | 82.35% | 98.44% | 96.15% |
+| Support | 21 | 15 | 10 | 223 | 25 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
