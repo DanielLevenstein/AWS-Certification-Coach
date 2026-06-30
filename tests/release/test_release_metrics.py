@@ -24,6 +24,7 @@ from scripts.semantic_similarity_evaluation import (
     plot_semantic_accuracy,
 )
 from scripts.combine_release_charts import combine_accuracy_charts, combine_question_coverage_charts
+from scripts.combine_curated_training_data import combine_curated_training_data
 
 
 STRUCTURED_QUESTIONS = JsonQuestionRepository(
@@ -473,16 +474,18 @@ def test_curated_semantic_metrics_keep_grade_a_precision_high():
 
     assert metrics["per_grade_band"]["A"]["precision"] >= 0.9
 
-def test_curated_semantic_metrics_keep_grade_b_precision_stable():
+def test_config_curated_semantic_metrics_keep_per_grade_precision_stable(tmp_path: Path):
     project_root = Path(__file__).resolve().parents[2]
     questions = JsonQuestionRepository(project_root / "data" / "questions" / "sample_questions.json").all()
+    curated = tmp_path / "curated_training_data.json"
+    combine_curated_training_data(project_root / "config" / "data", curated)
 
     metrics = evaluate_semantic_curated_answers(
-        project_root / "data" / "curated" / "curated_training_data.json",
+        curated,
         questions,
     )
 
-    assert metrics["per_grade"]["B"]["precision"] >= 0.8
+    assert all(metrics["per_grade"][grade]["precision"] >= 0.8 for grade in "ABCDF")
 
 def test_semantic_accuracy_skips_conflicting_duplicate_feedback(tmp_path: Path):
     question = _structured_question("manages encryption keys")

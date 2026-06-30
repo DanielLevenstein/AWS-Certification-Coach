@@ -1,13 +1,13 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 255
+- Curated examples reviewed: 300
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 14, 'B': 7, 'C': 8, 'D': 218, 'F': 8}`
-- Suggested label updates: 12
+- Current grade distribution: `{'A': 22, 'B': 17, 'C': 11, 'D': 224, 'F': 26}`
+- Suggested label updates: 13
 
 ## Suggested Answer Updates
 
-### Row 2: D -> F
+### Row 45: D -> F
 
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
 - Answer: `AWS Key Store`
@@ -15,7 +15,7 @@
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
-### Row 4: B -> C
+### Row 47: B -> C
 
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
 - Answer: `AWS Kinesis`
@@ -23,7 +23,7 @@
 - Semantic score: `75`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 5: D -> F
+### Row 48: D -> F
 
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
 - Answer: `route 53`
@@ -31,7 +31,7 @@
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
-### Row 25: A -> B
+### Row 68: A -> B
 
 - Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
 - Answer: `AWS Code Build`
@@ -40,7 +40,7 @@
 - Reviewer feedback: Again my answer is correct. Are you sure you are using the semantic evaluation logic?
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 27: B -> D
+### Row 70: B -> D
 
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
 - Answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. `
@@ -48,7 +48,7 @@
 - Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 28: A -> C
+### Row 71: A -> C
 
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
 - Answer: `AWS Kinesis`
@@ -57,7 +57,7 @@
 - Reviewer feedback: This is a question which had been misguided for awhile so I think we need to add a it to our synonym list if we don't already have one.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 31: C -> D
+### Row 74: C -> D
 
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
 - Answer: `SNS topics allow multiple receivers to see the same queue but I don't think it allows filtering based on attributes,  so I am going to have to go with I don't know. `
@@ -65,7 +65,7 @@
 - Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 32: F -> D
+### Row 75: F -> D
 
 - Question: A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?
 - Answer: `Which API Gateway feature should be used to run token validation on requests? `
@@ -73,7 +73,7 @@
 - Semantic score: `65`
 - Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
 
-### Row 44: C -> D
+### Row 87: C -> D
 
 - Question: Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.
 - Answer: `AWF Shield or AWS Groups can be used as a stateful firewall to control inbound and outbound traffic. `
@@ -82,16 +82,7 @@
 - Reviewer feedback: Correct answer was present but initial answer was definitely wrong.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 48: B -> D
-
-- Question: A Lambda function needs different non-secret configuration values in development and production. Which Lambda feature should the developer use to pass those values at runtime?
-- Answer: `Use environmental variables `
-- Reference: Lambda environment variables
-- Semantic score: `65`
-- Reviewer feedback: The correct answer was to use lambda environmental variables while I said to use environmental variables.
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 52: C -> D
+### Row 95: C -> D
 
 - Question: Review the SDK helper. Why can this function miss objects, and what SDK pattern should the developer use?
 - Answer: `The bucket contains more objects than a single ListObjectsV2 response can return.
@@ -101,13 +92,32 @@
 - Reviewer feedback: -- I think you gave away the answer in the question.
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 56: A -> D
+### Row 99: A -> D
 
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
 - Answer: `Vertical scaling involves making the individual instances of the EC2 instance bigger while horizontal scaling makes more instances. `
 - Reference: Auto Scaling groups
 - Semantic score: `65`
 - Reviewer feedback: We need to add a question about vertical scaling.
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 298: A -> D
+
+- Question: Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?
+- Answer: `Change resource to 
+"Resource": "s3://example-bucket/reports/*"`
+- Reference: Restrict the Resource to arn:aws:s3:::example-bucket/reports/*
+- Semantic score: `65`
+- Reviewer feedback: My answer exactly matches the proposed code block.
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 299: C -> D
+
+- Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
+- Answer: `Elastic load balancing is a way of automatically adjusting demand based on health checks. `
+- Reference: Auto Scaling groups
+- Semantic score: `65`
+- Reviewer feedback: Elastic Load balancing is a sub feature of auto scaling groups
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ## Release Table Recommendation

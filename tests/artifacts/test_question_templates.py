@@ -7,6 +7,8 @@ from aws_certification_coach.question_templates import (
     DEFAULT_QUESTION_TEMPLATE_PATH,
     load_question_templates,
 )
+from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
+from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from scripts.generate_app_question_artifacts import _build_app_questions
 from scripts.generate_developer_question_artifacts import build_questions
 from scripts.download_developer_original_questions import SOURCE_ROWS
@@ -102,6 +104,50 @@ def test_developer_generator_uses_question_template_details_before_source_overri
     assert row["question_category"] == "integration_workflows"
     assert row["reference_answer"].startswith("Configure Lambda reserved concurrency")
     assert row["original_multiple_choice"]["options"][0]["text"] == "Configure Lambda reserved concurrency."
+
+
+def test_developer_generator_adds_lambda_environmental_variables_alias():
+    source = next(row for row in SOURCE_ROWS if row["source_id"] == "dva-lambda-env-vars")
+
+    row = build_questions([source])[0]
+
+    assert "Use environmental variables." in row["acceptable_answers"]
+    assert "environmental variables" in row["acceptable_answers"]
+    assert row["reference_answer"].startswith("Use Lambda environment variables")
+    assert semantic_similarity_score(_question_from_row(row), "Use environmental variables") >= 80
+
+
+def _question_from_row(row: dict) -> Question:
+    original = row["original_multiple_choice"]
+    return Question(
+        certification=row["certification"],
+        exam_code=row.get("exam_code", ""),
+        domain=row["domain"],
+        difficulty=row["difficulty"],
+        question=row["question"],
+        question_type=row["question_type"],
+        question_category=row["question_category"],
+        reference_answer=row["reference_answer"],
+        key_concepts=list(row["key_concepts"]),
+        required_concepts=list(row["required_concepts"]),
+        bonus_concepts=list(row["bonus_concepts"]),
+        common_misconceptions=list(row["common_misconceptions"]),
+        acceptable_answers=list(row["acceptable_answers"]),
+        must_not_claim=list(row["must_not_claim"]),
+        do_not_claim_explanation=list(row["do_not_claim_explanation"]),
+        original_multiple_choice=MultipleChoiceQuestion(
+            question=original["question"],
+            options=[
+                MultipleChoiceOption(option_id=option["option_id"], text=option["text"])
+                for option in original["options"]
+            ],
+            correct_option_ids=list(original["correct_option_ids"]),
+            explanation=original["explanation"],
+            source_name=original["source_name"],
+            source_url=original["source_url"],
+            source_license_notes=original["source_license_notes"],
+        ),
+    )
 
 
 def test_question_template_loader_rejects_answer_labels(tmp_path: Path):
@@ -264,4 +310,9 @@ def test_generated_app_questions_expand_s3_lifecycle_bucket_policy_boundary_case
     assert any(
         "S3 bucket policy only is the best fit" in misconception
         for misconception in row["common_misconceptions"]
+    )
+    assert any(
+        "S3 Lifecycle rules manage object transitions and expiration over time" in explanation
+        and "bucket policies are resource-based access policies" in explanation
+        for explanation in row["do_not_claim_explanation"]
     )

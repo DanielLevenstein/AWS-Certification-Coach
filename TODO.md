@@ -28,19 +28,10 @@ Implementing dedicated AWS knowledge based on a dedicated feature branch using t
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
 ## Question Expansion
-Expanded service-selection-template questions so generated rows include multiple selection categories.
-Implemented categories:
-- cost_tradeoff
-- operational_complexity_tradeoff
-- latency_tradeoff
-- durability_availability_tradeoff
-- managed_vs_self_managed_tradeoff
-- event_driven_vs_batch_tradeoff
-- security_boundary_tradeoff
+- Move download_developer_original_questions.py into question_template
+- Increase test data so there is a more even number of example cases for each grade level.
 
 ### Specific question suggestions
-- Add an explanatory question or feedback note contrasting S3 lifecycle policies with S3 bucket policies.
-- Add a Lambda environment variables wording case so answers that say "environmental variables" are recognized when the intended concept is Lambda environment variables.
 - Review artifact-review prompts that may give away the expected issue in the question wording, especially SDK pagination examples.
 - Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
 - Improve `suggested_improvements` wording so it gives concrete next steps instead of generic "explain improvements" style feedback.
@@ -48,7 +39,7 @@ Implemented categories:
 Add service-oriented questions that directly ask the user to compare the pros and cons of two different services. 
 
 ### Knowledge base notes for expansion
-- Treat the top-level `common_misconceptions` section as a legacy compatibility section for future code; leave it in place rather than moving code or data around.
+- Treat the top-level `common_misconceptions` section as a legacy compatibility section for future code; 
 - Expand the `services` section only when the next stage of question expansion identifies specific service metadata needed for generation, distractor quality, or feedback.
 
 ### Additional Feedback

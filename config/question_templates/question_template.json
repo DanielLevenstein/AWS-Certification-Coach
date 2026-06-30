@@ -1062,6 +1062,11 @@
       "generated_question": "A Lambda function needs different non-secret configuration values in development and production. Which Lambda feature should the developer use to pass those values at runtime?",
       "correct_option": "Use Lambda environment variables.",
       "reference_answer": "Use Lambda environment variables to provide non-secret function configuration values that can differ by deployment environment.",
+      "acceptable_answer_aliases": [
+        "Use environmental variables.",
+        "environmental variables",
+        "Lambda environmental variables"
+      ],
       "distractors": [
         "Store the values in CloudWatch Logs.",
         "Create an IAM role for each value.",

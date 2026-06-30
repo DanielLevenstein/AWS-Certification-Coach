@@ -45,7 +45,7 @@ def render_release_metrics(
         [
             "## Generated Release Metrics",
             "",
-            "| Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
+            "| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |",
             "|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|",
             f"| {release_label} | {semantic['semantic_grade_accuracy']:.2%} | "
             f"{semantic['semantic_precision']:.2%} | {semantic['semantic_recall']:.2%} | "
