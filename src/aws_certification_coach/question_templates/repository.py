@@ -85,6 +85,7 @@ class DeveloperQuestionScenario:
     correct_option: str
     reference_answer: str
     distractors: tuple[str, ...]
+    acceptable_answer_aliases: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -159,6 +160,7 @@ def _load_question_templates(resolved_path: str) -> QuestionTemplateCatalog:
                 correct_option=str(row["correct_option"]),
                 reference_answer=str(row["reference_answer"]),
                 distractors=tuple(str(value) for value in row["distractors"]),
+                acceptable_answer_aliases=tuple(str(value) for value in row.get("acceptable_answer_aliases", [])),
             )
             for row in payload["developer_question_scenarios"]
         ),
@@ -287,6 +289,9 @@ def _validate_developer_question_scenario_row(row: object, index: int, source: P
         raise ValueError(f"Developer-question scenario row {index} has invalid distractors: {source}")
     if len(value) < 3:
         raise ValueError(f"Developer-question scenario row {index} needs at least three distractors: {source}")
+    aliases = row.get("acceptable_answer_aliases", [])
+    if not isinstance(aliases, list) or not all(str(item).strip() for item in aliases):
+        raise ValueError(f"Developer-question scenario row {index} has invalid acceptable_answer_aliases: {source}")
 
 
 def _find_forbidden_keys(value: object) -> set[str]:

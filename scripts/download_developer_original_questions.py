@@ -116,6 +116,11 @@ SOURCE_ROWS = [
         "task_statement": "Configure a Lambda function with non-secret settings that can vary between deployment environments.",
         "services": ["AWS Lambda"],
         "concepts": ["Lambda environment variables", "function configuration", "deployment environment", "non-secret settings"],
+        "acceptable_answer_aliases": [
+            "Use environmental variables.",
+            "environmental variables",
+            "Lambda environmental variables",
+        ],
         "difficulty": "Medium",
         "exam_style_notes": "Configuration scenario asking where to store runtime settings for a serverless function.",
         "distractor_pattern": "Distinguish environment variables from Secrets Manager, IAM roles, and CloudWatch Logs.",

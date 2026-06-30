@@ -146,6 +146,12 @@ def service_name_for_source_url(source_url: str) -> str:
 
 
 def distractor_feedback(service_name: str, distractor: str, purpose: str) -> str:
+    if _is_s3_lifecycle_bucket_policy_boundary(service_name, distractor):
+        return (
+            f"{service_name} is a better option because it is designed to {purpose}. "
+            "S3 Lifecycle rules manage object transitions and expiration over time; "
+            "S3 bucket policies are resource-based access policies that allow or deny requests to the bucket and objects."
+        )
     distractor_context = distractor_service_context(distractor)
     if distractor_context:
         return (
@@ -156,6 +162,10 @@ def distractor_feedback(service_name: str, distractor: str, purpose: str) -> str
         f"{service_name} is a better option because it is designed to {purpose}, "
         f"while {distractor} does not satisfy that requirement."
     )
+
+
+def _is_s3_lifecycle_bucket_policy_boundary(service_name: str, distractor: str) -> bool:
+    return "s3 lifecycle" in service_name.casefold() and "bucket polic" in distractor.casefold()
 
 
 def distractor_service_context(distractor: str) -> str:

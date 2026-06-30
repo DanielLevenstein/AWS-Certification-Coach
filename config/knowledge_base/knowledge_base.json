@@ -2293,7 +2293,7 @@
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html",
       "do_not_claim_explanation": [
-        "S3 lifecycle policies is a better option for this scenario. S3 bucket policies does not satisfy the same requirement.",
+        "S3 lifecycle policies is a better option for this scenario. S3 Lifecycle rules manage object transitions and expiration over time; S3 bucket policies are resource-based access policies that allow or deny requests to the bucket and objects.",
         "S3 lifecycle policies is a better option for this scenario. AWS Organizations does not satisfy the same requirement.",
         "S3 lifecycle policies is a better option for this scenario. Amazon GuardDuty does not satisfy the same requirement."
       ]

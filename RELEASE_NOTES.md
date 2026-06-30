@@ -41,6 +41,8 @@
 | v3.6.0   | Added question_category taxonomy coverage to generated app questions.                                                              |
 | v3.6.1   | Added Show Option selections to UI                                                                                                 |
 | v3.6.2.1 | Added Question Category to UI                                                                                                      |
+| v3.6.3   | Handling final instances of manual feedback in TODO.md                                                                             |
+
 
 # Release Metrics
 
@@ -90,6 +92,7 @@
 | v3.4.1   |            99.20% |            100.00% |          99.17% |                98.80% |         100.00% |            94.95% |
 | v3.5.2   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            94.95% |
 | v3.6.1   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
+| v3.6.3   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 
 ## Grade Band Precision
 | Release |       A |     B&C |     D&F |
@@ -130,27 +133,27 @@
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
-| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+| Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.6.1  |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
+| v3.6.3 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 95.12% |
 
 ## Grade Band Metrics
 
-| Metric    |       A |     BC |      DF |
-|:----------|--------:|-------:|--------:|
-| Precision | 100.00% | 90.00% |  98.25% |
-| Recall    |  84.62% | 75.00% | 100.00% |
-| F1        |  91.67% | 81.82% |  99.12% |
-| Support   |      13 |     12 |     224 |
+| Metric | A | BC | DF |
+|:-------|--:|---:|---:|
+| Precision | 100.00% | 90.00% | 98.25% |
+| Recall | 84.62% | 75.00% | 100.00% |
+| F1 | 91.67% | 81.82% | 99.12% |
+| Support | 13 | 12 | 224 |
 
 ## Per Grade Metrics
 
-| Metric    |       A |      B |       C |      D |       F |
-|:----------|--------:|-------:|--------:|-------:|--------:|
-| Precision | 100.00% | 80.00% | 100.00% | 98.17% |  77.78% |
-| Recall    |  84.62% | 80.00% |  71.43% | 99.08% | 100.00% |
-| F1        |  91.67% | 80.00% |  83.33% | 98.62% |  87.50% |
-| Support   |      13 |      5 |       7 |    217 |       7 |
+| Metric | A | B | C | D | F |
+|:-------|--:|--:|--:|--:|--:|
+| Precision | 100.00% | 80.00% | 100.00% | 98.17% | 77.78% |
+| Recall | 84.62% | 80.00% | 71.43% | 99.08% | 100.00% |
+| F1 | 91.67% | 80.00% | 83.33% | 98.62% | 87.50% |
+| Support | 13 | 5 | 7 | 217 | 7 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
@@ -161,7 +164,7 @@ Question coverage concept count: `285`
 Question coverage question-category count: `14`
 Top covered concepts: `fanout, S3 Lifecycle, object expiration, Amazon RDS, replication, low latency, Auto Scaling, EC2, health checks, SQS, message queue, decoupling`
 Knowledge base schema version: `3`
-Knowledge base file size: `70127` bytes
+Knowledge base file size: `70249` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`

@@ -415,7 +415,10 @@
     "acceptable_answers": [
       "Use Lambda environment variables.",
       "Use Lambda environment variables to provide non-secret function configuration values that can differ by deployment environment.",
-      "AWS Lambda"
+      "AWS Lambda",
+      "Use environmental variables.",
+      "environmental variables",
+      "Lambda environmental variables"
     ],
     "must_not_claim": [
       "Store the values in CloudWatch Logs. satisfies the scenario better than AWS Lambda.",

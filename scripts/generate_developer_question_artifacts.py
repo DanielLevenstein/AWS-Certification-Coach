@@ -108,11 +108,17 @@ def _rubric_metadata(
 ) -> dict[str, list[str]]:
     distractors = _distractors(source, template_scenario)
     correct_option = _correct_option(source, template_scenario)
+    acceptable_answers = [
+        correct_option,
+        reference_answer,
+        service,
+        *_acceptable_answer_aliases(source, template_scenario),
+    ]
     return {
         "required_concepts": concepts,
         "bonus_concepts": [],
         "common_misconceptions": [f"{distractor} is the best fit for this scenario." for distractor in distractors],
-        "acceptable_answers": [correct_option, reference_answer, service],
+        "acceptable_answers": list(dict.fromkeys(acceptable_answers)),
         "must_not_claim": [f"{distractor} satisfies the scenario better than {service}." for distractor in distractors],
         "do_not_claim_explanation": [
             distractor_feedback(service, distractor, _scenario_purpose(source, reference_answer))
@@ -160,9 +166,19 @@ def _developer_question_scenarios() -> dict[str, dict[str, object]]:
             "correct_option": scenario.correct_option,
             "reference_answer": scenario.reference_answer,
             "distractors": list(scenario.distractors),
+            "acceptable_answer_aliases": list(scenario.acceptable_answer_aliases),
         }
         for scenario in load_question_templates().developer_question_scenarios
     }
+
+
+def _acceptable_answer_aliases(
+    source: dict[str, object],
+    template_scenario: dict[str, object] | None,
+) -> list[str]:
+    if template_scenario is not None:
+        return [str(alias) for alias in template_scenario.get("acceptable_answer_aliases", [])]
+    return [str(alias) for alias in source.get("acceptable_answer_aliases", [])]
 
 
 def _scenario_purpose(source: dict[str, object], reference_answer: str) -> str:
