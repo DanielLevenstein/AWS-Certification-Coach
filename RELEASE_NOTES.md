@@ -4,33 +4,36 @@
 - Release versions in Docker and GitHub should match, but not all builds are tagged. 
 - Release notes are summarized for readability, and some version numbers may be lost in the summarization. 
 
-| Release | Description                                                                                                                        |
-| :------ | :--------------------------------------------------------------------------------------------------------------------------------- |
-| v1.0.0  | Initial Streamlit/Docker release with generated AWS certification practice questions.                                              |
-| v1.3.4  | Swaps app scoring from trained regression to`semantic_similarity`.                                                                 |
-| v2.1.1  | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                   |
-| v2.1.2  | Expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture.                  |
-| v2.2.4  | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table. |
-| v2.3.1  | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.   |
-| v2.4.1  | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                    |
-| v2.4.5  | Ensure that full sentence answers which reference the correct service receive grade A                                              |
-| v2.5.1  | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                        |
-| v2.5.4  | Added new grading band chart with bands defined as A, BC, and DF                                                                   |
-| v3.0.1  | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.           |
-| v3.0.2  | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                           |
-| v3.0.3  | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                        |
-| v3.0.4  | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation.        |
-| v3.1.1  | Split question and knowledge base schema (knowledge_base and question_template.json)                                               |
-| v3.1.2  | Added documentation links for all services and displayed suggested_improvements in UI                                              |
-| v3.3.4  | Setting the best wrong answer back to D in answer rubric.                                                                          |
-| v3.4.1  | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                           |
-| v3.4.2  | Update feedback explanations for wrong service selection                                                                           |
-| v3.6.0  | Added question_category taxonomy coverage to generated app questions.                                                              |
-| v3.6.1  | Added Show Option selections to UI, Grade tuning based on user feedback.                                                           |
-| v3.6.4 | Generate common_misconceptions and must_not_claim fields during question generation time.                                          |
-| v3.7.0 | Increase test data so there is a more even number of example cases for each grade level.                                           |
-| v3.7.1 | Updated curated_training_balanced_grade_examples.json based on performance.                                                        |
-| v3.7.2 | Removed Duplicate D grades from training data.                                                                                     |
+| Release  | Description                                                                                                                             |
+|:---------|:----------------------------------------------------------------------------------------------------------------------------------------|
+| v1.0.0   | Initial Streamlit/Docker release with generated AWS certification practice questions.                                                   |
+| v1.3.4   | Swaps app scoring from trained regression to`semantic_similarity`.                                                                      |
+| v2.1.1   | Adds Developer Associate freeform question generation and independent question-fidelity scoring.                                        |
+| v2.1.2   | Expands the Developer source set to 12 rows, generates 12 Developer questions, and adds v2 feedback text capture.                       |
+| v2.2.4   | Stabilizes answer grading against the standardized rubric and moves Training Accuracy out of the maintained release metrics table.      |
+| v2.3.1   | Adds the app-facing answer rubric data contract, generated exact-letter grade examples, and strict grading release metrics flag.        |
+| v2.4.1   | Adds the first Phase 2 artifact-review question iteration for IAM, Lambda, SDK, and SAM review.                                         |
+| v2.4.5   | Ensure that full sentence answers which reference the correct service receive grade A                                                   |
+| v2.5.1   | Reimplemented per-grade performance evaluation for semantic accuracy model.                                                             |
+| v2.5.4   | Added new grading band chart with bands defined as A, BC, and DF                                                                        |
+| v3.0.1   | Adds the first structured AWS knowledge base with deterministic classifier access and bounded lightweight-model context.                |
+| v3.0.2   | Splits model smoke and full-training gates, groups tests by review area, and isolates deployment checks.                                |
+| v3.0.3   | Makes quick release-note generation reuse validated full-run metrics without retraining or rerunning tests.                             |
+| v3.0.4   | Removes the unused answer regressor and generated split workflow, moves all release grading metrics to semantic evaluation.             |
+| v3.1.1   | Split question and knowledge base schema (knowledge_base and question_template.json)                                                    |
+| v3.1.2   | Added documentation links for all services and displayed suggested_improvements in UI                                                   |
+| v3.3.4   | Setting the best wrong answer back to D in answer rubric.                                                                               |
+| v3.4.1   | Moving literal constants out of generate_developer_question_artifacts.py and into question_template.json                                |
+| v3.4.2   | Update feedback explanations for wrong service selection                                                                                |
+| v3.6.0   | Added question_category taxonomy coverage to generated app questions.                                                                   |
+| v3.6.1   | Added Show Option selections to UI, Grade tuning based on user feedback.                                                                |
+| v3.6.4   | Generate common_misconceptions and must_not_claim fields during question generation time.                                               |
+| v3.7.0   | Increase test data so there is a more even number of example cases for each grade level.                                                |
+| v3.7.1   | Updated curated_training_balanced_grade_examples.json based on performance.                                                             |
+| v3.7.2   | Removed Duplicate D grades from training data.                                                                                          |
+| v3.7.3   | Revert v3.6.4 Generate common_misconceptions and must_not_claim fields during question generation time.                                 |
+| V3.7.3.1 | Removed references to certification-coach scenarios from the AWS knowledge base and expanded descriptions to be more than one sentence. |
+
 # Release Metrics
 
 ## Metric Definitions:

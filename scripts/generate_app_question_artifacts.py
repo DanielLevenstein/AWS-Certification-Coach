@@ -9,10 +9,6 @@ from pathlib import Path
 from aws_certification_coach.config import current_schema_version
 from aws_certification_coach.knowledge_base import load_knowledge_base
 from aws_certification_coach.question_templates import load_question_templates
-from aws_certification_coach.questions.rubric_metadata import (
-    is_s3_lifecycle_bucket_policy_boundary,
-    service_selection_rubric_metadata,
-)
 
 
 SERVICE_SELECTION_TEMPLATE_ID = "service-selection-freeform"
@@ -92,16 +88,17 @@ def _rubric_metadata(
     explanation: str,
     purpose: str,
 ) -> dict[str, list[str]]:
-    return service_selection_rubric_metadata(
-        service_name,
-        concepts,
-        distractors,
-        correct_option,
-        explanation,
-        purpose,
-        misconception_subject="requirement",
-        feedback_builder=distractor_feedback,
-    )
+    return {
+        "required_concepts": concepts,
+        "bonus_concepts": [],
+        "common_misconceptions": [f"{distractor} is the best fit for this requirement." for distractor in distractors],
+        "acceptable_answers": [correct_option, explanation, service_name],
+        "must_not_claim": [f"{distractor} satisfies the scenario better than {service_name}." for distractor in distractors],
+        "do_not_claim_explanation": [
+            distractor_feedback(service_name, distractor, purpose)
+            for distractor in distractors
+        ],
+    }
 
 
 def _option(option_id: str, text: str) -> dict[str, str]:
@@ -149,7 +146,7 @@ def service_name_for_source_url(source_url: str) -> str:
 
 
 def distractor_feedback(service_name: str, distractor: str, purpose: str) -> str:
-    if is_s3_lifecycle_bucket_policy_boundary(service_name, distractor):
+    if _is_s3_lifecycle_bucket_policy_boundary(service_name, distractor):
         return (
             f"{service_name} is a better option because it is designed to {purpose}. "
             "S3 Lifecycle rules manage object transitions and expiration over time; "
@@ -165,6 +162,10 @@ def distractor_feedback(service_name: str, distractor: str, purpose: str) -> str
         f"{service_name} is a better option because it is designed to {purpose}, "
         f"while {distractor} does not satisfy that requirement."
     )
+
+
+def _is_s3_lifecycle_bucket_policy_boundary(service_name: str, distractor: str) -> bool:
+    return "s3 lifecycle" in service_name.casefold() and "bucket polic" in distractor.casefold()
 
 
 def distractor_service_context(distractor: str) -> str:
