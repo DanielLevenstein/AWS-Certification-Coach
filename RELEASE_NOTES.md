@@ -32,7 +32,7 @@
 | v3.7.1   | Updated curated_training_balanced_grade_examples.json based on performance.                                                             |
 | v3.7.2   | Removed Duplicate D grades from training data.                                                                                          |
 | v3.7.3   | Revert v3.6.4 Generate common_misconceptions and must_not_claim fields during question generation time.                                 |
-| V3.7.3.1 | Removed references to certification-coach scenarios from the AWS knowledge base and expanded descriptions to be more than one sentence. |
+| v3.7.3.1 | Removed references to certification-coach scenarios from the AWS knowledge base and expanded descriptions to be more than one sentence. |
 
 # Release Metrics
 
