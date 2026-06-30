@@ -57,6 +57,24 @@ def test_knowledge_base_source_merges_feedback_flag_sections():
     assert "must_not_claim" not in payload
 
 
+def test_knowledge_base_does_not_reference_generation_internals():
+    payload = json.loads(DEFAULT_KNOWLEDGE_BASE_PATH.read_text(encoding="utf-8"))
+    serialized = json.dumps(payload).casefold()
+
+    assert "codex" not in serialized
+    assert "certification-coach scenarios" not in serialized
+
+
+def test_knowledge_base_service_descriptions_are_substantive():
+    knowledge = load_knowledge_base()
+
+    for service in knowledge.services:
+        description = service.description.strip()
+        assert "aws service or feature" not in description.casefold()
+        assert len(description.split()) >= 20
+        assert description.count(".") >= 2
+
+
 def test_knowledge_base_normalizes_syntax_and_exposes_service_aliases():
     knowledge = load_knowledge_base()
 

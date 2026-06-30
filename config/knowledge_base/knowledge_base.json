@@ -87,7 +87,7 @@
         "amazon athena"
       ],
       "source_url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html",
-      "description": "Amazon Athena is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon Athena is a serverless interactive query service that lets users analyze data in Amazon S3 with standard SQL. It is useful when data should stay in object storage and teams want ad hoc analytics without provisioning or managing database infrastructure."
     },
     {
       "id": "amazon-cloudfront",
@@ -100,7 +100,7 @@
         "amazon cloudfront"
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
-      "description": "Amazon CloudFront is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon CloudFront is a content delivery network that caches and serves web content, APIs, and streaming assets from edge locations near viewers. It helps reduce latency and origin load while integrating with AWS security controls such as TLS, signed URLs, and AWS WAF."
     },
     {
       "id": "amazon-cloudwatch",
@@ -113,7 +113,7 @@
         "amazon cloudwatch"
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html",
-      "description": "Amazon CloudWatch is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon CloudWatch collects metrics, logs, events, alarms, and dashboards for AWS resources and applications. It is used to observe system health, detect operational problems, trigger notifications, and support troubleshooting without building a separate monitoring stack."
     },
     {
       "id": "amazon-cognito",
@@ -126,7 +126,7 @@
         "amazon cognito"
       ],
       "source_url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
-      "description": "Amazon Cognito is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon Cognito provides managed user sign-up, sign-in, federation, and identity features for web and mobile applications. It helps applications authenticate users, issue tokens, and integrate with social, enterprise, or custom identity providers without building the full identity layer from scratch."
     },
     {
       "id": "amazon-ebs-snapshots",
@@ -139,7 +139,7 @@
         "amazon ebs snapshots"
       ],
       "source_url": "https://docs.aws.amazon.com/ebs/latest/userguide/EBSSnapshots.html",
-      "description": "Amazon EBS snapshots is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon EBS snapshots are point-in-time backups of Amazon EBS volumes stored durably in Amazon S3-managed storage. They support recovery, copying volumes across Regions or accounts, and creating new volumes from previous block-storage states."
     },
     {
       "id": "amazon-efs",
@@ -152,7 +152,7 @@
         "amazon efs"
       ],
       "source_url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html",
-      "description": "Amazon EFS is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon Elastic File System provides managed, elastic NFS file storage that can be mounted by multiple compute resources at the same time. It is useful for shared file workloads where applications need a POSIX-style file system that grows and shrinks without manual capacity planning."
     },
     {
       "id": "amazon-eventbridge",
@@ -165,7 +165,7 @@
         "amazon eventbridge"
       ],
       "source_url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
-      "description": "Amazon EventBridge is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon EventBridge is a serverless event bus service that routes events from AWS services, custom applications, and SaaS sources to targets. It supports event-driven architectures by filtering events with rules and decoupling producers from consumers."
     },
     {
       "id": "amazon-kinesis-data-streams",
@@ -178,7 +178,7 @@
         "amazon kinesis data streams"
       ],
       "source_url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html",
-      "description": "Amazon Kinesis Data Streams is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon Kinesis Data Streams captures and stores high-throughput streaming data for real-time processing. It is used when applications need ordered, durable stream records that consumers can process independently with low latency."
     },
     {
       "id": "amazon-rds-multi-az",
@@ -191,7 +191,7 @@
         "amazon rds multi-az"
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
-      "description": "Amazon RDS Multi-AZ is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon RDS Multi-AZ deployments provide synchronous standby replication and automatic failover for supported relational database engines. They improve availability and durability for database workloads, but they are primarily a resilience feature rather than a read-scaling feature."
     },
     {
       "id": "amazon-rds-read-replicas",
@@ -204,7 +204,7 @@
         "amazon rds read replicas"
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
-      "description": "Amazon RDS read replicas is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon RDS read replicas create asynchronously replicated database instances that can serve read traffic separately from the primary database. They help scale read-heavy workloads and can also support reporting, regional read locality, or some disaster recovery patterns depending on the engine."
     },
     {
       "id": "amazon-redshift",
@@ -217,7 +217,7 @@
         "amazon redshift"
       ],
       "source_url": "https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html",
-      "description": "Amazon Redshift is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon Redshift is a managed data warehouse service designed for analytical SQL queries across large structured and semi-structured datasets. It is used for business intelligence and reporting workloads where columnar storage, query optimization, and integration with data lakes are important."
     },
     {
       "id": "amazon-route-53",
@@ -230,7 +230,7 @@
         "amazon route 53"
       ],
       "source_url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
-      "description": "Amazon Route 53 is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon Route 53 is a scalable DNS and domain registration service with routing policies and health checks. It maps domain names to application endpoints and can route users based on latency, geography, weighted policies, failover status, or other DNS-level decisions."
     },
     {
       "id": "amazon-s3-versioning",
@@ -243,7 +243,7 @@
         "amazon s3 versioning"
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html",
-      "description": "Amazon S3 versioning is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon S3 versioning keeps multiple versions of an object in a bucket after overwrite or delete operations. It helps recover from accidental changes, application bugs, and unintended deletions by preserving prior object states."
     },
     {
       "id": "amazon-sns",
@@ -256,7 +256,7 @@
         "amazon sns"
       ],
       "source_url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
-      "description": "Amazon SNS is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon Simple Notification Service is a managed publish-subscribe messaging service for fanout to multiple subscribers. It is used to send notifications or event messages to queues, Lambda functions, HTTP endpoints, mobile push channels, email, and other supported targets."
     },
     {
       "id": "apigateway",
@@ -268,7 +268,7 @@
         "api gateway"
       ],
       "source_url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html",
-      "description": "A managed service for creating and operating APIs that route requests to backend integrations."
+      "description": "Amazon API Gateway is a managed service for creating, publishing, securing, monitoring, and throttling APIs. It routes client requests to backend integrations such as Lambda functions, HTTP services, or AWS services while handling concerns such as authorization, stages, and request limits."
     },
     {
       "id": "auto-scaling-groups",
@@ -280,7 +280,7 @@
         "auto scaling groups"
       ],
       "source_url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html",
-      "description": "Auto Scaling groups is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Amazon EC2 Auto Scaling groups manage collections of EC2 instances as a logical fleet. They launch, terminate, and replace instances according to desired capacity, health checks, and scaling policies so applications can adapt to demand and recover from instance failures."
     },
     {
       "id": "aws-backup",
@@ -293,7 +293,7 @@
         "aws backup"
       ],
       "source_url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html",
-      "description": "AWS Backup is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "AWS Backup centralizes backup policy management across supported AWS services. It helps automate backup schedules, retention rules, lifecycle transitions, and compliance reporting from a single service rather than configuring each resource independently."
     },
     {
       "id": "aws-glue",
@@ -306,7 +306,7 @@
         "aws glue"
       ],
       "source_url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html",
-      "description": "AWS Glue is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "AWS Glue is a serverless data integration service for discovering, cataloging, preparing, and transforming data. It is commonly used for extract, transform, and load workflows, data catalog metadata, crawlers, and jobs that prepare data for analytics services."
     },
     {
       "id": "aws-organizations",
@@ -319,7 +319,7 @@
         "aws organizations"
       ],
       "source_url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html",
-      "description": "AWS Organizations is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "AWS Organizations centrally manages multiple AWS accounts under an organization structure. It supports consolidated billing, account grouping, delegated administration, and governance controls such as service control policies."
     },
     {
       "id": "aws-step-functions",
@@ -332,7 +332,7 @@
         "aws step functions"
       ],
       "source_url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html",
-      "description": "AWS Step Functions is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "AWS Step Functions coordinates distributed application components through visual workflows called state machines. It is used to sequence tasks, branch logic, handle retries and errors, and orchestrate services without embedding all workflow control in application code."
     },
     {
       "id": "aws-trusted-advisor",
@@ -345,7 +345,7 @@
         "aws trusted advisor"
       ],
       "source_url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html",
-      "description": "AWS Trusted Advisor is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "AWS Trusted Advisor checks AWS environments against best-practice recommendations for cost optimization, performance, security, fault tolerance, and service limits. It helps identify improvement opportunities, but it does not replace workload-specific architecture review or monitoring."
     },
     {
       "id": "aws-waf",
@@ -358,7 +358,7 @@
         "aws waf"
       ],
       "source_url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html",
-      "description": "AWS WAF is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "AWS WAF is a web application firewall that helps protect HTTP and HTTPS applications from common web exploits and unwanted traffic. It uses rules, managed rule groups, and request inspection to filter traffic for resources such as CloudFront distributions, Application Load Balancers, and API Gateway APIs."
     },
     {
       "id": "aws-well-architected-tool",
@@ -371,7 +371,7 @@
         "aws well-architected tool"
       ],
       "source_url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html",
-      "description": "AWS Well-Architected Tool is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "AWS Well-Architected Tool helps teams review workloads against AWS architectural best practices. It organizes findings around the Well-Architected pillars and produces improvement plans for reliability, security, cost, performance, operations, and sustainability considerations."
     },
     {
       "id": "budgets",
@@ -385,7 +385,7 @@
         "cost center"
       ],
       "source_url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html",
-      "description": "A budgeting service that tracks cost or usage against configured thresholds and sends notifications."
+      "description": "AWS Budgets tracks cost, usage, reservation, and savings-plan metrics against configured thresholds. It sends alerts when actual or forecasted values cross limits, helping teams monitor spend and respond before billing surprises become larger problems."
     },
     {
       "id": "cloudtrail",
@@ -397,7 +397,7 @@
         "cloud trail"
       ],
       "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
-      "description": "A service that records AWS account activity and API events for governance and auditing."
+      "description": "AWS CloudTrail records account activity and API events across AWS services. It supports governance, compliance, security analysis, and operational troubleshooting by showing who made a request, when it happened, which resource was affected, and where the request came from."
     },
     {
       "id": "codebuild",
@@ -411,7 +411,7 @@
         "aws code build"
       ],
       "source_url": "https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html",
-      "description": "A managed build service that runs commands defined for a build project."
+      "description": "AWS CodeBuild is a managed continuous integration service that compiles source code, runs tests, and produces build artifacts. Build projects use build environments and buildspec commands so teams can automate repeatable build and validation steps without managing build servers."
     },
     {
       "id": "config",
@@ -423,7 +423,7 @@
         "aws config"
       ],
       "source_url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html",
-      "description": "A service that records supported resource configuration state and evaluates configurations against rules."
+      "description": "AWS Config records supported AWS resource configuration changes and evaluates those resources against managed or custom rules. It is used for compliance tracking, configuration history, resource inventory, and detecting drift from expected governance requirements."
     },
     {
       "id": "dynamodb",
@@ -435,7 +435,7 @@
         "dynamo db"
       ],
       "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html",
-      "description": "A managed NoSQL database family for key-value and document workloads."
+      "description": "Amazon DynamoDB is a fully managed NoSQL database for key-value and document workloads that need low-latency access at scale. It provides features such as partitioned storage, automatic scaling options, streams, TTL, and global replication patterns for serverless application data."
     },
     {
       "id": "dynamodb-global-tables",
@@ -447,7 +447,7 @@
         "dynamodb global tables"
       ],
       "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html",
-      "description": "DynamoDB global tables is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "DynamoDB global tables replicate table data across multiple AWS Regions for multi-Region availability and local read or write access. They are used when applications need regional resilience or lower-latency access for globally distributed users."
     },
     {
       "id": "elastic-load-balancing",
@@ -459,7 +459,7 @@
         "elastic load balancing"
       ],
       "source_url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html",
-      "description": "Elastic Load Balancing is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Elastic Load Balancing distributes incoming traffic across healthy targets such as EC2 instances, containers, IP addresses, and Lambda functions. It improves availability and scalability by spreading requests, monitoring target health, and integrating with services such as Auto Scaling."
     },
     {
       "id": "iam-roles",
@@ -471,7 +471,7 @@
         "iam roles"
       ],
       "source_url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
-      "description": "IAM roles is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "IAM roles define permissions that trusted principals can assume to receive temporary security credentials. They are the preferred pattern for granting AWS access to services, applications, federated users, and cross-account workflows without distributing long-term access keys."
     },
     {
       "id": "kms",
@@ -484,7 +484,7 @@
         "key management service"
       ],
       "source_url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html",
-      "description": "A managed service for creating and controlling encryption keys."
+      "description": "AWS Key Management Service creates and controls cryptographic keys used to protect data across AWS services and custom applications. It supports key policies, grants, rotation options, audit integration, and envelope encryption patterns for managing access to encrypted data."
     },
     {
       "id": "lambda",
@@ -496,7 +496,7 @@
         "aws lambda"
       ],
       "source_url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
-      "description": "The AWS serverless compute family for running functions in response to requests or events."
+      "description": "AWS Lambda runs application code in response to events without requiring users to provision or manage servers. It automatically scales function execution for supported event sources and is commonly used for APIs, stream processing, automation, and event-driven application logic."
     },
     {
       "id": "multiple-availability-zones",
@@ -508,7 +508,7 @@
         "multiple availability zones"
       ],
       "source_url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html",
-      "description": "multiple Availability Zones is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Using multiple Availability Zones places application resources across physically separate locations within an AWS Region. This design improves fault tolerance and availability because an impairment in one zone is less likely to take down the entire workload."
     },
     {
       "id": "network-acls",
@@ -520,7 +520,7 @@
         "network acls"
       ],
       "source_url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
-      "description": "network ACLs is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Network ACLs are stateless subnet-level traffic filters in Amazon VPC. They evaluate inbound and outbound rules separately and can be used as an additional network boundary alongside stateful security groups."
     },
     {
       "id": "s3",
@@ -533,7 +533,7 @@
         "simple storage service"
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html",
-      "description": "The AWS object storage family for buckets, objects, and their lifecycle controls."
+      "description": "Amazon S3 is object storage for storing and retrieving data as objects in buckets. It supports durable storage, access policies, encryption, lifecycle management, versioning, replication, and integration with many analytics, backup, and application workflows."
     },
     {
       "id": "s3-glacier-storage-classes",
@@ -545,7 +545,7 @@
         "s3 glacier storage classes"
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
-      "description": "S3 Glacier storage classes is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "S3 Glacier storage classes are Amazon S3 storage classes optimized for archive data and lower storage cost. They are appropriate for rarely accessed data where retrieval time can range from minutes to hours depending on the selected class and restore option."
     },
     {
       "id": "s3-lifecycle-policies",
@@ -557,7 +557,7 @@
         "s3 lifecycle policies"
       ],
       "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html",
-      "description": "S3 lifecycle policies is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "S3 lifecycle policies automate transitions and expirations for objects based on rules such as age, prefix, tags, or object version state. They help manage storage cost and data retention by moving objects to appropriate storage classes or deleting them when no longer needed."
     },
     {
       "id": "secretsmanager",
@@ -571,7 +571,7 @@
         "aws secrets manager"
       ],
       "source_url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html",
-      "description": "A managed service for storing, retrieving, and rotating application secrets."
+      "description": "AWS Secrets Manager stores, retrieves, and rotates sensitive application values such as database credentials, API keys, and tokens. It helps keep secrets out of source code and supports controlled access through IAM, encryption with AWS KMS, and integration with rotation workflows."
     },
     {
       "id": "service-control-policies",
@@ -583,7 +583,7 @@
         "service control policies"
       ],
       "source_url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
-      "description": "Service Control Policies is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "Service control policies set maximum available permissions for accounts in an AWS Organization. They do not grant permissions by themselves, but they define guardrails that limit what IAM principals in affected accounts can do."
     },
     {
       "id": "sqs",
@@ -596,7 +596,7 @@
         "simple queue service"
       ],
       "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
-      "description": "A managed message queue service for decoupling producers and consumers."
+      "description": "Amazon Simple Queue Service is a managed message queue for decoupling producers and consumers. It buffers work between components, supports asynchronous processing, and provides queue types for standard high-throughput workloads or FIFO ordering and deduplication requirements."
     },
     {
       "id": "vpc-security-groups",
@@ -608,7 +608,7 @@
         "vpc security groups"
       ],
       "source_url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
-      "description": "VPC security groups is an AWS service or feature used by generated certification-coach scenarios."
+      "description": "VPC security groups are stateful virtual firewalls attached to supported resources such as EC2 instances and elastic network interfaces. They control allowed inbound and outbound traffic using rules based on protocols, ports, and source or destination ranges or security groups."
     }
   ],
   "concepts": [
