@@ -29,8 +29,12 @@ My hope is to get the local language model to train the existing classifier to i
 
 ## Potential Rubric Update
 Current rubric has difficulty determining the difference between C, D, and F grades. 
+Current Rubric:
+C: Answers which describe pieces of the problem but do not specify the service involved. 
+D: Answers which name the best wrong answer.                                             
+F: Answers which have no relation to the correct answer.                                 
 
-Proposed new rubric.
+Proposed new rubric:
 C: the answer would point a developer toward the right AWS service or implementation path, but misses an important qualifier, feature name, or condition.
 D: the answer is related to the domain but would not reliably lead to the right implementation.
 F: wrong domain/service, contradicted requirement, or no meaningful answer.
