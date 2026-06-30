@@ -165,7 +165,7 @@ def _evaluation_response(
     if reasoning_issue:
         missing = _missing_concepts(question, user_answer)
         payload = {
-            "score": min(int(model_score), 79),
+            "score": min(79, int(model_score)),
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": reasoning_issue,

@@ -28,6 +28,7 @@ Implementing dedicated AWS knowledge based on a dedicated feature branch using t
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
 ## Potential Rubric Update
+
 Current rubric has difficulty determining the difference between C, D, and F grades. 
 Current Rubric:
 C: Answers which describe pieces of the problem but do not specify the service involved. 
@@ -35,6 +36,7 @@ D: Answers which name the best wrong answer.
 F: Answers which have no relation to the correct answer.                                 
 
 Proposed new rubric:
+Change correct_service_wrong_reasoning grade from C to B.
 C: the answer would point a developer toward the right AWS service or implementation path, but misses an important qualifier, feature name, or condition.
 D: the answer is related to the domain but would not reliably lead to the right implementation.
 F: wrong domain/service, contradicted requirement, or no meaningful answer.
