@@ -24,6 +24,7 @@ def combine_curated_training_data(config_dir: Path, output: Path, generated_dir:
         patterns = ", ".join(DEFAULT_PATTERNS)
         raise FileNotFoundError(f"No curated training data found in {config_dir} matching {patterns}")
     combined_rows: list[object] = []
+    seen_rows: set[tuple[str, str, str, str, str]] = set()
     for path in input_paths:
         with path.open("r", encoding="utf-8") as input_file:
             rows = json.load(input_file)
@@ -31,7 +32,12 @@ def combine_curated_training_data(config_dir: Path, output: Path, generated_dir:
             raise ValueError(f"Curated training data must be a JSON list: {path}")
         for index, row in enumerate(rows):
             _validate_curated_row(row, path, index)
-            curated_row = json.dumps(_curated_row(row))
+            curated = _curated_row(row)
+            dedupe_key = _curated_row_dedupe_key(curated)
+            if dedupe_key in seen_rows:
+                continue
+            seen_rows.add(dedupe_key)
+            curated_row = json.dumps(curated)
             combined_rows.append(json.loads(curated_row))
 
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -99,6 +105,20 @@ def _curated_row(row: dict) -> dict:
         "feedback_text",
     ]
     return {key: curated[key] for key in ordered_keys if key in curated}
+
+
+def _curated_row_dedupe_key(row: dict) -> tuple[str, str, str, str, str]:
+    return (
+        _normalized_text(row.get("question", "")),
+        _normalized_text(row.get("reference_answer", "")),
+        _normalized_text(row.get("answer_given", "")),
+        str(row.get("correct_rating", "")).strip().upper(),
+        str(row.get("rating_given", "")).strip().upper(),
+    )
+
+
+def _normalized_text(value: object) -> str:
+    return " ".join(str(value).casefold().split())
 
 
 def main() -> None:

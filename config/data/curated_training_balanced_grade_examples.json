@@ -144,6 +144,61 @@
   },
   {
     "schema_version": 3,
+    "question": "A public API must protect its backend from sudden request spikes by limiting client request rates. Which API Gateway feature should the developer configure?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Configure API Gateway throttling with rate and burst limits to protect backend integrations from request spikes.",
+    "answer_given": "Use API Gateway to protect the backend from spikes.",
+    "correct_rating": "C",
+    "rating_given": "C",
+    "correct_answer_text": "Configure API Gateway throttling.",
+    "feedback_text": "Balanced grade example: identifies API Gateway and the spike-protection goal but misses throttling, rate, and burst limit details."
+  },
+  {
+    "schema_version": 3,
+    "question": "A session table in DynamoDB stores an expiration time for each item and should remove old sessions without a scheduled cleanup job. Which feature should the developer enable?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Enable DynamoDB TTL on the expiration timestamp attribute so DynamoDB automatically deletes expired table items.",
+    "answer_given": "Use DynamoDB automatic expiration.",
+    "correct_rating": "C",
+    "rating_given": "C",
+    "correct_answer_text": "Enable DynamoDB Time to Live.",
+    "feedback_text": "Balanced grade example: names DynamoDB and automatic expiration but does not identify TTL or the timestamp attribute."
+  },
+  {
+    "schema_version": 3,
+    "question": "An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Configure SNS subscription filter policies that match message attributes so each subscriber receives only the relevant fanout messages.",
+    "answer_given": "Use SNS attributes for order types.",
+    "correct_rating": "C",
+    "rating_given": "C",
+    "correct_answer_text": "Configure SNS subscription filter policies.",
+    "feedback_text": "Balanced grade example: recognizes SNS attributes and order-type routing but misses subscription filter policies."
+  },
+  {
+    "schema_version": 3,
+    "question": "Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use Amazon CloudWatch to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.",
+    "answer_given": "Use metrics and alarms.",
+    "correct_rating": "C",
+    "rating_given": "C",
+    "correct_answer_text": "Use Amazon CloudWatch.",
+    "feedback_text": "Balanced grade example: mentions key monitoring outputs but omits CloudWatch and the full monitoring scope."
+  },
+  {
+    "schema_version": 3,
+    "question": "Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.",
+    "exam_code": "SAA-C03",
+    "reference_answer": "Use Auto Scaling groups to adjust EC2 capacity automatically based on demand and health checks.",
+    "answer_given": "Use capacity scaling based on health checks.",
+    "correct_rating": "C",
+    "rating_given": "C",
+    "correct_answer_text": "Use Auto Scaling groups.",
+    "feedback_text": "Balanced grade example: captures capacity scaling and health checks but misses Auto Scaling groups and demand-based adjustment."
+  },
+  {
+    "schema_version": 3,
     "question": "Explain which AWS service or feature should be used to decouple application components with a managed message queue.",
     "exam_code": "CLF-C02",
     "reference_answer": "Use Amazon SQS to decouple application components with a managed message queue.",

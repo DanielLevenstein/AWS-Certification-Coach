@@ -231,3 +231,4 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 /models/huggingface/*
+/tests/release/release/metrics/.matplotlib/fontlist-v3.11.0.json

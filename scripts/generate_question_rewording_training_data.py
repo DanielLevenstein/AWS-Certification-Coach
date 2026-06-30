@@ -11,6 +11,8 @@ from typing import Protocol
 from aws_certification_coach.config import current_schema_version
 
 
+DEFAULT_MAX_REWORDING_ROWS = 20
+
 class RewordingProvider(Protocol):
     def reword(self, question: dict[str, object]) -> str:
         """Return a natural-language restatement of the question, not an answer."""
@@ -62,11 +64,24 @@ class OpenAIRewordingProvider:
         return response.output_text.strip()
 
 
-def generate_rewording_rows(questions: list[dict[str, object]], provider: RewordingProvider) -> list[dict[str, object]]:
+def generate_rewording_rows(
+    questions: list[dict[str, object]],
+    provider: RewordingProvider,
+    max_rows: int = DEFAULT_MAX_REWORDING_ROWS,
+) -> list[dict[str, object]]:
+    if max_rows < 1:
+        raise ValueError("max_rows must be at least 1.")
     rows = []
+    seen_questions: set[tuple[str, str]] = set()
     for question in questions:
         _validate_question_row(question)
+        question_key = _question_dedupe_key(question)
+        if question_key in seen_questions:
+            continue
+        seen_questions.add(question_key)
         rows.append(_curated_row(question, provider.reword(question)))
+        if len(rows) >= max_rows:
+            break
     return rows
 
 
@@ -83,6 +98,17 @@ def _validate_question_row(question: object) -> None:
     for field in ("question", "reference_answer"):
         if not str(question.get(field, "")).strip():
             raise ValueError(f"Question row is missing {field}.")
+
+
+def _question_dedupe_key(question: dict[str, object]) -> tuple[str, str]:
+    return (
+        _normalized_text(question.get("question", "")),
+        _normalized_text(question.get("reference_answer", "")),
+    )
+
+
+def _normalized_text(value: object) -> str:
+    return " ".join(str(value).casefold().split())
 
 
 def _curated_row(question: dict[str, object], reworded_answer: str) -> dict[str, object]:
@@ -123,12 +149,13 @@ def main() -> None:
     parser.add_argument("--model", default="gpt-5.4-mini")
     parser.add_argument("--temperature", type=float, default=0.4)
     parser.add_argument("--max-output-tokens", type=int, default=120)
+    parser.add_argument("--max-rows", type=int, default=DEFAULT_MAX_REWORDING_ROWS)
     args = parser.parse_args()
 
     questions = json.loads(args.questions.read_text(encoding="utf-8"))
     if not isinstance(questions, list):
         raise ValueError(f"Question artifact must be a JSON list: {args.questions}")
-    rows = generate_rewording_rows(questions, _provider(args))
+    rows = generate_rewording_rows(questions, _provider(args), max_rows=args.max_rows)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
     print(f"Generated {len(rows)} question-rewording curated examples into {args.output}.")
