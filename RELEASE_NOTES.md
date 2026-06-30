@@ -43,7 +43,7 @@
 | v3.6.2.1 | Added Question Category to UI                                                                                                      |
 | v3.6.3   | Handling final instances of manual feedback in TODO.md                                                                             |
 | v3.6.4 | Generate common_misconceptions and must_not_claim fields during question generation time. |
-
+| v3.7.0 | Increase test data so there is a more even number of example cases for each grade level. |
 # Release Metrics
 
 ## Metric Definitions:
@@ -94,6 +94,7 @@
 | v3.6.1   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 | v3.6.3   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 | v3.6.4   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
+| v3.7.0   |            95.92% |            100.00% |          97.09% |                92.18% |          97.28% |            95.12% |
 
 ## Grade Band Precision
 | Release |       A |     B&C |     D&F |
@@ -107,6 +108,7 @@
 | v3.3.4  | 100.00% |  92.31% | 100.00% |
 | v3.4.1  | 100.00% |  92.31% | 100.00% |
 | v3.5.2  | 100.00% |  90.00% |  98.25% |
+| v3.7.0  | 94.44% | 95.65% | 93.28% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |        D |      F |
@@ -126,7 +128,7 @@
 | v3.3.4   | 100.00% | 83.33% | 100.00% |  100.00% | 77.78% |
 | v3.4.1   | 100.00% | 83.33% | 100.00% |  100.00% | 77.78% |
 | v3.4.2   | 100.00% | 80.00% | 100.00% | 98.17%   | 77.78% |
-
+| v3.7.0   | 94.44% | 93.75% | 71.43% | 95.13% | 70.37% |
 ## Current Coverage
 
 ![Release Metrics Chart](release/v3.6.0_question_coverage_metrics_chart.png)
@@ -136,25 +138,25 @@
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.6.4 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 95.12% |
+| v3.7.0 | 95.92% | 100.00% | 97.09% | 92.18% | 97.28% | 95.12% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 100.00% | 90.00% | 98.25% |
-| Recall | 84.62% | 75.00% | 100.00% |
-| F1 | 91.67% | 81.82% | 99.12% |
-| Support | 13 | 12 | 224 |
+| Precision | 94.44% | 95.65% | 93.28% |
+| Recall | 85.00% | 57.89% | 100.00% |
+| F1 | 89.47% | 72.13% | 96.52% |
+| Support | 20 | 38 | 236 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 100.00% | 80.00% | 100.00% | 98.17% | 77.78% |
-| Recall | 84.62% | 80.00% | 71.43% | 99.08% | 100.00% |
-| F1 | 91.67% | 80.00% | 83.33% | 98.62% | 87.50% |
-| Support | 13 | 5 | 7 | 217 | 7 |
+| Precision | 94.44% | 93.75% | 71.43% | 95.13% | 70.37% |
+| Recall | 85.00% | 83.33% | 25.00% | 99.08% | 100.00% |
+| F1 | 89.47% | 88.24% | 37.04% | 97.07% | 82.61% |
+| Support | 20 | 18 | 20 | 217 | 19 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
@@ -169,7 +171,7 @@ Knowledge base file size: `61306` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`
-Semantic evaluation count: `249`
+Semantic evaluation count: `294`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.

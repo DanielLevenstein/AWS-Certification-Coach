@@ -1,6 +1,12 @@
 import json
+from collections import Counter
+from pathlib import Path
 
-from scripts.combine_curated_training_data import combine_curated_training_data
+from scripts.combine_curated_training_data import combine_curated_training_data, curated_training_input_paths
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+MIN_CURATED_EXAMPLES_PER_GRADE = 10
 
 
 def test_combines_curated_training_fragments_in_filename_order(tmp_path):
@@ -130,3 +136,17 @@ def test_combiner_includes_generated_curated_fragments(tmp_path):
         "Correct service",
         "This question asks which service is exact.",
     ]
+
+
+def test_config_curated_training_sources_cover_each_grade_letter():
+    rows = []
+    for path in curated_training_input_paths(PROJECT_ROOT / "config" / "data"):
+        rows.extend(json.loads(path.read_text(encoding="utf-8")))
+
+    distribution = Counter(
+        str(row.get("correct_rating", "")).strip().upper()
+        for row in rows
+        if row.get("correct_rating")
+    )
+
+    assert all(distribution[grade] >= MIN_CURATED_EXAMPLES_PER_GRADE for grade in "ABCDF")
