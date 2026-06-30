@@ -42,7 +42,7 @@
 | v3.6.1   | Added Show Option selections to UI                                                                                                 |
 | v3.6.2.1 | Added Question Category to UI                                                                                                      |
 | v3.6.3   | Handling final instances of manual feedback in TODO.md                                                                             |
-
+| v3.6.4 | Generate common_misconceptions and must_not_claim fields during question generation time. |
 
 # Release Metrics
 
@@ -93,6 +93,7 @@
 | v3.5.2   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            94.95% |
 | v3.6.1   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 | v3.6.3   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
+| v3.6.4   |            98.39% |            100.00% |          99.17% |                97.19% |          99.20% |            95.12% |
 
 ## Grade Band Precision
 | Release |       A |     B&C |     D&F |
@@ -135,7 +136,7 @@
 
 | Release | Legacy Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.6.3 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 95.12% |
+| v3.6.4 | 98.39% | 100.00% | 99.17% | 97.19% | 99.20% | 95.12% |
 
 ## Grade Band Metrics
 
@@ -164,7 +165,7 @@ Question coverage concept count: `285`
 Question coverage question-category count: `14`
 Top covered concepts: `fanout, S3 Lifecycle, object expiration, Amazon RDS, replication, low latency, Auto Scaling, EC2, health checks, SQS, message queue, decoupling`
 Knowledge base schema version: `3`
-Knowledge base file size: `70249` bytes
+Knowledge base file size: `61306` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`

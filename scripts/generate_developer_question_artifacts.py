@@ -10,6 +10,7 @@ from pathlib import Path
 from aws_certification_coach.config import current_schema_version
 from aws_certification_coach.question_fidelity.model import QuestionFidelityModel
 from aws_certification_coach.question_templates import load_question_templates
+from aws_certification_coach.questions.rubric_metadata import service_selection_rubric_metadata
 try:
     from generate_app_question_artifacts import documentation_url_for_option, distractor_feedback, service_metadata_for_option
 except ModuleNotFoundError:  # Imported as scripts.generate_developer_question_artifacts in tests.
@@ -108,23 +109,17 @@ def _rubric_metadata(
 ) -> dict[str, list[str]]:
     distractors = _distractors(source, template_scenario)
     correct_option = _correct_option(source, template_scenario)
-    acceptable_answers = [
+    return service_selection_rubric_metadata(
+        service,
+        concepts,
+        distractors,
         correct_option,
         reference_answer,
-        service,
-        *_acceptable_answer_aliases(source, template_scenario),
-    ]
-    return {
-        "required_concepts": concepts,
-        "bonus_concepts": [],
-        "common_misconceptions": [f"{distractor} is the best fit for this scenario." for distractor in distractors],
-        "acceptable_answers": list(dict.fromkeys(acceptable_answers)),
-        "must_not_claim": [f"{distractor} satisfies the scenario better than {service}." for distractor in distractors],
-        "do_not_claim_explanation": [
-            distractor_feedback(service, distractor, _scenario_purpose(source, reference_answer))
-            for distractor in distractors
-        ],
-    }
+        _scenario_purpose(source, reference_answer),
+        misconception_subject="scenario",
+        acceptable_answer_aliases=_acceptable_answer_aliases(source, template_scenario),
+        feedback_builder=distractor_feedback,
+    )
 
 
 def _generated_question(source: dict[str, object], template_scenario: dict[str, object] | None) -> str:

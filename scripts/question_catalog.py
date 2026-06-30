@@ -1,5 +1,7 @@
 """Shared self-authored AWS service scenarios for app question generation."""
 
+from aws_certification_coach.questions.rubric_metadata import service_selection_rubric_metadata
+
 SERVICE_SPECS = [
     ("IAM roles", "Security", "Cloud Practitioner", "Easy", "grant temporary credentials to trusted AWS resources without storing long-term access keys", ["IAM", "temporary credentials", "least privilege", "trusted entities"], ["IAM user access keys", "AWS Shield Advanced", "hard-coded credentials"]),
     ("AWS Budgets", "Billing", "Cloud Practitioner", "Easy", "track cost or usage thresholds and send alerts for actual or forecasted spending", ["AWS Budgets", "cost thresholds", "usage thresholds", "alerts"], ["AWS CloudTrail", "AWS Artifact", "Elastic Load Balancing"]),
@@ -56,22 +58,31 @@ def rubric_metadata(
     correct_option: str,
     explanation: str,
 ) -> dict[str, list[str]]:
-    return {
-        "required_concepts": concepts,
-        "bonus_concepts": [],
-        "common_misconceptions": [f"{distractor} is the best fit for this requirement." for distractor in distractors],
-        "acceptable_answers": [correct_option, explanation, service],
-        "must_not_claim": [f"{distractor} satisfies the scenario better than {service}." for distractor in distractors],
-        "do_not_claim_explanation": [
-            f"{service} is a better option because {_explanation_reason(explanation, service)}"
-            f"while {distractor} does not satisfy that requirement."
-            for distractor in distractors
-        ],
-    }
+    return service_selection_rubric_metadata(
+        service,
+        concepts,
+        distractors,
+        correct_option,
+        explanation,
+        _explanation_reason(explanation, service),
+        feedback_builder=_catalog_distractor_feedback,
+    )
 
 
 def _explanation_reason(explanation: str, service: str) -> str:
     prefix = f"Use {service} to "
     if explanation.startswith(prefix):
-        return f"it is designed to {explanation.removeprefix(prefix).rstrip('.')}"
+        return explanation.removeprefix(prefix).rstrip(".")
     return f"the reference answer is: {explanation.rstrip('.')}"
+
+
+def _catalog_distractor_feedback(service: str, distractor: str, purpose: str) -> str:
+    if purpose.startswith("the reference answer is:"):
+        return (
+            f"{service} is a better option because {purpose}, "
+            f"while {distractor} does not satisfy that requirement."
+        )
+    return (
+        f"{service} is a better option because it is designed to {purpose}, "
+        f"while {distractor} does not satisfy that requirement."
+    )

@@ -9,6 +9,9 @@ from pathlib import Path
 import re
 from typing import Iterable
 
+from aws_certification_coach.question_templates import load_question_templates
+from aws_certification_coach.questions.rubric_metadata import service_selection_rubric_metadata
+
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 DEFAULT_KNOWLEDGE_BASE_PATH = (
@@ -205,11 +208,11 @@ def _load_knowledge_base(resolved_path: str) -> KnowledgeBase:
         )
         for row in payload["concepts"]
     )
-    common_misconceptions = tuple(_flag_set_from_json(row) for row in payload["common_misconceptions"])
+    common_misconceptions = _load_flag_sets(payload, services)
     must_not_claim = tuple(
         _flag_set_from_json(row)
-        for row in payload.get("must_not_claim", payload["common_misconceptions"])
-    )
+        for row in payload.get("must_not_claim", [])
+    ) or common_misconceptions
     knowledge = KnowledgeBase(
         schema_version=int(payload["schema_version"]),
         description=str(payload["description"]),
@@ -235,7 +238,6 @@ def _validate_payload(payload: object, source: Path) -> None:
         "syntax_aliases",
         "services",
         "concepts",
-        "common_misconceptions",
     }
     missing = required - payload.keys()
     if missing:
@@ -258,6 +260,10 @@ def _validate_payload(payload: object, source: Path) -> None:
         "concepts",
         source,
     )
+    _validate_flag_rows(payload, source)
+
+
+def _validate_flag_rows(payload: dict[str, object], source: Path) -> None:
     flag_fields = {
         "id",
         "key_concepts",
@@ -267,9 +273,47 @@ def _validate_payload(payload: object, source: Path) -> None:
         "do_not_claim_explanation",
         "source_url",
     }
-    _require_rows(payload["common_misconceptions"], flag_fields, "common_misconceptions", source)
+    if "common_misconceptions" in payload:
+        _require_rows(payload["common_misconceptions"], flag_fields, "common_misconceptions", source)
     if "must_not_claim" in payload:
         _require_rows(payload["must_not_claim"], flag_fields, "must_not_claim", source)
+
+
+def _load_flag_sets(payload: dict[str, object], services: tuple[Service, ...]) -> tuple[QuestionFlagSet, ...]:
+    if "common_misconceptions" in payload:
+        return tuple(_flag_set_from_json(row) for row in payload["common_misconceptions"])
+    return _generated_question_flag_sets(services)
+
+
+def _generated_question_flag_sets(services: tuple[Service, ...]) -> tuple[QuestionFlagSet, ...]:
+    services_by_id = {service.id: service for service in services}
+    rows: list[QuestionFlagSet] = []
+    for scenario in load_question_templates().service_scenarios:
+        service = services_by_id.get(scenario.service_id)
+        if service is None:
+            continue
+        correct_option = f"Use {service.name}."
+        reference_answer = f"Use {service.name} to {scenario.purpose}."
+        metadata = service_selection_rubric_metadata(
+            service.name,
+            scenario.key_concepts,
+            scenario.distractors,
+            correct_option,
+            reference_answer,
+            scenario.purpose,
+        )
+        rows.append(
+            QuestionFlagSet(
+                id=scenario.id,
+                key_concepts=scenario.key_concepts,
+                common_misconceptions=tuple(metadata["common_misconceptions"]),
+                acceptable_answers=tuple(metadata["acceptable_answers"]),
+                must_not_claim=tuple(metadata["must_not_claim"]),
+                do_not_claim_explanation=tuple(metadata["do_not_claim_explanation"]),
+                source_url=service.source_url,
+            )
+        )
+    return tuple(rows)
 
 
 def _flag_set_from_json(row: dict[str, object]) -> QuestionFlagSet:
