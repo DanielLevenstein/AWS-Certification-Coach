@@ -138,6 +138,40 @@ def test_combiner_includes_generated_curated_fragments(tmp_path):
     ]
 
 
+def test_combiner_deduplicates_matching_curated_rows(tmp_path):
+    config_dir = tmp_path / "config"
+    generated_dir = tmp_path / "generated"
+    config_dir.mkdir()
+    generated_dir.mkdir()
+    duplicate = {
+        "schema_version": 2,
+        "question": "Readable question",
+        "reference_answer": "Use the exact service.",
+        "answer_given": "This question asks which service is exact.",
+        "correct_rating": "D",
+        "rating_given": "A",
+        "feedback_text": "Question-restatement negative example.",
+    }
+    (config_dir / "curated_training_data.json").write_text(
+        json.dumps([duplicate]),
+        encoding="utf-8",
+    )
+    generated_duplicate = dict(duplicate)
+    generated_duplicate["question"] = "  readable   QUESTION  "
+    generated_duplicate["answer_given"] = "This question asks which service is exact.  "
+    (generated_dir / "curated_training_question_rewordings.json").write_text(
+        json.dumps([generated_duplicate]),
+        encoding="utf-8",
+    )
+    output = tmp_path / "combined.json"
+
+    file_count, row_count = combine_curated_training_data(config_dir, output, generated_dir)
+
+    assert file_count == 2
+    assert row_count == 1
+    assert json.loads(output.read_text(encoding="utf-8")) == [duplicate]
+
+
 def test_config_curated_training_sources_cover_each_grade_letter():
     rows = []
     for path in curated_training_input_paths(PROJECT_ROOT / "config" / "data"):
@@ -149,4 +183,5 @@ def test_config_curated_training_sources_cover_each_grade_letter():
         if row.get("correct_rating")
     )
 
-    assert all(distribution[grade] >= MIN_CURATED_EXAMPLES_PER_GRADE for grade in "ABCDF")
+    assert all(distribution[grade] >= MIN_CURATED_EXAMPLES_PER_GRADE for grade in
+               "ABCDF"), f"Grades failing: {[grade for grade in 'ABCDF' if distribution[grade] < MIN_CURATED_EXAMPLES_PER_GRADE]}"
