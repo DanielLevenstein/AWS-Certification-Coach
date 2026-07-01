@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import random
 
 from aws_certification_coach.config import current_schema_version
 from aws_certification_coach.question_fidelity.model import QuestionFidelityModel
@@ -50,11 +51,24 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
         concepts = [str(concept) for concept in source["concepts"]]
         question_text = _generated_question(source, template_scenario)
         reference_answer = _reference_answer(source, template_scenario, service)
-        options = [_option("A", _correct_option(source, template_scenario), str(source["source_url"]))]
-        options.extend(
-            _option(option_id, text, documentation_url_for_option(text))
-            for option_id, text in zip(["B", "C", "D"], _distractors(source, template_scenario), strict=True)
-        )
+        correct_option = _correct_option(source, template_scenario)
+        distractors = _distractors(source, template_scenario)
+        # options = [_option("A", _correct_option(source, template_scenario), str(source["source_url"]))]
+        # options.extend(
+        #     _option(option_id, text, documentation_url_for_option(text))
+        #     for option_id, text in zip(["B", "C", "D"], _distractors(source, template_scenario), strict=True)
+        # )
+        answers = [correct_option,distractors[0],distractors[1],distractors[2]]
+        random.shuffle(answers)
+        # Return get letter index of correct
+        correct_option_id = []
+        options =[]
+        for letter, answer in zip(["A", "B", "C", "D"], answers, strict=True):
+            options.append(_option(letter, answer, documentation_url_for_option(answer)))
+            if answer == correct_option:
+                correct_option_id.append(letter)
+
+
         row = {
             "schema_version": schema_version,
             "certification": source["certification"],
@@ -70,7 +84,7 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
             "original_multiple_choice": {
                 "question": question_text,
                 "options": options,
-                "correct_option_ids": ["A"],
+                "correct_option_ids": correct_option,
                 "explanation": reference_answer,
                 "source_name": source["source_name"],
                 "source_url": source["source_url"],
