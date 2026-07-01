@@ -12,6 +12,8 @@ class EvaluationResult:
     score: int
     missing_concepts: list[str] = field(default_factory=list)
     suggested_improvements: list[str] = field(default_factory=list)
+    service_correct: bool = False
+    core_concept_correct: bool = False
     feedback: str = ""
     feedback_source: str = ""
     detailed_answer: str = ""

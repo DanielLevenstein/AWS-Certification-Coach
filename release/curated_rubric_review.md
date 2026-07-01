@@ -1,9 +1,9 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 106
+- Curated examples reviewed: 109
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 17, 'B': 16, 'C': 12, 'D': 36, 'F': 25}`
-- Suggested label updates: 10
+- Current grade distribution: `{'A': 20, 'B': 16, 'C': 12, 'D': 36, 'F': 25}`
+- Suggested label updates: 13
 
 ## Suggested Answer Updates
 
@@ -90,6 +90,30 @@
 - Reference: Auto Scaling groups
 - Semantic score: `65`
 - Reviewer feedback: Elastic Load balancing is a sub feature of auto scaling groups
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 86: A -> D
+
+- Question: A DynamoDB table is keyed by customer ID, but the application now needs fast lookups by order status without scanning every item. What should the developer add to support this access pattern?
+- Answer: `The user should add a second database index for order status.`
+- Reference: Add a DynamoDB secondary index
+- Semantic score: `65`
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 87: A -> C
+
+- Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
+- Answer: `S3 lifestyle policies are used to expire objects based on age and access patterns`
+- Reference: S3 lifecycle policies
+- Semantic score: `71`
+- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
+
+### Row 88: A -> C
+
+- Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
+- Answer: `Synchronous standby replication with automatic failover is provided by using multi AZ deployment with failover. `
+- Reference: Amazon RDS Multi-AZ
+- Semantic score: `75`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ## Release Table Recommendation

@@ -44,7 +44,7 @@
 ## Semantic Accuracy
 
 | Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
-| :------- | ----------------: | -----------------: | --------------: | --------------------: | --------------: | ----------------: |
+|:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
 | v1.5.0   |            68.00% |             84.62% |          68.75% |               Unknown |         Unknown |           Unknown |
 | v2.1.2   |            83.33% |             90.00% |          90.00% |               Unknown |         Unknown |            96.00% |
 | v2.3.1   |            86.21% |             95.45% |          95.45% |                55.17% |         Unknown |            95.12% |
@@ -67,6 +67,7 @@
 | v3.7.0   |            95.92% |            100.00% |          97.09% |                92.18% |          97.28% |            95.12% |
 | v3.7.1   |            98.64% |            100.00% |          99.26% |                97.28% |          99.32% |            95.12% |
 | v3.7.2   |            97.00% |            100.00% |          97.37% |                95.00% |          99.00% |            95.12% |
+| v3.8.0   |            94.17% |            100.00% |          97.47% |                92.23% |          96.12% |            95.12% |
 
 ## Grading Rubric:
 
@@ -93,6 +94,7 @@
 | v3.7.0  | 94.44% | 95.65% | 93.28% |
 | v3.7.1  | 100.00% | 95.65% | 98.02% |
 | v3.7.2  | 100.00% | 96.00% | 96.72% |
+| v3.8.0  | 100.00% | 88.89% | 95.16% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |        D |      F |
@@ -115,37 +117,36 @@
 | v3.7.0   | 94.44% | 93.75% | 71.43% | 95.13% | 70.37% |
 | v3.7.1   | 100.00% | 93.75% | 100.00% | 97.79% | 92.59% |
 | v3.7.2   | 100.00% | 93.33% | 100.00% | 94.29% | 92.31% |
+| v3.8.0  | 100.00% | 93.33% | 83.33% | 91.67% | 92.31% |
 
 ## Current Coverage
 
 ![Release Metrics Chart](release/v3.6.0_question_coverage_metrics_chart.png)
 
 <!-- release-metrics:start -->
-
 ## Generated Release Metrics
-
 
 | Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.7.2 | 97.00% | 100.00% | 97.37% | 95.00% | 99.00% | 95.12% |
+| v3.8.0 | 94.17% | 100.00% | 97.47% | 92.23% | 96.12% | 95.12% |
 
 ## Grade Band Metrics
 
 | Metric | A | BC | DF |
 |:-------|--:|---:|---:|
-| Precision | 100.00% | 96.00% | 96.72% |
-| Recall | 87.50% | 96.00% | 100.00% |
-| F1 | 93.33% | 96.00% | 98.33% |
-| Support | 16 | 25 | 59 |
+| Precision | 100.00% | 88.89% | 95.16% |
+| Recall | 73.68% | 96.00% | 100.00% |
+| F1 | 84.85% | 92.31% | 97.52% |
+| Support | 19 | 25 | 59 |
 
 ## Per Grade Metrics
 
 | Metric | A | B | C | D | F |
 |:-------|--:|--:|--:|--:|--:|
-| Precision | 100.00% | 93.33% | 100.00% | 94.29% | 92.31% |
-| Recall | 87.50% | 100.00% | 90.91% | 94.29% | 100.00% |
-| F1 | 93.33% | 96.55% | 95.24% | 94.29% | 96.00% |
-| Support | 16 | 14 | 11 | 35 | 24 |
+| Precision | 100.00% | 93.33% | 83.33% | 91.67% | 92.31% |
+| Recall | 73.68% | 100.00% | 90.91% | 94.29% | 100.00% |
+| F1 | 84.85% | 96.55% | 86.96% | 92.96% | 96.00% |
+| Support | 19 | 14 | 11 | 35 | 24 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
@@ -156,15 +157,14 @@ Question coverage concept count: `285`
 Question coverage question-category count: `14`
 Top covered concepts: `fanout, S3 Lifecycle, object expiration, Amazon RDS, replication, low latency, Auto Scaling, EC2, health checks, SQS, message queue, decoupling`
 Knowledge base schema version: `3`
-Knowledge base file size: `61306` bytes
+Knowledge base file size: `77594` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`
-Semantic evaluation count: `100`
+Semantic evaluation count: `103`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.
 Legacy Semantic Precision and Recall retain the original `A`–`D` accepted and `F` rejected definition.
 Question fidelity is the release guardrail for generated-question concept and exam-style fidelity.
-
 <!-- release-metrics:end -->

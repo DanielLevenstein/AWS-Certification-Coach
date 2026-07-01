@@ -212,7 +212,6 @@ def _render_answer_feedback(score: int, feedback: str, suggest_improvements: lis
     if feedback:
         for line in feedback.split(';'):
             st.info(line)
-        # st.info(feedback)
     elif suggest_improvements:
             st.info(f"Here are some suggestions for improving your answer:")
             output = ""

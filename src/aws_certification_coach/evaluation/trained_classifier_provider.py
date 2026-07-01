@@ -164,9 +164,11 @@ def _evaluation_response(
     reasoning_issue = _correct_service_wrong_reasoning_issue(question, user_answer)
     if reasoning_issue:
         missing = _missing_concepts(question, user_answer)
+        score = min(89, max(80, int(model_score)))
         payload = {
-            "score": min(79, int(model_score)),
+            "score": score,
             "missing_concepts": missing,
+            **_structured_feedback_fields(question, user_answer, missing, score),
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": reasoning_issue,
             "detailed_answer": question.reference_answer,
@@ -202,6 +204,22 @@ def _evaluation_response(
         "detailed_answer": question.reference_answer,
     }
     return json.dumps(payload)
+
+
+def _structured_feedback_fields(
+    question: Question,
+    user_answer: str,
+    missing_concepts: list[str],
+    score: int | float,
+) -> dict[str, object]:
+    service_correct = _answer_names_expected_service_or_feature(question, user_answer) or (
+        score >= 90 and not missing_concepts
+    )
+    core_concept_correct = not missing_concepts
+    return {
+        "service_correct": service_correct,
+        "core_concept_correct": core_concept_correct,
+    }
 
 
 def _feedback_calibrations(

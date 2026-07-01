@@ -37,10 +37,10 @@ Use the grade to answer:
 | Grade | Meaning |
 |:------|:--------|
 | A | Correct answer. Identifies the best AWS service, feature, or pattern; addresses the key scenario constraints; explains the important reasoning; avoids major misconceptions. |
-| B | Mostly correct. Identifies the right service or pattern but misses one important constraint, tradeoff, or detail needed for exam-ready reasoning. |
-| C | Partially correct. Recognizes the right problem domain or a plausible adjacent service, but the answer is not the best fit for the scenario. |
-| D | Minimal credit. Mentions a relevant AWS concept but fails the main requirement, provides weak reasoning, or leaves the answer too incomplete to be reliable. |
-| F | Incorrect. Uses the wrong service category, contradicts the requirements, gives a nonsensical answer, includes a severe misconception, or provides no meaningful AWS reasoning. |
+| B | Mostly correct. Identifies the right service or pattern but misses one important constraint, tradeoff, qualifier, or detail needed for exam-ready reasoning. |
+| C | Partially correct. Points a developer toward the right AWS service or implementation path, but misses an important qualifier, feature name, or condition. |
+| D | Minimal credit. Stays related to the AWS domain or scenario area, but would not reliably lead to the right implementation. |
+| F | Incorrect. Uses the wrong domain or service, contradicts the requirements, gives a nonsensical answer, includes a severe misconception, or provides no meaningful AWS reasoning. |
 
 ## Multiple-Choice Mapping
 
@@ -106,7 +106,7 @@ An A answer should:
 A B answer should:
 
 - Name the right service, feature, or pattern.
-- Show mostly correct reasoning.
+- Show mostly correct reasoning, or name the correct service while giving incomplete or partially incorrect reasoning.
 - Miss one meaningful detail, constraint, or tradeoff.
 - Remain safe and technically accurate overall.
 
@@ -114,10 +114,9 @@ A B answer should:
 
 A C answer should:
 
-- Name the best wrong service or feature from the source options while missing the best-fit AWS service boundary.
-- Identify a plausible adjacent service, feature, or pattern.
-- Show partial understanding of the domain.
-- Miss the best-fit reasoning or one central requirement.
+- Point a developer toward the right AWS service or implementation path.
+- Miss an important qualifier, feature name, condition, or service-specific behavior.
+- Show enough scenario understanding that the answer is more than just a related AWS keyword.
 - Avoid severe misconceptions.
 
 ### D Answers
@@ -125,7 +124,8 @@ A C answer should:
 A D answer should:
 
 - Mention a relevant AWS concept.
-- Fail the main requirement or provide very limited reasoning.
+- Stay related to the domain but fail to identify a reliable implementation path.
+- Provide very limited reasoning or a solution that would need substantial correction before implementation.
 - Be too incomplete to trust as an exam-ready answer.
 - Avoid being entirely unrelated or nonsensical.
 

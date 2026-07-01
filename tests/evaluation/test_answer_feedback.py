@@ -14,10 +14,19 @@ from aws_certification_coach.evaluation.trained_classifier_provider import Seman
 
 
 class StaticProvider:
-    def __init__(self, score: int, feedback: str = "", feedback_source: str = "") -> None:
+    def __init__(
+        self,
+        score: int,
+        feedback: str = "",
+        feedback_source: str = "",
+        service_correct: bool = False,
+        core_concept_correct: bool = False,
+    ) -> None:
         self.score = score
         self.feedback = feedback
         self.feedback_source = feedback_source
+        self.service_correct = service_correct
+        self.core_concept_correct = core_concept_correct
 
     def evaluate(self, prompt: str, question: Question, user_answer: str) -> str:
         del prompt, question, user_answer
@@ -26,6 +35,8 @@ class StaticProvider:
                 "score": self.score,
                 "missing_concepts": [],
                 "suggested_improvements": [],
+                "service_correct": self.service_correct,
+                "core_concept_correct": self.core_concept_correct,
                 "feedback": self.feedback,
                 "feedback_source": self.feedback_source,
                 "detailed_answer": "Use AWS KMS to manage encryption keys.",
@@ -57,6 +68,19 @@ def test_non_a_answer_preserves_specific_provider_feedback():
     )
 
     assert result.feedback == "The service name is misspelled."
+
+
+def test_structured_feedback_fields_are_preserved_from_provider_response():
+    result = EvaluationService(
+        StaticProvider(
+            82,
+            service_correct=True,
+            core_concept_correct=False,
+        )
+    ).evaluate(QUESTION, "AWS KMS")
+
+    assert result.service_correct is True
+    assert result.core_concept_correct is False
 
 
 def test_valid_wrong_service_name_is_not_reported_as_misspelled():
@@ -214,7 +238,7 @@ def test_correct_paraphrase_is_not_downgraded_as_question_rewording():
     assert result.feedback == ""
 
 
-def test_correct_service_with_wrong_reasoning_is_capped_below_a_b_band():
+def test_correct_service_with_wrong_reasoning_receives_b_band_feedback():
     question = Question(
         schema_version=1,
         certification="Cloud Practitioner",
@@ -232,7 +256,9 @@ def test_correct_service_with_wrong_reasoning_is_capped_below_a_b_band():
         "Use AWS Budgets because it records API activity and audits account events.",
     )
 
-    assert 60 <= result.score <= 79
+    assert 80 <= result.score <= 89
+    assert result.service_correct is True
+    assert result.core_concept_correct is False
     assert result.feedback == "The answer names the correct service but includes reasoning for a different AWS concept."
 
 
