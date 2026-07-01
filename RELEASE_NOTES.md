@@ -34,7 +34,8 @@
 | v3.7.3   | Revert v3.6.4 Generate common_misconceptions and must_not_claim fields during question generation time.                                 |
 | v3.7.3.1 | Removed references to certification-coach scenarios from the AWS knowledge base and expanded descriptions to be more than one sentence. |
 | v3.7.3.2 | Changed grade for correct service wrong description to B.                                                                               |
-| v3.8.1   | Tunes semantic scoring for strong AWS concept prose so latest release metrics clear guardrails.                                         |
+| v3.8.1   | Tunes semantic scoring for strong AWS concept prose so latest release metrics clear guardrails.     |
+
 # Release Metrics
 
 ## Metric Definitions:
