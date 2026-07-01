@@ -9,10 +9,9 @@ from dataclasses import dataclass
 from difflib import SequenceMatcher
 
 from aws_certification_coach.domain import Question
-from aws_certification_coach.knowledge_base import load_knowledge_base
+from aws_certification_coach.knowledge_base import Service, load_knowledge_base
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
-from aws_certification_coach.ratings import letter_to_numeric
 from aws_certification_coach.training.answer_classifier import (
     AnswerClassificationModel,
     answer_calibration_key,
@@ -116,6 +115,7 @@ def _evaluation_response(
     model_score: float,
     curated_feedback: str = "",
 ) -> str:
+    relevant_service = _get_relevant_services(question, user_answer)
     if _is_exact_correct_option(question, user_answer):
         model_score = max(model_score, _exact_correct_option_score(question, user_answer))
     if _is_exact_corrected_artifact_answer(question, user_answer):
@@ -123,17 +123,20 @@ def _evaluation_response(
             "score": EXACT_CORRECT_OPTION_SCORE,
             "missing_concepts": [],
             "suggested_improvements": [],
+            "relevant_service": relevant_service,
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
     prediction = 1 if model_score >= SUCCESS_THRESHOLD else 0
     if _is_question_restatement(question, user_answer):
         missing = _missing_concepts(question, user_answer)
+        feedback = "This answer restates the question without identifying and explaining the solution."
         payload = {
             "score": min(int(model_score), QUESTION_RESTATEMENT_SCORE_CAP),
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
-            "feedback": curated_feedback or "This answer restates the question without identifying and explaining the solution.",
+            "feedback": feedback,
+            "relevant_service": relevant_service,
             "feedback_source": CURATED_FEEDBACK_SOURCE if curated_feedback else "",
             "detailed_answer": question.reference_answer,
         }
@@ -145,6 +148,7 @@ def _evaluation_response(
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": "The AWS service name appears to be misspelled.",
+            "relevant_service": relevant_service,
             "feedback_source": CURATED_FEEDBACK_SOURCE if curated_feedback else "",
             "detailed_answer": question.reference_answer,
         }
@@ -158,6 +162,7 @@ def _evaluation_response(
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": str(claim_issue["feedback"]),
+            "relevant_service": relevant_service,
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -171,6 +176,7 @@ def _evaluation_response(
             **_structured_feedback_fields(question, user_answer, missing, score),
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": reasoning_issue,
+            "relevant_service": relevant_service,
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -182,6 +188,7 @@ def _evaluation_response(
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": grading_issue,
+            "relevant_service": relevant_service,
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -193,6 +200,7 @@ def _evaluation_response(
             "missing_concepts": missing,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "feedback": missing_service_issue,
+            "relevant_service": relevant_service,
             "detailed_answer": question.reference_answer,
         }
         return json.dumps(payload)
@@ -201,6 +209,7 @@ def _evaluation_response(
         "score": int(model_score),
         "missing_concepts": missing,
         "suggested_improvements": [f"Explain {concept}." for concept in missing],
+        "relevant_service": relevant_service,
         "detailed_answer": question.reference_answer,
     }
     return json.dumps(payload)
@@ -291,6 +300,89 @@ def _missing_required_service_name_issue(question: Question, user_answer: str, m
     if model_score < 70 and not _answer_covers_required_nonservice_concepts(question, user_answer):
         return None
     return "Name the specific AWS service or feature required by the question."
+
+
+def _get_relevant_services(question: Question, user_answer: str) -> list[str]:
+    names = []
+    distractor_service = _selected_distractor_service(question, user_answer)
+    if distractor_service is not None:
+        names.append(distractor_service.name)
+    # Removing service descriptions from answer for now
+    #names.extend(service.name for service in _mentioned_answer_services(user_answer))
+    expected_service = _expected_service_or_feature(question)
+    if expected_service is not None:
+        names.append(expected_service.name)
+    return list(dict.fromkeys(names))
+
+
+def _mentioned_answer_services(user_answer: str) -> list[Service]:
+    knowledge = load_knowledge_base()
+    normalized_answer = knowledge.canonicalize(_normalized_service_answer(user_answer))
+    matches = []
+    for service in knowledge.services:
+        terms = (service.name, *service.aliases, *service.tokens)
+        term_positions = [
+            match.start()
+            for term in terms
+            for match in [re.search(rf"\b{re.escape(knowledge.canonicalize(term))}\b", normalized_answer)]
+            if match is not None
+        ]
+        if term_positions:
+            matches.append((min(term_positions), service))
+    return [service for _position, service in sorted(matches, key=lambda item: item[0])]
+
+
+def _selected_distractor_service(question: Question, user_answer: str) -> Service | None:
+    original = question.original_multiple_choice
+    if original is None:
+        return None
+    correct_ids = set(original.correct_option_ids)
+    normalized_answer = _normalized_service_answer(user_answer)
+    for option in original.options:
+        if option.option_id in correct_ids:
+            continue
+        if normalized_answer != _normalized_service_answer(option.text):
+            continue
+        service = _service_for_option(option)
+        if service is not None:
+            return service
+    return None
+
+
+def _service_for_option(option: object) -> Service | None:
+    knowledge = load_knowledge_base()
+    metadata = getattr(option, "metadata", {})
+    if isinstance(metadata, dict):
+        service_name = str(metadata.get("service_name", "")).strip()
+        if service_name:
+            service = knowledge.service_for_name(service_name)
+            if service is not None:
+                return service
+    option_text = _normalized_service_answer(str(getattr(option, "text", "")))
+    service = knowledge.service_for_name(option_text)
+    if service is not None:
+        return service
+    return knowledge.service_for_name(option_text.removesuffix(".").strip())
+
+
+def _expected_service_or_feature(question: Question) -> Service | None:
+    knowledge = load_knowledge_base()
+    for term in _expected_service_or_feature_terms(question):
+        service = knowledge.service_for_name(term)
+        if service is not None:
+            return service
+    for concept_name in _required_concepts(question):
+        normalized_name = knowledge.canonicalize(concept_name)
+        for concept in knowledge.concepts:
+            terms = (concept.name, *concept.aliases)
+            if normalized_name not in {knowledge.canonicalize(term) for term in terms}:
+                continue
+            for service_id in concept.service_ids:
+                try:
+                    return knowledge.service_by_id(service_id)
+                except KeyError:
+                    continue
+    return None
 
 
 def _rubric_claim_issue(question: Question, user_answer: str) -> dict[str, str] | None:

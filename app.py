@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import html
 import os
+import random
 from difflib import SequenceMatcher
 from pathlib import Path
 
@@ -17,6 +18,7 @@ from aws_certification_coach.config import load_evaluator_config
 from aws_certification_coach.evaluation.factory import build_evaluation_service
 from aws_certification_coach.evaluation.service import EvaluationService
 from aws_certification_coach.feedback import UserFeedbackRepository
+from aws_certification_coach.knowledge_base import load_knowledge_base
 from aws_certification_coach.questions.json_repository import JsonQuestionRepository
 from aws_certification_coach.questions.visibility import visible_questions
 from aws_certification_coach.quiz.session import QuizSession
@@ -162,11 +164,11 @@ def main() -> None:
             _render_answer_feedback(result.score, result.feedback, result.suggested_improvements)
             st.markdown("### Detailed Answer")
             st.write(result.detailed_answer)
-            _render_source_documentation(question.original_multiple_choice)
+            _render_multiple_choice_source_documentation(question.original_multiple_choice)
             _render_feedback_link(question, user_answer, result.score)
         with source_column:
             _render_original_multiple_choice(question.original_multiple_choice, highlight_correct=True)
-            _render_multiple_choice_source_documentation(question.original_multiple_choice)
+            _render_relevant_service_feedback(result.score, result.relevant_service)
 
 
 def _render_score(score: int) -> None:
@@ -212,12 +214,19 @@ def _render_answer_feedback(score: int, feedback: str, suggest_improvements: lis
     if feedback:
         for line in feedback.split(';'):
             st.info(line)
-    elif suggest_improvements:
-            st.info(f"Here are some suggestions for improving your answer:")
-            output = ""
-            for suggestion in suggest_improvements:
-                output+= f"- {suggestion}\n"
-            st.write(output)
+
+def _render_relevant_service_feedback(score: int, relevant_services: list[str]) -> None:
+    if score_to_letter(score) == "A" or not relevant_services:
+        return
+    st.markdown(f"### Relevant Services:")
+    knowledge = load_knowledge_base()
+    for relevant_service in relevant_services:
+        service = knowledge.service_for_name(relevant_service)
+        if service is None:
+            st.info(relevant_service)
+            continue
+        st.write(service.name)
+        st.info(f"{service.description}")
 
 def _render_contact_info_link() -> None:
     st.markdown(f"Author: [{author}]({linked_in_url}) — GitHub: [AWS-Certification-Coach]({github_url})")

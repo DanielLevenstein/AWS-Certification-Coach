@@ -1208,7 +1208,7 @@
     {
       "id": "dva-dynamodb-query-index",
       "generated_question": "A DynamoDB table is keyed by customer ID, but the application now needs fast lookups by order status without scanning every item. What should the developer add to support this access pattern?",
-      "correct_option": "Add a DynamoDB secondary index.",
+      "correct_option": "Add a secondary index.",
       "reference_answer": "Add a DynamoDB secondary index with the alternate partition key so the application can use efficient Query operations and avoid table scans.",
       "distractors": [
         "Enable point-in-time recovery.",

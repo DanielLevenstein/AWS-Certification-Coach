@@ -62,6 +62,7 @@ Return JSON only with:
 - core_concept_correct: boolean indicating whether the learner captured the central implementation concept
 - suggested_improvements: array of strings
 - feedback: exactly one learner-facing sentence explaining how to improve any answer scoring below 90
+- relevant_service: array of strings naming relevant AWS services or features
 - detailed_answer: detailed correct answer that covers the reference answer and every missing concept
 """
 
@@ -79,6 +80,7 @@ class EvaluationResponseParser:
             core_concept_correct=bool(payload.get("core_concept_correct", False)),
             feedback=str(payload.get("feedback", "")),
             feedback_source=str(payload.get("feedback_source", "")),
+            relevant_service=_string_list_or_scalar(payload.get("relevant_service", [])),
             detailed_answer=str(payload.get("detailed_answer", "")),
         )
 
@@ -95,6 +97,14 @@ def _string_list(value: object) -> list[str]:
     if not isinstance(value, list):
         return []
     return [str(item) for item in value if str(item).strip()]
+
+
+def _string_list_or_scalar(value: object) -> list[str]:
+    if isinstance(value, list):
+        return _string_list(value)
+    if str(value).strip():
+        return [str(value)]
+    return []
 
 
 def _required_concepts(question: Question) -> list[str]:

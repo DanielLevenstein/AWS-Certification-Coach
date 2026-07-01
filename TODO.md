@@ -53,6 +53,7 @@ F: wrong domain/service, contradicted requirement, or no meaningful answer.
 
 ## Question Expansion
 Add service-oriented questions that directly ask the user to compare the pros and cons of two different services. 
+# TODO BLOCKER shuffle answer order in UI.
 
 ### Additional Feedback
 Additional question generation feedback can be found in the feedback_text section of user_feedback.v3.json

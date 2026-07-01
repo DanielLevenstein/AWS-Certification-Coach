@@ -39,6 +39,7 @@ class StaticProvider:
                 "core_concept_correct": self.core_concept_correct,
                 "feedback": self.feedback,
                 "feedback_source": self.feedback_source,
+                "relevant_service": [],
                 "detailed_answer": "Use AWS KMS to manage encryption keys.",
             }
         )
@@ -107,6 +108,7 @@ def test_valid_wrong_service_name_is_not_reported_as_misspelled():
 
     assert result.score <= 49
     assert result.feedback == "This exact service answer is not in the question's correct answer list."
+    assert result.relevant_service == ["Amazon SNS", "Amazon SQS"]
 
 
 def test_common_misconception_answer_gets_specific_feedback():
@@ -128,6 +130,7 @@ def test_common_misconception_answer_gets_specific_feedback():
         "This answer appears to rely on a common misconception: "
         "AWS CloudTrail is the best fit for this requirement."
     )
+    assert result.relevant_service == ["AWS CloudTrail", "AWS Budgets"]
 
 
 def test_must_not_claim_answer_gets_stronger_feedback():
@@ -148,6 +151,7 @@ def test_must_not_claim_answer_gets_stronger_feedback():
 
     assert result.score <= 49
     assert result.feedback == "AWS KMS is a better option because it is designed to manage encryption keys."
+    assert result.relevant_service == ["Amazon S3", "AWS KMS"]
 
 
 def test_must_not_claim_matches_short_service_answer_without_aws_prefix():
@@ -174,6 +178,7 @@ def test_must_not_claim_matches_short_service_answer_without_aws_prefix():
     assert result.score <= 49
     assert result.feedback == question.do_not_claim_explanation[0]
     assert "\n\nAWS CloudTrail" in result.feedback
+    assert result.relevant_service == ["AWS CloudTrail", "AWS Config"]
 
 
 def test_negated_misconception_does_not_trigger_feedback():
@@ -215,6 +220,7 @@ def test_framed_question_restatement_receives_restatement_feedback():
 
     assert result.score <= 25
     assert result.feedback == "This answer restates the question without identifying and explaining the solution."
+    assert result.relevant_service == ["AWS KMS"]
 
 
 def test_correct_paraphrase_is_not_downgraded_as_question_rewording():
@@ -236,6 +242,7 @@ def test_correct_paraphrase_is_not_downgraded_as_question_rewording():
 
     assert result.score >= 90
     assert result.feedback == ""
+    assert result.relevant_service == ["AWS Budgets"]
 
 
 def test_correct_service_with_wrong_reasoning_receives_b_band_feedback():
@@ -287,6 +294,79 @@ def test_service_description_without_required_service_name_does_not_receive_b_le
 
     assert result.score <= 79
     assert result.feedback == "Name the specific AWS service or feature required by the question."
+    assert result.relevant_service == ["DynamoDB global tables"]
+
+
+def test_missing_required_service_feedback_includes_service_description():
+    question = Question(
+        schema_version=1,
+        certification="Solutions Architect Associate",
+        domain="Database",
+        difficulty="Medium",
+        question=(
+            "Explain which AWS service or feature should replicate tables across Regions "
+            "for low-latency multi-Region access and resilience."
+        ),
+        reference_answer=(
+            "Use DynamoDB global tables to replicate tables across Regions for low-latency "
+            "multi-Region access and resilience."
+        ),
+        key_concepts=["DynamoDB global tables", "multi-Region", "replication", "low latency"],
+        acceptable_answers=["DynamoDB global tables"],
+    )
+
+    result = EvaluationService(SemanticSimilarityEvaluatorProvider()).evaluate(
+        question,
+        "Use a global table replication feature across Regions for low latency.",
+    )
+
+    assert result.score <= 79
+    assert result.feedback == "Name the specific AWS service or feature required by the question."
+    assert result.relevant_service == ["DynamoDB global tables"]
+
+
+def test_app_renders_relevant_service_details_from_knowledge_base(monkeypatch):
+    headings = []
+    names = []
+    messages = []
+    monkeypatch.setattr(app.st, "markdown", headings.append)
+    monkeypatch.setattr(app.st, "write", names.append)
+    monkeypatch.setattr(app.st, "info", messages.append)
+
+    app._render_relevant_service_feedback(80, ["DynamoDB global tables"])
+
+    assert headings == ["### Relevant Services:"]
+    assert names == ["DynamoDB global tables"]
+    assert len(messages) == 1
+    assert "replicate table data across multiple AWS Regions" in messages[0]
+
+
+def test_app_renders_multiple_relevant_services(monkeypatch):
+    names = []
+    messages = []
+    monkeypatch.setattr(app.st, "markdown", lambda _value: None)
+    monkeypatch.setattr(app.st, "write", names.append)
+    monkeypatch.setattr(app.st, "info", messages.append)
+
+    app._render_relevant_service_feedback(49, ["Amazon SNS", "Amazon SQS"])
+
+    assert names == ["Amazon SNS", "Amazon SQS"]
+    assert len(messages) == 2
+
+
+def test_app_hides_relevant_service_for_a_grade(monkeypatch):
+    headings = []
+    names = []
+    messages = []
+    monkeypatch.setattr(app.st, "markdown", headings.append)
+    monkeypatch.setattr(app.st, "write", names.append)
+    monkeypatch.setattr(app.st, "info", messages.append)
+
+    app._render_relevant_service_feedback(95, ["DynamoDB global tables"])
+
+    assert headings == []
+    assert names == []
+    assert messages == []
 
 
 def test_artifact_review_accepts_exact_corrected_config_as_correct_answer():

@@ -16,6 +16,7 @@ class EvaluationResult:
     core_concept_correct: bool = False
     feedback: str = ""
     feedback_source: str = ""
+    relevant_service: list[str] = field(default_factory=list)
     detailed_answer: str = ""
 
 
