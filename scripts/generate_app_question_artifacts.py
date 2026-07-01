@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 from pathlib import Path
 
 from aws_certification_coach.config import current_schema_version
@@ -46,6 +47,18 @@ def _build_app_questions(count: int) -> list[dict]:
         correct_option = template.option_pattern.format(service_name=service.name)
         explanation = template.reference_answer_pattern.format(service_name=service.name, purpose=scenario.purpose)
         mcq_question = variant.format(purpose=scenario.purpose)
+        answers = [correct_option,
+        template.option_pattern.format(service_name=distractors[0]),
+        template.option_pattern.format(service_name=distractors[1]),
+        template.option_pattern.format(service_name=distractors[2])]
+        random.shuffle(answers)
+        # Return get letter index of correct
+        correct_option_id = []
+        for i, answer in enumerate(answers):
+            letter = chr(ord('A') + i)
+            if answer == correct_option:
+                correct_option_id.append(letter)
+
         questions.append(
             {
                 "schema_version": schema_version,
@@ -64,12 +77,12 @@ def _build_app_questions(count: int) -> list[dict]:
                 "original_multiple_choice": {
                     "question": mcq_question,
                     "options": [
-                        _option("A", correct_option),
-                        _option("B", template.option_pattern.format(service_name=distractors[0])),
-                        _option("C", template.option_pattern.format(service_name=distractors[1])),
-                        _option("D", template.option_pattern.format(service_name=distractors[2])),
+                        _option("A", answers[0]),
+                        _option("B", answers[1]),
+                        _option("C", answers[2]),
+                        _option("D", answers[3]),
                     ],
-                    "correct_option_ids": list(template.selection_rule["correct_option_ids"]),
+                    "correct_option_ids": list(correct_option_id),
                     "explanation": explanation,
                     "source_name": f"AWS Documentation: {service.name}",
                     "source_url": service.source_url,
@@ -149,14 +162,8 @@ def distractor_feedback(service_name: str, distractor: str, purpose: str) -> str
     if _is_s3_lifecycle_bucket_policy_boundary(service_name, distractor):
         return (
             f"{service_name} is a better option because it is designed to {purpose}. "
-            "S3 Lifecycle rules manage object transitions and expiration over time; "
+            "S3 Lifecycle rules manage object transitions and expiration over time.; "
             "S3 bucket policies are resource-based access policies that allow or deny requests to the bucket and objects."
-        )
-    distractor_context = distractor_service_context(distractor)
-    if distractor_context:
-        return (
-            f"{service_name} is a better option because it is designed to {purpose}.\n\n"
-            f"{distractor_context}, so it does not satisfy this scenario requirement."
         )
     return (
         f"{service_name} is a better option because it is designed to {purpose}, "

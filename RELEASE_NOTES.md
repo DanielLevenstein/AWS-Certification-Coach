@@ -34,8 +34,8 @@
 | v3.7.3   | Revert v3.6.4 Generate common_misconceptions and must_not_claim fields during question generation time.                                 |
 | v3.7.3.1 | Removed references to certification-coach scenarios from the AWS knowledge base and expanded descriptions to be more than one sentence. |
 | v3.7.3.2 | Changed grade for correct service wrong description to B.                                                                               |
-| v3.8.1   | Tunes semantic scoring for strong AWS concept prose so latest release metrics clear guardrails.     |
-
+| v3.8.1   | Tunes semantic scoring for strong AWS concept prose so latest release metrics clear guardrails.                                         |
+| v3.8.1.1 | Emergency Patch. Fix Answer Ordering |
 # Release Metrics
 
 ## Metric Definitions:
@@ -71,6 +71,7 @@
 | v3.7.2   |            97.00% |            100.00% |          97.37% |                95.00% |          99.00% |            95.12% |
 | v3.8.0   |            94.17% |            100.00% |          97.47% |                92.23% |          96.12% |            95.12% |
 | v3.8.1   |            98.06% |            100.00% |          97.47% |                97.09% |         100.00% |            95.12% |
+| v3.8.1.1 |            98.06% |            100.00% |          97.47% |                97.09% |         100.00% |            95.12% |
 
 ## Grading Rubric:
 
@@ -83,22 +84,23 @@
 | F     | Answers which have no relation to the correct answer.                                 |
 
 ### Grade Band Precision
-| Release |       A |     B&C |     D&F |
-| :------ | ------: | ------: | ------: |
-| v2.5.5  |  46.51% |  60.71% | 100.00% |
-| v3.0.1  |  50.00% |  69.70% | 100.00% |
-| v3.0.4  |  90.00% | 100.00% | 100.00% |
-| v3.3.0  |  90.00% |  84.62% |  97.79% |
-| v3.3.1  |  92.31% |  64.71% |  98.17% |
-| v3.3.2  |  92.31% |  64.71% |  98.17% |
-| v3.3.4  | 100.00% |  92.31% | 100.00% |
-| v3.4.1  | 100.00% |  92.31% | 100.00% |
-| v3.5.2  | 100.00% |  90.00% |  98.25% |
-| v3.7.0  | 94.44% | 95.65% | 93.28% |
-| v3.7.1  | 100.00% | 95.65% | 98.02% |
-| v3.7.2  | 100.00% | 96.00% | 96.72% |
-| v3.8.0  | 100.00% | 88.89% | 95.16% |
-| v3.8.1  | 100.00% | 100.00% | 98.33% |
+| Release  |       A |     B&C |     D&F |
+|:---------| ------: | ------: | ------: |
+| v2.5.5   |  46.51% |  60.71% | 100.00% |
+| v3.0.1   |  50.00% |  69.70% | 100.00% |
+| v3.0.4   |  90.00% | 100.00% | 100.00% |
+| v3.3.0   |  90.00% |  84.62% |  97.79% |
+| v3.3.1   |  92.31% |  64.71% |  98.17% |
+| v3.3.2   |  92.31% |  64.71% |  98.17% |
+| v3.3.4   | 100.00% |  92.31% | 100.00% |
+| v3.4.1   | 100.00% |  92.31% | 100.00% |
+| v3.5.2   | 100.00% |  90.00% |  98.25% |
+| v3.7.0   | 94.44% | 95.65% | 93.28% |
+| v3.7.1   | 100.00% | 95.65% | 98.02% |
+| v3.7.2   | 100.00% | 96.00% | 96.72% |
+| v3.8.0   | 100.00% | 88.89% | 95.16% |
+| v3.8.1   | 100.00% | 100.00% | 98.33% |
+| v3.8.1.1 | 100.00% | 100.00% | 98.33% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |        D |      F |
@@ -121,19 +123,20 @@
 | v3.7.0   | 94.44% | 93.75% | 71.43% | 95.13% | 70.37% |
 | v3.7.1   | 100.00% | 93.75% | 100.00% | 97.79% | 92.59% |
 | v3.7.2   | 100.00% | 93.33% | 100.00% | 94.29% | 92.31% |
-| v3.8.0  | 100.00% | 93.33% | 83.33% | 91.67% | 92.31% |
-| v3.8.1  | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
+| v3.8.0   | 100.00% | 93.33% | 83.33% | 91.67% | 92.31% |
+| v3.8.1   | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
+| v3.8.1.1 | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
 
 ## Current Coverage
 
-![Release Metrics Chart](release/v3.6.0_question_coverage_metrics_chart.png)
+![Release Metrics Chart](release/question_coverage_metrics_chart.png)
 
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
-| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
-|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.8.1 | 98.06% | 100.00% | 97.47% | 97.09% | 100.00% | 95.12% |
+| Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+|:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
+| v3.8.1.1 | 98.06% | 100.00% | 97.47% | 97.09% | 100.00% | 95.12% |
 
 ## Grade Band Metrics
 
