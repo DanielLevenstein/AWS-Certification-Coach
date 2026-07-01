@@ -27,7 +27,18 @@ Because the current accuracy metrics are stable, we are implementing these chang
 Implementing dedicated AWS knowledge based on a dedicated feature branch using tinyLLama for local training.
 My hope is to get the local language model to train the existing classifier to improve its accuracy scores so a heavy language model doesn't have to get deployed to production.  
 
-## Potential Rubric Update
+
+# v4.0.0 Use a language model to extract service name and heuristic matching as backup
+make a language model provide structured feedback to the heuristic model.
+
+{
+    service_correct: true/false,
+    core_concept_correct: true/false,
+}
+
+We will then display both the legacy feedback from the must_not_claim field and the suggested_improvements in the UI. 
+## Rubric Update
+
 Current rubric has difficulty determining the difference between C, D, and F grades. 
 Current Rubric:
 C: Answers which describe pieces of the problem but do not specify the service involved. 
@@ -35,25 +46,13 @@ D: Answers which name the best wrong answer.
 F: Answers which have no relation to the correct answer.                                 
 
 Proposed new rubric:
+Change correct_service_wrong_reasoning grade from C to B.
 C: the answer would point a developer toward the right AWS service or implementation path, but misses an important qualifier, feature name, or condition.
 D: the answer is related to the domain but would not reliably lead to the right implementation.
 F: wrong domain/service, contradicted requirement, or no meaningful answer.
 
 ## Question Expansion
-- Move download_developer_original_questions.py into question_template
-- Generate common_misconceptions and must_not_claim fields during question generation time.
-- Increase test data so there is a more even number of example cases for each grade level.
-
-### Specific question suggestions
-- Review artifact-review prompts that may give away the expected issue in the question wording, especially SDK pagination examples.
-- Improve learner feedback when the answer is essentially unrelated so `suggested_improvements` explains how to move toward the target concept.
-- Improve `suggested_improvements` wording so it gives concrete next steps instead of generic "explain improvements" style feedback.
-
 Add service-oriented questions that directly ask the user to compare the pros and cons of two different services. 
-
-### Knowledge base notes for expansion
-- Treat the top-level `common_misconceptions` section as a legacy compatibility section for future code; 
-- Expand the `services` section only when the next stage of question expansion identifies specific service metadata needed for generation, distractor quality, or feedback.
 
 ### Additional Feedback
 Additional question generation feedback can be found in the feedback_text section of user_feedback.v3.json

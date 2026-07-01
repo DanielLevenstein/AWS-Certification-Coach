@@ -29,6 +29,10 @@ if ! grep -Fq "$TAG_ID" "$RELEASE_NOTES"; then
   exit 1
 fi
 
+
+.venv/bin/python scripts/check_precision_guardrails.py --release-label "$TAG_ID"
+
+
 .venv/bin/python -m pip install -e . --quiet
 .venv/bin/python -m pip install pytest --quiet
 

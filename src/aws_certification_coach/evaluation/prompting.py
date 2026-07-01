@@ -58,6 +58,8 @@ Learner answer:
 Return JSON only with:
 - score: integer from 0 to 100
 - missing_concepts: array of strings
+- service_correct: boolean indicating whether the learner identified the expected AWS service or feature
+- core_concept_correct: boolean indicating whether the learner captured the central implementation concept
 - suggested_improvements: array of strings
 - feedback: exactly one learner-facing sentence explaining how to improve any answer scoring below 90
 - detailed_answer: detailed correct answer that covers the reference answer and every missing concept
@@ -73,6 +75,8 @@ class EvaluationResponseParser:
             score=_bounded_score(payload.get("score", 0)),
             missing_concepts=_string_list(payload.get("missing_concepts", [])),
             suggested_improvements=_string_list(payload.get("suggested_improvements", [])),
+            service_correct=bool(payload.get("service_correct", False)),
+            core_concept_correct=bool(payload.get("core_concept_correct", False)),
             feedback=str(payload.get("feedback", "")),
             feedback_source=str(payload.get("feedback_source", "")),
             detailed_answer=str(payload.get("detailed_answer", "")),

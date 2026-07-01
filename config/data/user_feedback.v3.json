@@ -152,5 +152,248 @@
       "Auto Scaling groups is a better option because it is designed to adjust EC2 capacity automatically based on demand and health checks, while Elastic IP does not satisfy that requirement.",
       "Auto Scaling groups is a better option because it is designed to adjust EC2 capacity automatically based on demand and health checks, while AMI copy does not satisfy that requirement."
     ]
+  },
+  {
+    "schema_version": 3,
+    "question": "A DynamoDB table is keyed by customer ID, but the application now needs fast lookups by order status without scanning every item. What should the developer add to support this access pattern?",
+    "exam_code": "DVA-C02",
+    "reference_answer": "Add a DynamoDB secondary index with the alternate partition key so the application can use efficient Query operations and avoid table scans.",
+    "original_multiple_choice": {
+      "question": "A DynamoDB table is keyed by customer ID, but the application now needs fast lookups by order status without scanning every item. What should the developer add to support this access pattern?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Add a DynamoDB secondary index.",
+          "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html",
+          "metadata": {
+            "service_id": "dynamodb",
+            "service_name": "Amazon DynamoDB",
+            "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html"
+          }
+        },
+        {
+          "option_id": "B",
+          "text": "Enable point-in-time recovery."
+        },
+        {
+          "option_id": "C",
+          "text": "Increase Lambda memory.",
+          "source_url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+          "metadata": {
+            "service_id": "lambda",
+            "service_name": "AWS Lambda",
+            "source_url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+          }
+        },
+        {
+          "option_id": "D",
+          "text": "Create a CloudTrail trail.",
+          "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+          "metadata": {
+            "service_id": "cloudtrail",
+            "service_name": "AWS CloudTrail",
+            "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+          }
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Add a DynamoDB secondary index with the alternate partition key so the application can use efficient Query operations and avoid table scans.",
+      "source_name": "AWS Documentation: DynamoDB secondary indexes",
+      "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html",
+      "source_license_notes": "AWS public documentation used for topic grounding; question text is self-authored."
+    },
+    "answer_given": "The user should add a second database index for order status.",
+    "correct_rating": "A",
+    "rating_given": "D",
+    "feedback_text": "",
+    "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html",
+    "key_concepts": [
+      "DynamoDB secondary index",
+      "alternate partition key",
+      "Query operation",
+      "avoid scans"
+    ],
+    "common_misconceptions": [
+      "Enable point-in-time recovery. is the best fit for this scenario.",
+      "Increase Lambda memory. is the best fit for this scenario.",
+      "Create a CloudTrail trail. is the best fit for this scenario."
+    ],
+    "acceptable_answers": [
+      "Add a DynamoDB secondary index.",
+      "Add a DynamoDB secondary index with the alternate partition key so the application can use efficient Query operations and avoid table scans.",
+      "Amazon DynamoDB"
+    ],
+    "must_not_claim": [
+      "Enable point-in-time recovery. satisfies the scenario better than Amazon DynamoDB.",
+      "Increase Lambda memory. satisfies the scenario better than Amazon DynamoDB.",
+      "Create a CloudTrail trail. satisfies the scenario better than Amazon DynamoDB."
+    ],
+    "do_not_claim_explanation": [
+      "Amazon DynamoDB is a better option because it is designed to Add an index that matches the query access pattern so the application can use Query efficiently, while Enable point-in-time recovery. does not satisfy that requirement.",
+      "Amazon DynamoDB is a better option because it is designed to Add an index that matches the query access pattern so the application can use Query efficiently.\n\nAWS Lambda addresses a different AWS need: aWS Lambda runs application code in response to events without requiring users to provision or manage servers. It automatically scales function execution for supported event sources and is commonly used for APIs, stream processing, automation, and event-driven application logic, so it does not satisfy this scenario requirement.",
+      "Amazon DynamoDB is a better option because it is designed to Add an index that matches the query access pattern so the application can use Query efficiently.\n\nAWS CloudTrail addresses a different AWS need: aWS CloudTrail records account activity and API events across AWS services. It supports governance, compliance, security analysis, and operational troubleshooting by showing who made a request, when it happened, which resource was affected, and where the request came from, so it does not satisfy this scenario requirement."
+    ]
+  },
+  {
+    "schema_version": 3,
+    "question": "Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.",
+    "exam_code": "CLF-C02",
+    "reference_answer": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+    "original_multiple_choice": {
+      "question": "A team is reviewing an AWS design and needs a solution that can automatically transition or expire objects based on age and access patterns. Which AWS service or feature should they choose?",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use S3 lifecycle policies.",
+          "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html",
+          "metadata": {
+            "service_id": "s3",
+            "service_name": "Amazon S3",
+            "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"
+          }
+        },
+        {
+          "option_id": "B",
+          "text": "Use S3 bucket policies.",
+          "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html",
+          "metadata": {
+            "service_id": "s3",
+            "service_name": "Amazon S3",
+            "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"
+          }
+        },
+        {
+          "option_id": "C",
+          "text": "Use AWS Organizations.",
+          "source_url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html",
+          "metadata": {
+            "service_id": "aws-organizations",
+            "service_name": "AWS Organizations",
+            "source_url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html"
+          }
+        },
+        {
+          "option_id": "D",
+          "text": "Use Amazon GuardDuty."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+      "source_name": "AWS Documentation: S3 lifecycle policies",
+      "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "S3 lifestyle policies are used to expire objects based on age and access patterns",
+    "correct_rating": "A",
+    "rating_given": "C",
+    "feedback_text": "",
+    "source_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html",
+    "key_concepts": [
+      "S3 Lifecycle",
+      "storage classes",
+      "object expiration",
+      "cost optimization"
+    ],
+    "common_misconceptions": [
+      "S3 bucket policies is the best fit for this requirement.",
+      "AWS Organizations is the best fit for this requirement.",
+      "Amazon GuardDuty is the best fit for this requirement."
+    ],
+    "acceptable_answers": [
+      "Use S3 lifecycle policies.",
+      "Use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns.",
+      "S3 lifecycle policies"
+    ],
+    "must_not_claim": [
+      "S3 bucket policies satisfies the scenario better than S3 lifecycle policies.",
+      "AWS Organizations satisfies the scenario better than S3 lifecycle policies.",
+      "Amazon GuardDuty satisfies the scenario better than S3 lifecycle policies."
+    ],
+    "do_not_claim_explanation": [
+      "S3 lifecycle policies is a better option because it is designed to automatically transition or expire objects based on age and access patterns. S3 Lifecycle rules manage object transitions and expiration over time; S3 bucket policies are resource-based access policies that allow or deny requests to the bucket and objects.",
+      "S3 lifecycle policies is a better option because it is designed to automatically transition or expire objects based on age and access patterns.\n\nAWS Organizations addresses a different AWS need: aWS Organizations centrally manages multiple AWS accounts under an organization structure. It supports consolidated billing, account grouping, delegated administration, and governance controls such as service control policies, so it does not satisfy this scenario requirement.",
+      "S3 lifecycle policies is a better option because it is designed to automatically transition or expire objects based on age and access patterns, while Amazon GuardDuty does not satisfy that requirement."
+    ]
+  },
+   {
+    "schema_version": 3,
+    "question": "Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.",
+    "exam_code": "SAA-C03",
+    "reference_answer": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+    "original_multiple_choice": {
+      "question": "During exam preparation, explain which AWS service or feature is best suited to provide synchronous standby replication and automatic failover for relational databases.",
+      "options": [
+        {
+          "option_id": "A",
+          "text": "Use Amazon RDS Multi-AZ.",
+          "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+          "metadata": {
+            "service_id": "amazon-rds-multi-az",
+            "service_name": "Amazon RDS Multi-AZ",
+            "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+          }
+        },
+        {
+          "option_id": "B",
+          "text": "Use read replica only."
+        },
+        {
+          "option_id": "C",
+          "text": "Use DynamoDB global table.",
+          "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html",
+          "metadata": {
+            "service_id": "dynamodb",
+            "service_name": "Amazon DynamoDB",
+            "source_url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
+          }
+        },
+        {
+          "option_id": "D",
+          "text": "Use manual snapshot."
+        }
+      ],
+      "correct_option_ids": [
+        "A"
+      ],
+      "explanation": "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+      "source_name": "AWS Documentation: Amazon RDS Multi-AZ",
+      "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "source_license_notes": "AWS documentation was used for topic grounding; this question text is self-authored."
+    },
+    "answer_given": "Synchronous standby replication with automatic failover is provided by using multi AZ deployment with failover. ",
+    "correct_rating": "A",
+    "rating_given": "C",
+    "feedback_text": "",
+    "source_url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+    "key_concepts": [
+      "Amazon RDS",
+      "Multi-AZ",
+      "automatic failover",
+      "standby replica"
+    ],
+    "common_misconceptions": [
+      "read replica only is the best fit for this requirement.",
+      "DynamoDB global table is the best fit for this requirement.",
+      "manual snapshot is the best fit for this requirement."
+    ],
+    "acceptable_answers": [
+      "Use Amazon RDS Multi-AZ.",
+      "Use Amazon RDS Multi-AZ to provide synchronous standby replication and automatic failover for relational databases.",
+      "Amazon RDS Multi-AZ"
+    ],
+    "must_not_claim": [
+      "read replica only satisfies the scenario better than Amazon RDS Multi-AZ.",
+      "DynamoDB global table satisfies the scenario better than Amazon RDS Multi-AZ.",
+      "manual snapshot satisfies the scenario better than Amazon RDS Multi-AZ."
+    ],
+    "do_not_claim_explanation": [
+      "Amazon RDS Multi-AZ is a better option because it is designed to provide synchronous standby replication and automatic failover for relational databases, while read replica only does not satisfy that requirement.",
+      "Amazon RDS Multi-AZ is a better option because it is designed to provide synchronous standby replication and automatic failover for relational databases.\n\nAmazon DynamoDB addresses a different AWS need: amazon DynamoDB is a fully managed NoSQL database for key-value and document workloads that need low-latency access at scale. It provides features such as partitioned storage, automatic scaling options, streams, TTL, and global replication patterns for serverless application data, so it does not satisfy this scenario requirement.",
+      "Amazon RDS Multi-AZ is a better option because it is designed to provide synchronous standby replication and automatic failover for relational databases, while manual snapshot does not satisfy that requirement."
+    ]
   }
 ]

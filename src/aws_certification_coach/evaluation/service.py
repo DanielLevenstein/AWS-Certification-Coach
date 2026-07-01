@@ -65,9 +65,13 @@ class HeuristicEvaluatorProvider:
         ]
         missing = [concept for concept in _required_concepts(question) if concept not in matched]
         score = round((len(matched) / max(1, len(_required_concepts(question)))) * 100)
+        service_correct = not missing or bool(matched and matched[0] == _required_concepts(question)[0])
+        core_concept_correct = not missing
         payload = {
             "score": score,
             "missing_concepts": missing,
+            "service_correct": service_correct,
+            "core_concept_correct": core_concept_correct,
             "suggested_improvements": [f"Explain {concept}." for concept in missing],
             "detailed_answer": _detailed_answer(question, missing),
         }
