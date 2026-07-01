@@ -3,7 +3,7 @@
 - Curated examples reviewed: 109
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
 - Current grade distribution: `{'A': 20, 'B': 16, 'C': 12, 'D': 36, 'F': 25}`
-- Suggested label updates: 13
+- Suggested label updates: 9
 
 ## Suggested Answer Updates
 
@@ -31,13 +31,12 @@
 - Semantic score: `25`
 - Rationale: The answer does not identify the required service or enough relevant AWS reasoning for partial credit.
 
-### Row 71: A -> B
+### Row 66: D -> A
 
-- Question: A deployment workflow uses a managed build project that must run the same install, build, and test commands every time. Where should the developer define those command phases?
-- Answer: `AWS Code Build`
-- Reference: a CodeBuild buildspec file
-- Semantic score: `85`
-- Reviewer feedback: Again my answer is correct. Are you sure you are using the semantic evaluation logic?
+- Question: A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?
+- Answer: `Which API Gateway feature should be used to run token validation on requests? `
+- Reference: an API Gateway Lambda authorizer
+- Semantic score: `95`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ### Row 73: B -> D
@@ -65,23 +64,13 @@
 - Semantic score: `65`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
-### Row 76: F -> D
+### Row 76: F -> A
 
 - Question: A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?
 - Answer: `Which API Gateway feature should be used to run token validation on requests? `
 - Reference: an API Gateway Lambda authorizer
-- Semantic score: `65`
+- Semantic score: `95`
 - Rationale: The answer names an adjacent AWS concept, so the standardized rubric gives minimal partial credit instead of no credit.
-
-### Row 84: A -> D
-
-- Question: Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?
-- Answer: `Change resource to 
-"Resource": "s3://example-bucket/reports/*"`
-- Reference: Restrict the Resource to arn:aws:s3:::example-bucket/reports/*
-- Semantic score: `65`
-- Reviewer feedback: My answer exactly matches the proposed code block.
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ### Row 85: C -> D
 
@@ -90,30 +79,6 @@
 - Reference: Auto Scaling groups
 - Semantic score: `65`
 - Reviewer feedback: Elastic Load balancing is a sub feature of auto scaling groups
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 86: A -> D
-
-- Question: A DynamoDB table is keyed by customer ID, but the application now needs fast lookups by order status without scanning every item. What should the developer add to support this access pattern?
-- Answer: `The user should add a second database index for order status.`
-- Reference: Add a DynamoDB secondary index
-- Semantic score: `65`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 87: A -> C
-
-- Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
-- Answer: `S3 lifestyle policies are used to expire objects based on age and access patterns`
-- Reference: S3 lifecycle policies
-- Semantic score: `71`
-- Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
-
-### Row 88: A -> C
-
-- Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
-- Answer: `Synchronous standby replication with automatic failover is provided by using multi AZ deployment with failover. `
-- Reference: Amazon RDS Multi-AZ
-- Semantic score: `75`
 - Rationale: The current label and scorer disagree on the standardized exact letter grade; review this as a calibration candidate.
 
 ## Release Table Recommendation

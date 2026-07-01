@@ -418,6 +418,8 @@ def test_semantic_similarity_requires_reasoning_for_a_grade():
 
     assert 80 <= semantic_similarity_score(question, "The correct service is AWS KMS.") < 90
     assert semantic_similarity_score(question, "AWS KMS manages encryption keys.") >= 90
+    assert semantic_similarity_score(question, "aws KMS manages encryption keys.") >= 90
+    assert semantic_similarity_score(question, "aWS KMS manages encryption keys.") >= 90
     assert semantic_similarity_score(question, "KMS") < 90
 
 
@@ -432,7 +434,53 @@ def test_semantic_similarity_uses_syntax_alias_table_for_service_names():
 def test_semantic_similarity_uses_acceptable_answers_as_correct_evidence():
     question = _structured_question("managed build project")
 
-    assert 80 <= semantic_similarity_score(question, "AWS Code Build") < 90
+    assert semantic_similarity_score(question, "AWS Code Build") >= 90
+
+def test_semantic_similarity_recognizes_strong_concept_prose_answers():
+    project_root = Path(__file__).resolve().parents[2]
+    questions = JsonQuestionRepository(project_root / "data" / "questions" / "sample_questions.json").all()
+    secondary_index_question = next(
+        question
+        for question in questions
+        if "fast lookups by order status" in question.question
+    )
+    lifecycle_question = next(
+        question
+        for question in questions
+        if "automatically transition or expire objects" in question.question
+    )
+    multi_az_question = next(
+        question
+        for question in questions
+        if "synchronous standby replication" in question.question
+    )
+
+    assert semantic_similarity_score(
+        secondary_index_question,
+        "The user should add a second database index for order status.",
+    ) >= 90
+    assert semantic_similarity_score(
+        lifecycle_question,
+        "S3 lifestyle policies are used to expire objects based on age and access patterns",
+    ) >= 90
+    assert semantic_similarity_score(
+        multi_az_question,
+        "Synchronous standby replication with automatic failover is provided by using multi AZ deployment with failover.",
+    ) >= 90
+
+def test_semantic_similarity_recognizes_artifact_resource_path_answer():
+    project_root = Path(__file__).resolve().parents[2]
+    questions = JsonQuestionRepository(project_root / "data" / "questions" / "sample_questions.json").all()
+    question = next(
+        question
+        for question in questions
+        if "Lambda execution role" in question.question
+    )
+
+    assert semantic_similarity_score(
+        question,
+        'Change resource to \n"Resource": "s3://example-bucket/reports/*"',
+    ) >= 90
 
 def test_semantic_similarity_recognizes_budget_cost_center_alias():
     question = _structured_question("track cost or usage thresholds")

@@ -2,12 +2,12 @@
 
 - Curated examples: 109
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
-- Passing exact-letter predictions: 63
-- Failing exact-letter predictions: 46
-- Exact-letter accuracy: 57.80%
-- Unique failing question/answer/grade cases: 46
+- Passing exact-letter predictions: 62
+- Failing exact-letter predictions: 47
+- Exact-letter accuracy: 56.88%
+- Unique failing question/answer/grade cases: 47
 - Conflicting normalized label sets: 3
-- Actual letter grades among failures: {'B': 6, 'C': 8, 'D': 6, 'F': 26}
+- Actual letter grades among failures: {'A': 2, 'B': 6, 'C': 10, 'D': 3, 'F': 26}
 
 ## Primary Findings
 
@@ -24,16 +24,16 @@
 
 ## Failing Cases
 
-### 1. Expected A, received D
+### 1. Expected A, received C
 
 - Rows: `86`; occurrences: `1`
 - Question: A DynamoDB table is keyed by customer ID, but the application now needs fast lookups by order status without scanning every item. What should the developer add to support this access pattern?
 - Expected rating: `0.95`
 - User answer: `The user should add a second database index for order status.`
 - Correct answer: Add a DynamoDB secondary index
-- Raw model score: `65.00`; runtime score: `65`
-- Runtime feedback: 
-- Largest feature contributions: `semantic_similarity_score` +0.650
+- Raw model score: `79.00`; runtime score: `79`
+- Runtime feedback: Name the specific AWS service or feature required by the question.
+- Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
 ### 2. Expected A, received C
@@ -62,19 +62,31 @@
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Runtime exact-service guard treated the answer as a wrong option before partial-credit semantics were considered.
 
-### 4. Expected F, received D
+### 4. Expected F, received A
 
 - Rows: `76`; occurrences: `1`
 - Question: A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?
 - Expected rating: `0.25`
 - User answer: `Which API Gateway feature should be used to run token validation on requests?`
 - Correct answer: an API Gateway Lambda authorizer
-- Raw model score: `65.00`; runtime score: `65`
+- Raw model score: `95.00`; runtime score: `95`
 - Runtime feedback: 
-- Largest feature contributions: `semantic_similarity_score` +0.650
+- Largest feature contributions: `semantic_similarity_score` +0.950
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 5. Expected C, received D
+### 5. Expected D, received A
+
+- Rows: `66`; occurrences: `1`
+- Question: A team exposes a Lambda-backed REST API and must run custom token validation before requests reach the backend function. Which API Gateway feature should the developer configure?
+- Expected rating: `0.65`
+- User answer: `Which API Gateway feature should be used to run token validation on requests?`
+- Correct answer: an API Gateway Lambda authorizer
+- Raw model score: `95.00`; runtime score: `95`
+- Runtime feedback: 
+- Largest feature contributions: `semantic_similarity_score` +0.950
+- Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
+
+### 6. Expected C, received D
 
 - Rows: `75`; occurrences: `1`
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
@@ -86,7 +98,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 6. Expected B, received D
+### 7. Expected B, received D
 
 - Rows: `73`; occurrences: `1`
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
@@ -98,7 +110,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 7. Expected C, received F
+### 8. Expected C, received F
 
 - Rows: `15`; occurrences: `1`
 - Question: An SNS topic publishes all order events, but each subscribed queue should receive only messages for selected order types based on attributes. Which SNS feature should the developer configure?
@@ -111,7 +123,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Runtime exact-service guard treated the answer as a wrong option before partial-credit semantics were considered.
 
-### 8. Expected D, received F
+### 9. Expected D, received F
 
 - Rows: `105`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.
@@ -124,7 +136,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 9. Expected A, received B
+### 10. Expected A, received B
 
 - Rows: `83`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.
@@ -137,7 +149,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 10. Expected C, received D
+### 11. Expected C, received D
 
 - Rows: `85`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
@@ -150,7 +162,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 11. Expected D, received F
+### 12. Expected D, received F
 
 - Rows: `100`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
@@ -163,19 +175,19 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 12. Expected A, received C
+### 13. Expected A, received C
 
 - Rows: `87`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
 - Expected rating: `0.95`
 - User answer: `S3 lifestyle policies are used to expire objects based on age and access patterns`
 - Correct answer: S3 lifecycle policies
-- Raw model score: `71.00`; runtime score: `71`
+- Raw model score: `79.00`; runtime score: `79`
 - Runtime feedback: Name the specific AWS service or feature required by the question.
-- Largest feature contributions: `semantic_similarity_score` +0.710
+- Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 13. Expected D, received F
+### 14. Expected D, received F
 
 - Rows: `93`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
@@ -188,7 +200,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 14. Expected A, received B
+### 15. Expected A, received B
 
 - Rows: `2`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
@@ -201,7 +213,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 15. Expected D, received F
+### 16. Expected D, received F
 
 - Rows: `103`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.
@@ -214,7 +226,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 16. Expected D, received F
+### 17. Expected D, received F
 
 - Rows: `108`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.
@@ -227,7 +239,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 17. Expected C, received F
+### 18. Expected C, received F
 
 - Rows: `16`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.
@@ -240,7 +252,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Runtime exact-service guard treated the answer as a wrong option before partial-credit semantics were considered.
 
-### 18. Expected A, received B
+### 19. Expected A, received B
 
 - Rows: `77`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -253,7 +265,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 19. Expected A, received B
+### 20. Expected A, received B
 
 - Rows: `64`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -265,7 +277,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 20. Expected C, received F
+### 21. Expected C, received F
 
 - Rows: `79`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -278,7 +290,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 21. Expected D, received F
+### 22. Expected D, received F
 
 - Rows: `102`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.
@@ -291,7 +303,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 22. Expected D, received F
+### 23. Expected D, received F
 
 - Rows: `89`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.
@@ -304,7 +316,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 23. Expected D, received F
+### 24. Expected D, received F
 
 - Rows: `101`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type.
@@ -317,7 +329,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 24. Expected D, received F
+### 25. Expected D, received F
 
 - Rows: `91`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.
@@ -330,7 +342,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 25. Expected B, received C
+### 26. Expected B, received C
 
 - Rows: `52`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
@@ -342,7 +354,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.750
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 26. Expected A, received C
+### 27. Expected A, received C
 
 - Rows: `74`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
@@ -355,7 +367,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.750
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 27. Expected D, received F
+### 28. Expected D, received F
 
 - Rows: `92`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.
@@ -368,7 +380,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 28. Expected D, received F
+### 29. Expected D, received F
 
 - Rows: `97`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.
@@ -381,7 +393,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 29. Expected D, received F
+### 30. Expected D, received F
 
 - Rows: `104`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
@@ -394,7 +406,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 30. Expected A, received B
+### 31. Expected A, received B
 
 - Rows: `34`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
@@ -407,7 +419,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 31. Expected D, received F
+### 32. Expected D, received F
 
 - Rows: `106`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
@@ -420,19 +432,19 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 32. Expected A, received C
+### 33. Expected A, received C
 
 - Rows: `88`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
 - Expected rating: `0.95`
 - User answer: `Synchronous standby replication with automatic failover is provided by using multi AZ deployment with failover.`
 - Correct answer: Amazon RDS Multi-AZ
-- Raw model score: `75.00`; runtime score: `75`
+- Raw model score: `79.00`; runtime score: `79`
 - Runtime feedback: Name the specific AWS service or feature required by the question.
-- Largest feature contributions: `semantic_similarity_score` +0.750
+- Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 33. Expected D, received F
+### 34. Expected D, received F
 
 - Rows: `95`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
@@ -445,7 +457,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 34. Expected A, received C
+### 35. Expected A, received C
 
 - Rows: `69`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
@@ -458,7 +470,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 35. Expected D, received F
+### 36. Expected D, received F
 
 - Rows: `107`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
@@ -471,7 +483,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 36. Expected A, received B
+### 37. Expected A, received B
 
 - Rows: `1`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
@@ -484,7 +496,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 37. Expected D, received F
+### 38. Expected D, received F
 
 - Rows: `98`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
@@ -497,7 +509,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 38. Expected D, received F
+### 39. Expected D, received F
 
 - Rows: `53`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
@@ -509,7 +521,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 39. Expected D, received F
+### 40. Expected D, received F
 
 - Rows: `99`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.
@@ -522,7 +534,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 40. Expected D, received F
+### 41. Expected D, received F
 
 - Rows: `96`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.
@@ -535,7 +547,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 41. Expected B, received C
+### 42. Expected B, received C
 
 - Rows: `51`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.
@@ -547,7 +559,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 42. Expected D, received F
+### 43. Expected D, received F
 
 - Rows: `50`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -559,7 +571,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 43. Expected B, received C
+### 44. Expected B, received C
 
 - Rows: `57`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
@@ -571,7 +583,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 44. Expected D, received F
+### 45. Expected D, received F
 
 - Rows: `90`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
@@ -584,7 +596,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 45. Expected D, received F
+### 46. Expected D, received F
 
 - Rows: `94`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to transition old S3 objects to lower-cost storage classes and expire them after a retention period without changing bucket access permissions.
@@ -597,7 +609,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 46. Expected A, received D
+### 47. Expected A, received C
 
 - Rows: `84`; occurrences: `1`
 - Question: Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?
@@ -605,10 +617,10 @@
 - User answer: `Change resource to 
 "Resource": "s3://example-bucket/reports/*"`
 - Correct answer: Restrict the Resource to arn:aws:s3:::example-bucket/reports/*
-- Raw model score: `65.00`; runtime score: `65`
+- Raw model score: `79.00`; runtime score: `79`
 - Runtime feedback: Name the specific AWS service or feature required by the question.
 - Reviewer feedback: My answer exactly matches the proposed code block.
-- Largest feature contributions: `semantic_similarity_score` +0.650
+- Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
 ## Recommended Remediation Order

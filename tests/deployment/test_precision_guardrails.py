@@ -41,7 +41,7 @@ def test_release_guardrails_require_release_in_generated_metrics(tmp_path: Path)
 def test_deploy_script_runs_release_guardrail_hook_before_build():
     deploy_script = Path("deploy.sh").read_text(encoding="utf-8")
 
-    guardrail_index = deploy_script.index("scripts/check_release_guardrails.py")
+    guardrail_index = deploy_script.index("scripts/check_precision_guardrails.py")
     build_index = deploy_script.index("docker buildx build")
     assert guardrail_index < build_index
     assert '--release-label "$TAG_ID"' in deploy_script
