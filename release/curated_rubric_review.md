@@ -1,8 +1,8 @@
 # Curated Rubric Review
 
-- Curated examples reviewed: 109
+- Curated examples reviewed: 189
 - Rubric grades: `A`, `B`, `C`, `D`, `F`
-- Current grade distribution: `{'A': 20, 'B': 16, 'C': 12, 'D': 36, 'F': 25}`
+- Current grade distribution: `{'A': 100, 'B': 16, 'C': 12, 'D': 36, 'F': 25}`
 - Suggested label updates: 9
 
 ## Suggested Answer Updates

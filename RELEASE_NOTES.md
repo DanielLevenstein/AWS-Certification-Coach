@@ -37,6 +37,7 @@
 | v3.8.1   | Tunes semantic scoring for strong AWS concept prose so latest release metrics clear guardrails.                                         |
 | v3.8.1.1 | Emergency Patch. Fix Answer Ordering, and included stable UI feedback change                                                            |
 | v3.8.1.2 | Fix Answer Ordering for developer questions                                                                                             |
+| v3.8.1.3 | Added unit tests for patch release |
 
 # Release Metrics
 
@@ -73,8 +74,9 @@
 | v3.7.2   |            97.00% |            100.00% |          97.37% |                95.00% |          99.00% |            95.12% |
 | v3.8.0   |            94.17% |            100.00% |          97.47% |                92.23% |          96.12% |            95.12% |
 | v3.8.1   |            98.06% |            100.00% |          97.47% |                97.09% |         100.00% |            95.12% |
-| v3.8.1.1 |            98.06% |            100.00% |          97.47% |                97.09% |         100.00% |            95.12% |
-| v3.8.1.2 |            98.06% |            100.00% |          97.47% |                97.09% |         100.00% |            95.12% |
+| v3.8.1.1 |               N/A |                N/A |             N/A |                   N/A |             N/A |               N/A |
+| v3.8.1.2 |               N/A |                N/A |             N/A |                   N/A |             N/A |               N/A |
+| v3.8.1.3 |            98.91% |            100.00% |          98.74% |                98.36% |         100.00% |            91.44% |
 
 ## Grading Rubric:
 
@@ -103,8 +105,9 @@
 | v3.7.2   | 100.00% | 96.00% | 96.72% |
 | v3.8.0   | 100.00% | 88.89% | 95.16% |
 | v3.8.1   | 100.00% | 100.00% | 98.33% |
-| v3.8.1.1 | 100.00% | 100.00% | 98.33% |
-| v3.8.1.2 | 100.00% | 100.00% | 98.33% |
+| v3.8.1.1 |     N/A |     N/A |    N/A |
+| v3.8.1.2 |     N/A |     N/A |    N/A |
+| v3.8.1.3 | 100.00% | 100.00% | 98.33% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |        D |      F |
@@ -129,8 +132,9 @@
 | v3.7.2   | 100.00% | 93.33% | 100.00% | 94.29% | 92.31% |
 | v3.8.0   | 100.00% | 93.33% | 83.33% | 91.67% | 92.31% |
 | v3.8.1   | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
-| v3.8.1.1 | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
-| v3.8.1.2 | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
+| v3.8.1.1 |     N/A |    N/A |     N/A |    N/A |    N/A |
+| v3.8.1.2 |     N/A |    N/A |     N/A |    N/A |    N/A |
+| v3.8.1.3 | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
 
 ## Current Coverage
 
@@ -139,9 +143,9 @@
 <!-- release-metrics:start -->
 ## Generated Release Metrics
 
-| Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
-|:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.8.1.2 | 98.06% | 100.00% | 97.47% | 97.09% | 100.00% | 95.12% |
+| Release | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
+|:--------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
+| v3.8.1.3 | 98.91% | 100.00% | 98.74% | 98.36% | 100.00% | 91.44% |
 
 ## Grade Band Metrics
 
@@ -150,7 +154,7 @@
 | Precision | 100.00% | 100.00% | 98.33% |
 | Recall | 100.00% | 96.00% | 100.00% |
 | F1 | 100.00% | 97.96% | 99.16% |
-| Support | 19 | 25 | 59 |
+| Support | 99 | 25 | 59 |
 
 ## Per Grade Metrics
 
@@ -159,7 +163,7 @@
 | Precision | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
 | Recall | 100.00% | 100.00% | 90.91% | 94.29% | 100.00% |
 | F1 | 100.00% | 100.00% | 95.24% | 95.65% | 96.00% |
-| Support | 19 | 14 | 11 | 35 | 24 |
+| Support | 99 | 14 | 11 | 35 | 24 |
 
 Answer evaluator: `semantic_similarity` with the local knowledge base
 Question fidelity model: `question_fidelity_heuristic_v1`
@@ -174,7 +178,7 @@ Knowledge base file size: `77594` bytes
 Knowledge base syntax alias count: `18`
 Knowledge base service count: `42`
 Knowledge base concept count: `161`
-Semantic evaluation count: `103`
+Semantic evaluation count: `183`
 Grade-band reporting uses the exclusive `A`, `BC`, and `DF` groups from `BandAccuracy`.
 Exact Letter Accuracy requires exact `A`, `B`, `C`, `D`, or `F` agreement.
 Within 1 Letter uses the ordered `A`, `B`, `C`, `D`, `F` scale.

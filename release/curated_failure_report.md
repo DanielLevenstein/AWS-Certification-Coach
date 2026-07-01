@@ -1,13 +1,13 @@
 # Curated Grade Failure Report
 
-- Curated examples: 109
+- Curated examples: 189
 - Evaluation grades: `A`, `B`, `C`, `D`, `F`
-- Passing exact-letter predictions: 62
-- Failing exact-letter predictions: 47
-- Exact-letter accuracy: 56.88%
-- Unique failing question/answer/grade cases: 47
+- Passing exact-letter predictions: 123
+- Failing exact-letter predictions: 66
+- Exact-letter accuracy: 65.08%
+- Unique failing question/answer/grade cases: 66
 - Conflicting normalized label sets: 3
-- Actual letter grades among failures: {'A': 2, 'B': 6, 'C': 10, 'D': 3, 'F': 26}
+- Actual letter grades among failures: {'A': 2, 'B': 25, 'C': 10, 'D': 3, 'F': 26}
 
 ## Primary Findings
 
@@ -30,7 +30,7 @@
 - Question: A DynamoDB table is keyed by customer ID, but the application now needs fast lookups by order status without scanning every item. What should the developer add to support this access pattern?
 - Expected rating: `0.95`
 - User answer: `The user should add a second database index for order status.`
-- Correct answer: Add a DynamoDB secondary index
+- Correct answer: Add a secondary index
 - Raw model score: `79.00`; runtime score: `79`
 - Runtime feedback: Name the specific AWS service or feature required by the question.
 - Largest feature contributions: `semantic_similarity_score` +0.790
@@ -125,7 +125,7 @@
 
 ### 9. Expected D, received F
 
-- Rows: `105`; occurrences: `1`
+- Rows: `185`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to act as stateful virtual firewalls controlling inbound and outbound traffic for resources.`
@@ -149,7 +149,20 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 11. Expected C, received D
+### 11. Expected A, received B
+
+- Rows: `131`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to add user sign-up, sign-in, and identity management to applications.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon Cognito to add user sign-up, sign-in, and identity management to applications. This addresses Cognito and user authentication.`
+- Correct answer: Amazon Cognito
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 12. Expected C, received D
 
 - Rows: `85`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
@@ -162,9 +175,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.650
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 12. Expected D, received F
+### 13. Expected D, received F
 
-- Rows: `100`; occurrences: `1`
+- Rows: `180`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to adjust EC2 capacity automatically based on demand and health checks.`
@@ -175,7 +188,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 13. Expected A, received C
+### 14. Expected A, received C
 
 - Rows: `87`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
@@ -187,9 +200,22 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 14. Expected D, received F
+### 15. Expected A, received B
 
 - Rows: `93`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use S3 lifecycle policies to automatically transition or expire objects based on age and access patterns. This addresses S3 Lifecycle and storage classes.`
+- Correct answer: S3 lifecycle policies
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 16. Expected D, received F
+
+- Rows: `173`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.`
@@ -200,7 +226,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 15. Expected A, received B
+### 17. Expected A, received B
 
 - Rows: `2`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to automatically transition or expire objects based on age and access patterns.
@@ -213,9 +239,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 16. Expected D, received F
+### 18. Expected D, received F
 
-- Rows: `103`; occurrences: `1`
+- Rows: `183`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to cache and deliver content from edge locations to reduce latency for users.`
@@ -226,9 +252,22 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 17. Expected D, received F
+### 19. Expected A, received B
 
-- Rows: `108`; occurrences: `1`
+- Rows: `130`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to centralize and automate backup policies across supported AWS services.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use AWS Backup to centralize and automate backup policies across supported AWS services. This addresses AWS Backup and centralized backups.`
+- Correct answer: AWS Backup
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 20. Expected D, received F
+
+- Rows: `188`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.`
@@ -239,7 +278,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 18. Expected C, received F
+### 21. Expected C, received F
 
 - Rows: `16`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to collect metrics, logs, alarms, and dashboards for monitoring AWS resources.
@@ -252,7 +291,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.490
 - Suspected cause: Runtime exact-service guard treated the answer as a wrong option before partial-credit semantics were considered.
 
-### 19. Expected A, received B
+### 22. Expected A, received B
 
 - Rows: `77`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -265,7 +304,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 20. Expected A, received B
+### 23. Expected A, received B
 
 - Rows: `64`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -277,7 +316,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 21. Expected C, received F
+### 24. Expected C, received F
 
 - Rows: `79`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
@@ -290,9 +329,35 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 22. Expected D, received F
+### 25. Expected A, received B
 
-- Rows: `102`; occurrences: `1`
+- Rows: `110`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to create and manage encryption keys used to protect data in AWS services.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use AWS KMS to create and manage encryption keys used to protect data in AWS services. This addresses AWS KMS and encryption keys.`
+- Correct answer: AWS KMS
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 26. Expected A, received B
+
+- Rows: `118`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to create, publish, secure, monitor, and throttle APIs for backend services.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon API Gateway to create, publish, secure, monitor, and throttle APIs for backend services. This addresses API Gateway and APIs.`
+- Correct answer: Amazon API Gateway
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 27. Expected D, received F
+
+- Rows: `182`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to distribute traffic across healthy targets to improve availability and scalability.`
@@ -303,9 +368,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 23. Expected D, received F
+### 28. Expected D, received F
 
-- Rows: `89`; occurrences: `1`
+- Rows: `169`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to grant temporary credentials to trusted AWS resources without storing long-term access keys.`
@@ -316,9 +381,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 24. Expected D, received F
+### 29. Expected D, received F
 
-- Rows: `101`; occurrences: `1`
+- Rows: `181`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to horizontally scale an EC2 application by adding and replacing instances automatically instead of manually moving to a larger instance type.`
@@ -329,9 +394,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 25. Expected D, received F
+### 30. Expected D, received F
 
-- Rows: `91`; occurrences: `1`
+- Rows: `171`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to improve high availability and fault tolerance during an Availability Zone impairment.`
@@ -342,7 +407,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 26. Expected B, received C
+### 31. Expected B, received C
 
 - Rows: `52`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
@@ -354,7 +419,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.750
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 27. Expected A, received C
+### 32. Expected A, received C
 
 - Rows: `74`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to ingest and process real-time streaming data at scale.
@@ -367,9 +432,35 @@
 - Largest feature contributions: `semantic_similarity_score` +0.750
 - Suspected cause: Conflicting curated labels: the same normalized question and answer has multiple expected grades.
 
-### 28. Expected D, received F
+### 33. Expected A, received B
+
+- Rows: `123`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to perform serverless data integration, cataloging, and ETL jobs.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use AWS Glue to perform serverless data integration, cataloging, and ETL jobs. This addresses AWS Glue and ETL.`
+- Correct answer: AWS Glue
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 34. Expected A, received B
 
 - Rows: `92`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon S3 versioning to preserve, retrieve, and restore previous versions of objects after overwrite or delete events. This addresses Amazon S3 and versioning.`
+- Correct answer: Amazon S3 versioning
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 35. Expected D, received F
+
+- Rows: `172`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to preserve, retrieve, and restore previous versions of objects after overwrite or delete events.`
@@ -380,9 +471,22 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 29. Expected D, received F
+### 36. Expected A, received B
 
 - Rows: `97`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon DynamoDB to provide a fully managed NoSQL key-value and document database with low-latency access. This addresses DynamoDB and NoSQL.`
+- Correct answer: Amazon DynamoDB
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 37. Expected D, received F
+
+- Rows: `177`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide a fully managed NoSQL key-value and document database with low-latency access.`
@@ -393,9 +497,35 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 30. Expected D, received F
+### 38. Expected A, received B
+
+- Rows: `128`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use AWS Trusted Advisor to provide recommendations for cost optimization, security, fault tolerance, performance, and service limits. This addresses Trusted Advisor and recommendations.`
+- Correct answer: AWS Trusted Advisor
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 39. Expected A, received B
 
 - Rows: `104`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon Route 53 to provide scalable DNS routing and health-check-based routing for applications. This addresses Route 53 and DNS.`
+- Correct answer: Amazon Route 53
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 40. Expected D, received F
+
+- Rows: `184`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.`
@@ -406,7 +536,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 31. Expected A, received B
+### 41. Expected A, received B
 
 - Rows: `34`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide scalable DNS routing and health-check-based routing for applications.
@@ -419,9 +549,35 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 32. Expected D, received F
+### 42. Expected A, received B
+
+- Rows: `119`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to provide shared elastic file storage that can be mounted by multiple compute resources.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon EFS to provide shared elastic file storage that can be mounted by multiple compute resources. This addresses EFS and shared file storage.`
+- Correct answer: Amazon EFS
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 43. Expected A, received B
 
 - Rows: `106`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use network ACLs to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules. This addresses network ACLs and stateless.`
+- Correct answer: network ACLs
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 44. Expected D, received F
+
+- Rows: `186`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide stateless subnet-level traffic filtering with explicit inbound and outbound rules.`
@@ -432,7 +588,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 33. Expected A, received C
+### 45. Expected A, received C
 
 - Rows: `88`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
@@ -444,9 +600,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 34. Expected D, received F
+### 46. Expected D, received F
 
-- Rows: `95`; occurrences: `1`
+- Rows: `175`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to provide synchronous standby replication and automatic failover for relational databases.`
@@ -457,7 +613,20 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 35. Expected A, received C
+### 47. Expected A, received B
+
+- Rows: `124`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to query data in Amazon S3 using SQL without managing servers.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon Athena to query data in Amazon S3 using SQL without managing servers. This addresses Athena and SQL.`
+- Correct answer: Amazon Athena
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 48. Expected A, received C
 
 - Rows: `69`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
@@ -470,9 +639,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 36. Expected D, received F
+### 49. Expected D, received F
 
-- Rows: `107`; occurrences: `1`
+- Rows: `187`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.`
@@ -483,7 +652,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 37. Expected A, received B
+### 50. Expected A, received B
 
 - Rows: `1`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to record AWS API activity for auditing, governance, and operational troubleshooting.
@@ -496,9 +665,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.890
 - Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
 
-### 38. Expected D, received F
+### 51. Expected D, received F
 
-- Rows: `98`; occurrences: `1`
+- Rows: `178`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to replicate tables across Regions for low-latency multi-Region access and resilience.`
@@ -509,7 +678,33 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 39. Expected D, received F
+### 52. Expected A, received B
+
+- Rows: `129`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to review workloads against AWS best practices and identify improvement opportunities.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use AWS Well-Architected Tool to review workloads against AWS best practices and identify improvement opportunities. This addresses Well-Architected Tool and best practices.`
+- Correct answer: AWS Well-Architected Tool
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 53. Expected A, received B
+
+- Rows: `116`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon EventBridge to route events from AWS services and applications to targets using event buses and rules. This addresses EventBridge and event bus.`
+- Correct answer: Amazon EventBridge
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 54. Expected D, received F
 
 - Rows: `53`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to route events from AWS services and applications to targets using event buses and rules.
@@ -521,9 +716,22 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 40. Expected D, received F
+### 55. Expected A, received B
 
-- Rows: `99`; occurrences: `1`
+- Rows: `122`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to run analytical queries against a managed petabyte-scale data warehouse.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon Redshift to run analytical queries against a managed petabyte-scale data warehouse. This addresses Redshift and data warehouse.`
+- Correct answer: Amazon Redshift
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 56. Expected D, received F
+
+- Rows: `179`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to run event-driven code without managing servers and scale per request.`
@@ -534,9 +742,22 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 41. Expected D, received F
+### 57. Expected A, received B
 
 - Rows: `96`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use Amazon RDS read replicas to scale read-heavy database workloads by serving read traffic from replicated database instances. This addresses Amazon RDS and read replicas.`
+- Correct answer: Amazon RDS read replicas
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 58. Expected D, received F
+
+- Rows: `176`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to scale read-heavy database workloads by serving read traffic from replicated database instances.`
@@ -547,7 +768,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 42. Expected B, received C
+### 59. Expected B, received C
 
 - Rows: `51`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.
@@ -559,7 +780,20 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 43. Expected D, received F
+### 60. Expected A, received B
+
+- Rows: `121`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to store rarely accessed archival data at lower cost with retrieval-time tradeoffs.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use S3 Glacier storage classes to store rarely accessed archival data at lower cost with retrieval-time tradeoffs. This addresses S3 Glacier and archive.`
+- Correct answer: S3 Glacier storage classes
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 61. Expected D, received F
 
 - Rows: `50`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to store, retrieve, and rotate application secrets such as database credentials.
@@ -571,7 +805,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 44. Expected B, received C
+### 62. Expected B, received C
 
 - Rows: `57`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
@@ -583,9 +817,22 @@
 - Largest feature contributions: `semantic_similarity_score` +0.790
 - Suspected cause: The expected grade and model score disagree; inspect the curated label and feature calibration together.
 
-### 45. Expected D, received F
+### 63. Expected A, received B
 
 - Rows: `90`; occurrences: `1`
+- Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
+- Expected rating: `0.95`
+- User answer: `The best answer is to use AWS Budgets to track cost or usage thresholds and send alerts for actual or forecasted spending. This addresses AWS Budgets and cost thresholds.`
+- Correct answer: AWS Budgets
+- Raw model score: `89.00`; runtime score: `89`
+- Runtime feedback: The answer names the correct service but includes reasoning for a different AWS concept.
+- Reviewer feedback: Generated full-sentence positive example: this answer names the correct AWS service or feature and explains the relevant scenario concept.
+- Largest feature contributions: `semantic_similarity_score` +0.890
+- Suspected cause: Semantically correct prose is not an exact option-text match. The model relies on lexical containment and does not receive the runtime 95-point exact-option boost.
+
+### 64. Expected D, received F
+
+- Rows: `170`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to track cost or usage thresholds and send alerts for actual or forecasted spending.`
@@ -596,9 +843,9 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 46. Expected D, received F
+### 65. Expected D, received F
 
-- Rows: `94`; occurrences: `1`
+- Rows: `174`; occurrences: `1`
 - Question: Explain which AWS service or feature should be used to transition old S3 objects to lower-cost storage classes and expire them after a retention period without changing bucket access permissions.
 - Expected rating: `0.65`
 - User answer: `This question is asking the learner to identify and explain which AWS service or feature should be used to transition old S3 objects to lower-cost storage classes and expire them after a retention period without changing bucket access permissions.`
@@ -609,7 +856,7 @@
 - Largest feature contributions: `semantic_similarity_score` +0.250
 - Suspected cause: Sparse alias or partial-concept answer has low lexical overlap with the long reference answer. The feature set lacks service aliases and calibrated partial-credit semantics.
 
-### 47. Expected A, received C
+### 66. Expected A, received C
 
 - Rows: `84`; occurrences: `1`
 - Question: Review the IAM policy for the Lambda execution role. What is the access-control issue, and what change best matches least privilege?

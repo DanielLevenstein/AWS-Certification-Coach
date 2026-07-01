@@ -53,21 +53,15 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
         reference_answer = _reference_answer(source, template_scenario, service)
         correct_option = _correct_option(source, template_scenario)
         distractors = _distractors(source, template_scenario)
-        # options = [_option("A", _correct_option(source, template_scenario), str(source["source_url"]))]
-        # options.extend(
-        #     _option(option_id, text, documentation_url_for_option(text))
-        #     for option_id, text in zip(["B", "C", "D"], _distractors(source, template_scenario), strict=True)
-        # )
-        answers = [correct_option,distractors[0],distractors[1],distractors[2]]
+        answers = [correct_option, distractors[0], distractors[1], distractors[2]]
         random.shuffle(answers)
-        # Return get letter index of correct
-        correct_option_id = []
-        options =[]
+        correct_option_ids = []
+        options = []
         for letter, answer in zip(["A", "B", "C", "D"], answers, strict=True):
-            options.append(_option(letter, answer, documentation_url_for_option(answer)))
+            source_url = str(source["source_url"]) if answer == correct_option else documentation_url_for_option(answer)
+            options.append(_option(letter, answer, source_url))
             if answer == correct_option:
-                correct_option_id.append(letter)
-
+                correct_option_ids.append(letter)
 
         row = {
             "schema_version": schema_version,
@@ -84,7 +78,7 @@ def build_questions(sources: list[dict[str, object]]) -> list[dict[str, object]]
             "original_multiple_choice": {
                 "question": question_text,
                 "options": options,
-                "correct_option_ids": correct_option,
+                "correct_option_ids": correct_option_ids,
                 "explanation": reference_answer,
                 "source_name": source["source_name"],
                 "source_url": source["source_url"],

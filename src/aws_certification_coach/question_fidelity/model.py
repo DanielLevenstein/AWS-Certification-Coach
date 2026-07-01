@@ -179,7 +179,12 @@ def _conflicting_concepts(
     conflicts: list[str] = []
     original = original_multiple_choice if isinstance(original_multiple_choice, dict) else {}
     options = original.get("options", [])
-    distractor_text = " ".join(str(option.get("text", "")) for option in options[1:] if isinstance(option, dict))
+    correct_option_ids = set(_string_list(original.get("correct_option_ids", [])))
+    distractor_text = " ".join(
+        str(option.get("text", ""))
+        for option in options
+        if isinstance(option, dict) and str(option.get("option_id", "")) not in correct_option_ids
+    )
     distractor_tokens = _tokens(distractor_text)
     for concept in generated_concepts:
         concept_tokens = _tokens(concept)
@@ -211,7 +216,16 @@ def _distractor_quality(generated: dict[str, object]) -> tuple[int, str]:
     if not isinstance(original, dict):
         return 50, "No multiple-choice distractor provenance was available."
     options = original.get("options", [])
-    distractors = [option for option in options[1:] if isinstance(option, dict) and str(option.get("text", "")).strip()]
+    correct_option_ids = set(_string_list(original.get("correct_option_ids", [])))
+    distractors = [
+        option
+        for option in options
+        if (
+            isinstance(option, dict)
+            and str(option.get("text", "")).strip()
+            and str(option.get("option_id", "")) not in correct_option_ids
+        )
+    ]
     if len(distractors) >= 3:
         return 95, "Three plausible AWS distractors are present."
     if distractors:

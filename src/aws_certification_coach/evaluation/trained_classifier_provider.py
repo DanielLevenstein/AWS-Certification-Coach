@@ -307,8 +307,7 @@ def _get_relevant_services(question: Question, user_answer: str) -> list[str]:
     distractor_service = _selected_distractor_service(question, user_answer)
     if distractor_service is not None:
         names.append(distractor_service.name)
-    # Removing service descriptions from answer for now
-    #names.extend(service.name for service in _mentioned_answer_services(user_answer))
+    names.extend(service.name for service in _mentioned_answer_services(user_answer))
     expected_service = _expected_service_or_feature(question)
     if expected_service is not None:
         names.append(expected_service.name)

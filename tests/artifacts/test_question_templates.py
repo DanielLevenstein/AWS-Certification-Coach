@@ -9,7 +9,9 @@ from aws_certification_coach.question_templates import (
 )
 from aws_certification_coach.domain import MultipleChoiceOption, MultipleChoiceQuestion, Question
 from aws_certification_coach.model_evaluation.semantic_similarity import semantic_similarity_score
+import scripts.generate_app_question_artifacts as app_generator
 from scripts.generate_app_question_artifacts import _build_app_questions
+import scripts.generate_developer_question_artifacts as developer_generator
 from scripts.generate_developer_question_artifacts import build_questions
 from scripts.download_developer_original_questions import SOURCE_ROWS
 
@@ -103,7 +105,48 @@ def test_developer_generator_uses_question_template_details_before_source_overri
     assert row["question"].startswith("A production Lambda function can overwhelm")
     assert row["question_category"] == "integration_workflows"
     assert row["reference_answer"].startswith("Configure Lambda reserved concurrency")
-    assert row["original_multiple_choice"]["options"][0]["text"] == "Configure Lambda reserved concurrency."
+    correct_option_id = row["original_multiple_choice"]["correct_option_ids"][0]
+    correct_option = next(
+        option
+        for option in row["original_multiple_choice"]["options"]
+        if option["option_id"] == correct_option_id
+    )
+    assert correct_option["text"] == "Configure Lambda reserved concurrency."
+
+
+def test_developer_generator_shuffles_answer_order_and_tracks_correct_letter(monkeypatch):
+    source = dict(SOURCE_ROWS[12])
+
+    def rotate_answers(answers: list[str]) -> None:
+        answers[:] = [answers[1], answers[2], answers[3], answers[0]]
+
+    monkeypatch.setattr(developer_generator.random, "shuffle", rotate_answers)
+
+    row = developer_generator.build_questions([source])[0]
+    options = row["original_multiple_choice"]["options"]
+
+    assert [option["text"] for option in options] == [
+        "Configure Lambda provisioned concurrency only.",
+        "Increase the function memory size.",
+        "Add an API Gateway usage plan only.",
+        "Configure Lambda reserved concurrency.",
+    ]
+    assert row["original_multiple_choice"]["correct_option_ids"] == ["D"]
+
+
+def test_app_question_generator_shuffles_answer_order_and_tracks_correct_letter(monkeypatch):
+    def rotate_answers(answers: list[str]) -> None:
+        answers[:] = [answers[1], answers[2], answers[3], answers[0]]
+
+    monkeypatch.setattr(app_generator.random, "shuffle", rotate_answers)
+
+    row = app_generator._build_app_questions(1)[0]
+    options = row["original_multiple_choice"]["options"]
+    correct_option_id = row["original_multiple_choice"]["correct_option_ids"][0]
+
+    assert correct_option_id == "D"
+    assert [option["option_id"] for option in options] == ["A", "B", "C", "D"]
+    assert options[-1]["text"] == row["acceptable_answers"][0]
 
 
 def test_developer_generator_adds_lambda_environmental_variables_alias():
@@ -193,13 +236,8 @@ def test_generated_app_questions_include_template_source_and_normalized_option_m
             "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
         )
     }
-    assert any(
-        "AWS Lambda addresses a different AWS need" in feedback
-        for row in lambda_rows
-        for feedback in row["do_not_claim_explanation"]
-    )
-    assert any(
-        "\n\nAWS Lambda addresses a different AWS need" in feedback
+    assert all(
+        "\n\nAWS Lambda addresses a different AWS need" not in feedback
         for row in lambda_rows
         for feedback in row["do_not_claim_explanation"]
     )

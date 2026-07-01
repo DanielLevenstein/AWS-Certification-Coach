@@ -14,7 +14,7 @@ The latest version of this project is deployed live on Render.
 
 ## Application Screenshot
 
-<img src="docs/images/aws-certification-coach.png" alt="Certification Exam Screenshot" width="720">
+<img src="docs/images/feedback.png" alt="Certification Exam Screenshot" width="720">
 
 *Figure: The coach scores a freeform Amazon answer and displays detailed feedback alongside the source multiple-choice question.*
 
