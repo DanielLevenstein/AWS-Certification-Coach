@@ -35,7 +35,9 @@
 | v3.7.3.1 | Removed references to certification-coach scenarios from the AWS knowledge base and expanded descriptions to be more than one sentence. |
 | v3.7.3.2 | Changed grade for correct service wrong description to B.                                                                               |
 | v3.8.1   | Tunes semantic scoring for strong AWS concept prose so latest release metrics clear guardrails.                                         |
-| v3.8.1.1 | Emergency Patch. Fix Answer Ordering |
+| v3.8.1.1 | Emergency Patch. Fix Answer Ordering, and included stable UI feedback change                                                            |
+| v3.8.1.2 | Fix Answer Ordering for developer questions                                                                                             |
+
 # Release Metrics
 
 ## Metric Definitions:
@@ -72,6 +74,7 @@
 | v3.8.0   |            94.17% |            100.00% |          97.47% |                92.23% |          96.12% |            95.12% |
 | v3.8.1   |            98.06% |            100.00% |          97.47% |                97.09% |         100.00% |            95.12% |
 | v3.8.1.1 |            98.06% |            100.00% |          97.47% |                97.09% |         100.00% |            95.12% |
+| v3.8.1.2 |            98.06% |            100.00% |          97.47% |                97.09% |         100.00% |            95.12% |
 
 ## Grading Rubric:
 
@@ -101,6 +104,7 @@
 | v3.8.0   | 100.00% | 88.89% | 95.16% |
 | v3.8.1   | 100.00% | 100.00% | 98.33% |
 | v3.8.1.1 | 100.00% | 100.00% | 98.33% |
+| v3.8.1.2 | 100.00% | 100.00% | 98.33% |
 
 ## Grade Precision
 | Release  |       A |      B |       C |        D |      F |
@@ -126,6 +130,7 @@
 | v3.8.0   | 100.00% | 93.33% | 83.33% | 91.67% | 92.31% |
 | v3.8.1   | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
 | v3.8.1.1 | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
+| v3.8.1.2 | 100.00% | 100.00% | 100.00% | 97.06% | 92.31% |
 
 ## Current Coverage
 
@@ -136,7 +141,7 @@
 
 | Release  | Semantic Accuracy | Semantic Precision | Semantic Recall | Exact Letter Accuracy | Within 1 Letter | Question Fidelity |
 |:---------|------------------:|-------------------:|----------------:|----------------------:|----------------:|------------------:|
-| v3.8.1.1 | 98.06% | 100.00% | 97.47% | 97.09% | 100.00% | 95.12% |
+| v3.8.1.2 | 98.06% | 100.00% | 97.47% | 97.09% | 100.00% | 95.12% |
 
 ## Grade Band Metrics
 
